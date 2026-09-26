@@ -1,3 +1,11 @@
+import { Badge } from '@/components/ui/badge'
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+
 interface SetupCardProps {
   title: string
   description: string
@@ -10,17 +18,19 @@ export function SetupCard({
   status = 'ready',
 }: SetupCardProps) {
   const statusLabel = status === 'ready' ? 'Siap' : 'Berikutnya'
+  const statusVariant = status === 'ready' ? 'success' : 'warning'
 
   return (
-    <article className="setup-card">
-      <div className="setup-card__heading">
-        <h2>{title}</h2>
-        <span className={`status-badge status-badge--${status}`}>
-          {statusLabel}
-        </span>
-      </div>
-      <p>{description}</p>
-    </article>
+    <Card>
+      <CardHeader>
+        <div className="flex items-start justify-between gap-3">
+          <CardTitle className="text-base leading-6">{title}</CardTitle>
+          <Badge className="shrink-0" variant={statusVariant}>
+            {statusLabel}
+          </Badge>
+        </div>
+        <CardDescription className="pt-1 leading-6">{description}</CardDescription>
+      </CardHeader>
+    </Card>
   )
 }
-

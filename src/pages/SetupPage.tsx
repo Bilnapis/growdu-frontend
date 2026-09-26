@@ -22,46 +22,77 @@ const foundations = [
 
 export function SetupPage() {
   return (
-    <main className="setup-page">
-      <section className="setup-hero" aria-labelledby="setup-title">
-        <div className="setup-hero__brand" aria-label="GrowDu">
-          <span className="setup-hero__logo" aria-hidden="true">
+    <main className="grid min-h-screen lg:grid-cols-[minmax(20rem,0.8fr)_minmax(32rem,1.2fr)]">
+      <section
+        className="flex min-h-screen flex-col justify-between gap-10 bg-gradient-to-br from-sky-950 to-sky-700 p-8 text-primary-foreground sm:p-12 lg:p-16"
+        aria-labelledby="setup-title"
+      >
+        <div
+          className="flex items-center gap-3 text-lg font-bold"
+          aria-label="GrowDu"
+        >
+          <span
+            className="grid h-9 w-9 place-items-center rounded-md border border-white/30 bg-white/15"
+            aria-hidden="true"
+          >
             G
           </span>
           <span>GrowDu</span>
         </div>
 
-        <div className="setup-hero__content">
-          <span className="eyebrow">Frontend foundation</span>
-          <h1 id="setup-title">Project siap dikembangkan</h1>
-          <p>
+        <div className="max-w-xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-sky-200">
+            Frontend foundation
+          </span>
+          <h1
+            id="setup-title"
+            className="mt-3 text-4xl leading-tight tracking-normal sm:text-5xl"
+          >
+            Project siap dikembangkan
+          </h1>
+          <p className="mt-4 max-w-lg text-base leading-7 text-sky-100">
             Fondasi dashboard GrowDu sudah aktif. Mulai implementasi dari app
             shell, autentikasi, lalu modul operasional sesuai dokumentasi MVP.
           </p>
         </div>
 
-        <dl className="environment-card">
-          <div>
-            <dt>Environment</dt>
-            <dd>{import.meta.env.MODE}</dd>
+        <dl className="grid overflow-hidden rounded-md border border-white/20 bg-sky-950/40 sm:grid-cols-[0.6fr_1.4fr]">
+          <div className="min-w-0 p-4">
+            <dt className="mb-2 text-xs font-semibold text-sky-200">
+              Environment
+            </dt>
+            <dd className="truncate text-sm font-semibold">
+              {import.meta.env.MODE}
+            </dd>
           </div>
-          <div>
-            <dt>API base URL</dt>
-            <dd>{env.apiBaseUrl}</dd>
+          <div className="min-w-0 border-t border-white/20 p-4 sm:border-l sm:border-t-0">
+            <dt className="mb-2 text-xs font-semibold text-sky-200">
+              API base URL
+            </dt>
+            <dd className="truncate text-sm font-semibold">{env.apiBaseUrl}</dd>
           </div>
         </dl>
       </section>
 
-      <section className="setup-content" aria-labelledby="foundation-title">
-        <div className="section-heading">
+      <section
+        className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-8 sm:p-12 lg:p-16"
+        aria-labelledby="foundation-title"
+      >
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <span className="eyebrow">Baseline</span>
-            <h2 id="foundation-title">Fondasi yang tersedia</h2>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              Baseline
+            </span>
+            <h2 id="foundation-title" className="mt-2 text-2xl font-semibold">
+              Fondasi yang tersedia
+            </h2>
           </div>
-          <span className="section-heading__count">{foundations.length} item</span>
+          <span className="text-sm text-muted-foreground">
+            {foundations.length} item
+          </span>
         </div>
 
-        <div className="setup-grid">
+        <div className="grid gap-4 sm:grid-cols-2">
           {foundations.map((foundation) => (
             <SetupCard key={foundation.title} {...foundation} />
           ))}
@@ -76,4 +107,3 @@ export function SetupPage() {
     </main>
   )
 }
-
