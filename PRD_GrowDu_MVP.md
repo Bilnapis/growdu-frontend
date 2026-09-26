@@ -48,7 +48,7 @@ Kebutuhan utama owner:
 
 #### Admin
 
-Admin adalah pengguna operasional harian yang mengelola data siswa, data tentor, program belajar, mata pelajaran, ruangan, kelompok belajar, jadwal, invoice, dan laporan.
+Admin adalah pengguna operasional harian yang mengelola data siswa, data tentor beserta mata pelajaran yang diajar, ruangan, kelompok belajar, jadwal, invoice, dan laporan.
 
 Kebutuhan utama admin:
 
@@ -78,18 +78,17 @@ Kebutuhan utama tentor:
 #### Master Data
 
 - Sebagai admin, saya ingin menambahkan, melihat, mengubah, dan menghapus data siswa agar data siswa selalu akurat.
-- Sebagai admin, saya ingin menambahkan, melihat, mengubah, dan menghapus data tentor agar data pengajar dan data pembayaran tentor selalu terkelola.
-- Sebagai admin, saya ingin mengelola program belajar secara bebas agar setiap bimbel bisa menentukan nama programnya sendiri.
-- Sebagai admin, saya ingin mengelola mata pelajaran dan ruangan agar keduanya dapat digunakan saat membuat kelompok belajar dan jadwal.
+- Sebagai admin, saya ingin menambahkan, melihat, mengubah, dan menghapus data tentor beserta mata pelajaran yang diajar agar data pengajar, penugasan kelas, dan pembayaran tentor selalu terkelola.
+- Sebagai admin, saya ingin mengelola ruangan agar ruangan dapat digunakan saat membuat kelompok belajar dan jadwal.
 
 #### Kelompok Belajar dan Jadwal
 
-- Sebagai admin, saya ingin membuat kelompok belajar berisi program, mata pelajaran, tentor, ruangan, hari, jam, dan daftar siswa agar kelas dapat dijadwalkan dengan jelas.
+- Sebagai admin, saya ingin membuat kelompok belajar berisi nama program, tentor, mata pelajaran yang diambil dari data tentor, ruangan, hari, jam, dan daftar siswa agar kelas dapat dijadwalkan dengan jelas tanpa master data program atau mata pelajaran terpisah.
 - Sebagai admin, saya ingin sistem mendeteksi bentrok tentor dan ruangan sebelum jadwal disimpan agar jadwal yang saling tumpang tindih dapat dicegah.
 
 #### Presensi
 
-- Sebagai tentor, saya ingin membuka jadwal mengajar hari ini dan memilih kelas agar saya bisa mencatat kehadiran siswa pada sesi tersebut.
+- Sebagai tentor, saya ingin membuka jadwal mengajar hari ini dan memilih kelas agar saya bisa mencatat kehadiran siswa langsung pada jadwal tersebut.
 - Sebagai tentor, saya ingin menandai setiap siswa dengan status Hadir, Izin, Sakit, atau Alpha agar presensi tercatat secara konsisten.
 - Sebagai admin, saya ingin data presensi muncul di dashboard dan digunakan dalam perhitungan gaji agar data operasional dan data penggajian saling terhubung.
 
@@ -121,7 +120,7 @@ Kebutuhan utama tentor:
 
 #### Dashboard Acceptance Criteria
 
-- Dashboard menampilkan widget pendapatan bulan ini, total gaji tentor bulan ini, jumlah siswa aktif, jumlah tentor aktif, jumlah kelompok belajar, jumlah program belajar, invoice belum dibayar, jadwal mengajar hari ini, progres belajar bulan ini, dan jumlah laporan perkembangan yang belum dibuat.
+- Dashboard menampilkan widget pendapatan bulan ini, total gaji tentor bulan ini, jumlah siswa aktif, jumlah tentor aktif, jumlah kelompok belajar, invoice belum dibayar, jadwal mengajar hari ini, progres belajar bulan ini, dan jumlah laporan perkembangan yang belum dibuat.
 - Data dashboard diperbarui setelah data operasional terkait berubah, seperti setelah presensi disimpan, status pembayaran diubah, atau laporan perkembangan dibuat.
 - Owner memiliki akses ke seluruh widget dashboard.
 - Admin memiliki akses ke widget dashboard operasional yang dibutuhkan untuk pengelolaan harian.
@@ -129,15 +128,17 @@ Kebutuhan utama tentor:
 #### Master Data Acceptance Criteria
 
 - Data siswa mendukung kolom nama, nomor HP, nama orang tua, email orang tua, sekolah, jenjang, dan status aktif atau nonaktif.
-- Data tentor mendukung kolom nama, nomor HP, mata pelajaran, tarif mengajar, rekening tentor, dan status.
-- Program belajar mendukung nama program kustom tanpa daftar nama yang dikunci oleh sistem.
-- Mata pelajaran mendukung proses tambah, lihat, ubah, dan hapus data.
+- Data tentor mendukung kolom nama, nomor HP, satu atau lebih mata pelajaran yang diajar, tarif mengajar, rekening tentor, dan status.
+- Mata pelajaran dikelola sebagai bagian dari data tentor dan tidak memiliki menu master data tersendiri.
 - Ruangan mendukung proses tambah, lihat, ubah, dan hapus data.
 - Data yang dihapus atau dinonaktifkan tidak boleh merusak riwayat presensi, invoice, penggajian, atau laporan yang sudah terbentuk.
 
 #### Kelompok Belajar Acceptance Criteria
 
-- Admin dapat membuat kelompok belajar dengan nama kelompok, program, mata pelajaran, tentor, ruangan, hari, jam mulai, jam selesai, dan daftar siswa.
+- Admin dapat membuat kelompok belajar dengan nama kelompok, nama program kustom, tentor, mata pelajaran, ruangan, hari, jam mulai, jam selesai, dan daftar siswa.
+- Nama program disimpan langsung pada kelompok belajar dan tidak dipilih dari master data program.
+- Pilihan mata pelajaran hanya menampilkan mata pelajaran yang tercatat pada tentor terpilih; jika tentor hanya memiliki satu mata pelajaran, sistem mengisinya secara otomatis.
+- Sistem menolak penyimpanan kelompok belajar apabila mata pelajaran tidak termasuk dalam data tentor terpilih.
 - Sistem memvalidasi bentrok tentor pada hari dan jam yang saling tumpang tindih sebelum jadwal disimpan.
 - Sistem memvalidasi bentrok ruangan pada hari dan jam yang saling tumpang tindih sebelum jadwal disimpan.
 - Jika terjadi bentrok, sistem membatalkan proses simpan dan menampilkan notifikasi yang jelas.
@@ -163,8 +164,8 @@ Kebutuhan utama tentor:
 
 #### Penggajian Tentor Acceptance Criteria
 
-- Sistem menghitung gaji tentor dengan rumus: total sesi mengajar x tarif tentor.
-- Sesi mengajar dihitung dari presensi yang sudah disimpan dan dikelompokkan berdasarkan kelompok belajar.
+- Sistem menghitung gaji tentor dengan rumus: total jadwal mengajar dengan presensi tersimpan x tarif tentor.
+- Jadwal mengajar yang diperhitungkan adalah jadwal dengan presensi tersimpan pada periode penggajian dan dikelompokkan berdasarkan kelompok belajar.
 - Admin dapat menyesuaikan tarif tentor saat proses perhitungan gaji.
 - Admin dapat menandai gaji sebagai Sudah Dibayar.
 - Riwayat pembayaran gaji tetap tersimpan setelah pembayaran dilakukan.
@@ -185,9 +186,9 @@ Kebutuhan utama tentor:
 
 #### Pengaturan Bimbel Acceptance Criteria
 
-- Pelanggan dapat mengatur logo, nama bimbel, alamat, nomor WhatsApp, email, website opsional, warna utama aplikasi, dan nomor rekening.
+- Owner dapat mengatur logo, nama bimbel, alamat, nomor WhatsApp, email, website opsional, warna utama aplikasi, dan nomor rekening.
 - Identitas yang sudah dikonfigurasi muncul pada dashboard, invoice, email perkembangan belajar, dan laporan.
-- Setiap pelanggan hanya dapat mengubah identitas bimbelnya sendiri.
+- Setiap owner hanya dapat mengubah identitas bimbelnya sendiri.
 
 ### Non-Goals
 
@@ -210,7 +211,7 @@ Kebutuhan alat dan layanan non-AI:
 
 - Frontend aplikasi web untuk alur kerja owner, admin, dan tentor.
 - Backend API untuk autentikasi, otorisasi, aturan bisnis, dan penyimpanan data.
-- Database relasional untuk menyimpan data operasional seperti user, siswa, tentor, program, mata pelajaran, ruangan, kelompok belajar, jadwal, presensi, invoice, penggajian, dan laporan perkembangan.
+- Database relasional untuk menyimpan data operasional seperti user, siswa, tentor beserta mata pelajaran yang diajar, ruangan, kelompok belajar beserta nama program dan mata pelajarannya, jadwal, presensi, invoice, penggajian, dan laporan perkembangan.
 - Layanan pengiriman email untuk mengirim laporan perkembangan belajar ke orang tua.
 - Layanan atau library pembuatan PDF untuk slip gaji tentor dan kemungkinan output invoice.
 
@@ -246,8 +247,8 @@ Rekomendasi arsitektur tingkat tinggi:
 Alur data utama:
 
 1. Owner atau admin mengatur identitas bimbel.
-2. Admin membuat master data: siswa, tentor, program, mata pelajaran, dan ruangan.
-3. Admin membuat kelompok belajar dan jadwal.
+2. Admin membuat master data siswa, tentor beserta mata pelajaran yang diajar, dan ruangan.
+3. Admin membuat kelompok belajar dengan mengisi nama program secara langsung, lalu memilih tentor dan mata pelajaran yang tersedia pada data tentor tersebut.
 4. Sistem memvalidasi bentrok tentor dan ruangan sebelum jadwal disimpan.
 5. Tentor melihat jadwal yang ditugaskan dan menyimpan presensi.
 6. Presensi menjadi sumber data untuk metrik dashboard, perhitungan gaji, dan kehadiran pada laporan perkembangan.
@@ -277,7 +278,7 @@ Stack berikut direkomendasikan untuk MVP 1.0 karena pengembangan saat ini berfok
 
 - NestJS dengan TypeScript sebagai backend utama.
 - REST API digunakan sebagai kontrak komunikasi antara React Vite dan NestJS.
-- Struktur backend dibagi menjadi module domain, seperti Auth, User, Student, Tutor, Program, Subject, Room, Study Group, Schedule, Attendance, Invoice, Payroll, Report, dan Settings.
+- Struktur backend dibagi menjadi module domain, seperti Auth, User, Student, Tutor, Room, Study Group, Schedule, Attendance, Invoice, Payroll, Report, dan Settings. Nama program menjadi atribut Study Group, sedangkan mata pelajaran menjadi bagian dari Tutor dan disalin sebagai snapshot pada Study Group.
 - Validasi request menggunakan class-validator dan class-transformer agar payload API konsisten.
 - Passport.js dan JWT digunakan untuk autentikasi berbasis token.
 - Guard dan decorator NestJS digunakan untuk membatasi akses berdasarkan role Owner, Admin, dan Tentor.
@@ -290,9 +291,9 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 - MySQL sebagai database utama karena kebutuhan GrowDu didominasi data relasional seperti siswa, tentor, kelompok belajar, jadwal, presensi, invoice, payroll, dan laporan perkembangan.
 - Prisma ORM direkomendasikan untuk schema, migration, query type-safe, dan pemodelan relasi MySQL.
 - Alternatif ORM adalah TypeORM jika tim ingin mengikuti pola yang umum digunakan pada ekosistem NestJS, tetapi Prisma lebih direkomendasikan untuk produktivitas dan type safety.
-- Soft delete atau status nonaktif untuk data penting seperti siswa, tentor, program, dan ruangan agar riwayat operasional tidak rusak.
+- Soft delete atau status nonaktif untuk data penting seperti siswa, tentor, dan ruangan agar riwayat operasional tidak rusak.
 - Unique constraint perlu diterapkan pada data sensitif terhadap duplikasi, seperti invoice per siswa per periode dan jadwal yang sudah divalidasi.
-- Index database perlu disiapkan untuk pencarian siswa, filter invoice, filter laporan, jadwal per tentor, dan data per tenant.
+- Index database perlu disiapkan untuk pencarian siswa, filter invoice, filter laporan, jadwal per tentor, dan data per owner.
 
 #### Authentication and Authorization
 
@@ -301,13 +302,13 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 - JWT access token dan refresh token digunakan untuk menjaga sesi login.
 - Refresh token sebaiknya disimpan melalui HTTP-only cookie agar lebih aman pada aplikasi web.
 - Role-based access control dengan role Owner, Admin, dan Tentor.
-- Tenant scoping wajib diterapkan pada seluruh query agar data antar bimbel tidak tercampur.
+- Owner scoping wajib diterapkan pada seluruh query agar data antar bimbel tidak tercampur.
 - Session berbasis HTTP-only cookie direkomendasikan untuk aplikasi web dashboard.
 
 #### File Storage
 
 - Cloudflare R2, Amazon S3, atau S3-compatible storage untuk menyimpan logo bimbel dan file PDF.
-- File upload perlu membatasi ukuran file, tipe file, dan akses berdasarkan tenant.
+- File upload perlu membatasi ukuran file, tipe file, dan akses berdasarkan owner.
 - Logo bimbel harus disimpan sebagai aset yang dapat dipakai ulang pada invoice, email, dashboard, dan laporan.
 
 #### Email Service
@@ -370,21 +371,20 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 
 #### Dashboard Module
 
-- Mengagregasi metrik operasional dari invoice, penggajian, siswa, tentor, kelompok belajar, program, jadwal, presensi, dan laporan.
+- Mengagregasi metrik operasional dari invoice, penggajian, siswa, tentor, kelompok belajar, jadwal, presensi, dan laporan.
 - Memberikan visibilitas real-time atau mendekati real-time untuk owner dan admin.
 
 #### Master Data Module
 
 - Mengelola data siswa.
-- Mengelola data tentor.
-- Mengelola program belajar kustom.
-- Mengelola mata pelajaran.
+- Mengelola data tentor beserta satu atau lebih mata pelajaran yang diajar.
 - Mengelola ruangan.
 
 #### Study Group and Schedule Module
 
 - Membuat kelompok belajar.
-- Menetapkan program, mata pelajaran, tentor, ruangan, hari, jam, dan siswa.
+- Mengisi nama program langsung pada kelompok belajar serta menetapkan tentor, mata pelajaran dari data tentor, ruangan, hari, jam, dan siswa.
+- Menyaring pilihan mata pelajaran berdasarkan tentor terpilih dan menyimpan snapshot mata pelajaran pada kelompok belajar untuk menjaga riwayat.
 - Memvalidasi bentrok tentor.
 - Memvalidasi bentrok ruangan.
 - Menampilkan notifikasi saat terjadi bentrok.
@@ -392,7 +392,7 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 #### Attendance Module
 
 - Menampilkan jadwal mengajar yang ditugaskan kepada tentor.
-- Mencatat presensi siswa per sesi kelas.
+- Mencatat presensi siswa langsung pada jadwal kelas.
 - Mendukung status presensi: Hadir, Izin, Sakit, Alpha.
 - Mengirim data presensi yang sudah disimpan ke dashboard admin.
 - Menyediakan data presensi sebagai sumber untuk penggajian dan laporan perkembangan.
@@ -405,7 +405,7 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 
 #### Tutor Payroll Module
 
-- Menghitung gaji dari jumlah sesi mengajar dan tarif tentor.
+- Menghitung gaji dari jumlah jadwal mengajar dengan presensi tersimpan dan tarif tentor.
 - Memungkinkan penyesuaian tarif saat proses penggajian.
 - Menyimpan riwayat pembayaran.
 - Membuat slip gaji PDF yang dapat diunduh.
@@ -428,18 +428,15 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 
 #### Core Entities
 
-- Pelanggan atau Tenant
+- Owner
 - User
 - Role
 - Siswa
 - Kontak Orang Tua
 - Tentor
-- Program
-- Mata Pelajaran
 - Ruangan
 - Kelompok Belajar
 - Jadwal
-- Sesi Presensi
 - Catatan Presensi
 - Invoice
 - Status Pembayaran Invoice
@@ -451,11 +448,12 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 
 #### Key Relationships
 
-- Satu pelanggan memiliki banyak user, siswa, tentor, program, mata pelajaran, ruangan, kelompok belajar, invoice, data penggajian, dan laporan.
-- Satu kelompok belajar terhubung dengan banyak pelajaran, banyak tentor, banyak ruangan, dan banyak siswa.
-- Satu jadwal terhubung dengan satu kelompok belajar.
-- Satu sesi presensi terhubung dengan satu jadwal atau satu kelompok belajar.
-- Satu catatan presensi terhubung dengan satu sesi presensi dan satu siswa.
+- Satu owner memiliki banyak user, siswa, tentor, ruangan, kelompok belajar, invoice, data penggajian, dan laporan.
+- Satu tentor memiliki satu atau lebih mata pelajaran yang diajar sebagai bagian dari data tentor.
+- Satu kelompok belajar menyimpan satu nama program kustom, satu mata pelajaran yang bersumber dari data tentor, serta terhubung dengan satu tentor, satu ruangan, dan banyak siswa.
+- Satu jadwal merepresentasikan satu pelaksanaan kelas dan terhubung dengan satu kelompok belajar.
+- Satu jadwal memiliki banyak catatan presensi, masing-masing untuk satu siswa yang terdaftar pada kelompok belajar.
+- Jadwal adalah satu-satunya entitas untuk pelaksanaan kelas; seluruh catatan presensi merujuk langsung ke jadwal tanpa entitas perantara.
 - Satu invoice terhubung dengan satu siswa dan satu periode penagihan.
 - Satu item penggajian terhubung dengan satu tentor dan satu periode penggajian.
 - Satu laporan perkembangan belajar terhubung dengan satu siswa, satu tentor, satu bulan, dan secara opsional satu kelompok belajar.
@@ -472,7 +470,7 @@ Payment gateway, WhatsApp API, dan integrasi akuntansi eksternal belum termasuk 
 
 ### Security & Privacy
 
-- Setiap pelanggan hanya boleh mengakses data bimbelnya sendiri.
+- Setiap owner hanya boleh mengakses data bimbelnya sendiri.
 - Kontrol akses berbasis peran harus diterapkan pada setiap endpoint backend.
 - Tentor tidak boleh mengakses kelas, siswa, penggajian, atau laporan di luar penugasannya.
 - Email orang tua, rekening tentor, nomor HP, dan data siswa harus diperlakukan sebagai data pribadi.
@@ -487,8 +485,12 @@ Payment gateway, WhatsApp API, dan integrasi akuntansi eksternal belum termasuk 
 - Pembuatan invoice berjalan pada periode awal bulan yang sudah dikonfigurasi.
 - Jadwal tidak dapat disimpan jika tentor yang sama memiliki jadwal dengan hari dan jam yang tumpang tindih.
 - Jadwal tidak dapat disimpan jika ruangan yang sama memiliki jadwal dengan hari dan jam yang tumpang tindih.
+- Nama program disimpan langsung pada kelompok belajar tanpa relasi ke master data program.
+- Mata pelajaran kelompok belajar harus berasal dari daftar mata pelajaran milik tentor yang ditugaskan dan disimpan sebagai snapshot agar riwayat kelompok tidak berubah saat data tentor diperbarui.
+- Jadwal menjadi representasi langsung setiap pelaksanaan kelas tanpa membuat entitas pelaksanaan atau presensi tambahan.
+- Catatan presensi harus terhubung langsung dengan satu jadwal dan satu siswa.
 - Presensi harus disimpan sebelum dapat dihitung dalam penggajian.
-- Perhitungan gaji tentor menggunakan data presensi yang dikelompokkan berdasarkan sesi mengajar.
+- Perhitungan gaji tentor menggunakan jumlah jadwal dengan presensi tersimpan pada periode penggajian.
 - Admin dapat menyesuaikan tarif tentor saat proses penggajian.
 - Kehadiran pada laporan perkembangan diambil dari data presensi.
 - Email laporan perkembangan dikirim setelah laporan disimpan.
@@ -511,9 +513,7 @@ Cakupan yang termasuk:
 
 - Dashboard
 - Data siswa
-- Data tentor
-- Program belajar
-- Mata pelajaran
+- Data tentor beserta mata pelajaran yang diajar
 - Ruangan
 - Kelompok belajar
 - Jadwal
@@ -536,7 +536,7 @@ Potensi cakupan berikutnya:
 - Alur pengingat pembayaran.
 - Integrasi notifikasi WhatsApp.
 - Import data siswa dan tentor dari spreadsheet.
-- Filter dashboard yang lebih detail berdasarkan program, tentor, dan bulan.
+- Filter dashboard yang lebih detail berdasarkan nama program pada kelompok belajar, tentor, dan bulan.
 
 #### Version 2.0
 
@@ -572,10 +572,10 @@ Mitigasi: Bekukan data sumber penggajian saat gaji ditandai sudah dibayar, atau 
 Risiko: Email laporan perkembangan dapat gagal terkirim atau masuk ke spam.  
 Mitigasi: Simpan status pengiriman email, sediakan aksi kirim ulang, dan gunakan penyedia email yang reputasinya baik dengan sender domain yang sudah diverifikasi.
 
-#### Multi-Tenant Data Isolation
+#### Multi-Owner Data Isolation
 
-Risiko: Data dari satu bimbel dapat terlihat oleh pelanggan lain jika pembatasan tenant tidak konsisten.  
-Mitigasi: Wajibkan scope tenant atau pelanggan pada setiap query dan terapkan pengujian otorisasi backend.
+Risiko: Data dari satu bimbel dapat terlihat oleh owner lain jika pembatasan owner tidak konsisten.  
+Mitigasi: Wajibkan scope owner pada setiap query dan terapkan pengujian otorisasi backend.
 
 #### Simplicity vs Feature Creep
 
@@ -585,10 +585,10 @@ Mitigasi: Pertahankan MVP pada alur kerja yang sudah terdokumentasi dan pindahka
 ### Open Questions
 
 - Apa target waktu peluncuran MVP 1.0?
-- Apakah GrowDu akan memakai model multi-tenant SaaS sejak MVP?
+- Apakah GrowDu akan memakai model multi-owner SaaS sejak MVP?
 - Apakah owner dan admin bisa dibuat lebih dari satu akun per bimbel?
-- Apakah invoice SPP memiliki nominal tetap per siswa, per program, atau bisa berbeda per siswa?
+- Apakah invoice SPP memiliki nominal tetap per siswa, berdasarkan nama program pada kelompok belajar, atau bisa berbeda per siswa?
 - Apakah laporan perkembangan perlu disimpan sebagai PDF, HTML email, atau cukup email berbasis template?
 - Apakah presensi bisa diedit setelah disimpan, dan siapa yang berwenang mengeditnya?
 - Apakah penggajian dihitung bulanan saja atau mendukung periode kustom?
-- Apakah sistem perlu mendukung masa coba, paket harga SaaS, atau penagihan untuk pelanggan GrowDu?
+- Apakah sistem perlu mendukung masa coba, paket harga SaaS, atau penagihan untuk owner GrowDu?
