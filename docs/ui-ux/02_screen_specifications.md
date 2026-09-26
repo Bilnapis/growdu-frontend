@@ -1,6 +1,6 @@
 # Screen Specifications
 
-Dokumen ini mendefinisikan screen MVP BimbelKit, konten utama, aksi, state, dan kebutuhan UI per role.
+Dokumen ini mendefinisikan screen MVP GrowDu, konten utama, aksi, state, dan kebutuhan UI per role.
 
 ## Route And Screen Map
 
@@ -32,7 +32,7 @@ Memberi akses role-based ke aplikasi.
 ### Layout
 
 - Centered auth panel max width 420px.
-- Logo atau nama bimbel/BimbelKit di atas form.
+- Logo atau nama bimbel/GrowDu di atas form.
 - Form email, password, remember session.
 - Primary action: `Masuk`.
 - Secondary: `Lupa password?` jika fitur tersedia.

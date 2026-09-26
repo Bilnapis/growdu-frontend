@@ -2,7 +2,7 @@
 
 ## Product Positioning
 
-BimbelKit adalah operating system untuk bimbel Indonesia. Produk membantu owner, admin, dan tentor mengelola aktivitas harian bimbel dalam satu aplikasi: data siswa, data tentor, kelompok belajar, jadwal, presensi, invoice SPP, penggajian, laporan perkembangan, dan pengaturan identitas bimbel.
+GrowDu adalah operating system untuk bimbel Indonesia. Produk membantu owner, admin, dan tentor mengelola aktivitas harian bimbel dalam satu aplikasi: data siswa, data tentor, kelompok belajar, jadwal, presensi, invoice SPP, penggajian, laporan perkembangan, dan pengaturan identitas bimbel.
 
 MVP bukan aplikasi marketing dan bukan portal pembelajaran. Tampilan pertama setelah login harus langsung menjadi workspace operasional.
 
@@ -26,7 +26,7 @@ Dashboard, tabel, dan daftar harus mudah dipindai. Gunakan hierarchy yang jelas:
 
 ### 3. Guided Data Entry
 
-Form BimbelKit berisi banyak data administrasi. Pecah form menjadi section kecil, tampilkan field wajib, beri validasi dekat field, dan pakai default value saat memungkinkan.
+Form GrowDu berisi banyak data administrasi. Pecah form menjadi section kecil, tampilkan field wajib, beri validasi dekat field, dan pakai default value saat memungkinkan.
 
 ### 4. Status Is A First-Class UI
 
@@ -169,7 +169,7 @@ Setiap halaman operasional mengikuti pola:
 
 ## Visual Tone
 
-BimbelKit harus terlihat seperti alat kerja modern untuk lembaga pendidikan:
+GrowDu harus terlihat seperti alat kerja modern untuk lembaga pendidikan:
 
 - Warna utama edukatif dan tepercaya.
 - Banyak ruang putih, bukan dekorasi ramai.

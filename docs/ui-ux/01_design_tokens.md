@@ -1,6 +1,6 @@
 # Design Tokens
 
-Token desain ini menjadi fondasi visual BimbelKit. Semua komponen sebaiknya memakai token, bukan warna hardcoded, agar branding bimbel bisa dikonfigurasi dari pengaturan.
+Token desain ini menjadi fondasi visual GrowDu. Semua komponen sebaiknya memakai token, bukan warna hardcoded, agar branding bimbel bisa dikonfigurasi dari pengaturan.
 
 ## Color System
 

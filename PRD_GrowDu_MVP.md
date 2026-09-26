@@ -1,8 +1,8 @@
-# PRD BimbelKit MVP 1.0
+# PRD GrowDu MVP 1.0
 
-Sumber: `BimbelKit (MVP).docx`
+Sumber: `GrowDu (MVP).docx`
 
-Produk: BimbelKit  
+Produk: GrowDu  
 Tagline produk: Operating System untuk Bimbel Indonesia  
 Versi dokumen: MVP 1.0  
 Status: Draft PRD  
@@ -18,13 +18,13 @@ Bimbel yang baru berdiri juga membutuhkan sistem sederhana yang bisa langsung di
 
 ### Proposed Solution
 
-BimbelKit adalah platform manajemen operasional bimbingan belajar berbasis web yang membantu owner, admin, dan tentor mengelola aktivitas utama bimbel dalam satu sistem terpadu.
+GrowDu adalah platform manajemen operasional bimbingan belajar berbasis web yang membantu owner, admin, dan tentor mengelola aktivitas utama bimbel dalam satu sistem terpadu.
 
 MVP 1.0 berfokus pada fitur inti: dashboard operasional, master data, kelompok belajar, jadwal, presensi, invoice SPP bulanan, penggajian tentor, laporan perkembangan belajar, dan pengaturan identitas bimbel.
 
 ### Success Criteria
 
-- Minimal 90% aktivitas operasional harian admin untuk data siswa, jadwal, presensi, invoice, dan penggajian dapat dilakukan dari BimbelKit tanpa spreadsheet terpisah.
+- Minimal 90% aktivitas operasional harian admin untuk data siswa, jadwal, presensi, invoice, dan penggajian dapat dilakukan dari GrowDu tanpa spreadsheet terpisah.
 - Admin dapat membuat kelompok belajar dan jadwal dengan validasi bentrok tentor dan ruangan sebelum data tersimpan.
 - Tentor dapat mengisi presensi kelas dan laporan perkembangan siswa dari akun masing-masing.
 - Invoice SPP bulanan dapat dibuat otomatis untuk seluruh siswa aktif pada awal bulan.
@@ -232,7 +232,7 @@ Evaluasi AI untuk rekomendasi, pembuatan draft laporan otomatis, atau ringkasan 
 
 ### Architecture Overview
 
-BimbelKit sebaiknya diimplementasikan sebagai aplikasi web multi-role dengan backend dan database terpusat.
+GrowDu sebaiknya diimplementasikan sebagai aplikasi web multi-role dengan backend dan database terpusat.
 
 Rekomendasi arsitektur tingkat tinggi:
 
@@ -259,7 +259,7 @@ Alur data utama:
 
 ### Recommended Tech Stack
 
-Stack berikut direkomendasikan untuk MVP 1.0 karena pengembangan saat ini berfokus pada aplikasi web berbasis browser. Kebutuhan utama BimbelKit adalah aplikasi web multi-role, CRUD operasional, validasi jadwal, invoice otomatis, penggajian, email, PDF, dan isolasi data antar bimbel.
+Stack berikut direkomendasikan untuk MVP 1.0 karena pengembangan saat ini berfokus pada aplikasi web berbasis browser. Kebutuhan utama GrowDu adalah aplikasi web multi-role, CRUD operasional, validasi jadwal, invoice otomatis, penggajian, email, PDF, dan isolasi data antar bimbel.
 
 #### Frontend
 
@@ -287,7 +287,7 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 
 #### Database and ORM
 
-- MySQL sebagai database utama karena kebutuhan BimbelKit didominasi data relasional seperti siswa, tentor, kelompok belajar, jadwal, presensi, invoice, payroll, dan laporan perkembangan.
+- MySQL sebagai database utama karena kebutuhan GrowDu didominasi data relasional seperti siswa, tentor, kelompok belajar, jadwal, presensi, invoice, payroll, dan laporan perkembangan.
 - Prisma ORM direkomendasikan untuk schema, migration, query type-safe, dan pemodelan relasi MySQL.
 - Alternatif ORM adalah TypeORM jika tim ingin mengikuti pola yang umum digunakan pada ekosistem NestJS, tetapi Prisma lebih direkomendasikan untuk produktivitas dan type safety.
 - Soft delete atau status nonaktif untuk data penting seperti siswa, tentor, program, dan ruangan agar riwayat operasional tidak rusak.
@@ -452,7 +452,7 @@ Rekomendasi MVP: gunakan arsitektur frontend dan backend terpisah sejak awal, de
 #### Key Relationships
 
 - Satu pelanggan memiliki banyak user, siswa, tentor, program, mata pelajaran, ruangan, kelompok belajar, invoice, data penggajian, dan laporan.
-- Satu kelompok belajar terhubung dengan satu program, satu mata pelajaran, satu tentor, satu ruangan, dan banyak siswa.
+- Satu kelompok belajar terhubung dengan banyak pelajaran, banyak tentor, banyak ruangan, dan banyak siswa.
 - Satu jadwal terhubung dengan satu kelompok belajar.
 - Satu sesi presensi terhubung dengan satu jadwal atau satu kelompok belajar.
 - Satu catatan presensi terhubung dengan satu sesi presensi dan satu siswa.
@@ -585,10 +585,10 @@ Mitigasi: Pertahankan MVP pada alur kerja yang sudah terdokumentasi dan pindahka
 ### Open Questions
 
 - Apa target waktu peluncuran MVP 1.0?
-- Apakah BimbelKit akan memakai model multi-tenant SaaS sejak MVP?
+- Apakah GrowDu akan memakai model multi-tenant SaaS sejak MVP?
 - Apakah owner dan admin bisa dibuat lebih dari satu akun per bimbel?
 - Apakah invoice SPP memiliki nominal tetap per siswa, per program, atau bisa berbeda per siswa?
 - Apakah laporan perkembangan perlu disimpan sebagai PDF, HTML email, atau cukup email berbasis template?
 - Apakah presensi bisa diedit setelah disimpan, dan siapa yang berwenang mengeditnya?
 - Apakah penggajian dihitung bulanan saja atau mendukung periode kustom?
-- Apakah sistem perlu mendukung masa coba, paket harga SaaS, atau penagihan untuk pelanggan BimbelKit?
+- Apakah sistem perlu mendukung masa coba, paket harga SaaS, atau penagihan untuk pelanggan GrowDu?

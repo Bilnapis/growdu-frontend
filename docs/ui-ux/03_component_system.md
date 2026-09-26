@@ -1,6 +1,6 @@
 # Component System
 
-Dokumen ini mendefinisikan komponen UI yang diperlukan untuk membangun BimbelKit MVP.
+Dokumen ini mendefinisikan komponen UI yang diperlukan untuk membangun GrowDu MVP.
 
 ## Component Principles
 

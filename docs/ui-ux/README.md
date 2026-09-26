@@ -1,6 +1,6 @@
-# BimbelKit UI/UX Design Setup
+# GrowDu UI/UX Design Setup
 
-Dokumen ini adalah paket setup desain untuk implementasi tampilan BimbelKit MVP 1.0 berdasarkan `PRD_BimbelKit_MVP.md`.
+Dokumen ini adalah paket setup desain untuk implementasi tampilan GrowDu MVP 1.0 berdasarkan `PRD_GrowDu_MVP.md`.
 
 Produk MVP difokuskan sebagai aplikasi web dashboard multi-role untuk owner, admin, dan tentor. Desain harus terasa operasional, rapi, cepat dipindai, dan tidak seperti landing page. Pengguna utama akan memakai aplikasi ini berulang setiap hari untuk mengelola data, jadwal, presensi, pembayaran, payroll, dan laporan perkembangan belajar.
 
@@ -31,7 +31,7 @@ Produk MVP difokuskan sebagai aplikasi web dashboard multi-role untuk owner, adm
 
 ## Target Kualitas Visual
 
-BimbelKit harus terasa:
+GrowDu harus terasa:
 
 - Profesional, bersih, dan dipercaya untuk data operasional.
 - Padat namun tidak sesak.

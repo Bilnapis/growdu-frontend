@@ -1,6 +1,6 @@
 # User Flows And States
 
-Dokumen ini mendefinisikan flow utama, state UI, validasi, responsive behavior, microcopy, dan checklist QA untuk BimbelKit MVP.
+Dokumen ini mendefinisikan flow utama, state UI, validasi, responsive behavior, microcopy, dan checklist QA untuk GrowDu MVP.
 
 ## Core User Flows
 
