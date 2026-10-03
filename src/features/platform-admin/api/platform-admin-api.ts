@@ -21,6 +21,55 @@ export type PlatformTenant = {
   status: 'active' | 'inactive'
 }
 
+export type PlatformTenantStatus = PlatformTenant['status']
+
+export type PlatformManagedTenant = PlatformTenant & {
+  ownerId: string
+  ownerName: string
+  ownerEmail: string
+  address: string | null
+  whatsappNumber: string | null
+  email: string | null
+  logoUrl: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export type PlatformTenantOwner = {
+  id: string
+  name: string
+  email: string
+}
+
+export type CreatePlatformTenantInput = {
+  ownerId: string
+  name: string
+  address: string | null
+  whatsappNumber: string | null
+  email: string | null
+  logoUrl: string | null
+  status: PlatformTenantStatus
+}
+
+export type UpdatePlatformTenantInput = CreatePlatformTenantInput
+
+export type ManagedPlatformTenantFilters = {
+  page: number
+  limit: number
+  search?: string
+  status?: PlatformTenantStatus
+}
+
+type ManagedPlatformTenantsResponse = {
+  data: PlatformManagedTenant[]
+  meta: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+}
+
 export type PlatformUserDetail = PlatformUser & {
   name: string
   phoneNumber: string
@@ -146,5 +195,51 @@ export function getPlatformTenants(signal?: AbortSignal) {
   return apiRequest<PlatformTenant[]>('/platform-admin/users/tenants', {
     authScope: 'platform-admin',
     signal,
+  })
+}
+
+export function getManagedPlatformTenants(
+  filters: ManagedPlatformTenantFilters,
+  signal?: AbortSignal,
+) {
+  const params = new URLSearchParams({
+    page: String(filters.page),
+    limit: String(filters.limit),
+  })
+  if (filters.search) params.set('search', filters.search)
+  if (filters.status) params.set('status', filters.status)
+
+  return apiRequest<ManagedPlatformTenantsResponse>(
+    `/platform-admin/tenants?${params.toString()}`,
+    {
+    authScope: 'platform-admin',
+    signal,
+    },
+  )
+}
+
+export function getPlatformTenantOwners(signal?: AbortSignal) {
+  return apiRequest<PlatformTenantOwner[]>('/platform-admin/tenants/owners', {
+    authScope: 'platform-admin',
+    signal,
+  })
+}
+
+export function createPlatformTenant(input: CreatePlatformTenantInput) {
+  return apiRequest<PlatformManagedTenant>('/platform-admin/tenants', {
+    method: 'POST',
+    body: JSON.stringify(input),
+    authScope: 'platform-admin',
+  })
+}
+
+export function updatePlatformTenant(
+  id: string,
+  input: UpdatePlatformTenantInput,
+) {
+  return apiRequest<PlatformManagedTenant>(`/platform-admin/tenants/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+    authScope: 'platform-admin',
   })
 }

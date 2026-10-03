@@ -12,6 +12,7 @@ import { AdminDashboardPage } from '@/pages/AdminDashboardPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { PlatformAdminLoginPage } from '@/pages/PlatformAdminLoginPage'
+import { PlatformTenantsPage } from '@/pages/PlatformTenantsPage'
 import { PlatformUsersPage } from '@/pages/PlatformUsersPage'
 import { SetupPage } from '@/pages/SetupPage'
 import { UserSettingsPage } from '@/pages/UserSettingsPage'
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
               {
                 path: 'users',
                 element: <PlatformUsersPage />,
+              },
+              {
+                path: 'tenants',
+                element: <PlatformTenantsPage />,
               },
             ],
           },

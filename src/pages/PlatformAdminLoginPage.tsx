@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -59,14 +59,14 @@ export function PlatformAdminLoginPage() {
     <main className="grid min-h-screen place-items-center bg-slate-100 p-4 sm:p-8">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <div className="flex h-11 w-11 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <ShieldCheck className="h-6 w-6" aria-hidden="true" />
-          </div>
-          <CardTitle id="platform-admin-login-title" className="pt-4 text-2xl">
-            BimbelKit Super Admin
+          <CardTitle
+            id="platform-admin-login-title"
+            className="text-center text-2xl"
+          >
+            GrowDu Super Admin
           </CardTitle>
-          <CardDescription className="leading-6">
-            Masuk dengan akun administrator platform.
+          <CardDescription className="text-center leading-6">
+            Silahkan maasuk dengan akun administrator.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,6 +82,7 @@ export function PlatformAdminLoginPage() {
                 name="email"
                 type="email"
                 autoComplete="username"
+                placeholder="Masukkan email"
                 required
                 disabled={loginMutation.isPending}
               />
@@ -98,6 +99,7 @@ export function PlatformAdminLoginPage() {
                   maxLength={128}
                   className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                   required
+                  placeholder="Masukkan kata sandi"
                   disabled={loginMutation.isPending}
                   aria-describedby="platform-admin-password-hint"
                 />
@@ -132,7 +134,7 @@ export function PlatformAdminLoginPage() {
             ) : null}
             <Button
               type="submit"
-              className="w-full"
+              className="w-full mt-2"
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? "Memproses..." : "Masuk"}

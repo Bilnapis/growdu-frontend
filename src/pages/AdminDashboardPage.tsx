@@ -1,4 +1,6 @@
 import { Building2, KeyRound } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function AdminDashboardPage() {
@@ -26,8 +28,10 @@ export function AdminDashboardPage() {
               panel saat modul tenant tersedia.
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Modul disiapkan sebagai langkah berikutnya.
+          <CardContent>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/tenants">Lihat daftar bimbel</Link>
+            </Button>
           </CardContent>
         </Card>
 
