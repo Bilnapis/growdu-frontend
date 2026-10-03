@@ -20,7 +20,7 @@ import {
   usePlatformTenants,
   useUpdatePlatformUser,
 } from "@/features/platform-admin/hooks/use-platform-users";
-import { ApiError } from "@/lib/api-client";
+import { ApiError } from "@/services/api-client";
 
 type PlatformUserManagementProps = {
   filters: {

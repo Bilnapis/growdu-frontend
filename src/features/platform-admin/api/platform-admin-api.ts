@@ -1,4 +1,4 @@
-import { apiRequest } from '@/lib/api-client'
+import { apiRequest } from '@/services/api-client'
 import { type PlatformAdmin } from '@/lib/platform-admin-session'
 
 export type PlatformUserRole = 'owner' | 'operator' | 'tutor' | 'parent'

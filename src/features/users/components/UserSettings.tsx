@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ApiError } from '@/lib/api-client'
+import { ApiError } from '@/services/api-client'
 import { type ManagedUser, type UserRole, type UserStatus } from '@/features/users/api/users-api'
 import { useResetUserPassword, useUpdateUser, useUsers } from '@/features/users/hooks/use-users'
 

@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ApiError } from '@/lib/api-client'
-import { login } from '@/lib/auth-api'
+import { ApiError } from '@/services/api-client'
+import { login } from '@/services/auth.service'
 import { clearAuthSession, storeAuthSession } from '@/lib/auth-session'
 
 type IconName = 'calendar' | 'users' | 'file' | 'eye' | 'eyeOff'

@@ -1,4 +1,4 @@
-import { apiRequest } from '@/lib/api-client'
+import { apiRequest } from '@/services/api-client'
 
 export type UserRole = 'owner' | 'operator' | 'tutor' | 'parent'
 export type UserStatus = 'active' | 'inactive'

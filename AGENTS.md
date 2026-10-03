@@ -42,9 +42,11 @@ Struktur dasar yang sudah tersedia:
 src/
 ├── app/          # Router dan provider global aplikasi
 ├── components/   # Komponen UI reusable lintas domain
+├── config/       # Environment serta konfigurasi Axios
 ├── hooks/        # Custom hook reusable lintas domain
-├── lib/          # API client, query client, formatter, dan utility
+├── lib/          # Query client, session facade, formatter, dan utility
 ├── pages/        # Entry component untuk route
+├── services/     # Transport API dan layanan eksternal lintas feature
 └── styles/       # Design tokens serta global style
 ```
 
@@ -115,11 +117,11 @@ src/features/<feature>/
 
 ### Transport API
 
-- Base URL dibaca dari `env.apiBaseUrl` di `src/lib/env.ts`.
+- Base URL dibaca dari `env.apiBaseUrl` di `src/config/env.ts`.
 - Jangan hard-code hostname atau port API di component, page, atau feature.
-- Pusatkan transport HTTP, parsing response, auth header, dan normalisasi error di
-  `src/lib/`.
-- Periksa `response.ok` sebelum memakai payload dan bedakan network error dari
+- Konfigurasi Axios berada di `src/config/axios.ts`; pusatkan transport HTTP,
+  auth header, dan normalisasi error di `src/services/api-client.ts`.
+- Tangani `AxiosError` secara terpusat dan bedakan network error dari
   application error.
 - Gunakan `AbortSignal` jika request dapat dibatalkan oleh query lifecycle.
 - Jangan menampilkan raw stack trace atau pesan internal backend kepada user.
@@ -213,7 +215,7 @@ memicu render seluruh aplikasi.
 - Secret, private key, database credential, dan server token tidak boleh berada
   pada source atau environment frontend.
 - Tambahkan variable baru ke `.env.example` dengan nilai contoh aman.
-- Normalisasi dan validasi environment melalui `src/lib/env.ts`.
+- Normalisasi dan validasi environment melalui `src/config/env.ts`.
 - Hindari `dangerouslySetInnerHTML`. Jika benar-benar dibutuhkan, sanitasi HTML
   dengan solusi yang sesuai dan dokumentasikan sumber kontennya.
 - Jangan mengandalkan penyembunyian menu/tombol sebagai authorization.

@@ -1,4 +1,4 @@
-import { apiRequest } from '@/lib/api-client'
+import { apiRequest } from '@/services/api-client'
 import { type AuthUser } from '@/lib/auth-session'
 
 export type LoginRequest = {
@@ -17,6 +17,7 @@ export function login(request: LoginRequest) {
   return apiRequest<LoginResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify(request),
+    authScope: 'none',
   })
 }
 
