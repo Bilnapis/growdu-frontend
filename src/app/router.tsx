@@ -9,13 +9,16 @@ import {
 } from '@/app/route-guards'
 import { AdminLayout } from '@/features/admin/components/AdminLayout'
 import { AdminDashboardPage } from '@/pages/AdminDashboardPage'
+import { DashboardLandingPage } from '@/pages/DashboardLandingPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import { DashboardPage } from '@/pages/DashboardPage'
+import { DashboardModulePlaceholderPage } from '@/pages/DashboardModulePlaceholderPage'
 import { PlatformAdminLoginPage } from '@/pages/PlatformAdminLoginPage'
 import { PlatformTenantsPage } from '@/pages/PlatformTenantsPage'
 import { PlatformUsersPage } from '@/pages/PlatformUsersPage'
-import { SetupPage } from '@/pages/SetupPage'
 import { UserSettingsPage } from '@/pages/UserSettingsPage'
+import { DashboardLayout } from '@/features/dashboard/components/DashboardLayout'
 
 export const router = createBrowserRouter([
   {
@@ -30,8 +33,22 @@ export const router = createBrowserRouter([
         element: <AuthenticatedRoute />,
         children: [
           {
-            path: 'dashboard',
-            element: <SetupPage />,
+            element: <DashboardLandingPage />,
+            children: [
+              {
+                element: <DashboardLayout />,
+                children: [
+                  {
+                    path: 'dashboard',
+                    element: <DashboardPage />,
+                  },
+                  {
+                    path: ':section',
+                    element: <DashboardModulePlaceholderPage />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
