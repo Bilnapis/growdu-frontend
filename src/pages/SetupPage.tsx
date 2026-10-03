@@ -1,46 +1,46 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { LogOut } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import { SetupCard } from '@/components/SetupCard'
-import { Button } from '@/components/ui/button'
-import { logout } from '@/lib/auth-api'
-import { clearAuthSession } from '@/lib/auth-session'
-import { env } from '@/lib/env'
+import { SetupCard } from "@/components/SetupCard";
+import { Button } from "@/components/ui/button";
+import { env } from "@/config/env";
+import { clearAuthSession } from "@/lib/auth-session";
+import { logout } from "@/services/auth.service";
 
 const foundations = [
   {
-    title: 'React + TypeScript',
-    description: 'React 18 dengan TypeScript strict dan import alias @/.',
+    title: "React + TypeScript",
+    description: "React 18 dengan TypeScript strict dan import alias @/.",
   },
   {
-    title: 'Routing',
-    description: 'React Router siap untuk route owner, admin, dan tentor.',
+    title: "Routing",
+    description: "React Router siap untuk route owner, admin, dan tentor.",
   },
   {
-    title: 'Server state',
-    description: 'TanStack Query tersedia untuk integrasi API dan cache data.',
+    title: "Server state",
+    description: "TanStack Query tersedia untuk integrasi API dan cache data.",
   },
   {
-    title: 'Design tokens',
-    description: 'Token GrowDu telah dipetakan ke CSS custom properties.',
+    title: "Design tokens",
+    description: "Token GrowDu telah dipetakan ke CSS custom properties.",
   },
-] as const
+] as const;
 
 export function SetupPage() {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSettled: () => {
-      clearAuthSession()
-      queryClient.clear()
-      void navigate('/login', { replace: true })
+      clearAuthSession();
+      queryClient.clear();
+      void navigate("/login", { replace: true });
     },
-  })
+  });
 
   function handleLogout() {
-    logoutMutation.mutate()
+    logoutMutation.mutate();
   }
 
   return (
@@ -71,13 +71,13 @@ export function SetupPage() {
             disabled={logoutMutation.isPending}
           >
             <LogOut className="h-4 w-4" aria-hidden="true" />
-            {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
+            {logoutMutation.isPending ? "Keluar..." : "Keluar"}
           </Button>
         </div>
 
         <div className="max-w-xl">
           <span className="text-xs font-bold uppercase tracking-wider text-sky-200">
-            Frontend foundation
+            Frontend foundation test
           </span>
           <h1
             id="setup-title"
@@ -140,5 +140,5 @@ export function SetupPage() {
         />
       </section>
     </main>
-  )
+  );
 }
