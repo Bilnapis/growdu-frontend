@@ -77,7 +77,7 @@ export function SetupPage() {
 
         <div className="max-w-xl">
           <span className="text-xs font-bold uppercase tracking-wider text-sky-200">
-            Frontend foundation test
+            Frontend foundation
           </span>
           <h1
             id="setup-title"
