@@ -1,4 +1,11 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { LogOut } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
 import { SetupCard } from '@/components/SetupCard'
+import { Button } from '@/components/ui/button'
+import { logout } from '@/lib/auth-api'
+import { clearAuthSession } from '@/lib/auth-session'
 import { env } from '@/lib/env'
 
 const foundations = [
@@ -21,23 +28,51 @@ const foundations = [
 ] as const
 
 export function SetupPage() {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSettled: () => {
+      clearAuthSession()
+      queryClient.clear()
+      void navigate('/login', { replace: true })
+    },
+  })
+
+  function handleLogout() {
+    logoutMutation.mutate()
+  }
+
   return (
     <main className="grid min-h-screen lg:grid-cols-[minmax(20rem,0.8fr)_minmax(32rem,1.2fr)]">
       <section
         className="flex min-h-screen flex-col justify-between gap-10 bg-gradient-to-br from-sky-950 to-sky-700 p-8 text-primary-foreground sm:p-12 lg:p-16"
         aria-labelledby="setup-title"
       >
-        <div
-          className="flex items-center gap-3 text-lg font-bold"
-          aria-label="GrowDu"
-        >
-          <span
-            className="grid h-9 w-9 place-items-center rounded-md border border-white/30 bg-white/15"
-            aria-hidden="true"
+        <div className="flex items-center justify-between gap-4">
+          <div
+            className="flex items-center gap-3 text-lg font-bold"
+            aria-label="GrowDu"
           >
-            G
-          </span>
-          <span>GrowDu</span>
+            <span
+              className="grid h-9 w-9 place-items-center rounded-md border border-white/30 bg-white/15"
+              aria-hidden="true"
+            >
+              G
+            </span>
+            <span>GrowDu</span>
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="border-white/30 bg-white/15 text-primary-foreground hover:bg-white/25 hover:text-primary-foreground"
+            onClick={handleLogout}
+            disabled={logoutMutation.isPending}
+          >
+            <LogOut className="h-4 w-4" aria-hidden="true" />
+            {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
+          </Button>
         </div>
 
         <div className="max-w-xl">
