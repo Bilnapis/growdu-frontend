@@ -1,5 +1,3 @@
-# .github/workflows/telegram-push-notify.yml
-
 name: Notify Telegram on Push
 
 on:
@@ -16,15 +14,8 @@ jobs:
     steps:
       - name: Send Telegram notification
         run: |
-          MESSAGE="🚀 *New push to repository*
+          MESSAGE="🚀 New push to ${{ github.repository }} by ${{ github.actor }} on branch ${{ github.ref_name }}. Commit: ${{ github.event.head_commit.message }}"
 
-📦 Repo: *${{ github.repository }}*
-🌿 Branch: *${{ github.ref_name }}*
-👤 By: *${{ github.actor }}*
-📝 Commit: ${{ github.event.head_commit.message }}
-🔗 [View Commit](${{ github.event.head_commit.url }})"
-
-          curl -s -X POST "https://api.telegram.org/bot8833966230:AAFXmqSP7_p8i0nJWDqr5NK25p2GBAS7NY4/sendMessage" \
-            -d chat_id="-1004452727398" \
-            -d text="$MESSAGE" \
-            -d parse_mode="Markdown"
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=$MESSAGE"
