@@ -92,7 +92,7 @@ export function TenantSelector({
         </p>
 
         <div
-          className="mt-8 grid w-full gap-8 md:grid-cols-2 xl:grid-cols-3"
+          className="mt-8 grid w-full grid-cols-[minmax(0,25rem)] justify-center gap-8 md:grid-cols-[repeat(auto-fit,minmax(22rem,25rem))]"
           aria-label="Daftar bimbel"
         >
           {tenants.map((tenant, index) => {
