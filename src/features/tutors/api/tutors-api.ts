@@ -8,6 +8,13 @@ export type Tutor = {
   userId: string | null
   name: string
   phoneNumber: string
+  email: string | null
+  address: string | null
+  expertise: string | null
+  education: string | null
+  bankName: string | null
+  accountName: string | null
+  accountNumber: string | null
   sessionRate: string
   status: TutorStatus
   createdAt: string
@@ -34,8 +41,21 @@ type PaginatedTutorsResponse = {
 export type TutorInput = {
   name: string
   phoneNumber: string
+  email?: string
+  address?: string
+  expertise?: string
+  education?: string
+  bankName?: string
+  accountName?: string
+  accountNumber?: string
   sessionRate: string
   status?: TutorStatus
+}
+
+export type TutorFormOptions = {
+  expertiseOptions: string[]
+  educationOptions: string[]
+  bankOptions: string[]
 }
 
 export function getTutors(filters: TutorsFilters, signal?: AbortSignal) {
@@ -55,13 +75,17 @@ export function getTutors(filters: TutorsFilters, signal?: AbortSignal) {
 export function createTutor(input: TutorInput) {
   return apiRequest<Tutor>('/tutors', {
     method: 'POST',
-    body: JSON.stringify(input),
+    body: input,
   })
 }
 
 export function updateTutor(id: string, input: TutorInput) {
   return apiRequest<Tutor>(`/tutors/${id}`, {
     method: 'PATCH',
-    body: JSON.stringify(input),
+    body: input,
   })
+}
+
+export function getTutorFormOptions(signal?: AbortSignal) {
+  return apiRequest<TutorFormOptions>('/tutors/form-options', { signal })
 }

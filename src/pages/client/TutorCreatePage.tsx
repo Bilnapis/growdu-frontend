@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateTutor } from "@/features/tutors/hooks/use-tutors";
+import {
+  useCreateTutor,
+  useTutorFormOptions,
+} from "@/features/tutors/hooks/use-tutors";
 import { ApiError } from "@/services/api-client";
 
 type TutorCreateForm = {
@@ -34,10 +37,14 @@ const initialForm: TutorCreateForm = {
 export function TutorCreatePage() {
   const navigate = useNavigate();
   const createMutation = useCreateTutor();
+  const formOptionsQuery = useTutorFormOptions();
   const [form, setForm] = useState<TutorCreateForm>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const expertiseOptions = formOptionsQuery.data?.expertiseOptions ?? [];
+  const educationOptions = formOptionsQuery.data?.educationOptions ?? [];
+  const bankOptions = formOptionsQuery.data?.bankOptions ?? [];
 
   const validationIssues = useMemo(() => {
     const issues: string[] = [];
@@ -50,10 +57,41 @@ export function TutorCreatePage() {
       issues.push("Nomor HP minimal 6 karakter.");
     }
 
-    return issues;
-  }, [form.name, form.phoneNumber]);
+    if (!isValidEmail(form.email)) {
+      issues.push("Email wajib valid.");
+    }
 
-  const canSubmit = validationIssues.length === 0 && !createMutation.isPending;
+    if (form.address.trim().length < 1) {
+      issues.push("Alamat wajib diisi.");
+    }
+
+    if (form.expertise.trim().length < 1) {
+      issues.push("Keahlian wajib dipilih.");
+    }
+
+    if (form.education.trim().length < 1) {
+      issues.push("Jurusan wajib dipilih.");
+    }
+
+    if (form.bankName.trim().length < 1) {
+      issues.push("Bank atau e-wallet wajib dipilih.");
+    }
+
+    if (form.accountName.trim().length < 2) {
+      issues.push("Atas nama rekening minimal 2 karakter.");
+    }
+
+    if (form.accountNumber.trim().length < 3) {
+      issues.push("Nomor rekening minimal 3 karakter.");
+    }
+
+    return issues;
+  }, [form]);
+
+  const canSubmit =
+    validationIssues.length === 0 &&
+    !createMutation.isPending &&
+    !formOptionsQuery.isLoading;
 
   function updateField(field: keyof TutorCreateForm, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -73,6 +111,13 @@ export function TutorCreatePage() {
       {
         name: form.name.trim(),
         phoneNumber: form.phoneNumber.trim(),
+        email: form.email.trim(),
+        address: form.address.trim(),
+        expertise: form.expertise.trim(),
+        education: form.education.trim(),
+        bankName: form.bankName.trim(),
+        accountName: form.accountName.trim(),
+        accountNumber: form.accountNumber.trim(),
         sessionRate: "0",
         status: "active",
       },
@@ -106,6 +151,15 @@ export function TutorCreatePage() {
 
       <form className="mt-[18px] space-y-5" onSubmit={handleSubmit}>
         <div className="max-w-[742px] space-y-4">
+          {formOptionsQuery.isError ? (
+            <p
+              className="rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
+              role="alert"
+            >
+              Data pilihan form belum dapat dimuat. Silakan muat ulang halaman.
+            </p>
+          ) : null}
+
           <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
             <SectionHeader
               title="Data Tentor"
@@ -128,8 +182,14 @@ export function TutorCreatePage() {
                 id="tutor-phone"
                 label="Nomor HP"
                 value={form.phoneNumber}
-                placeholder="081234567890"
-                inputMode="tel"
+                required
+                error={
+                  submitted && form.phoneNumber.trim().length < 6
+                    ? "Nomor HP minimal 6 karakter."
+                    : undefined
+                }
+                placeholder="81234567890"
+                isPhone
                 onChange={(value) => updateField("phoneNumber", value)}
               />
               <FormField
@@ -137,6 +197,11 @@ export function TutorCreatePage() {
                 label="Email"
                 value={form.email}
                 required
+                error={
+                  submitted && !isValidEmail(form.email)
+                    ? "Email wajib valid."
+                    : undefined
+                }
                 placeholder="nama@email.com"
                 type="email"
                 onChange={(value) => updateField("email", value)}
@@ -146,23 +211,50 @@ export function TutorCreatePage() {
                 label="Alamat"
                 value={form.address}
                 required
+                error={
+                  submitted && form.address.trim().length < 1
+                    ? "Alamat wajib diisi."
+                    : undefined
+                }
                 placeholder="Jl. Melati No. 12, Bandung"
                 onChange={(value) => updateField("address", value)}
               />
-              <FormField
+              <SelectField
                 id="tutor-expertise"
                 label="Keahlian"
                 value={form.expertise}
                 required
-                placeholder="Matematika, Fisika"
+                options={expertiseOptions}
+                placeholder={
+                  formOptionsQuery.isLoading
+                    ? "Memuat keahlian..."
+                    : "Pilih keahlian"
+                }
+                disabled={formOptionsQuery.isLoading}
+                error={
+                  submitted && form.expertise.trim().length < 1
+                    ? "Keahlian wajib dipilih."
+                    : undefined
+                }
                 onChange={(value) => updateField("expertise", value)}
               />
-              <FormField
+              <SelectField
                 id="tutor-education"
-                label="Pendidikan"
+                label="Jurusan"
                 value={form.education}
                 required
-                placeholder="Pendidikan Matematika"
+                options={educationOptions}
+                placeholder={
+                  formOptionsQuery.isLoading
+                    ? "Memuat jurusan..."
+                    : "Pilih jurusan"
+                }
+                disabled={formOptionsQuery.isLoading}
+                error={
+                  submitted && form.education.trim().length < 1
+                    ? "Jurusan wajib dipilih."
+                    : undefined
+                }
                 onChange={(value) => updateField("education", value)}
               />
             </div>
@@ -174,12 +266,23 @@ export function TutorCreatePage() {
               description="Dipakai untuk invoice atau penggajian"
             />
             <div className="mt-4 grid gap-3.5 md:grid-cols-3">
-              <FormField
+              <SelectField
                 id="tutor-bank"
                 label="Bank / E-Wallet"
                 value={form.bankName}
                 required
-                placeholder="BCA"
+                options={bankOptions}
+                placeholder={
+                  formOptionsQuery.isLoading
+                    ? "Memuat bank..."
+                    : "Pilih bank / e-wallet"
+                }
+                disabled={formOptionsQuery.isLoading}
+                error={
+                  submitted && form.bankName.trim().length < 1
+                    ? "Bank atau e-wallet wajib dipilih."
+                    : undefined
+                }
                 onChange={(value) => updateField("bankName", value)}
               />
               <FormField
@@ -187,6 +290,11 @@ export function TutorCreatePage() {
                 label="Atas Nama"
                 value={form.accountName}
                 required
+                error={
+                  submitted && form.accountName.trim().length < 2
+                    ? "Atas nama rekening minimal 2 karakter."
+                    : undefined
+                }
                 placeholder="Tentor"
                 onChange={(value) => updateField("accountName", value)}
               />
@@ -195,6 +303,11 @@ export function TutorCreatePage() {
                 label="Nomor Rekening"
                 value={form.accountNumber}
                 required
+                error={
+                  submitted && form.accountNumber.trim().length < 3
+                    ? "Nomor rekening minimal 3 karakter."
+                    : undefined
+                }
                 placeholder="12345678"
                 inputMode="numeric"
                 onChange={(value) => updateField("accountNumber", value)}
@@ -278,6 +391,7 @@ function FormField({
   placeholder,
   type = "text",
   inputMode,
+  isPhone = false,
 }: {
   id: string;
   label: string;
@@ -288,6 +402,7 @@ function FormField({
   placeholder?: string;
   type?: string;
   inputMode?: "email" | "numeric" | "search" | "tel" | "text" | "url";
+  isPhone?: boolean;
 }) {
   return (
     <div className="grid gap-[7px]">
@@ -309,6 +424,7 @@ function FormField({
         placeholder={placeholder}
         type={type}
         inputMode={inputMode}
+        isPhone={isPhone}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
         className={`h-[42px] rounded-md bg-white px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${
@@ -329,7 +445,77 @@ function FormField({
   );
 }
 
+function SelectField({
+  id,
+  label,
+  value,
+  options,
+  onChange,
+  error,
+  required = false,
+  placeholder,
+  disabled = false,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (value: string) => void;
+  error?: string;
+  required?: boolean;
+  placeholder: string;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="grid gap-[7px]">
+      <Label
+        htmlFor={id}
+        className="flex items-center gap-1 text-[13px] font-bold leading-[1.35] text-[var(--color-text)]"
+      >
+        {label}
+        {required ? (
+          <span className="text-[var(--color-danger)]" aria-hidden="true">
+            *
+          </span>
+        ) : null}
+      </Label>
+      <select
+        id={id}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        disabled={disabled}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className={`h-[42px] rounded-md border bg-white px-3 text-sm text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+          error
+            ? "border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]"
+            : "border-[var(--color-border)] focus-visible:ring-[var(--color-primary)]"
+        }`}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      {error ? (
+        <p
+          id={`${id}-error`}
+          className="text-xs font-semibold leading-[1.35] text-[var(--color-danger)]"
+        >
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 function getMutationError(error: unknown) {
   if (error instanceof ApiError) return error.message;
   return "Data tentor belum dapat disimpan. Silakan coba lagi.";
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }

@@ -2,18 +2,28 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   createTutor,
+  getTutorFormOptions,
   getTutors,
+  type TutorFormOptions,
   type TutorInput,
   type TutorsFilters,
   updateTutor,
 } from '@/features/tutors/api/tutors-api'
 
 export const tutorsQueryKey = ['tutors'] as const
+export const tutorFormOptionsQueryKey = [...tutorsQueryKey, 'form-options'] as const
 
 export function useTutors(filters: TutorsFilters) {
   return useQuery({
     queryKey: [...tutorsQueryKey, filters],
     queryFn: ({ signal }) => getTutors(filters, signal),
+  })
+}
+
+export function useTutorFormOptions() {
+  return useQuery<TutorFormOptions>({
+    queryKey: tutorFormOptionsQueryKey,
+    queryFn: ({ signal }) => getTutorFormOptions(signal),
   })
 }
 
