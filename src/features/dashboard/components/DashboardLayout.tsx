@@ -7,8 +7,15 @@ import {
   type SidebarClientItemId,
 } from '@/components/SidebarClient'
 import { Button } from '@/components/ui/button'
-import { clearAuthSession } from '@/lib/auth-session'
-import { clearSelectedTenant } from '@/lib/tenant-session'
+import {
+  useCurrentTenant,
+  useOwnedTenants,
+} from '@/features/tenant-context/hooks/use-owned-tenants'
+import { clearAuthSession, getStoredAuthUser } from '@/lib/auth-session'
+import {
+  clearSelectedTenant,
+  getStoredSelectedTenantId,
+} from '@/lib/tenant-session'
 import { logout } from '@/services/auth.service'
 
 const sidebarItemIds: readonly SidebarClientItemId[] = [
@@ -36,6 +43,12 @@ export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const queryClient = useQueryClient()
+  const user = getStoredAuthUser()
+  const selectedTenantId = user ? getStoredSelectedTenantId(user.id) : null
+  const tenantsQuery = useOwnedTenants({ enabled: user?.role === 'owner' })
+  const currentTenantQuery = useCurrentTenant({
+    enabled: Boolean(user && user.role !== 'owner'),
+  })
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSettled: () => {
@@ -50,11 +63,24 @@ export function DashboardLayout() {
     void navigate(itemId === 'dashboard' ? '/dashboard' : `/${itemId}`)
   }
 
+  const selectedTenant = tenantsQuery.data?.find(
+    (tenant) => tenant.id === selectedTenantId,
+  )
+  const sidebarTenant = selectedTenant ?? currentTenantQuery.data
+  const tenantName =
+    sidebarTenant?.name ??
+    (user?.role === 'owner' && tenantsQuery.isPending
+      ? 'Memuat bimbel...'
+      : user?.tenantName ?? 'Bimbel')
+
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex">
       <SidebarClient
         className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto"
         activeItem={getActiveItem(location.pathname)}
+        tenantLogoUrl={sidebarTenant?.logoUrl ?? null}
+        tenantName={tenantName}
+        userRole={user?.role ?? null}
         onItemSelect={handleItemSelect}
       />
 

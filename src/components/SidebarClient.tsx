@@ -54,14 +54,22 @@ const sidebarClientItems: readonly SidebarClientItem[] = [
 type SidebarClientProps = {
   activeItem: SidebarClientItemId
   onItemSelect: (itemId: SidebarClientItemId) => void
+  tenantName: string
+  tenantLogoUrl?: string | null
+  userRole?: string | null
   className?: string
 }
 
 export function SidebarClient({
   activeItem,
   onItemSelect,
+  tenantName,
+  tenantLogoUrl,
+  userRole,
   className,
 }: SidebarClientProps) {
+  const roleLabel = getRoleLabel(userRole)
+
   return (
     <aside
       className={cn(
@@ -70,18 +78,26 @@ export function SidebarClient({
       )}
     >
       <div className="flex items-center gap-2.5">
-        <div
-          className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-lg bg-primary text-base font-bold leading-[1.3] text-primary-foreground"
-          aria-hidden="true"
-        >
-          BK
-        </div>
+        {tenantLogoUrl ? (
+          <img
+            src={tenantLogoUrl}
+            alt={`Logo ${tenantName}`}
+            className="h-[38px] w-[38px] shrink-0 rounded-lg border border-border object-cover"
+          />
+        ) : (
+          <div
+            className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-lg bg-primary text-base font-bold leading-[1.3] text-primary-foreground"
+            aria-hidden="true"
+          >
+            {getInitials(tenantName)}
+          </div>
+        )}
         <div className="min-w-0">
-          <p className="text-base font-bold leading-[1.2] text-foreground">
-            BimbelKit
+          <p className="truncate text-base font-bold leading-[1.2] text-foreground">
+            {tenantName}
           </p>
-          <p className="mt-0.5 text-xs leading-[1.2] text-muted-foreground">
-            Operasional Bimbel
+          <p className="mt-0.5 truncate text-xs leading-[1.2] text-muted-foreground">
+            {roleLabel}
           </p>
         </div>
       </div>
@@ -114,4 +130,31 @@ export function SidebarClient({
       </nav>
     </aside>
   )
+}
+
+function getInitials(value: string) {
+  const initials = value
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toLocaleUpperCase('id-ID')
+
+  return initials || 'GD'
+}
+
+function getRoleLabel(role: string | null | undefined) {
+  switch (role) {
+    case 'owner':
+      return 'Owner'
+    case 'operator':
+      return 'Operator'
+    case 'tutor':
+      return 'Tutor'
+    case 'parent':
+      return 'Orang Tua'
+    default:
+      return 'Pengguna'
+  }
 }

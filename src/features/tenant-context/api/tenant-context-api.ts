@@ -13,3 +13,7 @@ export type OwnedTenant = {
 export function getOwnedTenants(signal?: AbortSignal) {
   return apiRequest<OwnedTenant[]>('/tenants/owned', { signal })
 }
+
+export function getCurrentTenant(signal?: AbortSignal) {
+  return apiRequest<OwnedTenant>('/tenants/me', { signal })
+}
