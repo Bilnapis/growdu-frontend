@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 
 import { getStoredAuthUser } from '@/lib/auth-session'
-import { SetupPage } from '@/pages/SetupPage'
+import { SetupPage } from '@/pages/client/SetupPage'
 
 export function DashboardLandingPage() {
   const user = getStoredAuthUser()
