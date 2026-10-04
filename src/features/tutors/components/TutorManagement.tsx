@@ -27,6 +27,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@ import {
   useUpdateTutor,
 } from "@/features/tutors/hooks/use-tutors";
 import { ApiError } from "@/services/api-client";
+import { getYupValidationMessage } from "@/lib/yup-validation";
 
 type TutorManagementProps = {
   filters: {
@@ -74,6 +76,32 @@ const rupiahFormatter = new Intl.NumberFormat("id-ID", {
   currency: "IDR",
   maximumFractionDigits: 0,
   style: "currency",
+});
+
+const tutorStatuses = ["active", "inactive"] as const;
+
+const tutorInputSchema = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .min(2, "Nama tentor minimal 2 karakter.")
+    .max(150, "Nama tentor maksimal 150 karakter.")
+    .required("Nama tentor wajib diisi."),
+  phoneNumber: yup
+    .string()
+    .trim()
+    .min(6, "Nomor WhatsApp minimal 6 karakter.")
+    .max(20, "Nomor WhatsApp maksimal 20 karakter.")
+    .required("Nomor WhatsApp wajib diisi."),
+  sessionRate: yup
+    .string()
+    .trim()
+    .matches(/^\d{1,10}(\.\d{1,2})?$/, "Tarif per sesi tidak valid.")
+    .required("Tarif per sesi wajib diisi."),
+  status: yup
+    .mixed<TutorStatus>()
+    .oneOf(tutorStatuses, "Status tentor tidak valid.")
+    .required("Status tentor wajib dipilih."),
 });
 
 export function TutorManagement({
@@ -503,7 +531,13 @@ function TutorEditor({
     setFormError(null);
     setSuccessMessage(null);
 
-    const input = getTutorInput(new FormData(event.currentTarget));
+    let input: TutorInput;
+    try {
+      input = getTutorInput(new FormData(event.currentTarget));
+    } catch (error) {
+      setFormError(getYupValidationMessage(error, "Periksa kembali data tentor."));
+      return;
+    }
     const mutationOptions = {
       onSuccess: () => {
         setSuccessMessage(
@@ -758,12 +792,15 @@ function EmptyState() {
 }
 
 function getTutorInput(formData: FormData): TutorInput {
-  return {
-    name: getFormValue(formData, "name"),
-    phoneNumber: getFormValue(formData, "phoneNumber"),
-    sessionRate: getFormValue(formData, "sessionRate"),
-    status: getOptionalStatus(getFormValue(formData, "status")) ?? "active",
-  };
+  return tutorInputSchema.validateSync(
+    {
+      name: getFormValue(formData, "name"),
+      phoneNumber: getFormValue(formData, "phoneNumber"),
+      sessionRate: getFormValue(formData, "sessionRate"),
+      status: getFormValue(formData, "status"),
+    },
+    { abortEarly: false },
+  );
 }
 
 function formatRate(value: string) {

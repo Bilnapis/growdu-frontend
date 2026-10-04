@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { CheckCircle2, KeyRound, Pencil, Search, UserRound, X } from 'lucide-react'
+import * as yup from 'yup'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { ApiError } from '@/services/api-client'
 import { type ManagedUser, type UserRole, type UserStatus } from '@/features/users/api/users-api'
 import { useResetUserPassword, useUpdateUser, useUsers } from '@/features/users/hooks/use-users'
+import { getYupValidationMessage } from '@/lib/yup-validation'
 
 type UserSettingsProps = {
   filters: {
@@ -30,6 +32,23 @@ const roleLabels: Record<UserRole, string> = {
 const dateFormatter = new Intl.DateTimeFormat('id-ID', {
   dateStyle: 'medium',
   timeStyle: 'short',
+})
+
+const userDetailsSchema = yup.object({
+  email: yup.string().trim().email('Email wajib valid.').required('Email wajib diisi.'),
+  status: yup
+    .mixed<UserStatus>()
+    .oneOf(['active', 'inactive'], 'Status akses tidak valid.')
+    .required('Status akses wajib dipilih.'),
+})
+
+const resetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .trim()
+    .min(12, 'Kata sandi minimal 12 karakter.')
+    .max(128, 'Kata sandi maksimal 128 karakter.')
+    .required('Kata sandi baru wajib diisi.'),
 })
 
 export function UserSettings({ filters, onFiltersChange }: UserSettingsProps) {
@@ -152,11 +171,23 @@ function UserEditor({ user, onClose }: { user: ManagedUser; onClose: () => void 
     setFormError(null)
     setSuccessMessage(null)
     const formData = new FormData(event.currentTarget)
-    const email = getFormValue(formData, 'email')
-    const status = getOptionalStatus(getFormValue(formData, 'status'))
+    let input: yup.InferType<typeof userDetailsSchema>
+
+    try {
+      input = userDetailsSchema.validateSync(
+        {
+          email: getFormValue(formData, 'email'),
+          status: getFormValue(formData, 'status'),
+        },
+        { abortEarly: false },
+      )
+    } catch (error) {
+      setFormError(getYupValidationMessage(error, 'Periksa kembali pengaturan akses.'))
+      return
+    }
 
     updateMutation.mutate(
-      { id: user.id, input: { email, ...(status ? { status } : {}) } },
+      { id: user.id, input },
       {
         onSuccess: () => setSuccessMessage('Pengaturan akses berhasil disimpan.'),
         onError: (error) => setFormError(getMutationError(error)),
@@ -168,10 +199,22 @@ function UserEditor({ user, onClose }: { user: ManagedUser; onClose: () => void 
     event.preventDefault()
     setFormError(null)
     setSuccessMessage(null)
-    const password = getFormValue(new FormData(event.currentTarget), 'password')
+    let input: yup.InferType<typeof resetPasswordSchema>
+
+    try {
+      input = resetPasswordSchema.validateSync(
+        {
+          password: getFormValue(new FormData(event.currentTarget), 'password'),
+        },
+        { abortEarly: false },
+      )
+    } catch (error) {
+      setFormError(getYupValidationMessage(error, 'Periksa kembali kata sandi baru.'))
+      return
+    }
 
     resetPasswordMutation.mutate(
-      { id: user.id, password },
+      { id: user.id, password: input.password },
       {
         onSuccess: () => {
           event.currentTarget.reset()

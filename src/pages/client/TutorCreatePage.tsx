@@ -1,6 +1,7 @@
 import { type FormEvent, useMemo, useState } from "react";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,11 @@ import {
   useTutorFormOptions,
 } from "@/features/tutors/hooks/use-tutors";
 import { ApiError } from "@/services/api-client";
+import {
+  getYupFieldErrors,
+  getYupValidationMessage,
+  type FormFieldErrors,
+} from "@/lib/yup-validation";
 
 type TutorCreateForm = {
   name: string;
@@ -34,6 +40,38 @@ const initialForm: TutorCreateForm = {
   accountNumber: "",
 };
 
+const tutorCreateSchema: yup.ObjectSchema<TutorCreateForm> = yup.object({
+  name: yup
+    .string()
+    .trim()
+    .min(2, "Nama tentor wajib diisi.")
+    .required("Nama tentor wajib diisi."),
+  phoneNumber: yup
+    .string()
+    .trim()
+    .min(6, "Nomor HP minimal 6 karakter.")
+    .required("Nomor HP minimal 6 karakter."),
+  email: yup
+    .string()
+    .trim()
+    .email("Email wajib valid.")
+    .required("Email wajib valid."),
+  address: yup.string().trim().required("Alamat wajib diisi."),
+  expertise: yup.string().trim().required("Keahlian wajib dipilih."),
+  education: yup.string().trim().required("Jurusan wajib dipilih."),
+  bankName: yup.string().trim().required("Bank atau e-wallet wajib dipilih."),
+  accountName: yup
+    .string()
+    .trim()
+    .min(2, "Atas nama rekening minimal 2 karakter.")
+    .required("Atas nama rekening minimal 2 karakter."),
+  accountNumber: yup
+    .string()
+    .trim()
+    .min(3, "Nomor rekening minimal 3 karakter.")
+    .required("Nomor rekening minimal 3 karakter."),
+});
+
 export function TutorCreatePage() {
   const navigate = useNavigate();
   const createMutation = useCreateTutor();
@@ -46,50 +84,26 @@ export function TutorCreatePage() {
   const educationOptions = formOptionsQuery.data?.educationOptions ?? [];
   const bankOptions = formOptionsQuery.data?.bankOptions ?? [];
 
-  const validationIssues = useMemo(() => {
-    const issues: string[] = [];
-
-    if (form.name.trim().length < 2) {
-      issues.push("Nama tentor wajib diisi.");
+  const validation = useMemo<{
+    errors: FormFieldErrors<keyof TutorCreateForm>;
+    issues: string[];
+  }>(() => {
+    try {
+      tutorCreateSchema.validateSync(form, { abortEarly: false });
+      return {
+        errors: {},
+        issues: [],
+      };
+    } catch (error) {
+      return {
+        errors: getYupFieldErrors<keyof TutorCreateForm>(error),
+        issues: error instanceof yup.ValidationError ? error.errors : [],
+      };
     }
-
-    if (form.phoneNumber.trim().length < 6) {
-      issues.push("Nomor HP minimal 6 karakter.");
-    }
-
-    if (!isValidEmail(form.email)) {
-      issues.push("Email wajib valid.");
-    }
-
-    if (form.address.trim().length < 1) {
-      issues.push("Alamat wajib diisi.");
-    }
-
-    if (form.expertise.trim().length < 1) {
-      issues.push("Keahlian wajib dipilih.");
-    }
-
-    if (form.education.trim().length < 1) {
-      issues.push("Jurusan wajib dipilih.");
-    }
-
-    if (form.bankName.trim().length < 1) {
-      issues.push("Bank atau e-wallet wajib dipilih.");
-    }
-
-    if (form.accountName.trim().length < 2) {
-      issues.push("Atas nama rekening minimal 2 karakter.");
-    }
-
-    if (form.accountNumber.trim().length < 3) {
-      issues.push("Nomor rekening minimal 3 karakter.");
-    }
-
-    return issues;
   }, [form]);
 
   const canSubmit =
-    validationIssues.length === 0 &&
+    validation.issues.length === 0 &&
     !createMutation.isPending &&
     !formOptionsQuery.isLoading;
 
@@ -105,19 +119,27 @@ export function TutorCreatePage() {
     setSuccessMessage(null);
     setFormError(null);
 
-    if (validationIssues.length > 0) return;
+    let input: TutorCreateForm;
+    try {
+      input = tutorCreateSchema.validateSync(form, { abortEarly: false });
+    } catch (error) {
+      setFormError(
+        getYupValidationMessage(error, "Periksa kembali data tentor."),
+      );
+      return;
+    }
 
     createMutation.mutate(
       {
-        name: form.name.trim(),
-        phoneNumber: form.phoneNumber.trim(),
-        email: form.email.trim(),
-        address: form.address.trim(),
-        expertise: form.expertise.trim(),
-        education: form.education.trim(),
-        bankName: form.bankName.trim(),
-        accountName: form.accountName.trim(),
-        accountNumber: form.accountNumber.trim(),
+        name: input.name,
+        phoneNumber: input.phoneNumber,
+        email: input.email,
+        address: input.address,
+        expertise: input.expertise,
+        education: input.education,
+        bankName: input.bankName,
+        accountName: input.accountName,
+        accountNumber: input.accountNumber,
         sessionRate: "0",
         status: "active",
       },
@@ -171,11 +193,7 @@ export function TutorCreatePage() {
                 label="Nama"
                 value={form.name}
                 required
-                error={
-                  submitted && form.name.trim().length < 2
-                    ? "Nama tentor wajib diisi."
-                    : undefined
-                }
+                error={submitted ? validation.errors.name : undefined}
                 onChange={(value) => updateField("name", value)}
               />
               <FormField
@@ -183,11 +201,7 @@ export function TutorCreatePage() {
                 label="Nomor HP"
                 value={form.phoneNumber}
                 required
-                error={
-                  submitted && form.phoneNumber.trim().length < 6
-                    ? "Nomor HP minimal 6 karakter."
-                    : undefined
-                }
+                error={submitted ? validation.errors.phoneNumber : undefined}
                 placeholder="81234567890"
                 isPhone
                 onChange={(value) => updateField("phoneNumber", value)}
@@ -197,11 +211,7 @@ export function TutorCreatePage() {
                 label="Email"
                 value={form.email}
                 required
-                error={
-                  submitted && !isValidEmail(form.email)
-                    ? "Email wajib valid."
-                    : undefined
-                }
+                error={submitted ? validation.errors.email : undefined}
                 placeholder="nama@email.com"
                 type="email"
                 onChange={(value) => updateField("email", value)}
@@ -211,11 +221,7 @@ export function TutorCreatePage() {
                 label="Alamat"
                 value={form.address}
                 required
-                error={
-                  submitted && form.address.trim().length < 1
-                    ? "Alamat wajib diisi."
-                    : undefined
-                }
+                error={submitted ? validation.errors.address : undefined}
                 placeholder="Jl. Melati No. 12, Bandung"
                 onChange={(value) => updateField("address", value)}
               />
@@ -231,11 +237,7 @@ export function TutorCreatePage() {
                     : "Pilih keahlian"
                 }
                 disabled={formOptionsQuery.isLoading}
-                error={
-                  submitted && form.expertise.trim().length < 1
-                    ? "Keahlian wajib dipilih."
-                    : undefined
-                }
+                error={submitted ? validation.errors.expertise : undefined}
                 onChange={(value) => updateField("expertise", value)}
               />
               <SelectField
@@ -250,11 +252,7 @@ export function TutorCreatePage() {
                     : "Pilih jurusan"
                 }
                 disabled={formOptionsQuery.isLoading}
-                error={
-                  submitted && form.education.trim().length < 1
-                    ? "Jurusan wajib dipilih."
-                    : undefined
-                }
+                error={submitted ? validation.errors.education : undefined}
                 onChange={(value) => updateField("education", value)}
               />
             </div>
@@ -278,11 +276,7 @@ export function TutorCreatePage() {
                     : "Pilih bank / e-wallet"
                 }
                 disabled={formOptionsQuery.isLoading}
-                error={
-                  submitted && form.bankName.trim().length < 1
-                    ? "Bank atau e-wallet wajib dipilih."
-                    : undefined
-                }
+                error={submitted ? validation.errors.bankName : undefined}
                 onChange={(value) => updateField("bankName", value)}
               />
               <FormField
@@ -290,11 +284,7 @@ export function TutorCreatePage() {
                 label="Atas Nama"
                 value={form.accountName}
                 required
-                error={
-                  submitted && form.accountName.trim().length < 2
-                    ? "Atas nama rekening minimal 2 karakter."
-                    : undefined
-                }
+                error={submitted ? validation.errors.accountName : undefined}
                 placeholder="Tentor"
                 onChange={(value) => updateField("accountName", value)}
               />
@@ -303,11 +293,7 @@ export function TutorCreatePage() {
                 label="Nomor Rekening"
                 value={form.accountNumber}
                 required
-                error={
-                  submitted && form.accountNumber.trim().length < 3
-                    ? "Nomor rekening minimal 3 karakter."
-                    : undefined
-                }
+                error={submitted ? validation.errors.accountNumber : undefined}
                 placeholder="12345678"
                 inputMode="numeric"
                 onChange={(value) => updateField("accountNumber", value)}
@@ -336,8 +322,8 @@ export function TutorCreatePage() {
 
         <footer className="flex max-w-full flex-col gap-3 rounded-lg border border-[var(--color-border)] bg-white px-[18px] py-3 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
           <p className="text-[13px] font-semibold leading-[1.35] text-[var(--color-muted)]">
-            {validationIssues.length > 0
-              ? `${validationIssues.length} validasi perlu diperbaiki sebelum menyimpan.`
+            {validation.issues.length > 0
+              ? `${validation.issues.length} validasi perlu diperbaiki sebelum menyimpan.`
               : "Data utama siap disimpan."}
           </p>
           <div className="flex flex-wrap gap-2.5">
@@ -514,8 +500,4 @@ function SelectField({
 function getMutationError(error: unknown) {
   if (error instanceof ApiError) return error.message;
   return "Data tentor belum dapat disimpan. Silakan coba lagi.";
-}
-
-function isValidEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }

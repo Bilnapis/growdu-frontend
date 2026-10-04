@@ -2,6 +2,7 @@ import { type FormEvent, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { CalendarDays, Eye, EyeOff, FileText, Users } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import * as yup from 'yup'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +17,7 @@ import { Label } from '@/components/ui/label'
 import { ApiError } from '@/services/api-client'
 import { login } from '@/services/auth.service'
 import { clearAuthSession, storeAuthSession } from '@/lib/auth-session'
+import { getYupValidationMessage } from '@/lib/yup-validation'
 
 type IconName = 'calendar' | 'users' | 'file' | 'eye' | 'eyeOff'
 
@@ -36,6 +38,15 @@ type LoginRedirectState = {
 type LoginPageProps = {
   adminOnly?: boolean
 }
+
+const loginSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .email('Email wajib valid.')
+    .required('Email wajib diisi.'),
+  password: yup.string().required('Kata sandi wajib diisi.'),
+})
 
 function LoginIcon({ name }: { name: IconName }) {
   if (name === 'calendar') {
@@ -109,10 +120,21 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
     const formData = new FormData(event.currentTarget)
     const emailValue = formData.get('email')
     const passwordValue = formData.get('password')
-    const email = typeof emailValue === 'string' ? emailValue.trim() : ''
-    const password = typeof passwordValue === 'string' ? passwordValue : ''
+    try {
+      const input = loginSchema.validateSync(
+        {
+          email: typeof emailValue === 'string' ? emailValue : '',
+          password: typeof passwordValue === 'string' ? passwordValue : '',
+        },
+        { abortEarly: false },
+      )
 
-    loginMutation.mutate({ email, password })
+      loginMutation.mutate(input)
+    } catch (error) {
+      setFormError(
+        getYupValidationMessage(error, 'Periksa kembali email dan kata sandi.'),
+      )
+    }
   }
 
   return (

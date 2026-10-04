@@ -2,6 +2,7 @@ import { type FormEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,10 +17,24 @@ import { Label } from "@/components/ui/label";
 import { platformAdminLogin } from "@/features/platform-admin/api/platform-admin-api";
 import { ApiError } from "@/services/api-client";
 import { storePlatformAdminSession } from "@/lib/platform-admin-session";
+import { getYupValidationMessage } from "@/lib/yup-validation";
 
 type LoginRedirectState = {
   from?: { pathname?: unknown; search?: unknown; hash?: unknown };
 };
+
+const platformAdminLoginSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .email("Email wajib valid.")
+    .required("Email wajib diisi."),
+  password: yup
+    .string()
+    .min(5, "Kata sandi minimal 5 karakter.")
+    .max(128, "Kata sandi maksimal 128 karakter.")
+    .required("Kata sandi wajib diisi."),
+});
 
 export function PlatformAdminLoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -50,9 +65,20 @@ export function PlatformAdminLoginPage() {
     event.preventDefault();
     setFormError(null);
     const formData = new FormData(event.currentTarget);
-    const email = getFormValue(formData, "email");
-    const password = getFormValue(formData, "password", false);
-    loginMutation.mutate({ email, password });
+    try {
+      const input = platformAdminLoginSchema.validateSync(
+        {
+          email: getFormValue(formData, "email", false),
+          password: getFormValue(formData, "password", false),
+        },
+        { abortEarly: false },
+      );
+      loginMutation.mutate(input);
+    } catch (error) {
+      setFormError(
+        getYupValidationMessage(error, "Periksa kembali email dan kata sandi."),
+      );
+    }
   }
 
   return (

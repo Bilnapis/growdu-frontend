@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { createPortal } from "react-dom";
 import { Pencil, Search, Users, X } from "lucide-react";
+import * as yup from "yup";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   useUpdatePlatformUser,
 } from "@/features/platform-admin/hooks/use-platform-users";
 import { ApiError } from "@/services/api-client";
+import { getYupValidationMessage } from "@/lib/yup-validation";
 
 type PlatformUserManagementProps = {
   filters: {
@@ -40,6 +42,86 @@ const roleLabels: Record<PlatformUserRole, string> = {
   tutor: "Tutor",
   parent: "Orang tua",
 };
+
+const platformUserRoles = ["owner", "operator", "tutor", "parent"] as const;
+const platformUserStatuses = ["active", "inactive"] as const;
+
+function isPlatformUserRole(value: unknown): value is PlatformUserRole {
+  return (
+    value === "owner" ||
+    value === "operator" ||
+    value === "tutor" ||
+    value === "parent"
+  );
+}
+
+function getParentRole(parent: unknown) {
+  if (typeof parent !== "object" || parent === null || !("role" in parent)) {
+    return undefined;
+  }
+
+  const role = parent.role;
+  return isPlatformUserRole(role) ? role : undefined;
+}
+
+
+const createPlatformUserSchema = yup.object({
+  role: yup
+    .mixed<PlatformUserRole>()
+    .oneOf(platformUserRoles, "Peran pengguna tidak valid.")
+    .required("Peran pengguna wajib dipilih."),
+  tenantId: yup
+    .string()
+    .trim()
+    .test("tenant-required", "Pilih tenant untuk pengguna ini.", function (value) {
+      return getParentRole(this.parent) === "owner" || Boolean(value);
+    }),
+  name: yup
+    .string()
+    .trim()
+    .min(2, "Nama lengkap minimal 2 karakter.")
+    .max(150, "Nama lengkap maksimal 150 karakter.")
+    .required("Nama lengkap wajib diisi."),
+  phoneNumber: yup
+    .string()
+    .trim()
+    .min(6, "Nomor WhatsApp minimal 6 karakter.")
+    .max(20, "Nomor WhatsApp maksimal 20 karakter.")
+    .required("Nomor WhatsApp wajib diisi."),
+  sessionRate: yup
+    .string()
+    .trim()
+    .test("session-rate-required", "Tarif per sesi wajib diisi.", function (value) {
+      return getParentRole(this.parent) !== "tutor" || Boolean(value);
+    })
+    .matches(/^\d{1,10}(\.\d{1,2})?$/, {
+      excludeEmptyString: true,
+      message: "Tarif per sesi tidak valid.",
+    }),
+  email: yup
+    .string()
+    .trim()
+    .email("Email wajib valid.")
+    .required("Email wajib diisi."),
+  password: yup
+    .string()
+    .min(5, "Kata sandi minimal 5 karakter.")
+    .max(128, "Kata sandi maksimal 128 karakter.")
+    .required("Kata sandi wajib diisi."),
+});
+
+const updatePlatformUserSchema = createPlatformUserSchema.shape({
+  status: yup
+    .mixed<PlatformUserStatus>()
+    .oneOf(platformUserStatuses, "Status akses tidak valid.")
+    .required("Status akses wajib dipilih."),
+  password: yup
+    .string()
+    .max(128, "Kata sandi maksimal 128 karakter.")
+    .test("empty-or-min", "Kata sandi minimal 5 karakter.", (value) => {
+      return !value || value.length >= 5;
+    }),
+});
 
 const dateFormatter = new Intl.DateTimeFormat("id-ID", {
   dateStyle: "medium",
@@ -223,16 +305,39 @@ function CreatePlatformUserDialog({ onClose }: { onClose: () => void }) {
     setError(null);
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const tenantId = getFormValue(formData, "tenantId");
-    const sessionRate = getFormValue(formData, "sessionRate");
+    let values: yup.InferType<typeof createPlatformUserSchema>;
+    try {
+      values = createPlatformUserSchema.validateSync(
+        {
+          role,
+          tenantId: getFormValue(formData, "tenantId"),
+          name: getFormValue(formData, "name"),
+          phoneNumber: getFormValue(formData, "phoneNumber"),
+          sessionRate: getFormValue(formData, "sessionRate"),
+          email: getFormValue(formData, "email"),
+          password: getFormValue(formData, "password", false),
+        },
+        { abortEarly: false },
+      );
+    } catch (validationError) {
+      setError(
+        getYupValidationMessage(validationError, "Periksa kembali data pengguna."),
+      );
+      return;
+    }
+
     const input: CreatePlatformUserInput = {
-      role,
-      name: getFormValue(formData, "name"),
-      phoneNumber: getFormValue(formData, "phoneNumber"),
-      email: getFormValue(formData, "email"),
-      password: getFormValue(formData, "password", false),
-      ...(needsTenant && tenantId ? { tenantId } : {}),
-      ...(needsSessionRate && sessionRate ? { sessionRate } : {}),
+      role: values.role,
+      name: values.name,
+      phoneNumber: values.phoneNumber,
+      email: values.email,
+      password: values.password,
+      ...(values.role !== "owner" && values.tenantId
+        ? { tenantId: values.tenantId }
+        : {}),
+      ...(values.role === "tutor" && values.sessionRate
+        ? { sessionRate: values.sessionRate }
+        : {}),
     };
 
     createMutation.mutate(input, {
@@ -441,22 +546,43 @@ function PlatformUserEditor({
     event.preventDefault();
     setError(null);
     const formData = new FormData(event.currentTarget);
-    const email = getFormValue(formData, "email");
-    const status = getStatus(getFormValue(formData, "status"));
-    const tenantId = getFormValue(formData, "tenantId");
-    const sessionRate = getFormValue(formData, "sessionRate");
-    const password = getFormValue(formData, "newPassword", false);
+    let values: yup.InferType<typeof updatePlatformUserSchema>;
+    try {
+      values = updatePlatformUserSchema.validateSync(
+        {
+          role: user.role,
+          tenantId: getFormValue(formData, "tenantId"),
+          name: getFormValue(formData, "name"),
+          phoneNumber: getFormValue(formData, "phoneNumber"),
+          sessionRate: getFormValue(formData, "sessionRate"),
+          email: getFormValue(formData, "email"),
+          password: getFormValue(formData, "newPassword", false),
+          status: getFormValue(formData, "status"),
+        },
+        { abortEarly: false },
+      );
+    } catch (validationError) {
+      setError(
+        getYupValidationMessage(validationError, "Periksa kembali data pengguna."),
+      );
+      return;
+    }
+
     updateMutation.mutate(
       {
         id: user.id,
         input: {
-          email,
-          name: getFormValue(formData, "name"),
-          phoneNumber: getFormValue(formData, "phoneNumber"),
-          ...(status ? { status } : {}),
-          ...(user.role !== "owner" && tenantId ? { tenantId } : {}),
-          ...(user.role === "tutor" && sessionRate ? { sessionRate } : {}),
-          ...(password ? { password } : {}),
+          email: values.email,
+          name: values.name,
+          phoneNumber: values.phoneNumber,
+          status: values.status,
+          ...(values.role !== "owner" && values.tenantId
+            ? { tenantId: values.tenantId }
+            : {}),
+          ...(values.role === "tutor" && values.sessionRate
+            ? { sessionRate: values.sessionRate }
+            : {}),
+          ...(values.password ? { password: values.password } : {}),
         },
       },
       {

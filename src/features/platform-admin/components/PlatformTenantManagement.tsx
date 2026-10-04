@@ -2,6 +2,7 @@ import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Cropper, { type Area } from "react-easy-crop";
 import { Building2, Pencil, Search, X } from "lucide-react";
+import * as yup from "yup";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   useUpdatePlatformTenant,
 } from "@/features/platform-admin/hooks/use-platform-users";
 import { ApiError } from "@/services/api-client";
+import { getYupValidationMessage } from "@/lib/yup-validation";
 
 type PlatformTenantManagementProps = {
   filters: {
@@ -32,6 +34,50 @@ type PlatformTenantManagementProps = {
   isCreateDialogOpen: boolean;
   onCreateDialogOpenChange: (isOpen: boolean) => void;
 };
+
+const platformTenantStatuses = ["active", "inactive"] as const;
+
+const tenantFormSchema = yup.object({
+  ownerId: yup.string().trim().required("Pilih owner untuk bimbel ini."),
+  name: yup
+    .string()
+    .trim()
+    .min(2, "Nama bimbel minimal 2 karakter.")
+    .max(150, "Nama bimbel maksimal 150 karakter.")
+    .required("Nama bimbel wajib diisi."),
+  address: yup
+    .string()
+    .trim()
+    .max(5000, "Alamat maksimal 5000 karakter.")
+    .transform((value: unknown) => (typeof value === "string" && value ? value : null))
+    .nullable(),
+  whatsappNumber: yup
+    .string()
+    .trim()
+    .max(20, "Nomor WhatsApp maksimal 20 karakter.")
+    .transform((value: unknown) => (typeof value === "string" && value ? value : null))
+    .nullable(),
+  email: yup
+    .string()
+    .trim()
+    .email("Email bimbel wajib valid.")
+    .max(150, "Email bimbel maksimal 150 karakter.")
+    .transform((value: unknown) => (typeof value === "string" && value ? value : null))
+    .nullable(),
+  status: yup
+    .mixed<PlatformTenantStatus>()
+    .oneOf(platformTenantStatuses, "Status bimbel tidak valid.")
+    .required("Status bimbel wajib dipilih."),
+});
+
+const tenantLogoSchema = yup
+  .mixed<File>()
+  .test("file-type", "Logo harus berupa gambar PNG atau JPEG.", (file) => {
+    return file instanceof File && ["image/jpeg", "image/png"].includes(file.type);
+  })
+  .test("file-size", "Ukuran logo maksimal 5 MB.", (file) => {
+    return file instanceof File && file.size <= 5 * 1024 * 1024;
+  });
 
 export function PlatformTenantManagement({
   filters,
@@ -266,9 +312,23 @@ function TenantFormDialog({
     event.preventDefault();
     setError(null);
     const formData = new FormData(event.currentTarget);
-    const selectedOwnerId = getRequiredFormValue(formData, "ownerId");
-    if (!selectedOwnerId) {
-      setError("Pilih owner untuk bimbel ini.");
+    let values: yup.InferType<typeof tenantFormSchema>;
+    try {
+      values = tenantFormSchema.validateSync(
+        {
+          ownerId: getRequiredFormValue(formData, "ownerId"),
+          name: getRequiredFormValue(formData, "name"),
+          address: getRequiredFormValue(formData, "address"),
+          whatsappNumber: getRequiredFormValue(formData, "whatsappNumber"),
+          email: getRequiredFormValue(formData, "email"),
+          status: formData.get("status"),
+        },
+        { abortEarly: false },
+      );
+    } catch (validationError) {
+      setError(
+        getYupValidationMessage(validationError, "Periksa kembali data bimbel."),
+      );
       return;
     }
 
@@ -278,20 +338,19 @@ function TenantFormDialog({
         const response = await uploadLogoMutation.mutateAsync(logoFile);
         logoUrl = response.logoUrl;
       } catch (mutationError) {
-        console.log(mutationError);
         setError(getErrorMessage(mutationError));
         return;
       }
     }
 
     const input: CreatePlatformTenantInput = {
-      ownerId: selectedOwnerId,
-      name: getRequiredFormValue(formData, "name"),
-      address: getNullableFormValue(formData, "address"),
-      whatsappNumber: getNullableFormValue(formData, "whatsappNumber"),
-      email: getNullableFormValue(formData, "email"),
+      ownerId: values.ownerId,
+      name: values.name,
+      address: values.address ?? null,
+      whatsappNumber: values.whatsappNumber ?? null,
+      email: values.email ?? null,
       logoUrl,
-      status: getStatus(formData.get("status")),
+      status: values.status,
     };
 
     if (isEditing) {
@@ -316,13 +375,13 @@ function TenantFormDialog({
     if (!file) return;
 
     setError(null);
-    if (!["image/jpeg", "image/png"].includes(file.type)) {
-      setError("Logo harus berupa gambar PNG atau JPEG.");
-      event.target.value = "";
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Ukuran logo maksimal 5 MB.");
+
+    try {
+      tenantLogoSchema.validateSync(file);
+    } catch (validationError) {
+      setError(
+        getYupValidationMessage(validationError, "Logo tidak dapat digunakan."),
+      );
       event.target.value = "";
       return;
     }
@@ -830,15 +889,6 @@ function EmptyState() {
 function getRequiredFormValue(formData: FormData, name: string) {
   const value = formData.get(name);
   return typeof value === "string" ? value.trim() : "";
-}
-
-function getNullableFormValue(formData: FormData, name: string) {
-  const value = getRequiredFormValue(formData, name);
-  return value || null;
-}
-
-function getStatus(value: FormDataEntryValue | null): "active" | "inactive" {
-  return value === "inactive" ? "inactive" : "active";
 }
 
 function getTenantStatus(
