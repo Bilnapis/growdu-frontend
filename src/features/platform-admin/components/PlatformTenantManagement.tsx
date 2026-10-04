@@ -122,7 +122,12 @@ export function PlatformTenantManagement({
               <tbody className="divide-y">
                 {tenants.map((tenant) => (
                   <tr key={tenant.id} className="bg-card">
-                    <td className="px-6 py-4 font-medium">{tenant.name}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <TenantLogo tenant={tenant} />
+                        <span className="font-medium">{tenant.name}</span>
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
                       <span className="block font-medium">
                         {tenant.ownerName}
@@ -233,6 +238,7 @@ function TenantFormDialog({
   const createMutation = useCreatePlatformTenant();
   const updateMutation = useUpdatePlatformTenant();
   const uploadLogoMutation = useUploadPlatformTenantLogo();
+  const [ownerId, setOwnerId] = useState(tenant?.ownerId ?? "");
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(
     tenant?.logoUrl ?? null,
@@ -252,12 +258,16 @@ function TenantFormDialog({
     };
   }, [logoPreviewUrl]);
 
+  const hasCurrentOwnerOption =
+    !tenant?.ownerId ||
+    ownersQuery.data?.some((owner) => owner.id === tenant.ownerId);
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     const formData = new FormData(event.currentTarget);
-    const ownerId = getRequiredFormValue(formData, "ownerId");
-    if (!ownerId) {
+    const selectedOwnerId = getRequiredFormValue(formData, "ownerId");
+    if (!selectedOwnerId) {
       setError("Pilih owner untuk bimbel ini.");
       return;
     }
@@ -275,7 +285,7 @@ function TenantFormDialog({
     }
 
     const input: CreatePlatformTenantInput = {
-      ownerId,
+      ownerId: selectedOwnerId,
       name: getRequiredFormValue(formData, "name"),
       address: getNullableFormValue(formData, "address"),
       whatsappNumber: getNullableFormValue(formData, "whatsappNumber"),
@@ -385,7 +395,8 @@ function TenantFormDialog({
               <select
                 id="platform-tenant-owner"
                 name="ownerId"
-                defaultValue={tenant?.ownerId ?? ""}
+                value={ownerId}
+                onChange={(event) => setOwnerId(event.target.value)}
                 required
                 disabled={
                   isPending || ownersQuery.isPending || ownersQuery.isError
@@ -399,6 +410,11 @@ function TenantFormDialog({
                       ? "Owner tidak dapat dimuat"
                       : "Pilih owner"}
                 </option>
+                {!hasCurrentOwnerOption && tenant ? (
+                  <option value={tenant.ownerId}>
+                    {tenant.ownerName} ({tenant.ownerEmail})
+                  </option>
+                ) : null}
                 {ownersQuery.data?.map((owner) => (
                   <option key={owner.id} value={owner.id}>
                     {owner.name} ({owner.email})
@@ -462,7 +478,7 @@ function TenantFormDialog({
               </div>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2 items-start">
               <div className="grid gap-2">
                 <Label htmlFor="platform-tenant-logo">Logo bimbel</Label>
                 <Input
@@ -741,6 +757,27 @@ function StatusBadge({ status }: { status: PlatformManagedTenant["status"] }) {
     <Badge variant={status === "active" ? "success" : "secondary"}>
       {status === "active" ? "Aktif" : "Nonaktif"}
     </Badge>
+  );
+}
+
+function TenantLogo({ tenant }: { tenant: PlatformManagedTenant }) {
+  if (tenant.logoUrl) {
+    return (
+      <img
+        src={tenant.logoUrl}
+        alt={`Logo ${tenant.name}`}
+        className="h-10 w-10 shrink-0 rounded-md border object-cover"
+      />
+    );
+  }
+
+  return (
+    <span
+      className="grid h-10 w-10 shrink-0 place-items-center rounded-md border bg-muted text-muted-foreground"
+      aria-hidden="true"
+    >
+      <Building2 className="h-5 w-5" />
+    </span>
   );
 }
 
