@@ -26,6 +26,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,6 +80,7 @@ export function TutorManagement({
   filters,
   onFiltersChange,
 }: TutorManagementProps) {
+  const navigate = useNavigate();
   const actionMenuBoundaryRef = useRef<HTMLElement | null>(null);
   const [editorState, setEditorState] = useState<TutorEditorState>(null);
   const [actionMenu, setActionMenu] = useState<ActionMenuState>(null);
@@ -174,10 +176,10 @@ export function TutorManagement({
           <button
             type="button"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-[13px] font-semibold leading-[1.3] text-white"
-            onClick={() => setEditorState({ mode: "create" })}
+            onClick={() => void navigate("/tutors/new")}
           >
             <Plus className="h-4 w-4" aria-hidden="true" />
-            Tambah Siswa
+            Tambah Tentor
           </button>
         </div>
       </header>
@@ -343,7 +345,7 @@ export function TutorManagement({
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary)]"
                             onClick={() => {
                               setActionMenu(null);
-                              setEditorState({ mode: "edit", tutor })
+                              setEditorState({ mode: "edit", tutor });
                             }}
                             aria-label={`Edit ${tutor.name}`}
                           >
@@ -356,10 +358,7 @@ export function TutorManagement({
                             type="button"
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-muted)]"
                             onClick={(event) =>
-                              handleActionMenuToggle(
-                                tutor,
-                                event.currentTarget,
-                              )
+                              handleActionMenuToggle(tutor, event.currentTarget)
                             }
                             aria-label={`Menu aksi ${tutor.name}`}
                           >
