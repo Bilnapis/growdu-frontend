@@ -2,6 +2,7 @@ import { type ReactNode } from 'react'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 import { getStoredAuthUser, isAuthenticated } from '@/lib/auth-session'
+import { getStoredSelectedTenantId } from '@/lib/tenant-session'
 import {
   getStoredPlatformAdmin,
   isPlatformAdminAuthenticated,
@@ -86,6 +87,24 @@ export function OwnerRoute({ children }: GuardProps) {
 
   if (user.role !== 'owner') {
     return <Navigate to="/dashboard" replace />
+  }
+
+  return children ?? <Outlet />
+}
+
+export function TenantContextRoute({ children }: GuardProps) {
+  const location = useLocation()
+  const user = getStoredAuthUser()
+
+  if (!isAuthenticated() || !user) {
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
+
+  if (
+    user.role === 'owner' &&
+    getStoredSelectedTenantId(user.id) === null
+  ) {
+    return <Navigate to="/bimbel/select" replace />
   }
 
   return children ?? <Outlet />

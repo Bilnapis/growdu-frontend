@@ -8,6 +8,7 @@ import {
 } from '@/components/SidebarClient'
 import { Button } from '@/components/ui/button'
 import { clearAuthSession } from '@/lib/auth-session'
+import { clearSelectedTenant } from '@/lib/tenant-session'
 import { logout } from '@/services/auth.service'
 
 const sidebarItemIds: readonly SidebarClientItemId[] = [
@@ -39,6 +40,7 @@ export function DashboardLayout() {
     mutationFn: logout,
     onSettled: () => {
       clearAuthSession()
+      clearSelectedTenant()
       queryClient.clear()
       void navigate('/login', { replace: true })
     },

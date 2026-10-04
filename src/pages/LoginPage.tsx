@@ -78,7 +78,11 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
       void navigate(
         getRedirectPath(
           location.state,
-          adminOnly ? '/admin' : '/dashboard',
+          adminOnly
+            ? '/admin'
+            : response.user.role === 'owner'
+              ? '/bimbel/select'
+              : '/dashboard',
           adminOnly ? '/admin/login' : '/login',
         ),
         { replace: true },

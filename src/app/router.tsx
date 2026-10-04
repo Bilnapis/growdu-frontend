@@ -5,6 +5,7 @@ import {
   AuthenticatedRoute,
   OwnerRoute,
   PlatformAdminRoute,
+  TenantContextRoute,
   UnauthenticatedRoute,
 } from '@/app/route-guards'
 import { AdminLayout } from '@/features/admin/components/AdminLayout'
@@ -19,6 +20,7 @@ import { PlatformTenantsPage } from '@/pages/PlatformTenantsPage'
 import { PlatformUsersPage } from '@/pages/PlatformUsersPage'
 import { UserSettingsPage } from '@/pages/UserSettingsPage'
 import { DashboardLayout } from '@/features/dashboard/components/DashboardLayout'
+import { BimbelSelectorPage } from '@/pages/BimbelSelectorPage'
 
 export const router = createBrowserRouter([
   {
@@ -33,18 +35,32 @@ export const router = createBrowserRouter([
         element: <AuthenticatedRoute />,
         children: [
           {
-            element: <DashboardLandingPage />,
+            element: <OwnerRoute />,
             children: [
               {
-                element: <DashboardLayout />,
+                path: 'bimbel/select',
+                element: <BimbelSelectorPage />,
+              },
+            ],
+          },
+          {
+            element: <TenantContextRoute />,
+            children: [
+              {
+                element: <DashboardLandingPage />,
                 children: [
                   {
-                    path: 'dashboard',
-                    element: <DashboardPage />,
-                  },
-                  {
-                    path: ':section',
-                    element: <DashboardModulePlaceholderPage />,
+                    element: <DashboardLayout />,
+                    children: [
+                      {
+                        path: 'dashboard',
+                        element: <DashboardPage />,
+                      },
+                      {
+                        path: ':section',
+                        element: <DashboardModulePlaceholderPage />,
+                      },
+                    ],
                   },
                 ],
               },

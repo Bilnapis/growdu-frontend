@@ -1,4 +1,5 @@
 import { apiRequest } from '@/services/api-client'
+import { env } from '@/config/env'
 import { type PlatformAdmin } from '@/lib/platform-admin-session'
 
 export type PlatformUserRole = 'owner' | 'operator' | 'tutor' | 'parent'
@@ -52,6 +53,10 @@ export type CreatePlatformTenantInput = {
 }
 
 export type UpdatePlatformTenantInput = CreatePlatformTenantInput
+
+type PlatformTenantLogoUploadResponse = {
+  logoUrl: string
+}
 
 export type ManagedPlatformTenantFilters = {
   page: number
@@ -231,6 +236,22 @@ export function createPlatformTenant(input: CreatePlatformTenantInput) {
     body: JSON.stringify(input),
     authScope: 'platform-admin',
   })
+}
+
+export function uploadPlatformTenantLogo(file: File) {
+  const body = new FormData()
+  body.append('file', file)
+
+  return apiRequest<PlatformTenantLogoUploadResponse>(
+    '/platform-admin/tenants/logo',
+    {
+      method: 'POST',
+      body,
+      authScope: 'platform-admin',
+    },
+  ).then(({ logoUrl }) => ({
+    logoUrl: new URL(logoUrl, env.apiBaseUrl).toString(),
+  }))
 }
 
 export function updatePlatformTenant(

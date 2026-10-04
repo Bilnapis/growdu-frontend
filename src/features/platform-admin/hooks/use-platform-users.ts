@@ -15,6 +15,7 @@ import {
   type ManagedPlatformTenantFilters,
   type UpdatePlatformTenantInput,
   type UpdatePlatformUserInput,
+  uploadPlatformTenantLogo,
   updatePlatformTenant,
   updatePlatformUser,
 } from '@/features/platform-admin/api/platform-admin-api'
@@ -118,6 +119,12 @@ export function useCreatePlatformTenant() {
         queryClient.invalidateQueries({ queryKey: platformTenantsQueryKey }),
       ])
     },
+  })
+}
+
+export function useUploadPlatformTenantLogo() {
+  return useMutation({
+    mutationFn: (file: File) => uploadPlatformTenantLogo(file),
   })
 }
 
