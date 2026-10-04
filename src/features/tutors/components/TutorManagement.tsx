@@ -1,4 +1,10 @@
-import { type FormEvent, useMemo, useState } from "react";
+import {
+  type CSSProperties,
+  type FormEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   CheckCircle2,
   BookOpen,
@@ -55,6 +61,14 @@ type TutorEditorState =
     }
   | null;
 
+type ActionMenuState = {
+  tutorId: string;
+  top: number;
+  left: number;
+} | null;
+
+const actionMenuWidth = 180;
+
 const rupiahFormatter = new Intl.NumberFormat("id-ID", {
   currency: "IDR",
   maximumFractionDigits: 0,
@@ -65,11 +79,9 @@ export function TutorManagement({
   filters,
   onFiltersChange,
 }: TutorManagementProps) {
+  const actionMenuBoundaryRef = useRef<HTMLElement | null>(null);
   const [editorState, setEditorState] = useState<TutorEditorState>(null);
-  const [isDefaultActionMenu, setIsDefaultActionMenu] = useState(true);
-  const [openActionTutorId, setOpenActionTutorId] = useState<string | null>(
-    null,
-  );
+  const [actionMenu, setActionMenu] = useState<ActionMenuState>(null);
   const tutorsQuery = useTutors({ ...filters, limit: 20 });
   const updateMutation = useUpdateTutor();
   const summary = useMemo(() => {
@@ -84,9 +96,9 @@ export function TutorManagement({
       total: tutorsQuery.data?.meta.total ?? 0,
     };
   }, [tutorsQuery.data]);
-  const visibleActionTutorId = isDefaultActionMenu
-    ? tutorsQuery.data?.data[0]?.id
-    : openActionTutorId;
+  const openActionTutor =
+    tutorsQuery.data?.data.find((tutor) => tutor.id === actionMenu?.tutorId) ??
+    null;
 
   function handleFilterSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -98,6 +110,27 @@ export function TutorManagement({
       page: 1,
       ...(search ? { search } : {}),
       ...(status ? { status } : {}),
+    });
+  }
+
+  function handleActionMenuToggle(tutor: Tutor, button: HTMLButtonElement) {
+    setActionMenu((current) => {
+      if (current?.tutorId === tutor.id) return null;
+
+      const boundary = actionMenuBoundaryRef.current;
+      if (!boundary) return current;
+
+      const buttonRect = button.getBoundingClientRect();
+      const boundaryRect = boundary.getBoundingClientRect();
+      const maxLeft = Math.max(8, boundaryRect.width - actionMenuWidth - 8);
+      const preferredLeft =
+        buttonRect.right - boundaryRect.left - actionMenuWidth;
+
+      return {
+        tutorId: tutor.id,
+        top: buttonRect.bottom - boundaryRect.top + 8,
+        left: Math.max(8, Math.min(preferredLeft, maxLeft)),
+      };
     });
   }
 
@@ -179,7 +212,10 @@ export function TutorManagement({
         />
       </section>
 
-      <section className="mt-5 rounded-lg border border-[var(--color-border)] bg-white p-[18px]">
+      <section
+        ref={actionMenuBoundaryRef}
+        className="relative mt-5 rounded-lg border border-[var(--color-border)] bg-white p-[18px]"
+      >
         {tutorsQuery.isPending ? <LoadingState /> : null}
         {tutorsQuery.isError ? <ErrorState /> : null}
         {tutorsQuery.data ? (
@@ -300,14 +336,15 @@ export function TutorManagement({
                       <td className="border-b border-[var(--color-neutral-100)] px-3 py-3">
                         <TutorStatusBadge status={tutor.status} />
                       </td>
-                      <td className="relative border-b border-[var(--color-neutral-100)] px-3 py-3">
+                      <td className="border-b border-[var(--color-neutral-100)] px-3 py-3">
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary)]"
-                            onClick={() =>
+                            onClick={() => {
+                              setActionMenu(null);
                               setEditorState({ mode: "edit", tutor })
-                            }
+                            }}
                             aria-label={`Edit ${tutor.name}`}
                           >
                             <Pencil
@@ -318,12 +355,12 @@ export function TutorManagement({
                           <button
                             type="button"
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-muted)]"
-                            onClick={() => {
-                              setIsDefaultActionMenu(false);
-                              setOpenActionTutorId((current) =>
-                                current === tutor.id ? null : tutor.id,
-                              );
-                            }}
+                            onClick={(event) =>
+                              handleActionMenuToggle(
+                                tutor,
+                                event.currentTarget,
+                              )
+                            }
                             aria-label={`Menu aksi ${tutor.name}`}
                           >
                             <MoreHorizontal
@@ -332,15 +369,6 @@ export function TutorManagement({
                             />
                           </button>
                         </div>
-                        {visibleActionTutorId === tutor.id ? (
-                          <TutorActionMenu
-                            tutor={tutor}
-                            onEdit={() =>
-                              setEditorState({ mode: "edit", tutor })
-                            }
-                            onDeactivate={() => handleDeactivateTutor(tutor)}
-                          />
-                        ) : null}
                       </td>
                     </tr>
                   ))}
@@ -354,6 +382,23 @@ export function TutorManagement({
               totalPages={tutorsQuery.data.meta.totalPages}
               onPageChange={(page) => onFiltersChange({ ...filters, page })}
             />
+            {openActionTutor && actionMenu ? (
+              <TutorActionMenu
+                tutor={openActionTutor}
+                style={{
+                  left: actionMenu.left,
+                  top: actionMenu.top,
+                }}
+                onEdit={() => {
+                  setActionMenu(null);
+                  setEditorState({ mode: "edit", tutor: openActionTutor });
+                }}
+                onDeactivate={() => {
+                  setActionMenu(null);
+                  handleDeactivateTutor(openActionTutor);
+                }}
+              />
+            ) : null}
           </>
         ) : null}
       </section>
@@ -397,15 +442,20 @@ function SummaryCard({
 
 function TutorActionMenu({
   tutor,
+  style,
   onEdit,
   onDeactivate,
 }: {
   tutor: Tutor;
+  style: CSSProperties;
   onEdit: () => void;
   onDeactivate: () => void;
 }) {
   return (
-    <div className="absolute right-0 top-[46px] z-10 w-[180px] rounded-lg border border-[var(--color-border)] bg-white p-2 shadow-[0_8px_24px_rgb(15_23_42_/_10%)]">
+    <div
+      className="absolute z-20 w-[180px] rounded-lg border border-[var(--color-border)] bg-white p-2 shadow-[0_8px_24px_rgb(15_23_42_/_10%)]"
+      style={style}
+    >
       <button
         type="button"
         className="flex w-full items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-4 py-2 text-[13px] font-semibold text-[var(--color-text)]"
