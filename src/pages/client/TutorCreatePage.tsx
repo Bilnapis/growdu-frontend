@@ -5,10 +5,7 @@ import * as yup from "yup";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  useCreateTutor,
-  useTutorFormOptions,
-} from "@/features/tutors/hooks/use-tutors";
+import { useCreateTutor } from "@/features/tutors/hooks/use-tutors";
 import { ApiError } from "@/services/api-client";
 import {
   getYupFieldErrors,
@@ -57,9 +54,9 @@ const tutorCreateSchema: yup.ObjectSchema<TutorCreateForm> = yup.object({
     .email("Email wajib valid.")
     .required("Email wajib valid."),
   address: yup.string().trim().required("Alamat wajib diisi."),
-  expertise: yup.string().trim().required("Keahlian wajib dipilih."),
-  education: yup.string().trim().required("Jurusan wajib dipilih."),
-  bankName: yup.string().trim().required("Bank atau e-wallet wajib dipilih."),
+  expertise: yup.string().trim().required("Keahlian wajib diisi."),
+  education: yup.string().trim().required("Jurusan wajib diisi."),
+  bankName: yup.string().trim().required("Bank atau e-wallet wajib diisi."),
   accountName: yup
     .string()
     .trim()
@@ -75,14 +72,10 @@ const tutorCreateSchema: yup.ObjectSchema<TutorCreateForm> = yup.object({
 export function TutorCreatePage() {
   const navigate = useNavigate();
   const createMutation = useCreateTutor();
-  const formOptionsQuery = useTutorFormOptions();
   const [form, setForm] = useState<TutorCreateForm>(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const expertiseOptions = formOptionsQuery.data?.expertiseOptions ?? [];
-  const educationOptions = formOptionsQuery.data?.educationOptions ?? [];
-  const bankOptions = formOptionsQuery.data?.bankOptions ?? [];
 
   const validation = useMemo<{
     errors: FormFieldErrors<keyof TutorCreateForm>;
@@ -102,10 +95,7 @@ export function TutorCreatePage() {
     }
   }, [form]);
 
-  const canSubmit =
-    validation.issues.length === 0 &&
-    !createMutation.isPending &&
-    !formOptionsQuery.isLoading;
+  const canSubmit = validation.issues.length === 0 && !createMutation.isPending;
 
   function updateField(field: keyof TutorCreateForm, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -173,15 +163,6 @@ export function TutorCreatePage() {
 
       <form className="mt-[18px] space-y-5" onSubmit={handleSubmit}>
         <div className="max-w-[742px] space-y-4">
-          {formOptionsQuery.isError ? (
-            <p
-              className="rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
-              role="alert"
-            >
-              Data pilihan form belum dapat dimuat. Silakan muat ulang halaman.
-            </p>
-          ) : null}
-
           <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
             <SectionHeader
               title="Data Tentor"
@@ -225,33 +206,21 @@ export function TutorCreatePage() {
                 placeholder="Jl. Melati No. 12, Bandung"
                 onChange={(value) => updateField("address", value)}
               />
-              <SelectField
+              <FormField
                 id="tutor-expertise"
                 label="Keahlian"
                 value={form.expertise}
                 required
-                options={expertiseOptions}
-                placeholder={
-                  formOptionsQuery.isLoading
-                    ? "Memuat keahlian..."
-                    : "Pilih keahlian"
-                }
-                disabled={formOptionsQuery.isLoading}
+                placeholder="Contoh: Matematika, Bahasa Inggris"
                 error={submitted ? validation.errors.expertise : undefined}
                 onChange={(value) => updateField("expertise", value)}
               />
-              <SelectField
+              <FormField
                 id="tutor-education"
                 label="Jurusan"
                 value={form.education}
                 required
-                options={educationOptions}
-                placeholder={
-                  formOptionsQuery.isLoading
-                    ? "Memuat jurusan..."
-                    : "Pilih jurusan"
-                }
-                disabled={formOptionsQuery.isLoading}
+                placeholder="Contoh: Pendidikan Matematika"
                 error={submitted ? validation.errors.education : undefined}
                 onChange={(value) => updateField("education", value)}
               />
@@ -264,18 +233,12 @@ export function TutorCreatePage() {
               description="Dipakai untuk invoice atau penggajian"
             />
             <div className="mt-4 grid gap-3.5 md:grid-cols-3">
-              <SelectField
+              <FormField
                 id="tutor-bank"
                 label="Bank / E-Wallet"
                 value={form.bankName}
                 required
-                options={bankOptions}
-                placeholder={
-                  formOptionsQuery.isLoading
-                    ? "Memuat bank..."
-                    : "Pilih bank / e-wallet"
-                }
-                disabled={formOptionsQuery.isLoading}
+                placeholder="Contoh: BCA, Mandiri, GoPay"
                 error={submitted ? validation.errors.bankName : undefined}
                 onChange={(value) => updateField("bankName", value)}
               />
@@ -419,72 +382,6 @@ function FormField({
             : "border-[var(--color-border)]"
         }`}
       />
-      {error ? (
-        <p
-          id={`${id}-error`}
-          className="text-xs font-semibold leading-[1.35] text-[var(--color-danger)]"
-        >
-          {error}
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-function SelectField({
-  id,
-  label,
-  value,
-  options,
-  onChange,
-  error,
-  required = false,
-  placeholder,
-  disabled = false,
-}: {
-  id: string;
-  label: string;
-  value: string;
-  options: string[];
-  onChange: (value: string) => void;
-  error?: string;
-  required?: boolean;
-  placeholder: string;
-  disabled?: boolean;
-}) {
-  return (
-    <div className="grid gap-[7px]">
-      <Label
-        htmlFor={id}
-        className="flex items-center gap-1 text-[13px] font-bold leading-[1.35] text-[var(--color-text)]"
-      >
-        {label}
-        {required ? (
-          <span className="text-[var(--color-danger)]" aria-hidden="true">
-            *
-          </span>
-        ) : null}
-      </Label>
-      <select
-        id={id}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        disabled={disabled}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] rounded-md border bg-white px-3 text-sm text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-          error
-            ? "border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]"
-            : "border-[var(--color-border)] focus-visible:ring-[var(--color-primary)]"
-        }`}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
       {error ? (
         <p
           id={`${id}-error`}

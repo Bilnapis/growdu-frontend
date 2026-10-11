@@ -1,5 +1,5 @@
 {
-  "version": "2.19",
+  "version": "2.20",
   "children": [
     {
       "type": "frame",
@@ -989,65 +989,86 @@
                             {
                               "type": "frame",
                               "id": "cmp_sidebar_dashboard_brand",
-                              "name": "Brand Header",
+                              "name": "Bimbel Identity Header",
+                              "reusable": true,
                               "width": "fill_container",
                               "gap": 10,
+                              "justifyContent": "space_between",
                               "alignItems": "center",
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "cmp_sidebar_dashboard_bm",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
+                                  "id": "DbPZ3",
+                                  "name": "Bimbel Identity Left",
+                                  "gap": 10,
                                   "alignItems": "center",
                                   "children": [
                                     {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_dashboard_bm_txt",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
+                                      "type": "frame",
+                                      "id": "cmp_sidebar_dashboard_bm",
+                                      "name": "Bimbel Logo",
+                                      "width": 38,
+                                      "height": 38,
+                                      "fill": "$bk-primary",
+                                      "cornerRadius": 8,
+                                      "justifyContent": "center",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "cmp_sidebar_dashboard_bm_txt",
+                                          "name": "Bimbel Logo Initials",
+                                          "fill": "$bk-surface",
+                                          "content": "BH",
+                                          "lineHeight": 1.3,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 16,
+                                          "fontWeight": "700"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "cmp_sidebar_dashboard_bc",
+                                      "name": "Bimbel Name Container",
+                                      "layout": "vertical",
+                                      "gap": 2,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "cmp_sidebar_dashboard_title",
+                                          "name": "Bimbel Name",
+                                          "fill": "$bk-text",
+                                          "content": "Bimbel Hebat",
+                                          "lineHeight": 1.2,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 16,
+                                          "fontWeight": "700"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "E6Guo5",
+                                          "name": "Operator Label",
+                                          "fill": "$bk-muted",
+                                          "content": "Operator Bimbel",
+                                          "lineHeight": 1.2,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "normal"
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
                                 {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_dashboard_bc",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_dashboard_title",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_dashboard_sub",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
+                                  "type": "icon",
+                                  "id": "ucWXa",
+                                  "name": "Bimbel Switcher Icon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "icon": "chevrons-up-down",
+                                  "library": "lucide",
+                                  "fill": "$bk-muted"
                                 }
                               ]
                             },
@@ -1524,69 +1545,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "cmp_sidebar_siswa_brand",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_siswa_bm",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_siswa_bm_txt",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_siswa_bc",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_siswa_title",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_siswa_sub",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "Dajkr",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -2061,69 +2024,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "frjwS",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "v8YBe",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "A7XNoi",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "x4cpE",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "j8Wdw",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "CB4Ei",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "nKg0g",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -2597,69 +2502,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "sm7Y5",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "F0FUKU",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "YeGDq",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "Nkcco",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "Hp8Ui",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "s5GToR",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "XK4Oy",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -3134,69 +2981,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "cmp_sidebar_kelompok_brand",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_kelompok_bm",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_kelompok_bm_txt",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_kelompok_bc",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_kelompok_title",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_kelompok_sub",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "Bw9dq",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -3671,69 +3460,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "cmp_sidebar_jadwal_brand",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_jadwal_bm",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_jadwal_bm_txt",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "cmp_sidebar_jadwal_bc",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_jadwal_title",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "cmp_sidebar_jadwal_sub",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "u1fQB",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -4208,69 +3939,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "TAEsg",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "hEcgK",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "J78n3",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "VqV3i",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "JtFTH",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "i3bUW",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "mktGk",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -4745,69 +4418,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "ylbjqe",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "S9DYaM",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "KB3UUL",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "WGySPi",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "Mv0121",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "CYJK4W",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "k66xpY",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -5282,69 +4897,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "dbe58c",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "fd5054",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "0262d7",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "81567a",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "6b4bc0",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "a6dc70",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "h3GTa",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -5819,69 +5376,11 @@
                           "padding": 20,
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "lap_dbe58c",
-                              "name": "Brand Header",
-                              "width": "fill_container",
-                              "gap": 10,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "frame",
-                                  "id": "lap_fd5054",
-                                  "name": "Brand Mark",
-                                  "width": 38,
-                                  "height": 38,
-                                  "fill": "$bk-primary",
-                                  "cornerRadius": 8,
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "lap_0262d7",
-                                      "name": "Brand Mark Text",
-                                      "fill": "$bk-surface",
-                                      "content": "BK",
-                                      "lineHeight": 1.3,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "lap_81567a",
-                                  "name": "Brand Copy",
-                                  "layout": "vertical",
-                                  "gap": 2,
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "lap_6b4bc0",
-                                      "name": "Brand Name",
-                                      "fill": "$bk-text",
-                                      "content": "BimbelKit",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 16,
-                                      "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "lap_a6dc70",
-                                      "name": "Brand Subtitle",
-                                      "fill": "$bk-muted",
-                                      "content": "Operasional Bimbel",
-                                      "lineHeight": 1.2,
-                                      "fontFamily": "$bk-font",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
-                                }
-                              ]
+                              "id": "d7p6A",
+                              "type": "ref",
+                              "ref": "cmp_sidebar_dashboard_brand",
+                              "name": "Bimbel Identity Header",
+                              "width": "fill_container"
                             },
                             {
                               "type": "frame",
@@ -48586,7 +48085,7 @@
         "type": "image",
         "enabled": true,
         "url": "moodboard/moodboard_1",
-        "mode": "fill"
+        "mode": "cover"
       },
       "width": 1200,
       "height": 900
@@ -48600,7 +48099,7 @@
         "type": "image",
         "enabled": true,
         "url": "moodboard/moodboard_2",
-        "mode": "fill"
+        "mode": "cover"
       },
       "width": 1200,
       "height": 900
@@ -48614,7 +48113,7 @@
         "type": "image",
         "enabled": true,
         "url": "moodboard/moodboard_3",
-        "mode": "fill"
+        "mode": "cover"
       },
       "width": 1258,
       "height": 900
@@ -49399,7 +48898,7 @@
         "type": "image",
         "enabled": true,
         "url": "moodboard/moodboard_4",
-        "mode": "fill"
+        "mode": "cover"
       },
       "width": 1200,
       "height": 913
@@ -49413,7 +48912,7 @@
         "type": "image",
         "enabled": true,
         "url": "moodboard/moodboard_5",
-        "mode": "fill"
+        "mode": "cover"
       },
       "width": 1651,
       "height": 862
@@ -88290,7 +87789,7 @@
           "name": "Brand Panel",
           "width": 600,
           "height": "fill_container",
-          "fill": "$bk-primary-dark",
+          "fill": "$bk-primary",
           "layout": "vertical",
           "padding": 56,
           "justifyContent": "space_between",
@@ -89221,6 +88720,949 @@
               "fontFamily": "$bk-font",
               "fontSize": 12,
               "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Z1Gj1F",
+      "x": 1536,
+      "y": 544,
+      "name": "Screen - Pilih Bimbel",
+      "clip": true,
+      "width": 1440,
+      "height": 900,
+      "fill": "$bk-bg",
+      "layout": "none",
+      "children": [
+        {
+          "type": "ellipse",
+          "id": "IbPRy",
+          "x": 1040,
+          "y": -210,
+          "name": "Decorative Blue Orb",
+          "fill": "#D9ECFF80",
+          "width": 600,
+          "height": 600
+        },
+        {
+          "type": "ellipse",
+          "id": "ykucX",
+          "x": -180,
+          "y": 630,
+          "name": "Decorative Soft Orb",
+          "fill": "#E8F3FF",
+          "width": 500,
+          "height": 500
+        },
+        {
+          "type": "frame",
+          "id": "vp5jw",
+          "x": 72,
+          "y": 34,
+          "name": "Top Bar",
+          "width": 1296,
+          "height": 56,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "phKzx",
+              "name": "Brand Header",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "m2uBF",
+                  "name": "Brand Mark",
+                  "width": 38,
+                  "height": 38,
+                  "fill": "$bk-primary",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lKGbk",
+                      "name": "Brand Mark Text",
+                      "fill": "$bk-surface",
+                      "content": "BK",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "FzxZ7",
+                  "name": "Brand Copy",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "j3XbU",
+                      "name": "Brand Name",
+                      "fill": "$bk-text",
+                      "content": "BimbelKit",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "yu8tM",
+                      "name": "Brand Subtitle",
+                      "fill": "$bk-muted",
+                      "content": "Operasional Bimbel",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dJtBS",
+              "name": "User Menu",
+              "gap": 11,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "MAyXv",
+                  "name": "User Copy",
+                  "layout": "vertical",
+                  "gap": 1,
+                  "alignItems": "end",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QmQAh",
+                      "name": "User Name",
+                      "fill": "$bk-text",
+                      "content": "Rizky Pratama",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "rDz3u",
+                      "name": "User Role",
+                      "fill": "$bk-muted",
+                      "content": "Owner",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "iPrYt",
+                  "name": "User Avatar",
+                  "width": 38,
+                  "height": 38,
+                  "fill": "$bk-primary-soft",
+                  "cornerRadius": 19,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ExtK4",
+                      "name": "Avatar Initials",
+                      "fill": "$bk-primary-dark",
+                      "content": "RP",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 12,
+                      "fontWeight": "800"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "d54ce",
+          "x": 210,
+          "y": 175,
+          "name": "Bimbel Selector Content",
+          "width": 1020,
+          "layout": "vertical",
+          "gap": 32,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "cAPiN",
+              "name": "Selector Introduction",
+              "width": 700,
+              "layout": "vertical",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "iZ80J",
+                  "name": "Welcome Label",
+                  "fill": "$bk-primary",
+                  "content": "SELAMAT DATANG KEMBALI, RIZKY",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 12,
+                  "fontWeight": "800",
+                  "letterSpacing": 1.2
+                },
+                {
+                  "type": "text",
+                  "id": "IP63a",
+                  "name": "Selector Title",
+                  "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Pilih bimbel untuk mulai bekerja",
+                  "lineHeight": 1.25,
+                  "textAlign": "center",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 34,
+                  "fontWeight": "800"
+                },
+                {
+                  "type": "text",
+                  "id": "CgaD1",
+                  "name": "Selector Description",
+                  "fill": "$bk-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Kamu memiliki akses ke beberapa unit bimbingan belajar. Pilih satu untuk membuka dashboard dan mengelola operasionalnya.",
+                  "lineHeight": 1.55,
+                  "textAlign": "center",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "IjPNh",
+              "name": "Bimbel Cards",
+              "width": "fill_container",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Y3BdF",
+                  "name": "Bimbel Card - Bimbel Cendekia Utama",
+                  "width": "fill_container",
+                  "height": 310,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 14,
+                  "stroke": "$bk-primary",
+                  "strokeWidth": 2,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#1F8FE526",
+                    "offset": {
+                      "x": 0,
+                      "y": 8
+                    },
+                    "blur": 18
+                  },
+                  "layout": "vertical",
+                  "gap": 18,
+                  "padding": 22,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jusS0",
+                      "name": "Card Header",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "GX7jO",
+                          "name": "Bimbel Identity",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "evk7c",
+                              "name": "Bimbel Monogram",
+                              "width": 48,
+                              "height": 48,
+                              "fill": "#D9ECFF",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "o8jaRl",
+                                  "name": "Bimbel Initials",
+                                  "fill": "#175CD3",
+                                  "content": "BC",
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 15,
+                                  "fontWeight": "800"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UQOfl",
+                          "name": "Current Bimbel Badge",
+                          "fill": "$bk-primary-soft",
+                          "cornerRadius": 999,
+                          "gap": 5,
+                          "padding": [
+                            5,
+                            8
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "N3rt6T",
+                              "name": "Current Badge Icon",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "check",
+                              "library": "lucide",
+                              "fill": "$bk-primary-dark"
+                            },
+                            {
+                              "type": "text",
+                              "id": "IlFUj",
+                              "name": "Current Badge Text",
+                              "fill": "$bk-primary-dark",
+                              "content": "Terakhir dibuka",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Szg2b",
+                      "name": "Bimbel Name",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Bimbel Cendekia Utama",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 19,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "S483Li",
+                      "name": "Location",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "s8YgB",
+                          "name": "Location Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "map-pin",
+                          "library": "lucide",
+                          "fill": "$bk-muted"
+                        },
+                        {
+                          "type": "text",
+                          "id": "AksKr",
+                          "name": "Location Text",
+                          "fill": "$bk-muted",
+                          "content": "Jl. Sudirman No. 24, Jakarta",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vZLXF",
+                      "name": "Bimbel Stats",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "A3KrR",
+                          "name": "Stat - Siswa aktif",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J5MTEC",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "428",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "SIFJe",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Siswa aktif",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pvK0N",
+                          "name": "Stat - Kelas berjalan",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "AWJF4",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "24",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "jc8wF",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Kelas berjalan",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Ifu1a",
+                      "name": "Open Bimbel Button",
+                      "width": "fill_container",
+                      "height": 42,
+                      "fill": "$bk-primary",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "QGyBG",
+                          "name": "Button Label",
+                          "fill": "#FFFFFF",
+                          "content": "Lanjutkan ke dashboard",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "f97sN",
+                          "name": "Button Arrow",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "arrow-right",
+                          "library": "lucide",
+                          "fill": "#FFFFFF"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "JVYpn",
+                  "name": "Bimbel Card - Bimbel Cendekia Depok",
+                  "width": "fill_container",
+                  "height": 310,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 14,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 18,
+                  "padding": 22,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "p6sNK6",
+                      "name": "Card Header",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Iw6Tf",
+                          "name": "Bimbel Identity",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "F5nZp",
+                              "name": "Bimbel Monogram",
+                              "width": 48,
+                              "height": 48,
+                              "fill": "#EDE9FE",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "I3vey",
+                                  "name": "Bimbel Initials",
+                                  "fill": "#7C3AED",
+                                  "content": "CD",
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 15,
+                                  "fontWeight": "800"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "lfGRO",
+                      "name": "Bimbel Name",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Bimbel Cendekia Depok",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 19,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n6Vsz",
+                      "name": "Location",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "qtLXc",
+                          "name": "Location Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "map-pin",
+                          "library": "lucide",
+                          "fill": "$bk-muted"
+                        },
+                        {
+                          "type": "text",
+                          "id": "HqHvg",
+                          "name": "Location Text",
+                          "fill": "$bk-muted",
+                          "content": "Jl. Margonda Raya No. 98, Depok",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VtwlO",
+                      "name": "Bimbel Stats",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "wxkX6",
+                          "name": "Stat - Siswa aktif",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "z9J3Jf",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "316",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "m7kOS",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Siswa aktif",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lkbv9",
+                          "name": "Stat - Kelas berjalan",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "uVgeM",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "18",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "L9RW71",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Kelas berjalan",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IpZA2",
+                      "name": "Open Bimbel Button",
+                      "width": "fill_container",
+                      "height": 42,
+                      "fill": "$bk-primary-soft",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "b1msZ",
+                          "name": "Button Label",
+                          "fill": "$bk-primary-dark",
+                          "content": "Pilih bimbel ini",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "b2VT7r",
+                          "name": "Button Arrow",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "arrow-right",
+                          "library": "lucide",
+                          "fill": "$bk-primary-dark"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "xhDPN",
+                  "name": "Bimbel Card - Bimbel Cendekia Bekasi",
+                  "width": "fill_container",
+                  "height": 310,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 14,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 18,
+                  "padding": 22,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "SVvQX",
+                      "name": "Card Header",
+                      "width": "fill_container",
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "iBjLL",
+                          "name": "Bimbel Identity",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "O94WQS",
+                              "name": "Bimbel Monogram",
+                              "width": 48,
+                              "height": 48,
+                              "fill": "#D1FADF",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "dqiWG",
+                                  "name": "Bimbel Initials",
+                                  "fill": "#027A48",
+                                  "content": "CB",
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 15,
+                                  "fontWeight": "800"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "q8JUF",
+                      "name": "Bimbel Name",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Bimbel Cendekia Bekasi",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 19,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Ry4Bl",
+                      "name": "Location",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "l7TUBG",
+                          "name": "Location Icon",
+                          "width": 15,
+                          "height": 15,
+                          "icon": "map-pin",
+                          "library": "lucide",
+                          "fill": "$bk-muted"
+                        },
+                        {
+                          "type": "text",
+                          "id": "PNHVN",
+                          "name": "Location Text",
+                          "fill": "$bk-muted",
+                          "content": "Jl. Ahmad Yani No. 11, Bekasi",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "CdHKD",
+                      "name": "Bimbel Stats",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "S7T68J",
+                          "name": "Stat - Siswa aktif",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "x09oV",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "275",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "wQuLy",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Siswa aktif",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "oErkw",
+                          "name": "Stat - Kelas berjalan",
+                          "width": "fill_container",
+                          "fill": "$bk-bg-light",
+                          "cornerRadius": 8,
+                          "layout": "vertical",
+                          "gap": 3,
+                          "padding": 10,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "yZKgV",
+                              "name": "Stat Value",
+                              "fill": "$bk-text",
+                              "content": "15",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 16,
+                              "fontWeight": "800"
+                            },
+                            {
+                              "type": "text",
+                              "id": "kIgAi",
+                              "name": "Stat Label",
+                              "fill": "$bk-muted",
+                              "content": "Kelas berjalan",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DlpDs",
+                      "name": "Open Bimbel Button",
+                      "width": "fill_container",
+                      "height": 42,
+                      "fill": "$bk-primary-soft",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "TBbPV",
+                          "name": "Button Label",
+                          "fill": "$bk-primary-dark",
+                          "content": "Pilih bimbel ini",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "MBKjw",
+                          "name": "Button Arrow",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "arrow-right",
+                          "library": "lucide",
+                          "fill": "$bk-primary-dark"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "HELHQ",
+              "name": "Access Help",
+              "gap": 7,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "uzCFN",
+                  "name": "Help Icon",
+                  "width": 16,
+                  "height": 16,
+                  "icon": "circle-question-mark",
+                  "library": "lucide",
+                  "fill": "$bk-muted"
+                },
+                {
+                  "type": "text",
+                  "id": "Jxl4V",
+                  "name": "Help Text",
+                  "fill": "$bk-muted",
+                  "content": "Tidak menemukan bimbel yang dicari? Hubungi administrator pusat.",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
             }
           ]
         }
