@@ -19,6 +19,8 @@ import { DashboardModulePlaceholderPage } from '@/pages/client/DashboardModulePl
 import { DashboardPage } from '@/pages/client/DashboardPage'
 import { LoginPage } from '@/pages/client/LoginPage'
 import { TutorCreatePage } from '@/pages/client/TutorCreatePage'
+import { TutorDetailPage } from '@/pages/client/TutorDetailPage'
+import { TutorEditPage } from '@/pages/client/TutorEditPage'
 import { TutorsPage } from '@/pages/client/TutorsPage'
 import { UserSettingsPage } from '@/pages/client/UserSettingsPage'
 import { NotFoundPage } from '@/pages/shared/NotFoundPage'
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
                       {
                         path: 'tutors/new',
                         element: <TutorCreatePage />,
+                      },
+                      {
+                        path: 'tutors/:id',
+                        element: <TutorDetailPage />,
+                      },
+                      {
+                        path: 'tutors/:id/edit',
+                        element: <TutorEditPage />,
                       },
                       {
                         path: ':section',

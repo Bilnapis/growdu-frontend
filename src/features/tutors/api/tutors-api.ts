@@ -79,6 +79,10 @@ export function createTutor(input: TutorInput) {
   })
 }
 
+export function getTutor(id: string, signal?: AbortSignal) {
+  return apiRequest<Tutor>(`/tutors/${encodeURIComponent(id)}`, { signal })
+}
+
 export function updateTutor(id: string, input: TutorInput) {
   return apiRequest<Tutor>(`/tutors/${id}`, {
     method: 'PATCH',

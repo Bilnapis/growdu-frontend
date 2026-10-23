@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   createTutor,
+  getTutor,
   getTutorFormOptions,
   getTutors,
   type TutorFormOptions,
@@ -24,6 +25,14 @@ export function useTutorFormOptions() {
   return useQuery<TutorFormOptions>({
     queryKey: tutorFormOptionsQueryKey,
     queryFn: ({ signal }) => getTutorFormOptions(signal),
+  })
+}
+
+export function useTutor(id: string) {
+  return useQuery({
+    queryKey: [...tutorsQueryKey, 'detail', id],
+    queryFn: ({ signal }) => getTutor(id, signal),
+    enabled: Boolean(id),
   })
 }
 

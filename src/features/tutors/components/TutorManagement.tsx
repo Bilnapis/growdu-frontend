@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import {
-  CheckCircle2,
   BookOpen,
   ChevronDown,
   ChevronLeft,
@@ -23,27 +22,20 @@ import {
   UserRoundX,
   UserX,
   Users,
-  X,
   type LucideIcon,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   type Tutor,
-  type TutorInput,
   type TutorStatus,
 } from "@/features/tutors/api/tutors-api";
 import {
-  useCreateTutor,
   useTutors,
   useUpdateTutor,
 } from "@/features/tutors/hooks/use-tutors";
-import { ApiError } from "@/services/api-client";
-import { getYupValidationMessage } from "@/lib/yup-validation";
 
 type TutorManagementProps = {
   filters: {
@@ -54,16 +46,6 @@ type TutorManagementProps = {
   onFiltersChange: (filters: TutorManagementProps["filters"]) => void;
 };
 
-type TutorEditorState =
-  | {
-      mode: "create";
-    }
-  | {
-      mode: "edit";
-      tutor: Tutor;
-    }
-  | null;
-
 type ActionMenuState = {
   tutorId: string;
   top: number;
@@ -72,45 +54,12 @@ type ActionMenuState = {
 
 const actionMenuWidth = 180;
 
-const rupiahFormatter = new Intl.NumberFormat("id-ID", {
-  currency: "IDR",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
-
-const tutorStatuses = ["active", "inactive"] as const;
-
-const tutorInputSchema = yup.object({
-  name: yup
-    .string()
-    .trim()
-    .min(2, "Nama tentor minimal 2 karakter.")
-    .max(150, "Nama tentor maksimal 150 karakter.")
-    .required("Nama tentor wajib diisi."),
-  phoneNumber: yup
-    .string()
-    .trim()
-    .min(6, "Nomor WhatsApp minimal 6 karakter.")
-    .max(20, "Nomor WhatsApp maksimal 20 karakter.")
-    .required("Nomor WhatsApp wajib diisi."),
-  sessionRate: yup
-    .string()
-    .trim()
-    .matches(/^\d{1,10}(\.\d{1,2})?$/, "Tarif per sesi tidak valid.")
-    .required("Tarif per sesi wajib diisi."),
-  status: yup
-    .mixed<TutorStatus>()
-    .oneOf(tutorStatuses, "Status tentor tidak valid.")
-    .required("Status tentor wajib dipilih."),
-});
-
 export function TutorManagement({
   filters,
   onFiltersChange,
 }: TutorManagementProps) {
   const navigate = useNavigate();
   const actionMenuBoundaryRef = useRef<HTMLElement | null>(null);
-  const [editorState, setEditorState] = useState<TutorEditorState>(null);
   const [actionMenu, setActionMenu] = useState<ActionMenuState>(null);
   const tutorsQuery = useTutors({ ...filters, limit: 20 });
   const updateMutation = useUpdateTutor();
@@ -358,7 +307,7 @@ export function TutorManagement({
                         {getTutorContact(tutor)}
                       </td>
                       <td className="border-b border-[var(--color-neutral-100)] px-3 py-3 font-medium">
-                        {getTutorAddress()}
+                        {getTutorAddress(tutor)}
                       </td>
                       <td className="border-b border-[var(--color-neutral-100)] px-3 py-3 font-semibold">
                         {getTutorGroup(tutor)}
@@ -373,7 +322,7 @@ export function TutorManagement({
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary)]"
                             onClick={() => {
                               setActionMenu(null);
-                              setEditorState({ mode: "edit", tutor });
+                              void navigate(`/tutors/${tutor.id}/edit`);
                             }}
                             aria-label={`Edit ${tutor.name}`}
                           >
@@ -418,7 +367,7 @@ export function TutorManagement({
                 }}
                 onEdit={() => {
                   setActionMenu(null);
-                  setEditorState({ mode: "edit", tutor: openActionTutor });
+                  void navigate(`/tutors/${openActionTutor.id}/edit`);
                 }}
                 onDeactivate={() => {
                   setActionMenu(null);
@@ -430,9 +379,6 @@ export function TutorManagement({
         ) : null}
       </section>
 
-      {editorState ? (
-        <TutorEditor state={editorState} onClose={() => setEditorState(null)} />
-      ) : null}
     </div>
   );
 }
@@ -483,14 +429,14 @@ function TutorActionMenu({
       className="absolute z-20 w-[180px] rounded-lg border border-[var(--color-border)] bg-white p-2 shadow-[0_8px_24px_rgb(15_23_42_/_10%)]"
       style={style}
     >
-      <button
-        type="button"
+      <Link
+        to={`/tutors/${tutor.id}`}
         className="flex w-full items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-4 py-2 text-[13px] font-semibold text-[var(--color-text)]"
         aria-label={`Lihat detail ${tutor.name}`}
       >
         <Eye className="h-4 w-4" aria-hidden="true" />
         Lihat detail
-      </button>
+      </Link>
       <button
         type="button"
         className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-[13px] font-semibold text-white"
@@ -507,165 +453,6 @@ function TutorActionMenu({
         <UserX className="h-4 w-4" aria-hidden="true" />
         Nonaktifkan tentor
       </button>
-    </div>
-  );
-}
-
-function TutorEditor({
-  state,
-  onClose,
-}: {
-  state: Exclude<TutorEditorState, null>;
-  onClose: () => void;
-}) {
-  const createMutation = useCreateTutor();
-  const updateMutation = useUpdateTutor();
-  const [formError, setFormError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const isEdit = state.mode === "edit";
-  const tutor = isEdit ? state.tutor : null;
-  const isPending = createMutation.isPending || updateMutation.isPending;
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setFormError(null);
-    setSuccessMessage(null);
-
-    let input: TutorInput;
-    try {
-      input = getTutorInput(new FormData(event.currentTarget));
-    } catch (error) {
-      setFormError(getYupValidationMessage(error, "Periksa kembali data tentor."));
-      return;
-    }
-    const mutationOptions = {
-      onSuccess: () => {
-        setSuccessMessage(
-          isEdit
-            ? "Profil tentor berhasil diperbarui."
-            : "Tentor baru berhasil ditambahkan.",
-        );
-        if (!isEdit) {
-          event.currentTarget.reset();
-        }
-      },
-      onError: (error: unknown) => setFormError(getMutationError(error)),
-    };
-
-    if (isEdit && tutor) {
-      updateMutation.mutate({ id: tutor.id, input }, mutationOptions);
-      return;
-    }
-
-    createMutation.mutate(input, mutationOptions);
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex justify-end bg-slate-950/40 p-0 sm:p-4"
-      role="presentation"
-    >
-      <section
-        className="h-full w-full max-w-xl overflow-y-auto bg-background p-5 shadow-xl sm:rounded-lg sm:p-6"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tutor-editor-title"
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">
-              {isEdit ? "Edit tentor" : "Tambah tentor"}
-            </span>
-            <h2 id="tutor-editor-title" className="mt-1 text-xl font-semibold">
-              {tutor?.name ?? "Profil tentor baru"}
-            </h2>
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            aria-label="Tutup pengaturan tentor"
-          >
-            <X className="h-5 w-5" aria-hidden="true" />
-          </Button>
-        </div>
-
-        <form className="mt-7 space-y-5" onSubmit={handleSubmit}>
-          <div className="grid gap-2">
-            <Label htmlFor="tutor-name">Nama tentor</Label>
-            <Input
-              id="tutor-name"
-              name="name"
-              defaultValue={tutor?.name}
-              minLength={2}
-              maxLength={150}
-              required
-              disabled={isPending}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="tutor-phone">Nomor WhatsApp</Label>
-            <Input
-              id="tutor-phone"
-              name="phoneNumber"
-              defaultValue={tutor?.phoneNumber}
-              minLength={6}
-              maxLength={20}
-              placeholder="081234567890"
-              required
-              disabled={isPending}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="tutor-rate">Tarif per sesi</Label>
-            <Input
-              id="tutor-rate"
-              name="sessionRate"
-              defaultValue={tutor?.sessionRate}
-              inputMode="decimal"
-              pattern="^\d{1,10}(\.\d{1,2})?$"
-              placeholder="150000"
-              required
-              disabled={isPending}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="tutor-editor-status">Status</Label>
-            <select
-              id="tutor-editor-status"
-              name="status"
-              defaultValue={tutor?.status ?? "active"}
-              className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              disabled={isPending}
-            >
-              <option value="active">Aktif</option>
-              <option value="inactive">Nonaktif</option>
-            </select>
-          </div>
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Menyimpan..." : "Simpan tentor"}
-          </Button>
-        </form>
-
-        {formError ? (
-          <p
-            className="mt-5 rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-            role="alert"
-          >
-            {formError}
-          </p>
-        ) : null}
-        {successMessage ? (
-          <p
-            className="mt-5 flex items-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
-            role="status"
-          >
-            <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-            {successMessage}
-          </p>
-        ) : null}
-      </section>
     </div>
   );
 }
@@ -708,11 +495,10 @@ function Pagination({
           <button
             key={paginationPage}
             type="button"
-            className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${
-              paginationPage === page
+            className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${paginationPage === page
                 ? "bg-[var(--color-primary)] text-white"
                 : "border border-[var(--color-border)] bg-white text-[var(--color-muted)]"
-            }`}
+              }`}
             onClick={() => onPageChange(paginationPage)}
             aria-current={paginationPage === page ? "page" : undefined}
           >
@@ -738,11 +524,10 @@ function TutorStatusBadge({ status }: { status: TutorStatus }) {
 
   return (
     <span
-      className={`inline-flex rounded-[5px] px-2 py-1 text-[11px] font-bold leading-[1.3] ${
-        isActive
+      className={`inline-flex rounded-[5px] px-2 py-1 text-[11px] font-bold leading-[1.3] ${isActive
           ? "bg-[var(--color-success-bg)] text-[var(--color-success)]"
           : "bg-[var(--color-gray-50)] text-[var(--color-muted)]"
-      }`}
+        }`}
     >
       {status === "active" ? "Aktif" : "Nonaktif"}
     </span>
@@ -791,37 +576,29 @@ function EmptyState() {
   );
 }
 
-function getTutorInput(formData: FormData): TutorInput {
-  return tutorInputSchema.validateSync(
-    {
-      name: getFormValue(formData, "name"),
-      phoneNumber: getFormValue(formData, "phoneNumber"),
-      sessionRate: getFormValue(formData, "sessionRate"),
-      status: getFormValue(formData, "status"),
-    },
-    { abortEarly: false },
-  );
-}
-
-function formatRate(value: string) {
-  const amount = Number(value);
-  return Number.isFinite(amount) ? rupiahFormatter.format(amount) : value;
-}
-
 function getTutorExpertise(tutor: Tutor) {
-  return tutor.userId ? "Mapel belum diisi\nJurusan belum diisi" : "-";
+  const expertise = tutor.expertise?.trim() || 'Keahlian belum diisi'
+  const education = tutor.education?.trim() || 'Jurusan belum diisi'
+
+  return `${expertise}\n${education}`
 }
 
 function getTutorBankInfo(tutor: Tutor) {
-  return `Tarif sesi\n${formatRate(tutor.sessionRate)}`;
+  const bankName = tutor.bankName?.trim() || 'Bank belum diisi'
+  const accountNumber = tutor.accountNumber?.trim() || 'Nomor rekening belum diisi'
+  const accountName = tutor.accountName?.trim()
+
+  return `${bankName}\n${accountNumber}\n${accountName ? `a.n. ${accountName}` : 'Nama pemilik belum diisi'}`
 }
 
 function getTutorContact(tutor: Tutor) {
-  return `${tutor.phoneNumber}\nEmail belum diisi`;
+  const email = tutor.email?.trim() || 'Email belum diisi'
+
+  return `${tutor.phoneNumber}\n${email}`
 }
 
-function getTutorAddress() {
-  return "Alamat belum diisi";
+function getTutorAddress(tutor: Tutor) {
+  return tutor.address?.trim() || 'Alamat belum diisi'
 }
 
 function getTutorGroup(tutor: Tutor) {
@@ -836,9 +613,4 @@ function getFormValue(formData: FormData, name: string) {
 
 function getOptionalStatus(value: string): TutorStatus | undefined {
   return value === "active" || value === "inactive" ? value : undefined;
-}
-
-function getMutationError(error: unknown) {
-  if (error instanceof ApiError) return error.message;
-  return "Data tentor belum dapat disimpan. Silakan coba lagi.";
 }
