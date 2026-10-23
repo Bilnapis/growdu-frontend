@@ -72,12 +72,12 @@ const tutorCreateSchema: yup.ObjectSchema<TutorCreateForm> = yup.object({
     .required("Nomor rekening minimal 3 karakter."),
 });
 
-export function TutorForm({ tutor }: { tutor?: Tutor }) {
+export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => void }) {
   const navigate = useNavigate();
   const createMutation = useCreateTutor();
   const updateMutation = useUpdateTutor();
   const isPending = createMutation.isPending || updateMutation.isPending;
-  const returnPath = '/tutors';
+  const closeForm = onClose ?? (() => void navigate('/tutors', { replace: true }));
   const [form, setForm] = useState<TutorCreateForm>(() => tutor ? {
     name: tutor.name,
     phoneNumber: normalizeTutorPhoneNumber(tutor.phoneNumber),
@@ -145,7 +145,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
     const options = {
       onSuccess: () => {
         setSuccessMessage(tutor ? 'Data tentor berhasil diperbarui.' : 'Tentor baru berhasil ditambahkan.');
-        void navigate(returnPath, { replace: true });
+        closeForm();
       },
       onError: (error: unknown) => setFormError(getMutationError(error)),
     };
@@ -169,7 +169,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
           disabled={isPending}
           aria-label={tutor ? "Tutup modal ubah tentor" : "Tutup modal tambah tentor"}
           className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--color-muted)] hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-          onClick={() => void navigate(returnPath, { replace: true })}
+          onClick={closeForm}
         >
           <X className="h-6 w-6" aria-hidden="true" />
         </button>
@@ -304,7 +304,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
               type="button"
               disabled={isPending}
               className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 text-[13px] font-semibold text-[var(--color-text)]"
-              onClick={() => void navigate(returnPath, { replace: true })}
+              onClick={closeForm}
             >
               Batal
             </button>
@@ -322,7 +322,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
   );
 
   return (
-    <TutorDialog isPending={isPending} onDismiss={() => void navigate(returnPath, { replace: true })}>
+    <TutorDialog isPending={isPending} onDismiss={closeForm}>
       {content}
     </TutorDialog>
   );

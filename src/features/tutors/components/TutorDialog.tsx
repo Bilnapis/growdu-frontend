@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 type TutorDialogProps = {
   children: ReactNode
@@ -24,18 +25,19 @@ export function TutorDialog({ children, isPending, onDismiss }: TutorDialogProps
     }
   }, [])
 
-  return (
+  return createPortal(
     <dialog
       ref={dialogRef}
       aria-labelledby="tutor-form-title"
       aria-busy={isPending}
-      className="m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-[840px] overflow-y-auto rounded-[var(--radius-lg)] border-0 bg-[var(--color-surface)] p-4 text-[var(--color-text)] shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] sm:p-6"
+      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-[840px] overflow-y-auto rounded-[var(--radius-lg)] border-0 bg-[var(--color-surface)] p-4 text-[var(--color-text)] shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] sm:p-6"
       onCancel={(event) => {
         event.preventDefault()
         if (!isPending) onDismiss()
       }}
     >
       {children}
-    </dialog>
+    </dialog>,
+    document.body,
   )
 }

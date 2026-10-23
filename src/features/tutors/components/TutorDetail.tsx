@@ -1,12 +1,14 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import { BookOpen, Pencil, UserX, WalletCards } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
+import { TutorForm } from '@/features/tutors/components/TutorForm'
 import { useTutor, useUpdateTutor } from '@/features/tutors/hooks/use-tutors'
 import { ApiError } from '@/services/api-client'
 
 export function TutorDetail({ id }: { id: string }) {
+  const [isEditing, setIsEditing] = useState(false)
   const tutorQuery = useTutor(id)
   const updateMutation = useUpdateTutor()
   const tutor = tutorQuery.data
@@ -38,8 +40,8 @@ export function TutorDetail({ id }: { id: string }) {
         </div>
         {tutor && !tutorQuery.isError ? (
           <div className="flex flex-wrap gap-2.5">
-            <Button size="sm" asChild>
-              <Link to={`/tutors/${tutor.id}/edit`}><Pencil className="h-4 w-4" aria-hidden="true" /> Ubah Data</Link>
+            <Button size="sm" onClick={() => setIsEditing(true)}>
+              <Pencil className="h-4 w-4" aria-hidden="true" /> Ubah Data
             </Button>
             <Button
               size="sm"
@@ -121,6 +123,9 @@ export function TutorDetail({ id }: { id: string }) {
           </div>
         </>
       )}
+      {isEditing && tutor ? (
+        <TutorForm tutor={tutor} onClose={() => setIsEditing(false)} />
+      ) : null}
     </div>
   )
 }
