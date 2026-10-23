@@ -18,7 +18,6 @@ import {
   Plus,
   Search,
   SlidersHorizontal,
-  Upload,
   UserRoundX,
   UserX,
   Users,
@@ -143,13 +142,6 @@ export function TutorManagement({
           </p>
         </div>
         <div className="flex h-[33px] flex-wrap gap-2.5">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-4 py-2 text-[13px] font-semibold leading-[1.3] text-[var(--color-text)]"
-          >
-            <Upload className="h-4 w-4" aria-hidden="true" />
-            Import
-          </button>
           <button
             type="button"
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-[13px] font-semibold leading-[1.3] text-white"
@@ -496,8 +488,8 @@ function Pagination({
             key={paginationPage}
             type="button"
             className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${paginationPage === page
-                ? "bg-[var(--color-primary)] text-white"
-                : "border border-[var(--color-border)] bg-white text-[var(--color-muted)]"
+              ? "bg-[var(--color-primary)] text-white"
+              : "border border-[var(--color-border)] bg-white text-[var(--color-muted)]"
               }`}
             onClick={() => onPageChange(paginationPage)}
             aria-current={paginationPage === page ? "page" : undefined}
@@ -525,8 +517,8 @@ function TutorStatusBadge({ status }: { status: TutorStatus }) {
   return (
     <span
       className={`inline-flex rounded-[5px] px-2 py-1 text-[11px] font-bold leading-[1.3] ${isActive
-          ? "bg-[var(--color-success-bg)] text-[var(--color-success)]"
-          : "bg-[var(--color-gray-50)] text-[var(--color-muted)]"
+        ? "bg-[var(--color-success-bg)] text-[var(--color-success)]"
+        : "bg-[var(--color-gray-50)] text-[var(--color-muted)]"
         }`}
     >
       {status === "active" ? "Aktif" : "Nonaktif"}

@@ -42,6 +42,7 @@
   --color-bg-alt: var(--color-neutral-100);
   --color-bg-light: #fafbfc;
   --color-surface: var(--color-neutral-0);
+  --color-modal-overlay: #10182880;
   --color-border: var(--color-neutral-200);
   --color-text: var(--color-neutral-900);
   --color-muted: var(--color-neutral-500);

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 import type { TutorStatus } from '@/features/tutors/api/tutors-api'
 import { TutorManagement } from '@/features/tutors/components/TutorManagement'
@@ -12,5 +13,10 @@ type TutorsPageFilters = {
 export function TutorsPage() {
   const [filters, setFilters] = useState<TutorsPageFilters>({ page: 1 })
 
-  return <TutorManagement filters={filters} onFiltersChange={setFilters} />
+  return (
+    <>
+      <TutorManagement filters={filters} onFiltersChange={setFilters} />
+      <Outlet />
+    </>
+  )
 }

@@ -63,18 +63,14 @@ export const router = createBrowserRouter([
                       {
                         path: 'tutors',
                         element: <TutorsPage />,
-                      },
-                      {
-                        path: 'tutors/new',
-                        element: <TutorCreatePage />,
+                        children: [
+                          { path: 'new', element: <TutorCreatePage /> },
+                          { path: ':id/edit', element: <TutorEditPage /> },
+                        ],
                       },
                       {
                         path: 'tutors/:id',
                         element: <TutorDetailPage />,
-                      },
-                      {
-                        path: 'tutors/:id/edit',
-                        element: <TutorEditPage />,
                       },
                       {
                         path: ':section',

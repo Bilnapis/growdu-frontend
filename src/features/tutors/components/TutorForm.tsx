@@ -1,7 +1,9 @@
 import { type FormEvent, useMemo, useState } from "react";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { CheckCircle2, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+
+import { TutorDialog } from './TutorDialog';
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,10 +77,10 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
   const createMutation = useCreateTutor();
   const updateMutation = useUpdateTutor();
   const isPending = createMutation.isPending || updateMutation.isPending;
-  const returnPath = tutor ? `/tutors/${tutor.id}` : '/tutors';
+  const returnPath = '/tutors';
   const [form, setForm] = useState<TutorCreateForm>(() => tutor ? {
     name: tutor.name,
-    phoneNumber: tutor.phoneNumber,
+    phoneNumber: normalizeTutorPhoneNumber(tutor.phoneNumber),
     email: tutor.email ?? '',
     address: tutor.address ?? '',
     expertise: tutor.expertise ?? '',
@@ -136,13 +138,14 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
 
     const payload = {
       ...input,
+      phoneNumber: `+62${normalizeTutorPhoneNumber(input.phoneNumber)}`,
       sessionRate: tutor?.sessionRate ?? '0',
       status: tutor?.status ?? 'active',
     };
     const options = {
       onSuccess: () => {
         setSuccessMessage(tutor ? 'Data tentor berhasil diperbarui.' : 'Tentor baru berhasil ditambahkan.');
-        void navigate(returnPath);
+        void navigate(returnPath, { replace: true });
       },
       onError: (error: unknown) => setFormError(getMutationError(error)),
     };
@@ -153,30 +156,30 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
     }
   }
 
-  return (
+  const content = (
     <div className="min-w-0 font-sans text-[var(--color-text)]">
-      <header className="flex min-h-14 items-center justify-between gap-4">
+      <header className="flex items-center justify-between gap-4">
         <div className="min-w-0 space-y-1">
-          {tutor ? <nav aria-label="Breadcrumb" className="text-xs font-semibold text-muted-foreground"><Link to="/tutors" className="hover:underline">Data Tentor</Link><span aria-hidden="true"> / </span><span aria-current="page">Ubah Data</span></nav> : null}
-          <h1 className="text-2xl font-bold leading-[1.35] tracking-normal text-[var(--color-text)]">
+          <h1 id="tutor-form-title" className="text-2xl font-bold leading-[1.35] tracking-normal text-[var(--color-text)]">
             {tutor ? 'Ubah Data Tentor' : 'Tambah Tentor'}
           </h1>
         </div>
         <button
           type="button"
-          className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-3 text-[13px] font-semibold text-[var(--color-text)]"
-          onClick={() => void navigate(returnPath)}
+          disabled={isPending}
+          aria-label={tutor ? "Tutup modal ubah tentor" : "Tutup modal tambah tentor"}
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--color-muted)] hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          onClick={() => void navigate(returnPath, { replace: true })}
         >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Kembali
+          <X className="h-6 w-6" aria-hidden="true" />
         </button>
       </header>
 
-      <form className="mt-[18px] space-y-5" onSubmit={handleSubmit}>
-        <fieldset disabled={isPending} className="min-w-0 max-w-[742px] space-y-4">
+      <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
+        <fieldset disabled={isPending} className="min-w-0 space-y-4">
           <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
             <SectionHeader
-              title="Data Tentor"
+              title="Data Diri Tentor"
               description="Identitas tentor yang dipakai pada kelompok belajar dan laporan"
             />
             <div className="mt-4 grid gap-3.5 md:grid-cols-2">
@@ -195,7 +198,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
                 required
                 error={submitted ? validation.errors.phoneNumber : undefined}
                 placeholder="81234567890"
-                isPhone={!tutor}
+                isPhone
                 type="tel"
                 onChange={(value) => updateField("phoneNumber", value)}
               />
@@ -223,7 +226,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
                 label="Keahlian"
                 value={form.expertise}
                 required
-                placeholder="Contoh: Matematika, Bahasa Inggris"
+                placeholder="Matematika, Bahasa Inggris"
                 error={submitted ? validation.errors.expertise : undefined}
                 onChange={(value) => updateField("expertise", value)}
               />
@@ -232,7 +235,7 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
                 label="Jurusan"
                 value={form.education}
                 required
-                placeholder="Contoh: Pendidikan Matematika"
+                placeholder="Pendidikan Matematika"
                 error={submitted ? validation.errors.education : undefined}
                 onChange={(value) => updateField("education", value)}
               />
@@ -241,8 +244,8 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
 
           <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
             <SectionHeader
-              title="Data Rekening"
-              description={tutor ? "Dipakai untuk penggajian" : "Dipakai untuk invoice atau penggajian"}
+              title="Data Rekening Tentor"
+              description={"Dipakai untuk invoice atau penggajian"}
             />
             <div className="mt-4 grid gap-3.5 md:grid-cols-3">
               <FormField
@@ -295,23 +298,19 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
           </p>
         ) : null}
 
-        <footer className="flex max-w-full flex-col gap-3 rounded-lg border border-[var(--color-border)] bg-white px-[18px] py-3 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:py-0">
-          <p className="text-[13px] font-semibold leading-[1.35] text-[var(--color-muted)]">
-            {validation.issues.length > 0
-              ? `${validation.issues.length} validasi perlu diperbaiki sebelum menyimpan.`
-              : tutor ? "Perubahan belum disimpan." : "Data utama siap disimpan."}
-          </p>
+        <footer className="flex max-w-full flex-col gap-3 bg-white py-3 sm:min-h-14 sm:flex-row sm:items-center sm:justify-end sm:py-0">
           <div className="flex flex-wrap gap-2.5">
             <button
               type="button"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 text-[13px] font-semibold text-[var(--color-text)]"
-              onClick={() => void navigate(returnPath)}
+              disabled={isPending}
+              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 text-[13px] font-semibold text-[var(--color-text)]"
+              onClick={() => void navigate(returnPath, { replace: true })}
             >
               Batal
             </button>
             <button
               type="submit"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-gray-50)] px-4 text-[13px] font-semibold text-[var(--color-gray-400)] enabled:border-[var(--color-primary)] enabled:bg-[var(--color-primary)] enabled:text-white"
+              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-gray-50)] px-4 text-[13px] font-semibold text-[var(--color-gray-400)] enabled:border-[var(--color-primary)] enabled:bg-[var(--color-primary)] enabled:text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               disabled={!canSubmit}
             >
               {isPending ? "Menyimpan..." : tutor ? "Simpan Perubahan" : "Simpan Tentor"}
@@ -320,6 +319,12 @@ export function TutorForm({ tutor }: { tutor?: Tutor }) {
         </footer>
       </form>
     </div>
+  );
+
+  return (
+    <TutorDialog isPending={isPending} onDismiss={() => void navigate(returnPath, { replace: true })}>
+      {content}
+    </TutorDialog>
   );
 }
 
@@ -386,13 +391,13 @@ function FormField({
         type={type}
         inputMode={inputMode}
         isPhone={isPhone}
+        aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] rounded-md bg-white px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${
-          error
-            ? "border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]"
-            : "border-[var(--color-border)]"
-        }`}
+        className={`h-[42px] rounded-md bg-white px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${error
+          ? "border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]"
+          : "border-[var(--color-border)]"
+          }`}
       />
       {error ? (
         <p
@@ -404,6 +409,10 @@ function FormField({
       ) : null}
     </div>
   );
+}
+
+function normalizeTutorPhoneNumber(value: string) {
+  return value.replace(/\D/g, '').replace(/^(?:62|0+)/, '');
 }
 
 function getMutationError(error: unknown) {
