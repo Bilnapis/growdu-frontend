@@ -18,6 +18,7 @@ import { DashboardLandingPage } from '@/pages/client/DashboardLandingPage'
 import { DashboardModulePlaceholderPage } from '@/pages/client/DashboardModulePlaceholderPage'
 import { DashboardPage } from '@/pages/client/DashboardPage'
 import { LoginPage } from '@/pages/client/LoginPage'
+import { StudentsPage } from '@/pages/client/StudentsPage'
 import { TutorCreatePage } from '@/pages/client/TutorCreatePage'
 import { TutorDetailPage } from '@/pages/client/TutorDetailPage'
 import { TutorEditPage } from '@/pages/client/TutorEditPage'
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
                       {
                         path: 'dashboard',
                         element: <DashboardPage />,
+                      },
+                      {
+                        path: 'students',
+                        element: <StudentsPage />,
                       },
                       {
                         path: 'tutors',
