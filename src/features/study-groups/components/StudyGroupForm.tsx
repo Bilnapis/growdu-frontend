@@ -17,17 +17,20 @@ import {
 } from '@/features/study-groups/hooks/use-study-groups'
 import { useStudents } from '@/features/students/hooks/use-students'
 import { useTutors } from '@/features/tutors/hooks/use-tutors'
+import { useRooms } from '@/features/rooms/hooks/use-rooms'
 import { ApiError } from '@/services/api-client'
 
 type ScheduleDraft = {
   id?: string
   tutorId: string
+  roomId: string
   dayOfWeek: number
   startTime: string
   endTime: string
 }
 const newSchedule = (): ScheduleDraft => ({
   tutorId: '',
+  roomId: '',
   dayOfWeek: 1,
   startTime: '15:00',
   endTime: '16:00',
@@ -36,13 +39,16 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const navigate = useNavigate()
   const [name, setName] = useState(group?.name ?? '')
   const [schedules, setSchedules] = useState<ScheduleDraft[]>(
-    group?.schedules.map(({ id, tutorId, dayOfWeek, startTime, endTime }) => ({
-      id,
-      tutorId,
-      dayOfWeek,
-      startTime,
-      endTime,
-    })) ?? [newSchedule()],
+    group?.schedules.map(
+      ({ id, tutorId, roomId, dayOfWeek, startTime, endTime }) => ({
+        id,
+        tutorId,
+        roomId: roomId ?? '',
+        dayOfWeek,
+        startTime,
+        endTime,
+      }),
+    ) ?? [newSchedule()],
   )
   const [studentIds, setStudentIds] = useState<string[]>(
     group?.studentIds ?? [],
@@ -55,6 +61,7 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const [error, setError] = useState<string | null>(null)
   const studentSearchRef = useRef<HTMLInputElement>(null)
   const tutors = useTutors({ page: 1, limit: 100, status: 'active' })
+  const rooms = useRooms({ page: 1, limit: 100, status: 'active' })
   const students = useStudents({ page: 1, limit: 100, status: 'active' })
   const create = useCreateStudyGroup()
   const update = useUpdateStudyGroup()
@@ -64,7 +71,11 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
     schedules.length === 0 ||
     schedules.some(
       (s) =>
-        !s.tutorId || !s.startTime || !s.endTime || s.startTime >= s.endTime,
+        !s.tutorId ||
+        !s.roomId ||
+        !s.startTime ||
+        !s.endTime ||
+        s.startTime >= s.endTime,
     )
   const pickerStudents =
     students.data?.data.filter(
@@ -195,10 +206,27 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
             ) : tutors.data.data.length === 0 ? (
               <p className="study-group-form__hint">Belum ada tentor aktif.</p>
             ) : null}
+            {rooms.isPending ? (
+              <p role="status" className="study-group-form__hint">
+                Memuat ruangan...
+              </p>
+            ) : rooms.isError ? (
+              <p role="alert" className="study-group-form__error">
+                Data ruangan belum dapat dimuat.{' '}
+                <button type="button" onClick={() => void rooms.refetch()}>
+                  Coba lagi
+                </button>
+              </p>
+            ) : rooms.data.data.length === 0 ? (
+              <p className="study-group-form__hint">
+                Belum ada ruangan aktif. Tambahkan ruangan terlebih dahulu.
+              </p>
+            ) : null}
             {schedules.map((schedule, index) => {
               const scheduleInvalid =
                 submitted &&
                 (!schedule.tutorId ||
+                  !schedule.roomId ||
                   !schedule.startTime ||
                   !schedule.endTime ||
                   schedule.startTime >= schedule.endTime)
@@ -262,9 +290,33 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                         ))}
                       </select>
                     </Field>
-                    <Field label="Ruangan">
-                      <select disabled aria-describedby="group-room-hint">
-                        <option>Belum tersedia</option>
+                    <Field label="Ruangan" required>
+                      <select
+                        required
+                        value={schedule.roomId}
+                        disabled={rooms.isPending}
+                        aria-invalid={submitted && !schedule.roomId}
+                        aria-describedby={scheduleInvalid ? errorId : undefined}
+                        onChange={(event) =>
+                          changeSchedule(index, { roomId: event.target.value })
+                        }
+                      >
+                        <option value="">Pilih ruangan</option>
+                        {schedule.roomId &&
+                        !rooms.data?.data.some(
+                          (room) => room.id === schedule.roomId,
+                        ) ? (
+                          <option value={schedule.roomId}>
+                            {group?.schedules.find(
+                              (item) => item.roomId === schedule.roomId,
+                            )?.roomName ?? 'Ruangan terpilih'}
+                          </option>
+                        ) : null}
+                        {rooms.data?.data.map((room) => (
+                          <option value={room.id} key={room.id}>
+                            {room.name} ({room.code}) · {room.capacity} siswa
+                          </option>
+                        ))}
                       </select>
                     </Field>
                   </div>
@@ -335,15 +387,13 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                       role="alert"
                       className="study-group-form__error"
                     >
-                      Pilih tentor dan pastikan jam selesai setelah jam mulai.
+                      Pilih tentor dan ruangan, lalu pastikan jam selesai
+                      setelah jam mulai.
                     </p>
                   ) : null}
                 </fieldset>
               )
             })}
-            <p id="group-room-hint" className="sr-only">
-              Pemilihan ruangan belum tersedia.
-            </p>
             <Button
               className="study-group-form__add-schedule"
               type="button"

@@ -18,6 +18,10 @@ import { DashboardLandingPage } from '@/pages/client/DashboardLandingPage'
 import { DashboardModulePlaceholderPage } from '@/pages/client/DashboardModulePlaceholderPage'
 import { DashboardPage } from '@/pages/client/DashboardPage'
 import { LoginPage } from '@/pages/client/LoginPage'
+import { RoomCreatePage } from '@/pages/client/RoomCreatePage'
+import { RoomDetailPage } from '@/pages/client/RoomDetailPage'
+import { RoomEditPage } from '@/pages/client/RoomEditPage'
+import { RoomsPage } from '@/pages/client/RoomsPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
 import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
@@ -118,6 +122,18 @@ export const router = createBrowserRouter([
                       {
                         path: 'study-groups/:id',
                         element: <StudyGroupDetailPage />,
+                      },
+                      {
+                        path: 'rooms',
+                        element: <RoomsPage />,
+                        children: [
+                          { path: 'new', element: <RoomCreatePage /> },
+                          { path: ':id/edit', element: <RoomEditPage /> },
+                        ],
+                      },
+                      {
+                        path: 'rooms/:id',
+                        element: <RoomDetailPage />,
                       },
                       {
                         path: ':section',

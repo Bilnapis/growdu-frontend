@@ -1,16 +1,190 @@
-import { Link } from 'react-router-dom'
 import { Pencil, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { useStudyGroup, useUpdateStudyGroupStatus } from '@/features/study-groups/hooks/use-study-groups'
+import {
+  useStudyGroup,
+  useUpdateStudyGroupStatus,
+} from '@/features/study-groups/hooks/use-study-groups'
 import { useStudents } from '@/features/students/hooks/use-students'
 import { ApiError } from '@/services/api-client'
 
-const dayNames = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']
+const dayNames = [
+  'Senin',
+  'Selasa',
+  'Rabu',
+  'Kamis',
+  'Jumat',
+  'Sabtu',
+  'Minggu',
+]
+
 export function StudyGroupDetail({ id }: { id: string }) {
-  const detail = useStudyGroup(id); const status = useUpdateStudyGroupStatus(); const students = useStudents({ page: 1, limit: 100, status: 'active' }); const group = detail.data
-  if (detail.isPending) return <p role="status" className="rounded-lg border border-border bg-card p-8 text-center">Memuat detail kelompok belajar...</p>
-  if (!group) { const code = detail.error instanceof ApiError ? detail.error.status : 0; return <section role="alert" className="rounded-lg border border-border bg-card p-6"><h1 className="font-bold">{code === 404 ? 'Kelompok belajar tidak ditemukan.' : 'Detail kelompok belajar belum dapat dimuat.'}</h1><Button asChild className="mt-4" variant="outline"><Link to="/study-groups">Kembali ke Kelompok Belajar</Link></Button></section> }
-  const memberSet = new Set(group.studentIds); const members = students.data?.data.filter(student => memberSet.has(student.id)) ?? []
-  return <div className="space-y-5"><header className="flex flex-wrap items-center justify-between gap-4"><div><nav className="text-xs text-muted-foreground"><Link to="/study-groups" className="hover:underline">Kelompok Belajar</Link> / {group.name}</nav><h1 className="mt-2 text-2xl font-bold">{group.name}</h1></div><div className="flex gap-2"><Button asChild><Link to={`/study-groups/${group.id}/edit`}><Pencil className="h-4 w-4" />Edit</Link></Button><Button variant="outline" disabled={status.isPending} onClick={() => { if (window.confirm(`Ubah status ${group.name}?`)) status.mutate({ id: group.id, status: group.status === 'active' ? 'inactive' : 'active' }) }}>{group.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}</Button></div></header>{status.isError ? <p role="alert" className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">Status kelompok belum dapat diubah.</p> : null}<section className="rounded-lg border border-border bg-card p-5"><h2 className="font-bold">Jadwal & Tentor</h2><p className="mt-1 text-sm text-muted-foreground">Kelompok belajar ini memiliki {group.schedules.length} jadwal mingguan.</p><div className="mt-4 grid gap-3 md:grid-cols-2">{group.schedules.map((schedule, index) => <article className="rounded-md border border-border p-4" key={schedule.id}><h3 className="font-semibold">Jadwal {index + 1}</h3><dl className="mt-3 grid grid-cols-2 gap-3 text-sm"><Item label="Tentor" value={schedule.tutorName} /><Item label="Mata pelajaran" value={schedule.tutorExpertise || '—'} /><Item label="Hari" value={dayNames[schedule.dayOfWeek - 1]} /><Item label="Jam" value={`${schedule.startTime}–${schedule.endTime}`} /><Item label="Ruangan" value="—" /></dl></article>)}</div></section><section className="rounded-lg border border-border bg-card p-5"><div className="flex items-center gap-2"><Users className="h-5 w-5" /><h2 className="font-bold">Daftar Siswa ({group.studentCount})</h2></div>{students.isPending ? <p className="mt-4 text-sm">Memuat siswa...</p> : <div className="mt-4 overflow-x-auto"><table className="w-full min-w-[650px] text-left text-sm"><thead className="bg-muted"><tr><th className="p-3">Nama Siswa</th><th className="p-3">Jenjang / Sekolah</th><th className="p-3">Alamat</th><th className="p-3">Status</th></tr></thead><tbody>{members.map(student => <tr className="border-t border-border" key={student.id}><td className="p-3 font-medium">{student.name}</td><td className="p-3">{student.educationLevel} / {student.school}</td><td className="p-3">{student.address}</td><td className="p-3">Aktif</td></tr>)}</tbody></table>{group.studentCount === 0 ? <p className="p-4 text-sm text-muted-foreground">Belum ada siswa peserta.</p> : null}</div>}</section></div>
+  const detail = useStudyGroup(id)
+  const status = useUpdateStudyGroupStatus()
+  const students = useStudents({ page: 1, limit: 100, status: 'active' })
+  const group = detail.data
+
+  if (detail.isPending) {
+    return (
+      <p
+        role="status"
+        className="rounded-lg border border-border bg-card p-8 text-center"
+      >
+        Memuat detail kelompok belajar...
+      </p>
+    )
+  }
+
+  if (!group) {
+    const code = detail.error instanceof ApiError ? detail.error.status : 0
+    return (
+      <section
+        role="alert"
+        className="rounded-lg border border-border bg-card p-6"
+      >
+        <h1 className="font-bold">
+          {code === 404
+            ? 'Kelompok belajar tidak ditemukan.'
+            : 'Detail kelompok belajar belum dapat dimuat.'}
+        </h1>
+        <Button asChild className="mt-4" variant="outline">
+          <Link to="/study-groups">Kembali ke Kelompok Belajar</Link>
+        </Button>
+      </section>
+    )
+  }
+
+  const memberSet = new Set(group.studentIds)
+  const members =
+    students.data?.data.filter((student) => memberSet.has(student.id)) ?? []
+
+  return (
+    <div className="space-y-5">
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <nav className="text-xs text-muted-foreground">
+            <Link to="/study-groups" className="hover:underline">
+              Kelompok Belajar
+            </Link>{' '}
+            / {group.name}
+          </nav>
+          <h1 className="mt-2 text-2xl font-bold">{group.name}</h1>
+        </div>
+        <div className="flex gap-2">
+          <Button asChild>
+            <Link to={`/study-groups/${group.id}/edit`}>
+              <Pencil className="h-4 w-4" />
+              Edit
+            </Link>
+          </Button>
+          <Button
+            variant="outline"
+            disabled={status.isPending}
+            onClick={() => {
+              if (window.confirm(`Ubah status ${group.name}?`))
+                status.mutate({
+                  id: group.id,
+                  status: group.status === 'active' ? 'inactive' : 'active',
+                })
+            }}
+          >
+            {group.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
+          </Button>
+        </div>
+      </header>
+      {status.isError ? (
+        <p
+          role="alert"
+          className="rounded-md bg-destructive/10 p-3 text-sm text-destructive"
+        >
+          Status kelompok belum dapat diubah.
+        </p>
+      ) : null}
+      <section className="rounded-lg border border-border bg-card p-5">
+        <h2 className="font-bold">Jadwal &amp; Tentor</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Kelompok belajar ini memiliki {group.schedules.length} jadwal
+          mingguan.
+        </p>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {group.schedules.map((schedule, index) => (
+            <article
+              className="rounded-md border border-border p-4"
+              key={schedule.id}
+            >
+              <h3 className="font-semibold">Jadwal {index + 1}</h3>
+              <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                <Item label="Tentor" value={schedule.tutorName} />
+                <Item
+                  label="Mata pelajaran"
+                  value={schedule.tutorExpertise || '—'}
+                />
+                <Item label="Hari" value={dayNames[schedule.dayOfWeek - 1]} />
+                <Item
+                  label="Jam"
+                  value={`${schedule.startTime}–${schedule.endTime}`}
+                />
+                <Item
+                  label="Ruangan"
+                  value={
+                    schedule.roomName
+                      ? `${schedule.roomName}${schedule.roomCode ? ` (${schedule.roomCode})` : ''}`
+                      : 'Belum ditentukan'
+                  }
+                />
+              </dl>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="rounded-lg border border-border bg-card p-5">
+        <div className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          <h2 className="font-bold">Daftar Siswa ({group.studentCount})</h2>
+        </div>
+        {students.isPending ? (
+          <p className="mt-4 text-sm">Memuat siswa...</p>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full min-w-[650px] text-left text-sm">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="p-3">Nama Siswa</th>
+                  <th className="p-3">Jenjang / Sekolah</th>
+                  <th className="p-3">Alamat</th>
+                  <th className="p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {members.map((student) => (
+                  <tr className="border-t border-border" key={student.id}>
+                    <td className="p-3 font-medium">{student.name}</td>
+                    <td className="p-3">
+                      {student.educationLevel} / {student.school}
+                    </td>
+                    <td className="p-3">{student.address}</td>
+                    <td className="p-3">Aktif</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {group.studentCount === 0 ? (
+              <p className="p-4 text-sm text-muted-foreground">
+                Belum ada siswa peserta.
+              </p>
+            ) : null}
+          </div>
+        )}
+      </section>
+    </div>
+  )
 }
-function Item({ label, value }: { label: string; value: string }) { return <div><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 font-medium">{value}</dd></div> }
+
+function Item({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd className="mt-1 font-medium">{value}</dd>
+    </div>
+  )
+}

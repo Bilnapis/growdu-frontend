@@ -43217,12 +43217,6 @@
                   "gap": 12,
                   "children": [
                     {
-                      "id": "ref_btn_exp_ruang",
-                      "type": "ref",
-                      "ref": "btn_cmp_outline_lead_icon",
-                      "height": "fit_content"
-                    },
-                    {
                       "id": "ref_btn_tbh_ruang",
                       "type": "ref",
                       "ref": "btn_cmp_lead_icon",
@@ -44907,60 +44901,1869 @@
       "name": "Screen - Tambah Ruangan",
       "clip": true,
       "width": 1440,
-      "height": 1110,
+      "height": 1060,
       "fill": "$bk-bg",
+      "layout": "none",
       "children": [
         {
-          "id": "ref_sb_ruang_tbh",
-          "type": "ref",
-          "ref": "cmp_sidebar_ruangan"
+          "type": "frame",
+          "id": "rK67d",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Data Ruangan Background",
+          "width": 1440,
+          "height": 1060,
+          "fill": "$bk-bg",
+          "children": [
+            {
+              "id": "qyuR3",
+              "type": "ref",
+              "ref": "cmp_sidebar_ruangan"
+            },
+            {
+              "type": "frame",
+              "id": "hQQYE",
+              "name": "Ruangan List Main",
+              "width": "fill_container",
+              "height": 1060,
+              "fill": "$bk-bg",
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 28,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "nKFSj",
+                  "name": "Ruangan List Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "taA9n",
+                      "name": "Header Copy",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "I8Y7dg",
+                          "name": "Header Title",
+                          "fill": "$bk-text",
+                          "content": "Data Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "bqndW",
+                          "name": "Header Subtitle",
+                          "fill": "$bk-muted",
+                          "content": "Kelola ruangan kelas, kapasitas belajar, dan status ketersediaan jadwal.",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yiw9k",
+                      "name": "Header Actions",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "id": "HLvUt",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "height": "fit_content"
+                        },
+                        {
+                          "id": "jDATn",
+                          "type": "ref",
+                          "ref": "btn_cmp_lead_icon",
+                          "height": "fit_content"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MPqHm",
+                  "name": "Ruangan List Summary",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IgtwU",
+                      "name": "Metric - Ruangan Aktif",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PEUda",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "O8aHYA",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "OYWfO",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "door-open",
+                                  "library": "lucide",
+                                  "fill": "$bk-success"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "LVnga",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Ruangan Aktif",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "rMJQ8",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "8 Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xElzn",
+                      "name": "Metric - Terpakai Hari Ini",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "CbJXK",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "gImvj",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-primary-soft",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "oIAA7",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "calendar-days",
+                                  "library": "lucide",
+                                  "fill": "$bk-primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "hetNd",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Terpakai Hari Ini",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "FlSKk",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "6 Sesi Aktif",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "uwEhQ",
+                      "name": "Metric - Total Kapasitas",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "sO58i",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "jFDgn",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-warning-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "nodnW",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "users",
+                                  "library": "lucide",
+                                  "fill": "$bk-warning"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "dfVS3",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Total Kapasitas",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "s7cWjO",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "96 Siswa",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kJldL",
+                      "name": "Metric - Nonaktif / Perbaikan",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "TE8MG",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "HWBna",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "Obzk1",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "wrench",
+                                  "library": "lucide",
+                                  "fill": "$bk-muted"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "Nn0aZ",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Nonaktif / Perbaikan",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "G32M3f",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "1 Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d4PrQ",
+                  "name": "Ruangan Table Shell",
+                  "width": "fill_container",
+                  "height": 790,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 18,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "k7eP1b",
+                      "name": "Ruangan Toolbar",
+                      "width": "fill_container",
+                      "height": 40,
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "AArKS",
+                          "name": "Ruangan Search",
+                          "width": "fill_container",
+                          "height": 40,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 6,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "gap": 8,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "v4tT2",
+                              "name": "Ruangan Search Icon",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "search",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "OryAV",
+                              "name": "Ruangan Search Placeholder",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Cari nama ruangan atau kode...",
+                              "lineHeight": 1.3,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "Fgkpx",
+                          "type": "ref",
+                          "ref": "btn_cmp_dropdown_icon",
+                          "descendants": {
+                            "btn_txt_dd": {
+                              "content": "Kapasitas"
+                            },
+                            "btn_ic_dd": {
+                              "icon": "keyboard_arrow_down",
+                              "library": "Material Symbols Outlined"
+                            }
+                          }
+                        },
+                        {
+                          "id": "nploN",
+                          "type": "ref",
+                          "ref": "btn_cmp_dropdown_icon",
+                          "descendants": {
+                            "btn_txt_dd": {
+                              "content": "Status"
+                            },
+                            "btn_ic_dd": {
+                              "icon": "tune",
+                              "library": "Material Symbols Outlined"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l3j28",
+                      "name": "Ruangan Table Header",
+                      "width": "fill_container",
+                      "height": 44,
+                      "fill": "$bk-gray-50",
+                      "cornerRadius": 6,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Evcsd",
+                          "name": "TH - Nama Ruangan",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Nama Ruangan",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xeDRQ",
+                          "name": "TH - Kode",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "Kode",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Li8Vy",
+                          "name": "TH - Kapasitas",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "Kapasitas",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "QAoMm",
+                          "name": "TH - Kelompok Aktif",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "Kelompok Aktif",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "gf1zj",
+                          "name": "TH - Jadwal Hari Ini",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Jadwal Hari Ini",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Rmigg",
+                          "name": "TH - Status",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "Status",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Powgm",
+                          "name": "TH - Aksi",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 52,
+                          "content": "Aksi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GnqAC",
+                      "name": "Ruangan Row - Ruang Galileo (R-01)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "rAUuQ",
+                          "name": "Ruangan Cell Nama - Ruang Galileo",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Galileo",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Bzlb6",
+                          "name": "Ruangan Cell Kode - R-01",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-01",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "c6m1rD",
+                          "name": "Ruangan Cell Kapasitas - 12 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "12 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MePz0",
+                          "name": "Ruangan Cell Kelompok - 4 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "4 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "eW2nM",
+                          "name": "Ruangan Cell Jadwal - 3 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "3 Sesi (15:00 - 19:30)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "w6UBz4",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "w2LpAE",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "k7dF6",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YDb5b",
+                          "name": "Ruangan Cell Aksi - Ruang Galileo",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "Fs02v",
+                              "name": "Ruangan Edit - Galileo",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "h18Ve",
+                              "name": "Ruangan More - Galileo",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EYnRT",
+                      "name": "Ruangan Row - Ruang Einstein (R-02)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "pTJZg",
+                          "name": "Ruangan Cell Nama - Ruang Einstein",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Einstein",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "R6C5rX",
+                          "name": "Ruangan Cell Kode - R-02",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-02",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "BQuP0",
+                          "name": "Ruangan Cell Kapasitas - 15 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "15 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ewlaY",
+                          "name": "Ruangan Cell Kelompok - 5 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "5 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xkfrI",
+                          "name": "Ruangan Cell Jadwal - 2 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "2 Sesi (16:30 - 19:30)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "iMDiK",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ySeA1",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "KSnjw",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "FfF7I",
+                          "name": "Ruangan Cell Aksi - Ruang Einstein",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "I85aWH",
+                              "name": "Ruangan Edit - Einstein",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ckkF4",
+                              "name": "Ruangan More - Einstein",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bCkZC",
+                      "name": "Ruangan Row - Ruang Newton (R-03)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tVPXY",
+                          "name": "Ruangan Cell Nama - Ruang Newton",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Newton",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vl6Fa",
+                          "name": "Ruangan Cell Kode - R-03",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-03",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Iyizf",
+                          "name": "Ruangan Cell Kapasitas - 8 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "8 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "wLeYS",
+                          "name": "Ruangan Cell Kelompok - 3 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "3 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "YxSM9",
+                          "name": "Ruangan Cell Jadwal - 2 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "2 Sesi (15:00 - 18:00)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "b4Dg1",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "UgDdF",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "PDg5p",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "GHsLp",
+                          "name": "Ruangan Cell Aksi - Ruang Newton",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "BNHVG",
+                              "name": "Ruangan Edit - Newton",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "SsluK",
+                              "name": "Ruangan More - Newton",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lhb5h",
+                      "name": "Ruangan Row - Ruang Al-Khawarizmi (R-04)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UEjE9",
+                          "name": "Ruangan Cell Nama - Ruang Al-Khawarizmi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Al-Khawarizmi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OxgtR",
+                          "name": "Ruangan Cell Kode - R-04",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-04",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "NEyPl",
+                          "name": "Ruangan Cell Kapasitas - 20 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "20 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "T6xhdW",
+                          "name": "Ruangan Cell Kelompok - 2 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "2 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "yACra",
+                          "name": "Ruangan Cell Jadwal - 1 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "1 Sesi (16:30 - 18:00)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Lr74l",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ikAtE",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ONvmr",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "e8CGN2",
+                          "name": "Ruangan Cell Aksi - Ruang Al-Khawarizmi",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "H6oopP",
+                              "name": "Ruangan Edit - Al-Khawarizmi",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "yI6aW",
+                              "name": "Ruangan More - Al-Khawarizmi",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "crfvY",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "LQNEm",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "fYRqU",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "EdohY",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "fCEgy",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ZgZi8",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "q5b98i",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "NhfUq",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "m1KqI6",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "pZp3q",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "hOENs",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "e9gQ7",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zYJbu",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qQKMI",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rcAcl",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "wPffQ",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vclUd",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "C9EhPb",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "vdXTF",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "MDocQ",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "intxV",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "V85lmw",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "pxmpo",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "T1erX",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "oQHfR",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "yQcWp",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DdItS",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "AT20J",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DEqPF",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "s3poN",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Y7Ph4",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ppB24",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "h3sfc",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "O6ptkd",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "FCEAs",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "e1byg",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zclCj",
+                      "name": "Ruangan Table Pagination",
+                      "width": "fill_container",
+                      "padding": [
+                        14,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "a3buu",
+                          "fill": "$bk-muted",
+                          "content": "Menampilkan 1-5 dari 9 ruangan kelas",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bSglD",
+                          "name": "Ruangan Page Numbers",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "KhQC1",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_prev"
+                            },
+                            {
+                              "id": "lPE58",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_act",
+                              "descendants": {
+                                "pgn_txt_p1": {
+                                  "content": "1"
+                                }
+                              }
+                            },
+                            {
+                              "id": "u8z5k",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_inact",
+                              "descendants": {
+                                "pgn_txt_p2": {
+                                  "content": "2"
+                                }
+                              }
+                            },
+                            {
+                              "id": "WmQdn",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_next"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pGz3K",
+                      "layoutPosition": "absolute",
+                      "x": 869,
+                      "y": 130,
+                      "name": "Ruangan Row Action Menu - Ruang Galileo",
+                      "width": 190,
+                      "height": 184,
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#0F172A1A",
+                        "offset": {
+                          "x": 0,
+                          "y": 8
+                        },
+                        "blur": 24
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": 8,
+                      "children": [
+                        {
+                          "id": "Rxfja",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_outline_lead": {
+                              "icon": "eye",
+                              "library": "lucide"
+                            },
+                            "btn_txt_outline_lead": {
+                              "content": "Lihat detail"
+                            }
+                          }
+                        },
+                        {
+                          "id": "dig61",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_outline_lead": {
+                              "icon": "pencil",
+                              "library": "lucide"
+                            },
+                            "btn_txt_outline_lead": {
+                              "content": "Ubah data"
+                            }
+                          }
+                        },
+                        {
+                          "id": "HluX3",
+                          "type": "ref",
+                          "ref": "btn_cmp_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_lead": {
+                              "icon": "calendar-days",
+                              "library": "lucide"
+                            },
+                            "btn_txt_lead": {
+                              "content": "Lihat jadwal"
+                            }
+                          }
+                        },
+                        {
+                          "id": "j13ZkI",
+                          "type": "ref",
+                          "ref": "btn_cmp_destructive_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_dest_out_lead": {
+                              "icon": "ban",
+                              "library": "lucide"
+                            },
+                            "btn_txt_dest_out_lead": {
+                              "content": "Nonaktifkan"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "HYuuQ",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Modal Backdrop",
+          "fill": "#0F172A73",
+          "width": 1440,
+          "height": 1060
         },
         {
           "type": "frame",
-          "id": "ruang_tbh_main",
-          "name": "Tambah Ruangan Main",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "h4674I",
+          "layoutPosition": "absolute",
+          "x": 350,
+          "y": 220,
+          "name": "Tambah Ruangan Modal",
+          "clip": true,
+          "width": 740,
+          "fill": "$bk-surface",
+          "cornerRadius": 12,
+          "stroke": "$bk-border",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A33",
+            "offset": {
+              "x": 0,
+              "y": 16
+            },
+            "blur": 40
+          },
           "layout": "vertical",
-          "gap": 18,
-          "padding": 28,
           "children": [
             {
               "type": "frame",
-              "id": "ruang_tbh_hdr",
-              "name": "Tambah Ruangan Header",
+              "id": "rycZA",
+              "name": "Modal Header",
               "width": "fill_container",
+              "stroke": "$bk-border",
+              "strokeWidth": {
+                "bottom": 1
+              },
+              "padding": [
+                20,
+                24
+              ],
               "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "ruang_tbh_hdr_copy",
-                  "name": "Tambah Ruangan Header Copy",
+                  "id": "F4gDPJ",
+                  "name": "Modal Title Copy",
                   "layout": "vertical",
                   "gap": 3,
                   "children": [
                     {
                       "type": "text",
-                      "id": "ruang_tbh_bc",
-                      "name": "Breadcrumb",
-                      "fill": "$bk-muted",
-                      "content": "Data Ruangan / Tambah Ruangan",
-                      "lineHeight": 1.35,
+                      "id": "ItdIK",
+                      "name": "Modal Title",
+                      "fill": "$bk-text",
+                      "content": "Tambah Ruangan",
+                      "lineHeight": 1.3,
                       "fontFamily": "$bk-font",
-                      "fontSize": 12,
-                      "fontWeight": "600"
+                      "fontSize": 20,
+                      "fontWeight": "700"
                     },
                     {
                       "type": "text",
-                      "id": "ruang_tbh_title",
-                      "name": "Title",
-                      "fill": "$bk-text",
-                      "content": "Tambah Ruangan Baru",
+                      "id": "bpwYg",
+                      "name": "Modal Subtitle",
+                      "fill": "$bk-muted",
+                      "content": "Lengkapi informasi ruangan baru.",
                       "lineHeight": 1.35,
                       "fontFamily": "$bk-font",
-                      "fontSize": 24,
-                      "fontWeight": "700"
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "p9Dg9",
+                  "name": "Close Modal Button",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$bk-gray-50",
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "T1lrX",
+                      "name": "Close Icon",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "x",
+                      "library": "lucide",
+                      "fill": "$bk-muted"
                     }
                   ]
                 }
@@ -44968,24 +46771,23 @@
             },
             {
               "type": "frame",
-              "id": "ruang_tbh_body",
-              "name": "Tambah Ruangan Body",
+              "id": "Vp2x8",
+              "name": "Modal Form Body",
               "width": "fill_container",
-              "height": "fill_container",
-              "gap": 18,
+              "layout": "vertical",
+              "padding": 24,
               "children": [
                 {
                   "type": "frame",
-                  "id": "ruang_tbh_form_col",
-                  "name": "Form Column",
-                  "width": 730,
-                  "height": "fill_container",
+                  "id": "H8m1Rs",
+                  "name": "Room Form",
+                  "width": "fill_container",
                   "layout": "vertical",
                   "gap": 16,
                   "children": [
                     {
                       "type": "frame",
-                      "id": "ruang_sec_1",
+                      "id": "EDLxi",
                       "name": "Section 1 - Informasi Dasar",
                       "width": "fill_container",
                       "fill": "$bk-surface",
@@ -44998,14 +46800,14 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ruang_row_1",
+                          "id": "GQhTu",
                           "name": "Row 1",
                           "width": "fill_container",
                           "gap": 16,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "fld_tbh_nama_ruang",
+                              "id": "o7iIz",
                               "name": "Field - Nama Ruangan",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -45013,14 +46815,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_nama_ruang_lbl_row",
+                                  "id": "wQSns",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_nama_ruang_lbl",
+                                      "id": "sn7iy",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Nama Ruangan",
@@ -45031,7 +46833,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_nama_ruang_req",
+                                      "id": "q9zORU",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -45044,7 +46846,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_nama_ruang_input_box",
+                                  "id": "rkGdU",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -45060,7 +46862,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_nama_ruang_val",
+                                      "id": "L2WE17",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "Ruang Galileo",
@@ -45075,7 +46877,7 @@
                             },
                             {
                               "type": "frame",
-                              "id": "fld_tbh_kode_ruang",
+                              "id": "XBI39",
                               "name": "Field - Kode Ruangan",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -45083,14 +46885,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_kode_ruang_lbl_row",
+                                  "id": "gL9T7",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_kode_ruang_lbl",
+                                      "id": "aWUkf",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Kode Ruangan",
@@ -45101,7 +46903,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_kode_ruang_req",
+                                      "id": "NMAYN",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -45114,7 +46916,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_kode_ruang_input_box",
+                                  "id": "XV63b",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -45130,7 +46932,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_kode_ruang_val",
+                                      "id": "P521O",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "R-01",
@@ -45143,7 +46945,7 @@
                                 },
                                 {
                                   "type": "text",
-                                  "id": "fld_tbh_kode_ruang_help",
+                                  "id": "L50uvq",
                                   "name": "Helper Text",
                                   "fill": "$bk-muted",
                                   "content": "Kode unik (contoh: R-01, LAB-1)",
@@ -45158,14 +46960,14 @@
                         },
                         {
                           "type": "frame",
-                          "id": "ruang_row_2",
+                          "id": "r8kkB",
                           "name": "Row 2",
                           "width": "fill_container",
                           "gap": 16,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "fld_tbh_cap_ruang",
+                              "id": "qMQEw",
                               "name": "Field - Kapasitas Maksimal Siswa",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -45173,14 +46975,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_cap_ruang_lbl_row",
+                                  "id": "VcaaV",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_cap_ruang_lbl",
+                                      "id": "K4tzLT",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Kapasitas Maksimal Siswa",
@@ -45191,7 +46993,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_cap_ruang_req",
+                                      "id": "J429d0",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -45204,7 +47006,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_tbh_cap_ruang_input_box",
+                                  "id": "L18HV5",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -45220,7 +47022,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_tbh_cap_ruang_val",
+                                      "id": "a3NNb6",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "12 Siswa",
@@ -45238,71 +47040,58 @@
                       ]
                     }
                   ]
-                },
-                {
-                  "type": "frame",
-                  "id": "ruang_tbh_side_col",
-                  "name": "Side Column",
-                  "width": "fill_container",
-                  "height": "fill_container",
-                  "layout": "vertical",
-                  "gap": 16
                 }
               ]
             },
             {
               "type": "frame",
-              "id": "ruang_tbh_footer",
-              "name": "Tambah Ruangan Sticky Footer",
+              "id": "WwJmL",
+              "name": "Modal Footer",
               "width": "fill_container",
-              "height": 56,
-              "fill": "$bk-surface",
-              "cornerRadius": 8,
               "stroke": "$bk-border",
-              "strokeWidth": 1,
+              "strokeWidth": {
+                "top": 1
+              },
               "padding": [
-                0,
-                18
+                16,
+                24
               ],
               "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
                   "type": "text",
-                  "id": "ruang_ft_note",
-                  "name": "Footer Note",
+                  "id": "OlpUa",
+                  "name": "Modal Footer Note",
                   "fill": "$bk-muted",
                   "content": "Perubahan belum disimpan.",
                   "lineHeight": 1.35,
                   "fontFamily": "$bk-font",
                   "fontSize": 13,
-                  "fontWeight": "600"
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "frame",
-                  "id": "ruang_ft_actions",
-                  "name": "Footer Actions",
+                  "id": "CkOh6",
+                  "name": "Modal Actions",
                   "gap": 10,
                   "children": [
                     {
-                      "id": "ref_btn_cancel_tbh",
+                      "id": "yORGi",
                       "type": "ref",
-                      "ref": "btn_cmp_outline_lead_icon",
+                      "ref": "btn_cmp_outline",
+                      "name": "Cancel Button",
                       "descendants": {
-                        "btn_ic_outline_lead": {
-                          "icon": "x",
-                          "library": "lucide",
-                          "enabled": false
-                        },
-                        "btn_txt_outline_lead": {
+                        "btn_txt_outline": {
                           "content": "Batal"
                         }
                       }
                     },
                     {
-                      "id": "ref_btn_save_tbh",
+                      "id": "s2YhR",
                       "type": "ref",
                       "ref": "btn_cmp_default",
+                      "name": "Save Button",
                       "descendants": {
                         "btn_txt_default": {
                           "content": "Simpan Ruangan"
@@ -45732,100 +47521,1896 @@
       "x": 6144,
       "y": 8600,
       "name": "Screen - Edit Ruangan",
+      "clip": true,
       "width": 1440,
-      "height": 1110,
+      "height": 1060,
       "fill": "$bk-bg",
+      "layout": "none",
       "children": [
         {
-          "id": "ref_sb_ruang_edt",
-          "type": "ref",
-          "ref": "cmp_sidebar_ruangan"
+          "type": "frame",
+          "id": "zOeze",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Data Ruangan Background",
+          "width": 1440,
+          "height": 1060,
+          "fill": "$bk-bg",
+          "children": [
+            {
+              "id": "sw54L",
+              "type": "ref",
+              "ref": "cmp_sidebar_ruangan"
+            },
+            {
+              "type": "frame",
+              "id": "Fcp1O",
+              "name": "Ruangan List Main",
+              "width": "fill_container",
+              "height": 1060,
+              "fill": "$bk-bg",
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 28,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Ymfvy",
+                  "name": "Ruangan List Header",
+                  "width": "fill_container",
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U3uh4",
+                      "name": "Header Copy",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "HV4B7",
+                          "name": "Header Title",
+                          "fill": "$bk-text",
+                          "content": "Data Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qAKJ6",
+                          "name": "Header Subtitle",
+                          "fill": "$bk-muted",
+                          "content": "Kelola ruangan kelas, kapasitas belajar, dan status ketersediaan jadwal.",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "h30VR",
+                      "name": "Header Actions",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "id": "WSelM",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "height": "fit_content"
+                        },
+                        {
+                          "id": "P8Fsf",
+                          "type": "ref",
+                          "ref": "btn_cmp_lead_icon",
+                          "height": "fit_content"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "QZpWm",
+                  "name": "Ruangan List Summary",
+                  "width": "fill_container",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "udFgk",
+                      "name": "Metric - Ruangan Aktif",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "pPCPN",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "qwZrQ",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "iXzyO",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "door-open",
+                                  "library": "lucide",
+                                  "fill": "$bk-success"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZeXWT",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Ruangan Aktif",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "gy4Ax",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "8 Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "J34Xd",
+                      "name": "Metric - Terpakai Hari Ini",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "TsB96",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "xPotj",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-primary-soft",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "kXQIt",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "calendar-days",
+                                  "library": "lucide",
+                                  "fill": "$bk-primary"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "LGFU6",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Terpakai Hari Ini",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "G8jZM",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "6 Sesi Aktif",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qxEaG",
+                      "name": "Metric - Total Kapasitas",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Lgvh4",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "LOv82",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-warning-bg",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "o12buf",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "users",
+                                  "library": "lucide",
+                                  "fill": "$bk-warning"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "P9PqL",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Total Kapasitas",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Mp5xM",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "96 Siswa",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "s80lR",
+                      "name": "Metric - Nonaktif / Perbaikan",
+                      "width": "fill_container",
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lT3T1",
+                          "name": "Metric Top",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "p7Y7pa",
+                              "name": "Icon Box",
+                              "width": 32,
+                              "height": 32,
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 6,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "n7U8F",
+                                  "name": "Icon",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "wrench",
+                                  "library": "lucide",
+                                  "fill": "$bk-muted"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "Q4BIe",
+                              "name": "Metric Label",
+                              "fill": "$bk-muted",
+                              "content": "Nonaktif / Perbaikan",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Lgjzw",
+                          "name": "Metric Value",
+                          "fill": "$bk-text",
+                          "content": "1 Ruangan",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "l7v3r",
+                  "name": "Ruangan Table Shell",
+                  "width": "fill_container",
+                  "height": 790,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 18,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "T3lfBL",
+                      "name": "Ruangan Toolbar",
+                      "width": "fill_container",
+                      "height": 40,
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "TkPnE",
+                          "name": "Ruangan Search",
+                          "width": "fill_container",
+                          "height": 40,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 6,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "gap": 8,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "O1dXU",
+                              "name": "Ruangan Search Icon",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "search",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            },
+                            {
+                              "type": "text",
+                              "id": "kvvKp",
+                              "name": "Ruangan Search Placeholder",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Cari nama ruangan atau kode...",
+                              "lineHeight": 1.3,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "dYA7g",
+                          "type": "ref",
+                          "ref": "btn_cmp_dropdown_icon",
+                          "descendants": {
+                            "btn_txt_dd": {
+                              "content": "Kapasitas"
+                            },
+                            "btn_ic_dd": {
+                              "icon": "keyboard_arrow_down",
+                              "library": "Material Symbols Outlined"
+                            }
+                          }
+                        },
+                        {
+                          "id": "PacmO",
+                          "type": "ref",
+                          "ref": "btn_cmp_dropdown_icon",
+                          "descendants": {
+                            "btn_txt_dd": {
+                              "content": "Status"
+                            },
+                            "btn_ic_dd": {
+                              "icon": "tune",
+                              "library": "Material Symbols Outlined"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ccAO3",
+                      "name": "Ruangan Table Header",
+                      "width": "fill_container",
+                      "height": 44,
+                      "fill": "$bk-gray-50",
+                      "cornerRadius": 6,
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "rlmwE",
+                          "name": "TH - Nama Ruangan",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Nama Ruangan",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "lnjKR",
+                          "name": "TH - Kode",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "Kode",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "s4Ur3",
+                          "name": "TH - Kapasitas",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "Kapasitas",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "IR1zN",
+                          "name": "TH - Kelompok Aktif",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "Kelompok Aktif",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OzE2s",
+                          "name": "TH - Jadwal Hari Ini",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Jadwal Hari Ini",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LSHDv",
+                          "name": "TH - Status",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "Status",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "B9q7aR",
+                          "name": "TH - Aksi",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 52,
+                          "content": "Aksi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cMiP7",
+                      "name": "Ruangan Row - Ruang Galileo (R-01)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UPfMe",
+                          "name": "Ruangan Cell Nama - Ruang Galileo",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Galileo",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "J23hG4",
+                          "name": "Ruangan Cell Kode - R-01",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-01",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "N2N39",
+                          "name": "Ruangan Cell Kapasitas - 12 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "12 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "yYIG7",
+                          "name": "Ruangan Cell Kelompok - 4 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "4 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "iH25A",
+                          "name": "Ruangan Cell Jadwal - 3 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "3 Sesi (15:00 - 19:30)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RGIBM",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "tw3DY",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "OJqf5",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rjWTE",
+                          "name": "Ruangan Cell Aksi - Ruang Galileo",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "SOuNU",
+                              "name": "Ruangan Edit - Galileo",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "aldEb",
+                              "name": "Ruangan More - Galileo",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ghogL",
+                      "name": "Ruangan Row - Ruang Einstein (R-02)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Z3pl2",
+                          "name": "Ruangan Cell Nama - Ruang Einstein",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Einstein",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LbXt9",
+                          "name": "Ruangan Cell Kode - R-02",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-02",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "oOb2A",
+                          "name": "Ruangan Cell Kapasitas - 15 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "15 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DWbWV",
+                          "name": "Ruangan Cell Kelompok - 5 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "5 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "RIxEL",
+                          "name": "Ruangan Cell Jadwal - 2 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "2 Sesi (16:30 - 19:30)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "V8LEq",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "nnyky",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "yntFD",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "JhjUn",
+                          "name": "Ruangan Cell Aksi - Ruang Einstein",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "OAItm",
+                              "name": "Ruangan Edit - Einstein",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "RUpHj",
+                              "name": "Ruangan More - Einstein",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "kDdRB",
+                      "name": "Ruangan Row - Ruang Newton (R-03)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Peufd",
+                          "name": "Ruangan Cell Nama - Ruang Newton",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Newton",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "O70Sg",
+                          "name": "Ruangan Cell Kode - R-03",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-03",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "l5k78i",
+                          "name": "Ruangan Cell Kapasitas - 8 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "8 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "QQX2o",
+                          "name": "Ruangan Cell Kelompok - 3 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "3 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "KcMjp",
+                          "name": "Ruangan Cell Jadwal - 2 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "2 Sesi (15:00 - 18:00)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "x3xai2",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "X802tb",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "flOPL",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "zN8MP",
+                          "name": "Ruangan Cell Aksi - Ruang Newton",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "MnwuZ",
+                              "name": "Ruangan Edit - Newton",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "JuC79",
+                              "name": "Ruangan More - Newton",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fQ6S1",
+                      "name": "Ruangan Row - Ruang Al-Khawarizmi (R-04)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Y4iBN",
+                          "name": "Ruangan Cell Nama - Ruang Al-Khawarizmi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Al-Khawarizmi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "I8BvHb",
+                          "name": "Ruangan Cell Kode - R-04",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-04",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kzHvU",
+                          "name": "Ruangan Cell Kapasitas - 20 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "20 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "gjhO0",
+                          "name": "Ruangan Cell Kelompok - 2 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "2 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rU7z8",
+                          "name": "Ruangan Cell Jadwal - 1 Sesi Hari Ini",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "1 Sesi (16:30 - 18:00)",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SMwP2",
+                          "name": "Ruangan Cell Status - Aktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "mhZOb",
+                              "name": "Status Badge - Aktif",
+                              "fill": "$bk-success-bg",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "zoyKD",
+                                  "fill": "$bk-success",
+                                  "content": "Aktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "yz8Bk",
+                          "name": "Ruangan Cell Aksi - Ruang Al-Khawarizmi",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "Wlg4X",
+                              "name": "Ruangan Edit - Al-Khawarizmi",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "eoJna",
+                              "name": "Ruangan More - Al-Khawarizmi",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "oS60y",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "OTOI2",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "XE0hg",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "nnefH",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "zEKsi",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "t4C8rP",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Z8cGBo",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "kM7UW",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "Bp8fg",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "wd7T3",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ojchJ",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "A4GgUa",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VhOuk",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "KqXv5",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U9NWsd",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "TedPH",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "asNJk",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qOdGH",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "S4dV2Z",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "rZf5H",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "HsjNd",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bpMNJ",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "JvRSa",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "ngNJ0",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BOiWL",
+                      "name": "Ruangan Row - Ruang Marie Curie (R-05)",
+                      "width": "fill_container",
+                      "height": 70,
+                      "stroke": "$bk-bg-alt",
+                      "strokeWidth": {
+                        "bottom": 1
+                      },
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "U36p1C",
+                          "name": "Ruangan Cell Nama - Ruang Marie Curie",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 230,
+                          "content": "Ruang Marie Curie",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "hNSln",
+                          "name": "Ruangan Cell Kode - R-05",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 90,
+                          "content": "R-05",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "KhVia",
+                          "name": "Ruangan Cell Kapasitas - 10 Siswa",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 140,
+                          "content": "10 Siswa",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Q9YZd",
+                          "name": "Ruangan Cell Kelompok - 0 Kelompok",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 150,
+                          "content": "0 Kelompok",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "l4U8c",
+                          "name": "Ruangan Cell Jadwal - Tidak Ada Sesi",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": 220,
+                          "content": "Tidak ada sesi",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "M2ZXvx",
+                          "name": "Ruangan Cell Status - Nonaktif",
+                          "width": 90,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Bfm1l",
+                              "name": "Status Badge - Nonaktif",
+                              "fill": "$bk-gray-50",
+                              "cornerRadius": 5,
+                              "padding": [
+                                5,
+                                8
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "OQz9L",
+                                  "fill": "$bk-muted",
+                                  "content": "Nonaktif",
+                                  "lineHeight": 1.3,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 11,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ADlun",
+                          "name": "Ruangan Cell Aksi - Ruang Marie Curie",
+                          "width": 52,
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "ef0Vj",
+                              "name": "Ruangan Edit - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "edit",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "KVLu0",
+                              "name": "Ruangan More - Curie",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "more_horiz",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u7WWw",
+                      "name": "Ruangan Table Pagination",
+                      "width": "fill_container",
+                      "padding": [
+                        14,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qjcWl",
+                          "fill": "$bk-muted",
+                          "content": "Menampilkan 1-5 dari 9 ruangan kelas",
+                          "lineHeight": 1.3,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 12,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "NZNEg",
+                          "name": "Ruangan Page Numbers",
+                          "gap": 6,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "id": "nklQc",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_prev"
+                            },
+                            {
+                              "id": "BzyJE",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_act",
+                              "descendants": {
+                                "pgn_txt_p1": {
+                                  "content": "1"
+                                }
+                              }
+                            },
+                            {
+                              "id": "yZjOm",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_inact",
+                              "descendants": {
+                                "pgn_txt_p2": {
+                                  "content": "2"
+                                }
+                              }
+                            },
+                            {
+                              "id": "bSrwk",
+                              "type": "ref",
+                              "ref": "btn_cmp_pgn_next"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ynnY8",
+                      "layoutPosition": "absolute",
+                      "x": 869,
+                      "y": 130,
+                      "name": "Ruangan Row Action Menu - Ruang Galileo",
+                      "width": 190,
+                      "height": 184,
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#0F172A1A",
+                        "offset": {
+                          "x": 0,
+                          "y": 8
+                        },
+                        "blur": 24
+                      },
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": 8,
+                      "children": [
+                        {
+                          "id": "L4Hee",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_outline_lead": {
+                              "icon": "eye",
+                              "library": "lucide"
+                            },
+                            "btn_txt_outline_lead": {
+                              "content": "Lihat detail"
+                            }
+                          }
+                        },
+                        {
+                          "id": "C60DMr",
+                          "type": "ref",
+                          "ref": "btn_cmp_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_outline_lead": {
+                              "icon": "pencil",
+                              "library": "lucide"
+                            },
+                            "btn_txt_outline_lead": {
+                              "content": "Ubah data"
+                            }
+                          }
+                        },
+                        {
+                          "id": "f9spv",
+                          "type": "ref",
+                          "ref": "btn_cmp_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_lead": {
+                              "icon": "calendar-days",
+                              "library": "lucide"
+                            },
+                            "btn_txt_lead": {
+                              "content": "Lihat jadwal"
+                            }
+                          }
+                        },
+                        {
+                          "id": "DrmIC",
+                          "type": "ref",
+                          "ref": "btn_cmp_destructive_outline_lead_icon",
+                          "width": "fill_container",
+                          "descendants": {
+                            "btn_ic_dest_out_lead": {
+                              "icon": "ban",
+                              "library": "lucide"
+                            },
+                            "btn_txt_dest_out_lead": {
+                              "content": "Nonaktifkan"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "id": "BQbfd",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Modal Backdrop",
+          "fill": "#0F172A73",
+          "width": 1440,
+          "height": 1060
         },
         {
           "type": "frame",
-          "id": "ruang_edt_main",
-          "name": "Edit Ruangan Main",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "SrR0r",
+          "layoutPosition": "absolute",
+          "x": 350,
+          "y": 220,
+          "name": "Edit Ruangan Modal",
+          "clip": true,
+          "width": 740,
+          "fill": "$bk-surface",
+          "cornerRadius": 12,
+          "stroke": "$bk-border",
+          "strokeWidth": 1,
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0F172A33",
+            "offset": {
+              "x": 0,
+              "y": 16
+            },
+            "blur": 40
+          },
           "layout": "vertical",
-          "gap": 18,
-          "padding": 28,
           "children": [
             {
               "type": "frame",
-              "id": "ruang_edt_hdr",
-              "name": "Edit Ruangan Header",
+              "id": "UhRq6",
+              "name": "Modal Header",
               "width": "fill_container",
-              "gap": 4,
+              "stroke": "$bk-border",
+              "strokeWidth": {
+                "bottom": 1
+              },
+              "padding": [
+                20,
+                24
+              ],
               "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "ruang_edt_hdr_copy",
+                  "id": "oMKTG",
+                  "name": "Modal Title Copy",
                   "layout": "vertical",
-                  "gap": 4,
+                  "gap": 3,
                   "children": [
                     {
                       "type": "text",
-                      "id": "ruang_edt_bc",
-                      "name": "Breadcrumb",
+                      "id": "fquQ1",
+                      "name": "Modal Title",
+                      "fill": "$bk-text",
+                      "content": "Edit Ruangan",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 20,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "C0jAJP",
+                      "name": "Modal Subtitle",
                       "fill": "$bk-muted",
-                      "content": "Data Ruangan / Ruang Galileo (R-01) / Ubah Data",
+                      "content": "Perbarui informasi Ruang Galileo (R-01).",
                       "lineHeight": 1.35,
                       "fontFamily": "$bk-font",
                       "fontSize": 13,
                       "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "ruang_edt_title",
-                      "name": "Title",
-                      "fill": "$bk-text",
-                      "content": "Ubah Data Ruangan",
-                      "lineHeight": 1.35,
-                      "fontFamily": "$bk-font",
-                      "fontSize": 24,
-                      "fontWeight": "700"
                     }
                   ]
                 },
                 {
-                  "id": "ref_btn_ruang_edt_back",
-                  "type": "ref",
-                  "ref": "btn_cmp_outline_lead_icon",
-                  "descendants": {
-                    "btn_ic_outline_lead": {
-                      "icon": "arrow-left",
-                      "library": "lucide"
-                    },
-                    "btn_txt_outline_lead": {
-                      "content": "Kembali ke Detail"
+                  "type": "frame",
+                  "id": "W2TkX",
+                  "name": "Close Modal Button",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$bk-gray-50",
+                  "cornerRadius": 6,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Q8iIMY",
+                      "name": "Close Icon",
+                      "width": 18,
+                      "height": 18,
+                      "icon": "x",
+                      "library": "lucide",
+                      "fill": "$bk-muted"
                     }
-                  }
+                  ]
                 }
               ]
             },
             {
               "type": "frame",
-              "id": "ruang_edt_body",
-              "name": "Edit Ruangan Body",
+              "id": "iGPPg",
+              "name": "Modal Form Body",
               "width": "fill_container",
-              "height": "fill_container",
-              "gap": 18,
+              "layout": "vertical",
+              "padding": 24,
               "children": [
                 {
                   "type": "frame",
-                  "id": "ruang_edt_form_col",
-                  "name": "Form Column",
-                  "width": 738,
+                  "id": "LRe1V",
+                  "name": "Room Form",
+                  "width": "fill_container",
                   "fill": "$bk-surface",
                   "layout": "vertical",
                   "gap": 20,
                   "children": [
                     {
                       "type": "frame",
-                      "id": "ruang_edt_sec_1",
+                      "id": "JcWJ5",
                       "name": "Section 1 - Informasi Dasar",
                       "width": "fill_container",
                       "fill": "$bk-surface",
@@ -45838,14 +49423,14 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "ruang_edt_row_1",
+                          "id": "qVF2U",
                           "name": "Row 1",
                           "width": "fill_container",
                           "gap": 16,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "fld_edt_nama_ruang",
+                              "id": "iKzyN",
                               "name": "Field - Nama Ruangan",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -45853,14 +49438,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_nama_ruang_lbl_row",
+                                  "id": "g3ydjE",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_nama_ruang_lbl",
+                                      "id": "NMkR7",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Nama Ruangan",
@@ -45871,7 +49456,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_nama_ruang_req",
+                                      "id": "N49Ov",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -45884,7 +49469,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_nama_ruang_input_box",
+                                  "id": "agOeu",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -45900,7 +49485,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_nama_ruang_val",
+                                      "id": "hps2o",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "Ruang Galileo",
@@ -45915,7 +49500,7 @@
                             },
                             {
                               "type": "frame",
-                              "id": "fld_edt_kode_ruang",
+                              "id": "EizVF",
                               "name": "Field - Kode Ruangan",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -45923,14 +49508,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_kode_ruang_lbl_row",
+                                  "id": "uAY0J",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_kode_ruang_lbl",
+                                      "id": "w2PnS",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Kode Ruangan",
@@ -45941,7 +49526,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_kode_ruang_req",
+                                      "id": "aKueH",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -45954,7 +49539,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_kode_ruang_input_box",
+                                  "id": "hf7um",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -45970,7 +49555,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_kode_ruang_val",
+                                      "id": "D3Q9s",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "R-01",
@@ -45987,14 +49572,14 @@
                         },
                         {
                           "type": "frame",
-                          "id": "ruang_edt_row_2",
+                          "id": "fOdmd",
                           "name": "Row 2",
                           "width": "fill_container",
                           "gap": 16,
                           "children": [
                             {
                               "type": "frame",
-                              "id": "fld_edt_cap_ruang",
+                              "id": "D5UYz",
                               "name": "Field - Kapasitas Maksimal Siswa",
                               "width": "fill_container",
                               "layout": "vertical",
@@ -46002,14 +49587,14 @@
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_cap_ruang_lbl_row",
+                                  "id": "cbIkU",
                                   "name": "Label Row",
                                   "gap": 4,
                                   "alignItems": "center",
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_cap_ruang_lbl",
+                                      "id": "b5kaH",
                                       "name": "Label",
                                       "fill": "$bk-text",
                                       "content": "Kapasitas Maksimal Siswa",
@@ -46020,7 +49605,7 @@
                                     },
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_cap_ruang_req",
+                                      "id": "K9z81n",
                                       "name": "Required Star",
                                       "fill": "$bk-danger",
                                       "content": "*",
@@ -46033,7 +49618,7 @@
                                 },
                                 {
                                   "type": "frame",
-                                  "id": "fld_edt_cap_ruang_input_box",
+                                  "id": "K4hHm",
                                   "name": "Input Box",
                                   "width": "fill_container",
                                   "fill": "$bk-surface",
@@ -46049,7 +49634,7 @@
                                   "children": [
                                     {
                                       "type": "text",
-                                      "id": "fld_edt_cap_ruang_val",
+                                      "id": "OKdjF",
                                       "name": "Input Value",
                                       "fill": "$bk-text",
                                       "content": "14 Siswa",
@@ -46072,26 +49657,26 @@
             },
             {
               "type": "frame",
-              "id": "ruang_edt_footer",
-              "name": "Edit Ruangan Sticky Footer",
+              "id": "SSJjh",
+              "name": "Modal Footer",
               "width": "fill_container",
-              "fill": "$bk-surface",
-              "cornerRadius": 8,
               "stroke": "$bk-border",
-              "strokeWidth": 1,
+              "strokeWidth": {
+                "top": 1
+              },
               "padding": [
-                14,
-                20
+                16,
+                24
               ],
               "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
                   "type": "text",
-                  "id": "edt_ft_note",
-                  "name": "Footer Note",
+                  "id": "x8h7Bl",
+                  "name": "Modal Footer Note",
                   "fill": "$bk-muted",
-                  "content": "Perubahan belum disimpan ke basis data master ruangan.",
+                  "content": "Perubahan belum disimpan.",
                   "lineHeight": 1.35,
                   "fontFamily": "$bk-font",
                   "fontSize": 13,
@@ -46099,19 +49684,31 @@
                 },
                 {
                   "type": "frame",
-                  "id": "edt_ft_actions",
-                  "name": "Footer Actions",
-                  "gap": 12,
+                  "id": "ysIOf",
+                  "name": "Modal Actions",
+                  "gap": 10,
                   "children": [
                     {
-                      "id": "ref_btn_cancel_edt",
+                      "id": "bWovq",
                       "type": "ref",
-                      "ref": "btn_cmp_outline"
+                      "ref": "btn_cmp_outline",
+                      "name": "Cancel Button",
+                      "descendants": {
+                        "btn_txt_outline": {
+                          "content": "Batal"
+                        }
+                      }
                     },
                     {
-                      "id": "ref_btn_save_edt",
+                      "id": "MHPcs",
                       "type": "ref",
-                      "ref": "btn_cmp_default"
+                      "ref": "btn_cmp_default",
+                      "name": "Save Button",
+                      "descendants": {
+                        "btn_txt_default": {
+                          "content": "Simpan Perubahan"
+                        }
+                      }
                     }
                   ]
                 }
