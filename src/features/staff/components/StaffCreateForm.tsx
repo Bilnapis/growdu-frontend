@@ -11,7 +11,7 @@ import { useCreateStaff } from '@/features/staff/hooks/use-staff'
 
 const accountFields = [
   { id: 'name', label: 'Nama', placeholder: 'Masukkan nama lengkap pegawai', type: 'text', autoComplete: 'name' },
-  { id: 'phoneNumber', label: 'Nomor HP', placeholder: '081234567890', type: 'tel', autoComplete: 'tel' },
+  { id: 'phoneNumber', label: 'Nomor HP', placeholder: '81234567890', type: 'tel', autoComplete: 'tel' },
   { id: 'email', label: 'Email', placeholder: 'nama@bimbelkit.com', type: 'email', autoComplete: 'email' },
   { id: 'password', label: 'Password', placeholder: 'Minimal 5 karakter', type: 'password', autoComplete: 'new-password' },
   { id: 'confirmation', label: 'Ulangi Password', placeholder: 'Ulangi password pegawai', type: 'password', autoComplete: 'new-password' },
@@ -60,7 +60,7 @@ export function StaffCreateForm() {
     submittingRef.current = true
     createMutation.mutate({
       name: values.name.trim(),
-      phoneNumber: values.phoneNumber.trim(),
+      phoneNumber: formatIndonesianPhoneNumber(values.phoneNumber),
       email: values.email.trim().toLowerCase(),
       password: values.password,
       address: values.address.trim(),
@@ -99,6 +99,7 @@ export function StaffCreateForm() {
                   id={`staff-${field.id}`}
                   name={field.id}
                   type={field.type}
+                  isPhone={field.id === 'phoneNumber'}
                   autoComplete={field.autoComplete}
                   placeholder={field.placeholder}
                   value={values[field.id]}
@@ -129,4 +130,8 @@ export function StaffCreateForm() {
       </form>
     </StaffCreateDialog>
   )
+}
+
+function formatIndonesianPhoneNumber(value: string) {
+  return `+62${value.replace(/\D/g, '').replace(/^(?:62|0+)/, '')}`
 }

@@ -55,7 +55,7 @@ export function getStaffError(error: unknown) {
   return 'Data pegawai belum dapat diproses. Silakan coba lagi.'
 }
 
-export type StaffUpdateInput = Partial<Pick<StaffMember, 'name' | 'email' | 'phoneNumber' | 'status'>> & { address?: string }
+export type StaffUpdateInput = Partial<Pick<StaffMember, 'name' | 'email' | 'phoneNumber' | 'status'>> & { address?: string; password?: string }
 
 export function updateStaff(tenantId: string, id: string, input: StaffUpdateInput) {
   return apiRequest<StaffMember>(`/tenants/${encodeURIComponent(tenantId)}/operators/${encodeURIComponent(id)}`, { method: 'PATCH', body: input })

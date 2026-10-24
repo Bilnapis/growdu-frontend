@@ -636,7 +636,7 @@ function FormField({
         aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] bg-white text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
+        className={`h-[42px] bg-[var(--color-bg-light)] text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
         onChange={(event) => onChange(event.target.value)}
       />
       <FieldError id={id} error={error} />
@@ -676,7 +676,7 @@ function PasswordField({
           aria-required="true"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : undefined}
-          className={`h-[42px] bg-white pr-10 text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
+          className={`h-[42px] bg-[var(--color-bg-light)] pr-10 text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
           onChange={(event) => onChange(event.target.value)}
         />
         <button
