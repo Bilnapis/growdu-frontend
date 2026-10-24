@@ -21,6 +21,7 @@ import { LoginPage } from '@/pages/client/LoginPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
 import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
+import { StaffCreatePage } from '@/pages/client/StaffCreatePage'
 import { StaffPage } from '@/pages/client/StaffPage'
 import { TutorCreatePage } from '@/pages/client/TutorCreatePage'
 import { TutorDetailPage } from '@/pages/client/TutorDetailPage'
@@ -90,6 +91,9 @@ export const router = createBrowserRouter([
                       {
                         path: 'staff',
                         element: <StaffPage />,
+                        children: [
+                          { path: 'new', element: <StaffCreatePage /> },
+                        ],
                       },
                       {
                         path: ':section',

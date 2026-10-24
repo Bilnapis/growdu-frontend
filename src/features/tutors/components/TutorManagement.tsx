@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { Button } from '@/components/ui/button'
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -141,16 +142,14 @@ export function TutorManagement({
             Kelola data tentor aktif dan nonaktif.
           </p>
         </div>
-        <div className="flex h-[33px] flex-wrap gap-2.5">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-[13px] font-semibold leading-[1.3] text-white"
-            onClick={() => void navigate("/tutors/new")}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Tambah Tentor
-          </button>
-        </div>
+        <Button
+          type="button"
+          className="text-[13px] font-semibold"
+          onClick={() => void navigate("/tutors/new")}
+        >
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Tambah Tentor
+        </Button>
       </header>
 
       <section

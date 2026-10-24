@@ -38,7 +38,7 @@ type SidebarClientItem = {
 
 const sidebarClientItems: readonly SidebarClientItem[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'students', label: 'Siswa', icon: Users },
+  { id: 'students', label: 'Siswa & Orang Tua', icon: Users },
   { id: 'tutors', label: 'Tentor', icon: GraduationCap },
   { id: 'staff', label: 'User/Pegawai', icon: UserCog },
   { id: 'study-groups', label: 'Kelompok Belajar', icon: BookOpen },
