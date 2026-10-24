@@ -80907,231 +80907,149 @@
               "id": "aPU40",
               "name": "Pegawai Summary Section - List",
               "width": "fill_container",
-              "height": 105,
               "gap": 14,
               "children": [
                 {
                   "type": "frame",
-                  "id": "p6IAX",
-                  "name": "Students Summary",
+                  "id": "f0Eiy",
+                  "name": "Pegawai Summary - Total Pegawai",
                   "width": "fill_container",
-                  "gap": 14,
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 6,
+                  "padding": 16,
                   "children": [
                     {
                       "type": "frame",
-                      "id": "f0Eiy",
-                      "name": "Pegawai Summary Section",
+                      "id": "H1fsgD",
+                      "name": "Pegawai Summary Top - Total Pegawai",
                       "width": "fill_container",
-                      "fill": "$bk-surface",
-                      "cornerRadius": 8,
-                      "stroke": "$bk-border",
-                      "strokeWidth": 1,
-                      "layout": "vertical",
-                      "gap": 6,
-                      "padding": 16,
+                      "gap": 8,
+                      "alignItems": "center",
                       "children": [
                         {
                           "type": "frame",
-                          "id": "H1fsgD",
-                          "name": "Students Summary Top - Siswa Aktif",
-                          "width": "fill_container",
-                          "gap": 8,
+                          "id": "kZ6YA",
+                          "name": "Pegawai Summary Icon - Total Pegawai",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "$bk-success-bg",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "kZ6YA",
-                              "name": "Students Summary Icon - Siswa Aktif",
-                              "width": 32,
-                              "height": 32,
-                              "fill": "$bk-primary-soft",
-                              "cornerRadius": 6,
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon",
-                                  "id": "xkViv",
-                                  "name": "Students Icon - Siswa Aktif",
-                                  "width": 18,
-                                  "height": 18,
-                                  "icon": "ballot",
-                                  "library": "Material Symbols Outlined",
-                                  "fill": "$bk-primary"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "flUaE",
-                              "name": "Pegawai Summary Label - Total Pegawai",
-                              "fill": "$bk-muted",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Total Pegawai",
-                              "lineHeight": 1.3,
-                              "fontFamily": "$bk-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
+                              "type": "icon",
+                              "id": "xkViv",
+                              "name": "Pegawai Icon - Total Pegawai",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "group",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-success"
                             }
                           ]
                         },
                         {
                           "type": "text",
-                          "id": "vDBrW",
-                          "name": "Pegawai Summary Value - Total Pegawai",
-                          "fill": "$bk-text",
-                          "content": "18",
+                          "id": "flUaE",
+                          "name": "Pegawai Summary Label - Total Pegawai",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Pegawai Aktif",
                           "lineHeight": 1.3,
                           "fontFamily": "$bk-font",
-                          "fontSize": 26,
-                          "fontWeight": "800"
+                          "fontSize": 12,
+                          "fontWeight": "700"
                         }
                       ]
                     },
                     {
+                      "type": "text",
+                      "id": "vDBrW",
+                      "name": "Pegawai Summary Value - Total Pegawai",
+                      "fill": "$bk-text",
+                      "content": "18",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 26,
+                      "fontWeight": "800"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "K7KjU3",
+                  "name": "Pegawai Summary - Pegawai Aktif",
+                  "width": "fill_container",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 6,
+                  "padding": 16,
+                  "children": [
+                    {
                       "type": "frame",
-                      "id": "K7KjU3",
-                      "name": "Pegawai Summary - Total Pegawai",
+                      "id": "i7UPAQ",
+                      "name": "Pegawai Summary Top - Pegawai Aktif",
                       "width": "fill_container",
-                      "fill": "$bk-surface",
-                      "cornerRadius": 8,
-                      "stroke": "$bk-border",
-                      "strokeWidth": 1,
-                      "layout": "vertical",
-                      "gap": 6,
-                      "padding": 16,
+                      "gap": 8,
+                      "alignItems": "center",
                       "children": [
                         {
                           "type": "frame",
-                          "id": "i7UPAQ",
-                          "name": "Students Summary Top - Nonaktif",
-                          "width": "fill_container",
-                          "gap": 8,
+                          "id": "z9NUfq",
+                          "name": "Pegawai Summary Icon - Pegawai Aktif",
+                          "width": 32,
+                          "height": 32,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
                           "alignItems": "center",
                           "children": [
                             {
-                              "type": "frame",
-                              "id": "z9NUfq",
-                              "name": "Students Summary Icon - Nonaktif",
-                              "width": 32,
-                              "height": 32,
-                              "fill": "$bk-success-bg",
-                              "cornerRadius": 6,
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon",
-                                  "id": "NffY2",
-                                  "name": "Students Icon - Nonaktif",
-                                  "width": 18,
-                                  "height": 18,
-                                  "icon": "payments",
-                                  "library": "Material Symbols Outlined",
-                                  "fill": "$bk-success"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "n9PWQj",
-                              "name": "Pegawai Summary Label - Pegawai Aktif",
-                              "fill": "$bk-muted",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Pegawai Aktif",
-                              "lineHeight": 1.3,
-                              "fontFamily": "$bk-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
+                              "type": "icon",
+                              "id": "NffY2",
+                              "name": "Pegawai Icon - Pegawai Aktif",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "person_off",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-muted"
                             }
                           ]
                         },
                         {
                           "type": "text",
-                          "id": "B9krCT",
-                          "name": "Pegawai Summary Value - Pegawai Aktif",
-                          "fill": "$bk-text",
-                          "content": "15",
+                          "id": "n9PWQj",
+                          "name": "Pegawai Summary Label - Pegawai Aktif",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Pegawai Nonaktif",
                           "lineHeight": 1.3,
                           "fontFamily": "$bk-font",
-                          "fontSize": 26,
-                          "fontWeight": "800"
+                          "fontSize": 12,
+                          "fontWeight": "700"
                         }
                       ]
                     },
                     {
-                      "type": "frame",
-                      "id": "bPXsK",
-                      "name": "Pegawai Summary - Pegawai Aktif",
-                      "width": "fill_container",
-                      "fill": "$bk-surface",
-                      "cornerRadius": 8,
-                      "stroke": "$bk-border",
-                      "strokeWidth": 1,
-                      "layout": "vertical",
-                      "gap": 6,
-                      "padding": 16,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "ETfqJ",
-                          "name": "Students Summary Top - Email Orang Tua Kosong",
-                          "width": "fill_container",
-                          "gap": 8,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "y6PQRl",
-                              "name": "Students Summary Icon - Email Orang Tua Kosong",
-                              "width": 32,
-                              "height": 32,
-                              "fill": "$bk-warning-bg",
-                              "cornerRadius": 6,
-                              "justifyContent": "center",
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon",
-                                  "id": "s484ek",
-                                  "name": "Students Icon - Email Orang Tua Kosong",
-                                  "width": 18,
-                                  "height": 18,
-                                  "icon": "money_off",
-                                  "library": "Material Symbols Outlined",
-                                  "fill": "$bk-warning"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "K08aH",
-                              "name": "Pegawai Summary Label - Nonaktif",
-                              "fill": "$bk-muted",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Nonaktif",
-                              "lineHeight": 1.3,
-                              "fontFamily": "$bk-font",
-                              "fontSize": 12,
-                              "fontWeight": "700"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "text",
-                          "id": "hbBMk",
-                          "name": "Pegawai Summary Value - Nonaktif",
-                          "fill": "$bk-text",
-                          "content": "3",
-                          "lineHeight": 1.3,
-                          "fontFamily": "$bk-font",
-                          "fontSize": 26,
-                          "fontWeight": "800"
-                        }
-                      ]
+                      "type": "text",
+                      "id": "B9krCT",
+                      "name": "Pegawai Summary Value - Pegawai Aktif",
+                      "fill": "$bk-text",
+                      "content": "15",
+                      "lineHeight": 1.3,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 26,
+                      "fontWeight": "800"
                     }
                   ]
                 }
