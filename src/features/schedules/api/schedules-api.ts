@@ -63,3 +63,24 @@ export function getSchedules(filters: ScheduleFilters, signal?: AbortSignal) {
 export function getSchedulesSummary(signal?: AbortSignal) {
   return apiRequest<SchedulesSummary>('/schedules/summary', { signal })
 }
+
+export async function getScheduleById(id: string, signal?: AbortSignal) {
+  const firstPage = await getSchedules({ page: 1, limit: 100 }, signal)
+  const firstMatch = firstPage.data.find((schedule) => schedule.id === id)
+
+  if (firstMatch || firstPage.meta.totalPages <= 1) {
+    return firstMatch ?? null
+  }
+
+  const remainingPages = await Promise.all(
+    Array.from({ length: firstPage.meta.totalPages - 1 }, (_, index) =>
+      getSchedules({ page: index + 2, limit: 100 }, signal),
+    ),
+  )
+
+  return (
+    remainingPages
+      .flatMap((page) => page.data)
+      .find((schedule) => schedule.id === id) ?? null
+  )
+}

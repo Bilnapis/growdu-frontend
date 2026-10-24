@@ -23,6 +23,7 @@ import { RoomDetailPage } from '@/pages/client/RoomDetailPage'
 import { RoomEditPage } from '@/pages/client/RoomEditPage'
 import { RoomsPage } from '@/pages/client/RoomsPage'
 import { SchedulePage } from '@/pages/client/SchedulePage'
+import { ScheduleDetailPage } from '@/pages/client/ScheduleDetailPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
 import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
@@ -139,6 +140,10 @@ export const router = createBrowserRouter([
                       {
                         path: 'schedule',
                         element: <SchedulePage />,
+                      },
+                      {
+                        path: 'schedule/:id',
+                        element: <ScheduleDetailPage />,
                       },
                       {
                         path: ':section',

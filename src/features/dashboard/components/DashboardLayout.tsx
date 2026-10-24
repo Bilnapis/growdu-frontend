@@ -45,6 +45,7 @@ export function DashboardLayout() {
   const isStudyGroupDetail = /^\/study-groups\/[^/]+\/?$/.test(
     location.pathname,
   )
+  const isScheduleDetail = /^\/schedule\/[^/]+\/?$/.test(location.pathname)
   const queryClient = useQueryClient()
   const user = getStoredAuthUser()
   const selectedTenantId = user ? getStoredSelectedTenantId(user.id) : null
@@ -74,7 +75,7 @@ export function DashboardLayout() {
     sidebarTenant?.name ??
     (user?.role === 'owner' && tenantsQuery.isPending
       ? 'Memuat bimbel...'
-      : user?.tenantName ?? 'Bimbel')
+      : (user?.tenantName ?? 'Bimbel'))
 
   return (
     <div className="min-h-screen bg-background text-foreground lg:flex">
@@ -88,7 +89,7 @@ export function DashboardLayout() {
       />
 
       <div className="min-w-0 flex-1">
-        {!isStudyGroupDetail ? (
+        {!isStudyGroupDetail && !isScheduleDetail ? (
           <header className="flex justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
             <Button
               type="button"
