@@ -245,68 +245,73 @@ export function TutorManagement({
               </div>
             </form>
 
-            <div className="mt-3.5 overflow-x-auto">
-              <table className="w-full min-w-[1000px] border-separate border-spacing-0 text-left">
+            <div
+              className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
+              role="region"
+              aria-label="Tabel tentor, geser untuk melihat semua kolom"
+              tabIndex={0}
+            >
+              <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
                 <caption className="sr-only">Daftar tentor bimbel</caption>
-                <thead>
-                  <tr className="h-11 rounded-md bg-[var(--color-gray-50)] text-xs font-bold leading-[1.3] text-[var(--color-muted)]">
-                    <th scope="col" className="w-[150px] rounded-l-md px-3">
+                <thead className="bg-slate-50 text-muted-foreground">
+                  <tr className="h-11">
+                    <th scope="col" className="w-[150px] px-[18px] font-bold">
                       Nama Tentor
                     </th>
-                    <th scope="col" className="w-[140px] px-3">
+                    <th scope="col" className="w-[140px] px-[18px] font-bold">
                       Keahlian / Jurusan
                     </th>
-                    <th scope="col" className="w-[120px] px-3">
+                    <th scope="col" className="w-[120px] px-[18px] font-bold">
                       Rekening
                     </th>
-                    <th scope="col" className="w-[145px] px-3">
+                    <th scope="col" className="w-[145px] px-[18px] font-bold">
                       Kontak & Email
                     </th>
-                    <th scope="col" className="w-[170px] px-3">
+                    <th scope="col" className="w-[170px] px-[18px] font-bold">
                       Alamat
                     </th>
-                    <th scope="col" className="w-[95px] px-3">
+                    <th scope="col" className="w-[95px] px-[18px] font-bold">
                       Kelompok
                     </th>
-                    <th scope="col" className="w-[78px] px-3">
+                    <th scope="col" className="w-[78px] px-[18px] font-bold">
                       Status
                     </th>
-                    <th scope="col" className="w-[52px] rounded-r-md px-3">
+                    <th scope="col" className="w-[72px] px-3 font-bold">
                       Aksi
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100">
                   {tutorsQuery.data.data.map((tutor) => (
                     <tr
                       key={tutor.id}
-                      className="relative h-[70px] border-b border-[var(--color-neutral-100)] text-xs leading-[1.3] text-[var(--color-text)]"
+                      className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
                       <th
                         scope="row"
-                        className="border-b border-[var(--color-neutral-100)] px-3 py-3 text-[13px] font-bold"
+                        className="px-[18px] py-3 font-bold"
                       >
                         {tutor.name}
                       </th>
-                      <td className="whitespace-pre-line border-b border-[var(--color-neutral-100)] px-3 py-3 font-medium">
+                      <td className="whitespace-pre-line px-[18px] py-3 font-medium">
                         {getTutorExpertise(tutor)}
                       </td>
-                      <td className="whitespace-pre-line border-b border-[var(--color-neutral-100)] px-3 py-3 font-semibold">
+                      <td className="whitespace-pre-line px-[18px] py-3 font-semibold">
                         {getTutorBankInfo(tutor)}
                       </td>
-                      <td className="whitespace-pre-line border-b border-[var(--color-neutral-100)] px-3 py-3 font-medium">
+                      <td className="whitespace-pre-line px-[18px] py-3 font-medium">
                         {getTutorContact(tutor)}
                       </td>
-                      <td className="border-b border-[var(--color-neutral-100)] px-3 py-3 font-medium">
+                      <td className="px-[18px] py-3 font-medium">
                         {getTutorAddress(tutor)}
                       </td>
-                      <td className="border-b border-[var(--color-neutral-100)] px-3 py-3 font-semibold">
+                      <td className="px-[18px] py-3 font-semibold">
                         {getTutorGroup(tutor)}
                       </td>
-                      <td className="border-b border-[var(--color-neutral-100)] px-3 py-3">
+                      <td className="px-[18px] py-3">
                         <TutorStatusBadge status={tutor.status} />
                       </td>
-                      <td className="border-b border-[var(--color-neutral-100)] px-3 py-3">
+                      <td className="px-3 py-3">
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
@@ -515,9 +520,9 @@ function TutorStatusBadge({ status }: { status: TutorStatus }) {
 
   return (
     <span
-      className={`inline-flex rounded-[5px] px-2 py-1 text-[11px] font-bold leading-[1.3] ${isActive
+      className={`inline-flex rounded-full px-2.5 py-[5px] text-xs font-bold leading-[1.2] ${isActive
         ? "bg-[var(--color-success-bg)] text-[var(--color-success)]"
-        : "bg-[var(--color-gray-50)] text-[var(--color-muted)]"
+        : "bg-slate-100 text-muted-foreground"
         }`}
     >
       {status === "active" ? "Aktif" : "Nonaktif"}

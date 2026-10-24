@@ -42,7 +42,7 @@ import { StudentCreateForm } from './StudentCreateForm'
 type DialogState = { type: 'edit'; student: StudentListItem } | null
 
 const pageSize = 5
-const cellClass = 'border-b border-[var(--color-neutral-100)] px-3 py-3'
+const cellClass = 'px-[18px] py-3'
 
 export function StudentManagement() {
   const navigate = useNavigate()
@@ -295,15 +295,15 @@ export function StudentManagement() {
         {studentsQuery.data ? (
           <>
             <div
-              className="mt-3.5 overflow-x-auto rounded-md focus-visible:ring-2 focus-visible:ring-ring"
+              className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
               role="region"
               aria-label="Tabel siswa, geser untuk melihat semua kolom"
               tabIndex={0}
             >
-              <table className="w-full min-w-[1000px] border-separate border-spacing-0 text-left text-xs leading-[1.4]">
+              <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
                 <caption className="sr-only">Daftar siswa bimbel</caption>
-                <thead>
-                  <tr className="h-11 bg-[var(--color-gray-50)] text-muted-foreground">
+                <thead className="bg-slate-50 text-muted-foreground">
+                  <tr className="h-11">
                     {[
                       'Nama Siswa',
                       'Jenjang / Sekolah',
@@ -317,18 +317,22 @@ export function StudentManagement() {
                       <th
                         scope="col"
                         key={label}
-                        className="px-3 font-bold first:rounded-l-md last:rounded-r-md"
+                        className={
+                          label === 'Aksi'
+                            ? 'px-3 font-bold'
+                            : 'px-[18px] font-bold'
+                        }
                       >
                         {label}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100">
                   {data.map((student) => (
                     <tr
                       key={student.id}
-                      className="relative h-[70px] border-b border-[var(--color-neutral-100)] text-xs leading-[1.3] text-[var(--color-text)]"
+                      className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
                       <th
                         scope="row"
@@ -372,7 +376,7 @@ export function StudentManagement() {
                       <td className={cellClass}>
                         <StudentStatusBadge student={student} />
                       </td>
-                      <td className={`${cellClass} relative`}>
+                      <td className="relative px-3 py-3">
                         <div className="flex items-center">
                           <Button
                             type="button"
@@ -480,7 +484,7 @@ function StudentStatusBadge({ student }: { student: StudentListItem }) {
         : 'bg-[var(--color-success-bg)] text-[var(--color-success)]'
   return (
     <span
-      className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-bold ${tone}`}
+      className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-[5px] text-xs font-bold leading-[1.2] ${tone}`}
     >
       {student.status === 'inactive'
         ? 'Nonaktif'

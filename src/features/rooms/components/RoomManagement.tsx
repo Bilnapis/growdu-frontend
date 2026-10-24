@@ -17,7 +17,6 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -212,58 +211,63 @@ export function RoomManagement() {
           <EmptyState filtered={Boolean(search || status)} />
         ) : (
           <>
-            <div className="mt-5 hidden overflow-visible md:block">
-              <table className="w-full table-fixed text-left text-xs">
-                <thead className="bg-muted text-muted-foreground">
-                  <tr>
-                    <th scope="col" className="w-[22%] rounded-l-md px-3 py-3">
+            <div className="mt-[14px] hidden rounded-md border md:block">
+              <table className="w-full table-fixed border-collapse text-left text-[13px]">
+                <caption className="sr-only">Daftar ruangan bimbel</caption>
+                <thead className="bg-slate-50 text-muted-foreground">
+                  <tr className="h-11">
+                    <th scope="col" className="w-[22%] px-[18px] font-bold">
                       Nama Ruangan
                     </th>
-                    <th scope="col" className="w-[10%] px-3 py-3">
+                    <th scope="col" className="w-[10%] px-[18px] font-bold">
                       Kode
                     </th>
-                    <th scope="col" className="w-[13%] px-3 py-3">
+                    <th scope="col" className="w-[13%] px-[18px] font-bold">
                       Kapasitas
                     </th>
-                    <th scope="col" className="w-[15%] px-3 py-3">
+                    <th scope="col" className="w-[15%] px-[18px] font-bold">
                       Kelompok Aktif
                     </th>
-                    <th scope="col" className="w-[23%] px-3 py-3">
+                    <th scope="col" className="w-[23%] px-[18px] font-bold">
                       Jadwal Hari Ini
                     </th>
-                    <th scope="col" className="w-[11%] px-3 py-3">
+                    <th scope="col" className="w-[11%] px-[18px] font-bold">
                       Status
                     </th>
                     <th
                       scope="col"
-                      className="w-[6%] rounded-r-md px-3 py-3 text-center"
+                      className="w-[6%] px-3 font-bold text-center"
                     >
                       Aksi
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100">
                   {rooms.data.data.map((room) => (
                     <tr
                       key={room.id}
-                      className="border-b border-border text-foreground"
+                      className="h-[70px] bg-card text-foreground"
                     >
                       <th
                         scope="row"
-                        className="px-3 py-4 text-[13px] font-bold"
+                        className="px-[18px] py-3 font-bold"
                       >
                         {room.name}
                       </th>
-                      <td className="px-3 py-4 font-medium">{room.code}</td>
-                      <td className="px-3 py-4">{room.capacity} Siswa</td>
-                      <td className="px-3 py-4">
+                      <td className="px-[18px] py-3 font-medium">
+                        {room.code}
+                      </td>
+                      <td className="px-[18px] py-3">
+                        {room.capacity} Siswa
+                      </td>
+                      <td className="px-[18px] py-3">
                         {room.activeGroupCount} Kelompok
                       </td>
-                      <td className="px-3 py-4">{todayLabel(room)}</td>
-                      <td className="px-3 py-4">
+                      <td className="px-[18px] py-3">{todayLabel(room)}</td>
+                      <td className="px-[18px] py-3">
                         <RoomStatusBadge status={room.status} />
                       </td>
-                      <td className="relative px-3 py-4 text-center">
+                      <td className="relative px-3 py-3 text-center">
                         <button
                           type="button"
                           className="inline-grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
@@ -413,10 +417,18 @@ function SummaryCard({
 }
 
 function RoomStatusBadge({ status }: { status: RoomStatus }) {
+  const isActive = status === 'active'
+
   return (
-    <Badge variant={status === 'active' ? 'success' : 'secondary'}>
-      {status === 'active' ? 'Aktif' : 'Nonaktif'}
-    </Badge>
+    <span
+      className={
+        isActive
+          ? 'inline-flex rounded-full bg-[var(--color-success-bg)] px-2.5 py-[5px] text-xs font-bold leading-[1.2] text-[var(--color-success)]'
+          : 'inline-flex rounded-full bg-slate-100 px-2.5 py-[5px] text-xs font-bold leading-[1.2] text-muted-foreground'
+      }
+    >
+      {isActive ? 'Aktif' : 'Nonaktif'}
+    </span>
   )
 }
 
