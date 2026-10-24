@@ -93,7 +93,7 @@ export function SidebarClient({
           </div>
         )}
         <div className="min-w-0">
-          <p className="truncate text-base font-bold leading-[1.2] text-foreground">
+          <p className="truncate text-sm text-base font-bold leading-[1.2] text-foreground">
             {tenantName}
           </p>
           <p className="mt-0.5 truncate text-xs leading-[1.2] text-muted-foreground">

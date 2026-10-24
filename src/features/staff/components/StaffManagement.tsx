@@ -85,9 +85,6 @@ export function StaffManagement() {
     <section aria-labelledby="staff-page-title">
       <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[13px] font-semibold leading-[1.3] text-primary">
-            Manajemen pegawai
-          </p>
           <h1 id="staff-page-title" className="mt-1.5 text-[28px] font-bold leading-[1.2] tracking-tight">
             Pegawai
           </h1>
