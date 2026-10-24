@@ -42,6 +42,9 @@ function getActiveItem(pathname: string): SidebarClientItemId {
 export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
+  const isStudyGroupDetail = /^\/study-groups\/[^/]+\/?$/.test(
+    location.pathname,
+  )
   const queryClient = useQueryClient()
   const user = getStoredAuthUser()
   const selectedTenantId = user ? getStoredSelectedTenantId(user.id) : null
@@ -85,18 +88,20 @@ export function DashboardLayout() {
       />
 
       <div className="min-w-0 flex-1">
-        <header className="flex justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => logoutMutation.mutate()}
-            disabled={logoutMutation.isPending}
-          >
-            <LogOut className="h-4 w-4" aria-hidden="true" />
-            {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
-          </Button>
-        </header>
+        {!isStudyGroupDetail ? (
+          <header className="flex justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => logoutMutation.mutate()}
+              disabled={logoutMutation.isPending}
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+              {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
+            </Button>
+          </header>
+        ) : null}
 
         <main className="min-w-0 p-5 sm:p-7">
           <Outlet />

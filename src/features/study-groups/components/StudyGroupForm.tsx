@@ -141,13 +141,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   return (
     <div className="study-group-form">
       <header>
-        <nav aria-label="Breadcrumb" className="study-group-form__breadcrumb">
-          <Link to="/study-groups">Kelompok Belajar</Link>
-          <span aria-hidden="true"> / </span>
-          <span aria-current="page">
-            {group ? group.name : 'Tambah Kelompok Belajar'}
-          </span>
-        </nav>
         <h1>
           {group ? 'Ubah Data Kelompok Belajar' : 'Tambah Kelompok Belajar'}
         </h1>
