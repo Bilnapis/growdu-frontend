@@ -1,6 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react'
 import {
   BookOpen,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -9,52 +16,59 @@ import {
   Pencil,
   Plus,
   Search,
-  Upload,
+  SlidersHorizontal,
   UserRoundX,
   Users,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import type {
+  EntityStatus,
+  StudentListItem,
+  StudentsFilters,
+  StudentUpdateInput,
+} from '@/features/students/api/students-api'
 import {
-  demoStudents,
-  getStudentStage,
-  getStudentStatus,
-  type Student,
-  type StudentInput,
-} from '../data/students'
+  useStudents,
+  useStudentsSummary,
+  useUpdateStudent,
+} from '@/features/students/hooks/use-students'
+import { ApiError } from '@/services/api-client'
 import { StudentDialog } from './StudentDialog'
-import { StudentForm, studentSelectClass } from './StudentForm'
-import { StudentImport } from './StudentImport'
+import { studentSelectClass } from './StudentForm'
 
 type DialogState =
-  | { type: 'create' }
-  | { type: 'import' }
-  | { type: 'edit'; student: Student }
-  | { type: 'detail'; student: Student }
+  | { type: 'edit'; student: StudentListItem }
+  | { type: 'detail'; student: StudentListItem }
   | null
+
 const pageSize = 5
 const cellClass = 'border-b border-[var(--color-neutral-100)] px-3 py-4'
 
 export function StudentManagement() {
-  const [students, setStudents] = useState(demoStudents)
-  const [search, setSearch] = useState('')
-  const [status, setStatus] = useState('')
-  const [stage, setStage] = useState('')
-  const [group, setGroup] = useState('')
-  const [page, setPage] = useState(1)
+  const navigate = useNavigate()
+  const [filters, setFilters] = useState<StudentsFilters>({
+    page: 1,
+    limit: pageSize,
+  })
   const [dialog, setDialog] = useState<DialogState>(null)
   const [notice, setNotice] = useState('')
+  const [actionError, setActionError] = useState('')
   const [menuId, setMenuId] = useState<string | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const menuTriggerRef = useRef<HTMLButtonElement | null>(null)
+  const studentsQuery = useStudents(filters)
+  const summaryQuery = useStudentsSummary()
+  const updateMutation = useUpdateStudent()
 
   useEffect(() => {
     if (!menuId) return
     menuRef.current?.querySelector('button')?.focus()
-    function dismiss(event: PointerEvent) {
+    const dismiss = (event: PointerEvent) => {
       if (
         event.target instanceof Node &&
         !menuRef.current?.contains(event.target) &&
@@ -62,7 +76,7 @@ export function StudentManagement() {
       )
         setMenuId(null)
     }
-    function escape(event: KeyboardEvent) {
+    const escape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setMenuId(null)
         menuTriggerRef.current?.focus()
@@ -76,91 +90,88 @@ export function StudentManagement() {
     }
   }, [menuId])
 
-  const groups = [
-    ...new Set(students.map((student) => student.group).filter(Boolean)),
-  ]
-  const filtered = students.filter((student) => {
-    const matchesSearch = [student.name, student.school, student.parent].some(
-      (value) =>
-        value
-          .toLocaleLowerCase('id-ID')
-          .includes(search.trim().toLocaleLowerCase('id-ID')),
-    )
-    return (
-      matchesSearch &&
-      (!status ||
-        (status === 'active'
-          ? student.active
-          : getStudentStatus(student) === status)) &&
-      (!stage || getStudentStage(student.level) === stage) &&
-      (!group || (group === 'none' ? !student.group : student.group === group))
-    )
-  })
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
-  const currentPage = Math.min(page, totalPages)
-  const visible = filtered.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  )
   const summary = [
-    {
-      label: 'Siswa Aktif',
-      value: students.filter((student) => student.active).length,
-      icon: Users,
-      tone: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
-    },
-    {
-      label: 'Nonaktif',
-      value: students.filter((student) => !student.active).length,
-      icon: UserRoundX,
-      tone: 'bg-muted text-muted-foreground',
-    },
-    {
-      label: 'Email Orang Tua Kosong',
-      value: students.filter((student) => !student.email).length,
-      icon: Mail,
-      tone: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
-    },
-    {
-      label: 'Belum Masuk Kelompok',
-      value: students.filter((student) => student.active && !student.group)
-        .length,
-      icon: BookOpen,
-      tone: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
-    },
-  ]
+    [
+      'Siswa Aktif',
+      summaryQuery.data?.active,
+      Users,
+      'bg-[var(--color-success-bg)] text-[var(--color-success)]',
+    ],
+    [
+      'Nonaktif',
+      summaryQuery.data?.inactive,
+      UserRoundX,
+      'bg-muted text-muted-foreground',
+    ],
+    [
+      'Kontak Orang Tua Kosong',
+      summaryQuery.data?.missingParentContact,
+      Mail,
+      'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+    ],
+    [
+      'Belum Masuk Kelompok',
+      summaryQuery.data?.withoutGroup,
+      BookOpen,
+      'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+    ],
+  ] as const
 
-  function save(input: StudentInput) {
-    if (dialog?.type === 'edit') {
-      setStudents((current) =>
-        current.map((student) =>
-          student.id === dialog.student.id ? { ...student, ...input } : student,
-        ),
-      )
-      setNotice(`Data ${input.name} berhasil diperbarui.`)
-    } else {
-      setStudents((current) => [
-        { ...input, id: crypto.randomUUID() },
-        ...current,
-      ])
-      resetFilters()
-      setNotice(`${input.name} berhasil ditambahkan.`)
-    }
-    setDialog(null)
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const search = getFormValue(new FormData(event.currentTarget), 'search')
+    setFilters((current) => ({
+      ...current,
+      page: 1,
+      search: search || undefined,
+    }))
   }
+
+  function setStatus(value: string) {
+    setFilters((current) => ({
+      ...current,
+      page: 1,
+      status: value === 'active' || value === 'inactive' ? value : undefined,
+    }))
+  }
+
+  function setEducationStage(value: string) {
+    setFilters((current) => ({
+      ...current,
+      page: 1,
+      educationStage:
+        value === 'SD' || value === 'SMP' || value === 'SMA'
+          ? value
+          : undefined,
+    }))
+  }
+
   function resetFilters() {
-    setSearch('')
-    setStatus('')
-    setStage('')
-    setGroup('')
-    setPage(1)
+    setFilters({ page: 1, limit: pageSize })
     setMenuId(null)
   }
-  function openStudent(type: 'detail' | 'edit', student: Student) {
-    menuTriggerRef.current?.focus()
-    setMenuId(null)
-    setDialog({ type, student })
+
+  function toggleStatus(student: StudentListItem) {
+    const status: EntityStatus =
+      student.status === 'active' ? 'inactive' : 'active'
+    setActionError('')
+    updateMutation.mutate(
+      { id: student.id, input: { status } },
+      {
+        onSuccess: () => {
+          setNotice(
+            `${student.name} berhasil ${status === 'active' ? 'diaktifkan' : 'dinonaktifkan'}.`,
+          )
+          setMenuId(null)
+          menuTriggerRef.current?.focus()
+        },
+        onError: (error: unknown) => setActionError(getMutationError(error)),
+      },
+    )
   }
+
+  const data = studentsQuery.data?.data ?? []
+  const meta = studentsQuery.data?.meta
 
   return (
     <div className="min-w-0" aria-labelledby="students-title">
@@ -176,29 +187,21 @@ export function StudentManagement() {
             Kelola siswa aktif, kontak orang tua, dan status belajar.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="bg-card text-[13px] font-semibold"
-            onClick={() => setDialog({ type: 'import' })}
-          >
-            <Upload className="h-4 w-4" aria-hidden="true" />
-            Import
-          </Button>
-          <Button
-            className="text-[13px] font-semibold"
-            onClick={() => setDialog({ type: 'create' })}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Tambah Siswa
-          </Button>
-        </div>
+        <Button
+          className="text-[13px] font-semibold"
+          onClick={() => void navigate('/students/new')}
+        >
+          <Plus className="h-4 w-4" aria-hidden="true" />
+          Tambah Siswa
+        </Button>
       </header>
+
       <section
         aria-label="Ringkasan siswa"
+        aria-busy={summaryQuery.isPending}
         className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
       >
-        {summary.map(({ label, value, icon: Icon, tone }) => (
+        {summary.map(([label, value, Icon, tone]) => (
           <Card key={label} className="p-4 shadow-none">
             <div className="flex items-center gap-2">
               <span
@@ -211,415 +214,283 @@ export function StudentManagement() {
               </h2>
             </div>
             <p className="mt-1.5 text-[26px] font-bold leading-[1.3]">
-              {value}
+              {value ?? '—'}
             </p>
           </Card>
         ))}
       </section>
+
       <p role="status" className="sr-only">
         {notice}
       </p>
-      {notice ? (
-        <p className="mt-4 rounded-md bg-[var(--color-success-bg)] px-4 py-3 text-sm text-[var(--color-success)]">
-          {notice}
-        </p>
-      ) : null}
+      {notice ? <Notice tone="success">{notice}</Notice> : null}
+      {actionError ? <Notice tone="error">{actionError}</Notice> : null}
+
       <Card className="mt-5 min-h-[560px] p-4 shadow-none sm:p-[18px]">
-        <div className="flex flex-col gap-3 xl:flex-row">
-          <div className="relative min-w-0 flex-1">
+        <form
+          className="flex flex-col gap-3 md:flex-row md:items-center"
+          onSubmit={handleSearch}
+        >
+          <div className="min-w-0 flex-1">
             <Label htmlFor="student-search" className="sr-only">
               Cari siswa
             </Label>
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
-              id="student-search"
-              placeholder="Cari nama siswa, sekolah, atau orang tua"
-              value={search}
-              onChange={(event) => {
-                setSearch(event.target.value)
-                setPage(1)
-                setMenuId(null)
-              }}
-              className="bg-[var(--color-gray-50)] pl-10 text-[13px]"
-            />
+            <div className="relative">
+              <Search
+                className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[var(--color-muted)]"
+                aria-hidden="true"
+              />
+              <Input
+                key={filters.search ?? 'empty-search'}
+                id="student-search"
+                name="search"
+                defaultValue={filters.search}
+                placeholder="Cari nama siswa, sekolah, atau orang tua"
+                className="h-10 rounded-md border-[var(--color-border)] bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]"
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
-            <div>
-              <Label htmlFor="student-status-filter" className="sr-only">
-                Filter status
+          <div className="flex gap-3">
+            <div className="relative">
+              <Label htmlFor="student-status" className="sr-only">
+                Filter status siswa
               </Label>
               <select
-                id="student-status-filter"
-                value={status}
-                className={studentSelectClass}
-                onChange={(event) => {
-                  setStatus(event.target.value)
-                  setPage(1)
-                  setMenuId(null)
-                }}
+                id="student-status"
+                value={filters.status ?? ''}
+                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onChange={(event) => setStatus(event.target.value)}
               >
                 <option value="">Status</option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Nonaktif</option>
-                <option value="incomplete">Perlu Data</option>
               </select>
-            </div>
-            <div>
-              <Label htmlFor="student-stage-filter" className="sr-only">
-                Filter jenjang
-              </Label>
-              <select
-                id="student-stage-filter"
-                value={stage}
-                className={studentSelectClass}
-                onChange={(event) => {
-                  setStage(event.target.value)
-                  setPage(1)
-                  setMenuId(null)
-                }}
-              >
-                <option value="">Jenjang</option>
-                {['SD', 'SMP', 'SMA'].map((value) => (
-                  <option key={value}>{value}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <Label htmlFor="student-group-filter" className="sr-only">
-                Filter kelompok
-              </Label>
-              <select
-                id="student-group-filter"
-                value={group}
-                className={studentSelectClass}
-                onChange={(event) => {
-                  setGroup(event.target.value)
-                  setPage(1)
-                  setMenuId(null)
-                }}
-              >
-                <option value="">Kelompok</option>
-                <option value="none">Belum masuk</option>
-                {groups.map((value) => (
-                  <option key={value}>{value}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div
-          className="mt-3.5 overflow-x-auto rounded-md focus-visible:ring-2 focus-visible:ring-ring"
-          role="region"
-          aria-label="Tabel siswa, geser untuk melihat semua kolom"
-          tabIndex={0}
-        >
-          <table className="w-full min-w-[1000px] border-separate border-spacing-0 text-left text-xs leading-[1.4]">
-            <caption className="sr-only">Daftar siswa bimbel</caption>
-            <thead>
-              <tr className="h-11 bg-[var(--color-gray-50)] text-muted-foreground">
-                {[
-                  'Nama Siswa',
-                  'Jenjang / Sekolah',
-                  'Orang Tua',
-                  'Kontak',
-                  'Alamat',
-                  'Kelompok',
-                  'Status',
-                  'Aksi',
-                ].map((label) => (
-                  <th
-                    scope="col"
-                    key={label}
-                    className="px-3 font-bold first:rounded-l-md last:rounded-r-md"
-                  >
-                    {label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((student) => (
-                <tr key={student.id} className="h-[82px]">
-                  <th
-                    scope="row"
-                    className={`${cellClass} min-w-[135px] text-[13px] font-bold`}
-                  >
-                    {student.name}
-                  </th>
-                  <td className={`${cellClass} min-w-[135px]`}>
-                    Kelas {student.level} / {student.school}
-                  </td>
-                  <td className={`${cellClass} min-w-[100px]`}>
-                    {student.parent}
-                  </td>
-                  <td className={`${cellClass} min-w-[160px] break-words`}>
-                    {student.phone || '-'}
-                    {student.email ? (
-                      <>
-                        <br />
-                        {student.email}
-                      </>
-                    ) : null}
-                  </td>
-                  <td className={`${cellClass} min-w-[155px] max-w-[200px]`}>
-                    {student.address || '-'}
-                  </td>
-                  <td className={`${cellClass} min-w-[100px] font-semibold`}>
-                    {student.active ? student.group || '-' : 'Nonaktif'}
-                  </td>
-                  <td className={cellClass}>
-                    <StudentStatusBadge student={student} />
-                  </td>
-                  <td className={`${cellClass} relative`}>
-                    <div className="flex items-center">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-primary"
-                        aria-label={`Edit ${student.name}`}
-                        onClick={() => setDialog({ type: 'edit', student })}
-                      >
-                        <Pencil className="h-4 w-4" aria-hidden="true" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground"
-                        aria-label={`Menu aksi ${student.name}`}
-                        aria-expanded={menuId === student.id}
-                        aria-controls={
-                          menuId === student.id ? 'student-actions' : undefined
-                        }
-                        onClick={(event) => {
-                          menuTriggerRef.current = event.currentTarget
-                          setMenuId(menuId === student.id ? null : student.id)
-                        }}
-                      >
-                        <MoreHorizontal
-                          className="h-4 w-4"
-                          aria-hidden="true"
-                        />
-                      </Button>
-                    </div>
-                    {menuId === student.id ? (
-                      <div
-                        id="student-actions"
-                        ref={menuRef}
-                        className="absolute right-2 top-14 z-10 w-[190px] space-y-1 rounded-lg border border-border bg-card p-2 shadow-[var(--shadow-md)]"
-                        onBlur={(event) => {
-                          if (
-                            !event.currentTarget.contains(event.relatedTarget)
-                          )
-                            setMenuId(null)
-                        }}
-                      >
-                        <Button
-                          variant="outline"
-                          className="h-8 w-full text-xs"
-                          onClick={() => openStudent('detail', student)}
-                        >
-                          <Eye className="h-4 w-4" aria-hidden="true" />
-                          Lihat detail
-                        </Button>
-                        <Button
-                          className="h-8 w-full text-xs"
-                          onClick={() => openStudent('edit', student)}
-                        >
-                          <Pencil className="h-4 w-4" aria-hidden="true" />
-                          Ubah data
-                        </Button>
-                        <Button
-                          variant="outline"
-                          className="h-8 w-full border-[var(--color-danger-border)] text-xs text-destructive"
-                          onClick={() => {
-                            setStudents((current) =>
-                              current.map((item) =>
-                                item.id === student.id
-                                  ? { ...item, active: !item.active }
-                                  : item,
-                              ),
-                            )
-                            setNotice(
-                              `${student.name} berhasil ${student.active ? 'dinonaktifkan' : 'diaktifkan'}.`,
-                            )
-                            setMenuId(null)
-                            menuTriggerRef.current?.focus()
-                          }}
-                        >
-                          <UserRoundX className="h-4 w-4" aria-hidden="true" />
-                          {student.active
-                            ? 'Nonaktifkan siswa'
-                            : 'Aktifkan siswa'}
-                        </Button>
-                      </div>
-                    ) : null}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {menuId ? <div className="h-28" aria-hidden="true" /> : null}
-        </div>
-        {!filtered.length ? (
-          <div className="grid min-h-56 place-items-center text-center">
-            <div>
-              <Users
-                className="mx-auto h-7 w-7 text-muted-foreground"
+              <SlidersHorizontal
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
                 aria-hidden="true"
               />
-              <h2 className="mt-3 font-semibold">Siswa tidak ditemukan</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Coba kata kunci lain atau ubah filter pencarian.
-              </p>
-              <Button variant="outline" className="mt-4" onClick={resetFilters}>
-                Reset filter
-              </Button>
+            </div>
+            <div className="relative">
+              <Label htmlFor="student-stage" className="sr-only">
+                Filter jenjang siswa
+              </Label>
+              <select
+                id="student-stage"
+                value={filters.educationStage ?? ''}
+                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                onChange={(event) => setEducationStage(event.target.value)}
+              >
+                <option value="">Jenjang</option>
+                <option value="SD">SD</option>
+                <option value="SMP">SMP</option>
+                <option value="SMA">SMA</option>
+              </select>
+              <ChevronDown
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
+                aria-hidden="true"
+              />
             </div>
           </div>
-        ) : (
-          <footer className="flex flex-wrap items-center justify-between gap-3 px-3 py-4 text-xs text-muted-foreground">
-            <span>
-              Menampilkan {(currentPage - 1) * pageSize + 1}-
-              {Math.min(currentPage * pageSize, filtered.length)} dari{' '}
-              {filtered.length} siswa
-            </span>
-            <nav
-              aria-label="Halaman siswa"
-              className="flex items-center gap-1.5"
+        </form>
+
+        {studentsQuery.isPending ? <StudentsLoadingState /> : null}
+        {studentsQuery.isError ? (
+          <StudentsErrorState onRetry={() => void studentsQuery.refetch()} />
+        ) : null}
+        {studentsQuery.data ? (
+          <>
+            <div
+              className="mt-3.5 overflow-x-auto rounded-md focus-visible:ring-2 focus-visible:ring-ring"
+              role="region"
+              aria-label="Tabel siswa, geser untuk melihat semua kolom"
+              tabIndex={0}
             >
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                aria-label="Halaman sebelumnya"
-                disabled={currentPage === 1}
-                onClick={() => {
-                  setPage(currentPage - 1)
-                  setMenuId(null)
-                }}
-              >
-                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              </Button>
-              {Array.from(
-                { length: Math.min(3, totalPages) },
-                (_, index) =>
-                  Math.min(
-                    Math.max(currentPage - 1, 1),
-                    Math.max(1, totalPages - 2),
-                  ) + index,
-              ).map((number) => (
-                <Button
-                  key={number}
-                  variant={number === currentPage ? 'default' : 'outline'}
-                  size="icon"
-                  className="h-8 w-8"
-                  aria-label={`Halaman ${number}`}
-                  aria-current={number === currentPage ? 'page' : undefined}
-                  onClick={() => {
-                    setPage(number)
-                    setMenuId(null)
-                  }}
-                >
-                  {number}
-                </Button>
-              ))}
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                aria-label="Halaman berikutnya"
-                disabled={currentPage === totalPages}
-                onClick={() => {
-                  setPage(currentPage + 1)
-                  setMenuId(null)
-                }}
-              >
-                <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              </Button>
-            </nav>
-          </footer>
-        )}
+              <table className="w-full min-w-[1000px] border-separate border-spacing-0 text-left text-xs leading-[1.4]">
+                <caption className="sr-only">Daftar siswa bimbel</caption>
+                <thead>
+                  <tr className="h-11 bg-[var(--color-gray-50)] text-muted-foreground">
+                    {[
+                      'Nama Siswa',
+                      'Jenjang / Sekolah',
+                      'Orang Tua',
+                      'Kontak',
+                      'Alamat',
+                      'Kelompok',
+                      'Status',
+                      'Aksi',
+                    ].map((label) => (
+                      <th
+                        scope="col"
+                        key={label}
+                        className="px-3 font-bold first:rounded-l-md last:rounded-r-md"
+                      >
+                        {label}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((student) => (
+                    <tr key={student.id} className="h-[82px]">
+                      <th
+                        scope="row"
+                        className={`${cellClass} min-w-[135px] text-[13px] font-bold`}
+                      >
+                        {student.name}
+                      </th>
+                      <td className={`${cellClass} min-w-[145px]`}>
+                        {student.educationLevel} / {student.school}
+                      </td>
+                      <td className={`${cellClass} min-w-[120px]`}>
+                        {student.primaryParent?.parentName ?? '-'}
+                      </td>
+                      <td className={`${cellClass} min-w-[180px] break-words`}>
+                        {student.primaryParent?.parentPhoneNumber ??
+                          student.phoneNumber ??
+                          '-'}
+                        {student.primaryParent?.parentContactEmail ? (
+                          <>
+                            <br />
+                            {student.primaryParent.parentContactEmail}
+                          </>
+                        ) : null}
+                      </td>
+                      <td
+                        className={`${cellClass} min-w-[155px] max-w-[210px]`}
+                      >
+                        {student.address}
+                      </td>
+                      <td
+                        className={`${cellClass} min-w-[100px] font-semibold`}
+                      >
+                        -
+                      </td>
+                      <td className={cellClass}>
+                        <StudentStatusBadge student={student} />
+                      </td>
+                      <td className={`${cellClass} relative`}>
+                        <div className="flex items-center">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-primary"
+                            aria-label={`Edit ${student.name}`}
+                            onClick={() => setDialog({ type: 'edit', student })}
+                          >
+                            <Pencil className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground"
+                            aria-label={`Menu aksi ${student.name}`}
+                            aria-expanded={menuId === student.id}
+                            onClick={(event) => {
+                              menuTriggerRef.current = event.currentTarget
+                              setMenuId(
+                                menuId === student.id ? null : student.id,
+                              )
+                            }}
+                          >
+                            <MoreHorizontal
+                              className="h-4 w-4"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        </div>
+                        {menuId === student.id ? (
+                          <div
+                            ref={menuRef}
+                            className="absolute right-2 top-14 z-10 w-[190px] space-y-1 rounded-lg border border-border bg-card p-2 shadow-[var(--shadow-md)]"
+                          >
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-8 w-full text-xs"
+                              onClick={() => {
+                                setMenuId(null)
+                                setDialog({ type: 'detail', student })
+                              }}
+                            >
+                              <Eye className="h-4 w-4" aria-hidden="true" />
+                              Lihat detail
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              disabled={updateMutation.isPending}
+                              className="h-8 w-full border-[var(--color-danger-border)] text-xs text-destructive"
+                              onClick={() => toggleStatus(student)}
+                            >
+                              <UserRoundX
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
+                              {student.status === 'active'
+                                ? 'Nonaktifkan siswa'
+                                : 'Aktifkan siswa'}
+                            </Button>
+                          </div>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {data.length === 0 ? (
+              <StudentsEmptyState onReset={resetFilters} />
+            ) : null}
+            {meta && data.length > 0 ? (
+              <StudentsPagination
+                meta={meta}
+                onPageChange={(page) =>
+                  setFilters((current) => ({ ...current, page }))
+                }
+              />
+            ) : null}
+          </>
+        ) : null}
       </Card>
-      <p className="mt-3 text-xs text-muted-foreground">
-        Mode demo · Perubahan data akan direset saat meninggalkan atau memuat
-        ulang halaman.
-      </p>
+
       {dialog ? (
         <StudentDialog
-          title={
-            dialog.type === 'create'
-              ? 'Tambah Siswa'
-              : dialog.type === 'edit'
-                ? 'Ubah Data Siswa'
-                : dialog.type === 'import'
-                  ? 'Import Siswa'
-                  : 'Detail Siswa'
-          }
+          title={dialog.type === 'edit' ? 'Ubah Data Siswa' : 'Detail Siswa'}
+          isPending={updateMutation.isPending}
           onDismiss={() => setDialog(null)}
         >
-          {dialog.type === 'create' || dialog.type === 'edit' ? (
-            <StudentForm
-              student={dialog.type === 'edit' ? dialog.student : undefined}
-              onSave={save}
+          {dialog.type === 'edit' ? (
+            <StudentEditForm
+              student={dialog.student}
+              isPending={updateMutation.isPending}
               onCancel={() => setDialog(null)}
-            />
-          ) : dialog.type === 'import' ? (
-            <StudentImport
-              onImport={(inputs) => {
-                setStudents((current) => [
-                  ...inputs.map((input) => ({
-                    ...input,
-                    id: crypto.randomUUID(),
-                  })),
-                  ...current,
-                ])
-                resetFilters()
-                setNotice(`${inputs.length} siswa berhasil diimpor.`)
-                setDialog(null)
-              }}
+              onSave={(input) =>
+                updateMutation.mutate(
+                  { id: dialog.student.id, input },
+                  {
+                    onSuccess: () => {
+                      setNotice(
+                        `Data ${input.name ?? dialog.student.name} berhasil diperbarui.`,
+                      )
+                      setDialog(null)
+                    },
+                    onError: (error: unknown) => {
+                      setDialog(null)
+                      setActionError(getMutationError(error))
+                    },
+                  },
+                )
+              }
             />
           ) : (
-            <>
-              <dl className="grid gap-4 sm:grid-cols-2">
-                {[
-                  ['Nama siswa', dialog.student.name],
-                  [
-                    'Jenjang / Sekolah',
-                    `Kelas ${dialog.student.level} / ${dialog.student.school}`,
-                  ],
-                  ['Orang tua', dialog.student.parent],
-                  ['Telepon', dialog.student.phone],
-                  ['Email', dialog.student.email],
-                  ['Alamat', dialog.student.address],
-                  ['Kelompok', dialog.student.group],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <dt className="text-xs text-muted-foreground">{label}</dt>
-                    <dd className="mt-1 break-words text-sm font-medium">
-                      {value || '-'}
-                    </dd>
-                  </div>
-                ))}
-                <div>
-                  <dt className="mb-1 text-xs text-muted-foreground">Status</dt>
-                  <dd>
-                    <StudentStatusBadge student={dialog.student} />
-                  </dd>
-                </div>
-              </dl>
-              <div className="mt-6 flex justify-end">
-                <Button
-                  onClick={() =>
-                    setDialog({ type: 'edit', student: dialog.student })
-                  }
-                >
-                  Ubah data
-                </Button>
-              </div>
-            </>
+            <StudentDetail
+              student={dialog.student}
+              onEdit={() =>
+                setDialog({ type: 'edit', student: dialog.student })
+              }
+            />
           )}
         </StudentDialog>
       ) : null}
@@ -627,23 +498,399 @@ export function StudentManagement() {
   )
 }
 
-function StudentStatusBadge({ student }: { student: Student }) {
-  const status = getStudentStatus(student)
+function StudentEditForm({
+  student,
+  isPending,
+  onCancel,
+  onSave,
+}: {
+  student: StudentListItem
+  isPending: boolean
+  onCancel: () => void
+  onSave: (input: StudentUpdateInput) => void
+}) {
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    onSave({
+      name: getFormValue(data, 'name'),
+      gender: getFormValue(data, 'gender') === 'male' ? 'male' : 'female',
+      educationLevel: getFormValue(data, 'educationLevel'),
+      school: getFormValue(data, 'school'),
+      phoneNumber: getFormValue(data, 'phoneNumber') || null,
+      address: getFormValue(data, 'address'),
+      status:
+        getFormValue(data, 'status') === 'inactive' ? 'inactive' : 'active',
+    })
+  }
+  return (
+    <form className="space-y-5" onSubmit={submit}>
+      <fieldset disabled={isPending} className="grid gap-4 sm:grid-cols-2">
+        <EditField
+          id="edit-name"
+          name="name"
+          label="Nama siswa"
+          value={student.name}
+          required
+        />
+        <EditSelect
+          id="edit-gender"
+          name="gender"
+          label="Jenis kelamin"
+          value={student.gender}
+          options={[
+            ['female', 'Perempuan'],
+            ['male', 'Laki-laki'],
+          ]}
+        />
+        <EditField
+          id="edit-level"
+          name="educationLevel"
+          label="Jenjang"
+          value={student.educationLevel}
+          required
+        />
+        <EditField
+          id="edit-school"
+          name="school"
+          label="Sekolah"
+          value={student.school}
+          required
+        />
+        <EditField
+          id="edit-phone"
+          name="phoneNumber"
+          label="Nomor HP siswa"
+          value={student.phoneNumber ?? ''}
+          type="tel"
+        />
+        <EditSelect
+          id="edit-status"
+          name="status"
+          label="Status"
+          value={student.status}
+          options={[
+            ['active', 'Aktif'],
+            ['inactive', 'Nonaktif'],
+          ]}
+        />
+        <div className="sm:col-span-2">
+          <EditField
+            id="edit-address"
+            name="address"
+            label="Alamat siswa"
+            value={student.address}
+            required
+          />
+        </div>
+      </fieldset>
+      <footer className="flex justify-end gap-2.5">
+        <Button
+          type="button"
+          variant="outline"
+          disabled={isPending}
+          onClick={onCancel}
+        >
+          Batal
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
+        </Button>
+      </footer>
+    </form>
+  )
+}
+
+function EditField({
+  id,
+  name,
+  label,
+  value,
+  required = false,
+  type = 'text',
+}: {
+  id: string
+  name: string
+  label: string
+  value: string
+  required?: boolean
+  type?: string
+}) {
+  return (
+    <div>
+      <Label htmlFor={id}>
+        {label}
+        {required ? ' *' : ''}
+      </Label>
+      <Input
+        id={id}
+        name={name}
+        type={type}
+        defaultValue={value}
+        required={required}
+        className="mt-1.5"
+      />
+    </div>
+  )
+}
+
+function EditSelect({
+  id,
+  name,
+  label,
+  value,
+  options,
+}: {
+  id: string
+  name: string
+  label: string
+  value: string
+  options: Array<[string, string]>
+}) {
+  return (
+    <div>
+      <Label htmlFor={id}>{label}</Label>
+      <select
+        id={id}
+        name={name}
+        defaultValue={value}
+        className={`mt-1.5 ${studentSelectClass}`}
+      >
+        {options.map(([optionValue, optionLabel]) => (
+          <option key={optionValue} value={optionValue}>
+            {optionLabel}
+          </option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+function StudentDetail({
+  student,
+  onEdit,
+}: {
+  student: StudentListItem
+  onEdit: () => void
+}) {
+  const values = [
+    ['Kode siswa', student.studentCode],
+    ['Nama siswa', student.name],
+    ['Jenis kelamin', student.gender === 'female' ? 'Perempuan' : 'Laki-laki'],
+    ['Jenjang / Sekolah', `${student.educationLevel} / ${student.school}`],
+    ['Orang tua', student.primaryParent?.parentName ?? '-'],
+    ['Kontak orang tua', student.primaryParent?.parentPhoneNumber ?? '-'],
+    ['Email orang tua', student.primaryParent?.parentContactEmail ?? '-'],
+    ['Nomor HP siswa', student.phoneNumber ?? '-'],
+    ['Alamat', student.address],
+  ]
+  return (
+    <>
+      <dl className="grid gap-4 sm:grid-cols-2">
+        {values.map(([label, value]) => (
+          <div key={label}>
+            <dt className="text-xs text-muted-foreground">{label}</dt>
+            <dd className="mt-1 break-words text-sm font-medium">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="mt-6 flex justify-end">
+        <Button onClick={onEdit}>Ubah data</Button>
+      </div>
+    </>
+  )
+}
+
+function StudentStatusBadge({ student }: { student: StudentListItem }) {
+  const incomplete =
+    student.status === 'active' && !student.primaryParent?.parentContactEmail
   const tone =
-    status === 'active'
-      ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]'
-      : status === 'incomplete'
+    student.status === 'inactive'
+      ? 'bg-muted text-muted-foreground'
+      : incomplete
         ? 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]'
-        : 'bg-muted text-muted-foreground'
+        : 'bg-[var(--color-success-bg)] text-[var(--color-success)]'
   return (
     <span
       className={`inline-flex whitespace-nowrap rounded px-2 py-1 text-[11px] font-bold ${tone}`}
     >
-      {status === 'active'
-        ? 'Aktif'
-        : status === 'inactive'
-          ? 'Nonaktif'
-          : 'Perlu Data'}
+      {student.status === 'inactive'
+        ? 'Nonaktif'
+        : incomplete
+          ? 'Perlu Data'
+          : 'Aktif'}
     </span>
   )
+}
+
+function Notice({
+  tone,
+  children,
+}: {
+  tone: 'success' | 'error'
+  children: string
+}) {
+  return (
+    <p
+      role={tone === 'error' ? 'alert' : 'status'}
+      className={`mt-4 rounded-md px-4 py-3 text-sm ${tone === 'success' ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]' : 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]'}`}
+    >
+      {children}
+    </p>
+  )
+}
+
+function StudentsLoadingState() {
+  return (
+    <div
+      className="mt-4 space-y-3"
+      aria-label="Memuat daftar siswa"
+      role="status"
+    >
+      {Array.from({ length: 5 }, (_, index) => (
+        <div
+          key={index}
+          className="h-[70px] animate-pulse rounded-md bg-muted"
+        />
+      ))}
+    </div>
+  )
+}
+
+function StudentsErrorState({ onRetry }: { onRetry: () => void }) {
+  return (
+    <div className="grid min-h-72 place-items-center text-center" role="alert">
+      <div>
+        <h2 className="font-semibold">Data siswa gagal dimuat</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Periksa koneksi lalu coba lagi.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4"
+          onClick={onRetry}
+        >
+          Coba lagi
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function StudentsEmptyState({ onReset }: { onReset: () => void }) {
+  return (
+    <div className="grid min-h-56 place-items-center text-center">
+      <div>
+        <Users
+          className="mx-auto h-7 w-7 text-muted-foreground"
+          aria-hidden="true"
+        />
+        <h2 className="mt-3 font-semibold">Siswa tidak ditemukan</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Coba kata kunci lain atau ubah filter pencarian.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4"
+          onClick={onReset}
+        >
+          Reset filter
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function StudentsPagination({
+  meta,
+  onPageChange,
+}: {
+  meta: { page: number; limit: number; total: number; totalPages: number }
+  onPageChange: (page: number) => void
+}) {
+  const start = Math.min(
+    Math.max(meta.page - 1, 1),
+    Math.max(1, meta.totalPages - 2),
+  )
+  const pages = Array.from(
+    { length: Math.min(3, meta.totalPages) },
+    (_, index) => start + index,
+  )
+  return (
+    <footer className="flex flex-wrap items-center justify-between gap-3 px-3 py-4 text-xs text-muted-foreground">
+      <span>
+        Menampilkan {(meta.page - 1) * meta.limit + 1}-
+        {Math.min(meta.page * meta.limit, meta.total)} dari {meta.total} siswa
+      </span>
+      <nav aria-label="Halaman siswa" className="flex items-center gap-1.5">
+        <PageButton
+          label="Halaman sebelumnya"
+          disabled={meta.page === 1}
+          onClick={() => onPageChange(meta.page - 1)}
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+        </PageButton>
+        {pages.map((page) => (
+          <Button
+            type="button"
+            key={page}
+            variant={page === meta.page ? 'default' : 'outline'}
+            size="icon"
+            className="h-8 w-8"
+            aria-label={`Halaman ${page}`}
+            aria-current={page === meta.page ? 'page' : undefined}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </Button>
+        ))}
+        <PageButton
+          label="Halaman berikutnya"
+          disabled={meta.page === meta.totalPages}
+          onClick={() => onPageChange(meta.page + 1)}
+        >
+          <ChevronRight className="h-4 w-4" aria-hidden="true" />
+        </PageButton>
+      </nav>
+    </footer>
+  )
+}
+
+function PageButton({
+  label,
+  disabled,
+  onClick,
+  children,
+}: {
+  label: string
+  disabled: boolean
+  onClick: () => void
+  children: ReactNode
+}) {
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      className="h-8 w-8"
+      aria-label={label}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  )
+}
+
+function getFormValue(data: FormData, key: string) {
+  const value = data.get(key)
+  return typeof value === 'string' ? value.trim() : ''
+}
+
+function getMutationError(error: unknown) {
+  if (error instanceof ApiError && error.status === 403)
+    return 'Anda tidak memiliki izin untuk mengubah data siswa.'
+  return 'Data siswa belum dapat diperbarui. Silakan coba lagi.'
 }

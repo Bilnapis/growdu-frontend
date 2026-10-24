@@ -8,10 +8,12 @@ export function StudentDialog({
   title,
   children,
   onDismiss,
+  isPending = false,
 }: {
   title: string
   children: ReactNode
   onDismiss: () => void
+  isPending?: boolean
 }) {
   const ref = useRef<HTMLDialogElement>(null)
 
@@ -32,10 +34,11 @@ export function StudentDialog({
     <dialog
       ref={ref}
       aria-labelledby="student-dialog-title"
-      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-lg border-0 bg-card p-5 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] sm:p-6"
+      aria-busy={isPending}
+      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-[840px] overflow-y-auto rounded-xl border-0 bg-card p-5 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] sm:p-6"
       onCancel={(event) => {
         event.preventDefault()
-        onDismiss()
+        if (!isPending) onDismiss()
       }}
     >
       <header className="mb-5 flex items-center justify-between gap-3">
@@ -46,6 +49,7 @@ export function StudentDialog({
           type="button"
           variant="ghost"
           size="icon"
+          disabled={isPending}
           aria-label="Tutup dialog"
           onClick={onDismiss}
         >
