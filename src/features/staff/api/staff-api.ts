@@ -40,6 +40,10 @@ export function getStaff(tenantId: string, filters: StaffFilters, signal?: Abort
   return apiRequest<StaffResponse>(`/tenants/${encodeURIComponent(tenantId)}/operators?${params}`, { signal })
 }
 
+export function getStaffMember(tenantId: string, id: string, signal?: AbortSignal) {
+  return apiRequest<StaffMember>(`/tenants/${encodeURIComponent(tenantId)}/operators/${encodeURIComponent(id)}`, { signal })
+}
+
 export function createStaff(tenantId: string, input: StaffInput) {
   return apiRequest<StaffMember>(`/tenants/${encodeURIComponent(tenantId)}/operators`, { method: 'POST', body: input })
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Plus,
   Search,
@@ -25,6 +25,7 @@ export function StaffManagement() {
   const [page, setPage] = useState(1)
   const tenantId = getStaffTenantId()
   const location = useLocation()
+  const navigate = useNavigate()
   const routeState: unknown = location.state
   const wasCreated = typeof routeState === 'object' && routeState !== null && 'staffCreated' in routeState && routeState.staffCreated === true
   const staffQuery = useStaff(tenantId, { page, limit: 10, search: search.trim() || undefined, status: status === 'all' ? undefined : status })
@@ -102,7 +103,14 @@ export function StaffManagement() {
                   <td className="px-[26px] font-medium text-foreground">{staff.email}</td>
                   <td className="px-[26px] font-medium text-foreground">{staff.phoneNumber}</td>
                   <td className="px-[26px]"><StatusBadge status={staff.status} /></td>
-                  <td className="px-3"><StaffRowActions staff={staff} onAction={(mode) => { setActionMessage(''); setAction({ staff, mode }) }} /></td>
+                  <td className="px-3"><StaffRowActions staff={staff} onAction={(mode) => {
+                    if (mode === 'detail') {
+                      void navigate(`/staff/${staff.id}`)
+                      return
+                    }
+                    setActionMessage('')
+                    setAction({ staff, mode })
+                  }} /></td>
 
                 </tr>
               ))}

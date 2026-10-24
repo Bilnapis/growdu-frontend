@@ -103467,6 +103467,683 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "q7jV3C",
+      "x": 4560,
+      "y": 14580,
+      "name": "Screen - Detail Pegawai",
+      "clip": true,
+      "width": 1440,
+      "height": 1120,
+      "fill": "$bk-bg",
+      "children": [
+        {
+          "id": "uV8Ok",
+          "type": "ref",
+          "ref": "vPUoF",
+          "name": "Sidebar - Pegawai Active",
+          "height": "fill_container",
+          "descendants": {
+            "oPruR": {
+              "name": "Nav - Pegawai"
+            },
+            "FDB1x": {
+              "name": "Icon - Pegawai"
+            },
+            "RHcl5": {
+              "content": "Pegawai"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "t21Y2J",
+          "name": "Detail Pegawai Main",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 18,
+          "padding": 28,
+          "children": [
+            {
+              "type": "frame",
+              "id": "VPHPR",
+              "name": "Detail Pegawai Header",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "XQZmc",
+                  "name": "Detail Header Copy",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "nTPjM",
+                      "name": "Detail Pegawai Title",
+                      "fill": "$bk-text",
+                      "content": "Detail Pegawai",
+                      "lineHeight": 1.2,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 28,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "iHdNZ",
+                  "name": "Detail Header Actions",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "LpLMu",
+                      "name": "Button - Edit Pegawai",
+                      "fill": "$bk-primary",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "padding": [
+                        12,
+                        18
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "R25VU",
+                          "name": "Edit Pegawai Icon",
+                          "width": 17,
+                          "height": 17,
+                          "icon": "edit",
+                          "library": "Material Symbols Outlined",
+                          "fill": "$bk-surface"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DhZX7",
+                          "name": "Edit Pegawai Label",
+                          "fill": "$bk-surface",
+                          "content": "Edit Pegawai",
+                          "fontFamily": "$bk-font",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Y0W92O",
+              "name": "Profil Pegawai Card",
+              "width": "fill_container",
+              "fill": "$bk-surface",
+              "cornerRadius": 8,
+              "stroke": "$bk-border",
+              "strokeWidth": 1,
+              "gap": 16,
+              "padding": 20,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mzi27",
+                  "name": "Avatar Dewi Lestari",
+                  "width": 64,
+                  "height": 64,
+                  "fill": "$bk-primary-soft",
+                  "cornerRadius": 8,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "sIYS4",
+                      "name": "Avatar Initials Dewi",
+                      "fill": "#0E5F9E",
+                      "content": "DL",
+                      "lineHeight": 1.35,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 20,
+                      "fontWeight": "800"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wcksg",
+                  "name": "Dewi Profile Top",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EKX3f",
+                      "name": "Dewi Profile Name",
+                      "fill": "$bk-text",
+                      "content": "Dewi Lestari",
+                      "lineHeight": 1.35,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 20,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "id": "mHMZn",
+                      "type": "ref",
+                      "ref": "Q2abA"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IHP2v",
+                  "name": "Dewi Profile Copy",
+                  "width": "fill_container",
+                  "height": 27,
+                  "layout": "vertical",
+                  "gap": 8
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xE2v6",
+              "name": "Detail Pegawai Content",
+              "width": "fill_container",
+              "height": "fill_container",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "jWStG",
+                  "name": "Informasi Akun Card",
+                  "width": "fill_container",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "HAOOa",
+                      "name": "Informasi Akun Header",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Bwxra",
+                          "name": "Informasi Akun Title",
+                          "fill": "$bk-text",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Informasi akun",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "W4CTk",
+                          "name": "Informasi Akun Description",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Informasi akun pegawai yang terdaftar di BimbelKit",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qGQ0h",
+                      "name": "Detail Akun Row - Nama dan Email",
+                      "width": "fill_container",
+                      "height": 39,
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ORP7Y",
+                          "name": "Nama Lengkap Detail Cell",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "veTeT",
+                              "name": "Nama Lengkap Detail Label",
+                              "fill": "$bk-muted",
+                              "content": "Nama lengkap",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "K0C5h",
+                              "name": "Nama Lengkap Detail Value",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Dewi Lestari",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k1jY0v",
+                          "name": "Email Akun Detail Cell",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "caW9M",
+                              "name": "Email Akun Detail Label",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Email",
+                              "lineHeight": 1.3,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "QI4vI",
+                              "name": "Email Akun Detail Value",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "dewi@bimbelkit.com",
+                              "lineHeight": 1.3,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "HP6Ad",
+                      "name": "Detail Akun Row - WhatsApp dan Peran",
+                      "width": "fill_container",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "P1pNiY",
+                          "name": "WhatsApp Detail Cell",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "L8o1h",
+                              "name": "WhatsApp Detail Label",
+                              "fill": "$bk-muted",
+                              "content": "Nomor WhatsApp",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 12,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Ffl5d",
+                              "name": "WhatsApp Detail Value",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "+62 812-3456-7890",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tSwoI",
+                  "name": "Hak Akses Card",
+                  "width": "fill_container",
+                  "height": "fill_container",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 10,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 14,
+                  "padding": 22,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Gxlnp",
+                      "name": "Hak Akses Title",
+                      "fill": "$bk-text",
+                      "content": "Hak akses menu",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 17,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "h7PFS",
+                      "name": "Hak Akses Description",
+                      "fill": "$bk-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Menu yang dapat diakses oleh Dewi Lestari.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 13,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZMzAK",
+                      "name": "Daftar Hak Akses",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 10,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Y8CDAs",
+                          "name": "Hak Akses - Dashboard",
+                          "width": "fill_container",
+                          "height": 42,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 7,
+                          "gap": 10,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "PSYVx",
+                              "name": "Hak Akses Icon - Dashboard",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "dashboard",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "I8Q1Ht",
+                              "name": "Hak Akses Label - Dashboard",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Dashboard",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "QAboO",
+                              "name": "Hak Akses Check - Dashboard",
+                              "width": 17,
+                              "height": 17,
+                              "icon": "check_circle",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-success"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "OWNae",
+                          "name": "Hak Akses - Data Siswa",
+                          "width": "fill_container",
+                          "height": 42,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 7,
+                          "gap": 10,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "zUfP6",
+                              "name": "Hak Akses Icon - Data Siswa",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "groups",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "U1z0N8",
+                              "name": "Hak Akses Label - Data Siswa",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Data Siswa",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "a7hCsR",
+                              "name": "Hak Akses Check - Data Siswa",
+                              "width": 17,
+                              "height": 17,
+                              "icon": "check_circle",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-success"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kgfRh",
+                          "name": "Hak Akses - Jadwal",
+                          "width": "fill_container",
+                          "height": 42,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 7,
+                          "gap": 10,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "fLRZG",
+                              "name": "Hak Akses Icon - Jadwal",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "calendar_month",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "otJuZ",
+                              "name": "Hak Akses Label - Jadwal",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Jadwal",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "kDbIj",
+                              "name": "Hak Akses Check - Jadwal",
+                              "width": 17,
+                              "height": 17,
+                              "icon": "check_circle",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-success"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "H4ThZ",
+                          "name": "Hak Akses - Pengumuman",
+                          "width": "fill_container",
+                          "height": 42,
+                          "fill": "$bk-gray-50",
+                          "cornerRadius": 7,
+                          "gap": 10,
+                          "padding": [
+                            0,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "d0ahw",
+                              "name": "Hak Akses Icon - Pengumuman",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "campaign",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-primary"
+                            },
+                            {
+                              "type": "text",
+                              "id": "BZvF4",
+                              "name": "Hak Akses Label - Pengumuman",
+                              "fill": "$bk-text",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Pengumuman",
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "amoai",
+                              "name": "Hak Akses Check - Pengumuman",
+                              "width": 17,
+                              "height": 17,
+                              "icon": "check_circle",
+                              "library": "Material Symbols Outlined",
+                              "fill": "$bk-success"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "m66YxA",
+              "name": "Detail Pegawai Footer",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "O38CJ",
+                  "name": "Update Terakhir",
+                  "fill": "$bk-muted",
+                  "content": "Terakhir diperbarui 3 hari yang lalu",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 12,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "ZO9js",
+                  "name": "Button - Kembali ke Pegawai",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 8,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "gap": 8,
+                  "padding": [
+                    10,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "xXYCg",
+                      "name": "Kembali Icon",
+                      "width": 16,
+                      "height": 16,
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined",
+                      "fill": "$bk-text"
+                    },
+                    {
+                      "type": "text",
+                      "id": "EPsih",
+                      "name": "Kembali Label",
+                      "fill": "$bk-text",
+                      "content": "Kembali ke daftar",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 13,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {
