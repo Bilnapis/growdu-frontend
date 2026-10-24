@@ -75,6 +75,14 @@ export type StudentUpdateInput = {
   status?: EntityStatus
 }
 
+export type StudentRegistrationUpdateInput = StudentUpdateInput & {
+  parent: {
+    name: string
+    phoneNumber: string
+    email: string
+  }
+}
+
 type PaginatedStudentsResponse = {
   data: StudentListItem[]
   meta: {
@@ -145,11 +153,35 @@ export function getStudentsSummary(signal?: AbortSignal) {
   return apiRequest<StudentsSummary>('/students/summary', { signal })
 }
 
+export function getStudent(id: string, signal?: AbortSignal) {
+  return apiRequest<Student>(`/students/${encodeURIComponent(id)}`, { signal })
+}
+
+export function getStudentParents(id: string, signal?: AbortSignal) {
+  return apiRequest<StudentPrimaryParent[]>(
+    `/students/${encodeURIComponent(id)}/parents`,
+    { signal },
+  )
+}
+
 export function updateStudent(id: string, input: StudentUpdateInput) {
   return apiRequest<Student>(`/students/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     body: input,
   })
+}
+
+export function updateStudentRegistration(
+  id: string,
+  input: StudentRegistrationUpdateInput,
+) {
+  return apiRequest<{ student: Student; parentId: string }>(
+    `/students/${encodeURIComponent(id)}/registration`,
+    {
+      method: 'PATCH',
+      body: input,
+    },
+  )
 }
 
 export function getActiveParents(signal?: AbortSignal) {

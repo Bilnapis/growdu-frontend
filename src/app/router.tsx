@@ -20,6 +20,7 @@ import { DashboardPage } from '@/pages/client/DashboardPage'
 import { LoginPage } from '@/pages/client/LoginPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
+import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
 import { TutorCreatePage } from '@/pages/client/TutorCreatePage'
 import { TutorDetailPage } from '@/pages/client/TutorDetailPage'
 import { TutorEditPage } from '@/pages/client/TutorEditPage'
@@ -68,6 +69,10 @@ export const router = createBrowserRouter([
                         children: [
                           { path: 'new', element: <StudentCreatePage /> },
                         ],
+                      },
+                      {
+                        path: 'students/:id',
+                        element: <StudentDetailPage />,
                       },
                       {
                         path: 'tutors',

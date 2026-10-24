@@ -15279,8 +15279,11 @@
               "fill": "$bk-surface",
               "cornerRadius": 12,
               "layout": "vertical",
-              "gap": 16,
-              "padding": 24,
+              "gap": 12,
+              "padding": [
+                16,
+                24
+              ],
               "children": [
                 {
                   "type": "frame",
@@ -15815,87 +15818,6 @@
                                       "fontFamily": "$bk-font",
                                       "fontSize": 18,
                                       "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "frame",
-                                      "id": "gpxcj",
-                                      "name": "Mode Data Orang Tua",
-                                      "fill": "$bk-gray-50",
-                                      "cornerRadius": 6,
-                                      "gap": 4,
-                                      "padding": 4,
-                                      "children": [
-                                        {
-                                          "type": "frame",
-                                          "id": "h0jg4",
-                                          "name": "Mode Baru Aktif",
-                                          "fill": "$bk-surface",
-                                          "cornerRadius": 4,
-                                          "gap": 6,
-                                          "padding": [
-                                            6,
-                                            10
-                                          ],
-                                          "alignItems": "center",
-                                          "children": [
-                                            {
-                                              "type": "icon",
-                                              "id": "HXQ1l",
-                                              "name": "Indikator Mode Baru",
-                                              "width": 14,
-                                              "height": 14,
-                                              "icon": "circle-dot",
-                                              "library": "lucide",
-                                              "fill": "$bk-primary"
-                                            },
-                                            {
-                                              "type": "text",
-                                              "id": "VwQ53",
-                                              "name": "Label Orang tua baru",
-                                              "fill": "$bk-text",
-                                              "content": "Orang tua baru",
-                                              "fontFamily": "$bk-font",
-                                              "fontSize": 12,
-                                              "fontWeight": "600"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "type": "frame",
-                                          "id": "P7Ame",
-                                          "name": "Mode Data Ada",
-                                          "fill": "$bk-gray-50",
-                                          "cornerRadius": 4,
-                                          "gap": 6,
-                                          "padding": [
-                                            6,
-                                            10
-                                          ],
-                                          "alignItems": "center",
-                                          "children": [
-                                            {
-                                              "type": "icon",
-                                              "id": "HM81y",
-                                              "name": "Indikator Mode Data Ada",
-                                              "width": 14,
-                                              "height": 14,
-                                              "icon": "circle",
-                                              "library": "lucide",
-                                              "fill": "$bk-muted"
-                                            },
-                                            {
-                                              "type": "text",
-                                              "id": "JEFHj",
-                                              "name": "Label Gunakan data yang ada",
-                                              "fill": "$bk-text",
-                                              "content": "Gunakan data yang ada",
-                                              "fontFamily": "$bk-font",
-                                              "fontSize": 12,
-                                              "fontWeight": "600"
-                                            }
-                                          ]
-                                        }
-                                      ]
                                     }
                                   ]
                                 },
@@ -15906,11 +15828,77 @@
                                   "fill": "$bk-muted",
                                   "textGrowth": "fixed-width",
                                   "width": "fill_container",
-                                  "content": "Gunakan akun yang sudah ada untuk saudara kandung, atau isi data orang tua di bawah.",
+                                  "content": "Tambahkan orang tua baru atau gunakan data orang tua yang sudah terdaftar.",
                                   "lineHeight": 1.35,
                                   "fontFamily": "$bk-font",
                                   "fontSize": 13,
                                   "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "gpxcj",
+                              "name": "Tab View - Sumber Data Orang Tua",
+                              "width": "fill_container",
+                              "fill": "$bk-surface",
+                              "cornerRadius": 4,
+                              "stroke": "$bk-border",
+                              "strokeWidth": 1,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "h0jg4",
+                                  "name": "Tab Aktif - Data Baru",
+                                  "width": "fill_container",
+                                  "fill": "$bk-primary",
+                                  "cornerRadius": 4,
+                                  "stroke": "$bk-primary",
+                                  "gap": 6,
+                                  "padding": [
+                                    10,
+                                    4
+                                  ],
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "VwQ53",
+                                      "name": "Label Orang tua baru",
+                                      "fill": "#FFFFFF",
+                                      "content": "Data baru",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "P7Ame",
+                                  "name": "Tab - Data yang Sudah Ada",
+                                  "width": "fill_container",
+                                  "fill": "$bk-surface",
+                                  "gap": 6,
+                                  "padding": [
+                                    10,
+                                    4
+                                  ],
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "JEFHj",
+                                      "name": "Label Gunakan data yang ada",
+                                      "fill": "$bk-muted",
+                                      "content": "Data yang sudah ada",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
                                 }
                               ]
                             },
@@ -19692,7 +19680,6 @@
                                   "id": "Pcvl7",
                                   "name": "Pilihan Sumber Orang Tua",
                                   "width": "fill_container",
-                                  "justifyContent": "space_between",
                                   "alignItems": "center",
                                   "children": [
                                     {
@@ -19705,87 +19692,6 @@
                                       "fontFamily": "$bk-font",
                                       "fontSize": 18,
                                       "fontWeight": "700"
-                                    },
-                                    {
-                                      "type": "frame",
-                                      "id": "Bw1V2",
-                                      "name": "Mode Data Orang Tua",
-                                      "fill": "$bk-gray-50",
-                                      "cornerRadius": 6,
-                                      "gap": 4,
-                                      "padding": 4,
-                                      "children": [
-                                        {
-                                          "type": "frame",
-                                          "id": "u0CwAc",
-                                          "name": "Mode Baru Aktif",
-                                          "fill": "$bk-surface",
-                                          "cornerRadius": 4,
-                                          "gap": 6,
-                                          "padding": [
-                                            6,
-                                            10
-                                          ],
-                                          "alignItems": "center",
-                                          "children": [
-                                            {
-                                              "type": "icon",
-                                              "id": "zuQVo",
-                                              "name": "Indikator Mode Baru",
-                                              "width": 14,
-                                              "height": 14,
-                                              "icon": "circle-dot",
-                                              "library": "lucide",
-                                              "fill": "$bk-primary"
-                                            },
-                                            {
-                                              "type": "text",
-                                              "id": "hMpiv",
-                                              "name": "Label Data saat ini",
-                                              "fill": "$bk-text",
-                                              "content": "Data saat ini",
-                                              "fontFamily": "$bk-font",
-                                              "fontSize": 12,
-                                              "fontWeight": "600"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "type": "frame",
-                                          "id": "KZjeX",
-                                          "name": "Mode Data Ada",
-                                          "fill": "$bk-gray-50",
-                                          "cornerRadius": 4,
-                                          "gap": 6,
-                                          "padding": [
-                                            6,
-                                            10
-                                          ],
-                                          "alignItems": "center",
-                                          "children": [
-                                            {
-                                              "type": "icon",
-                                              "id": "XB1aX",
-                                              "name": "Indikator Mode Data Ada",
-                                              "width": 14,
-                                              "height": 14,
-                                              "icon": "circle",
-                                              "library": "lucide",
-                                              "fill": "$bk-muted"
-                                            },
-                                            {
-                                              "type": "text",
-                                              "id": "dsdPN",
-                                              "name": "Label Gunakan data yang ada",
-                                              "fill": "$bk-text",
-                                              "content": "Gunakan data yang ada",
-                                              "fontFamily": "$bk-font",
-                                              "fontSize": 12,
-                                              "fontWeight": "600"
-                                            }
-                                          ]
-                                        }
-                                      ]
                                     }
                                   ]
                                 },
@@ -19796,11 +19702,77 @@
                                   "fill": "$bk-muted",
                                   "textGrowth": "fixed-width",
                                   "width": "fill_container",
-                                  "content": "Gunakan akun yang sudah ada untuk saudara kandung, atau isi data orang tua di bawah.",
+                                  "content": "Gunakan data orang tua yang sudah terdaftar atau perbarui data saat ini.",
                                   "lineHeight": 1.35,
                                   "fontFamily": "$bk-font",
                                   "fontSize": 13,
                                   "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Bw1V2",
+                              "name": "Tab View - Sumber Data Orang Tua",
+                              "width": "fill_container",
+                              "fill": "$bk-surface",
+                              "stroke": "$bk-border",
+                              "strokeWidth": {
+                                "bottom": 1
+                              },
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "u0CwAc",
+                                  "name": "Tab Aktif - Data Saat Ini",
+                                  "width": "fill_container",
+                                  "fill": "$bk-primary",
+                                  "cornerRadius": 4,
+                                  "gap": 6,
+                                  "padding": [
+                                    10,
+                                    4
+                                  ],
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "hMpiv",
+                                      "name": "Label Data saat ini",
+                                      "fill": "#FFFFFF",
+                                      "content": "Data saat ini",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "KZjeX",
+                                  "name": "Tab - Data yang Sudah Ada",
+                                  "width": "fill_container",
+                                  "fill": "$bk-surface",
+                                  "gap": 6,
+                                  "padding": [
+                                    10,
+                                    4
+                                  ],
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "dsdPN",
+                                      "name": "Label Gunakan data yang ada",
+                                      "fill": "$bk-muted",
+                                      "content": "Data yang sudah ada",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
                                 }
                               ]
                             },

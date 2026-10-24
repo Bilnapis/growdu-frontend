@@ -4,10 +4,15 @@ import * as yup from 'yup'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import type { StudentRegistrationInput } from '@/features/students/api/students-api'
+import type {
+  StudentListItem,
+  StudentRegistrationInput,
+  StudentRegistrationUpdateInput,
+} from '@/features/students/api/students-api'
 import {
   useActiveParents,
   useCreateStudentRegistration,
+  useUpdateStudentRegistration,
 } from '@/features/students/hooks/use-students'
 import {
   getYupFieldErrors,
@@ -18,6 +23,7 @@ import { ApiError } from '@/services/api-client'
 import { StudentDialog } from './StudentDialog'
 
 type StudentRegistrationForm = {
+  editing: boolean
   name: string
   phoneNumber: string
   school: string
@@ -34,25 +40,31 @@ type StudentRegistrationForm = {
   passwordConfirmation: string
 }
 
-const initialForm: StudentRegistrationForm = {
-  name: '',
-  phoneNumber: '',
-  school: '',
-  educationLevel: '',
-  gender: '',
-  address: '',
-  parentSource: 'new',
-  existingParentId: '',
-  parentName: '',
-  parentPhoneNumber: '',
-  parentEmail: '',
-  status: 'active',
-  password: '',
-  passwordConfirmation: '',
+function getInitialForm(student?: StudentListItem): StudentRegistrationForm {
+  return {
+    editing: Boolean(student),
+    name: student?.name ?? '',
+    phoneNumber: student ? normalizeEditablePhone(student.phoneNumber) : '',
+    school: student?.school ?? '',
+    educationLevel: student?.educationLevel ?? '',
+    gender: student?.gender ?? '',
+    address: student?.address ?? '',
+    parentSource: student ? 'existing' : 'new',
+    existingParentId: student?.primaryParent?.parentId ?? 'unlinked',
+    parentName: student?.primaryParent?.parentName ?? '',
+    parentPhoneNumber: student
+      ? normalizeEditablePhone(student.primaryParent?.parentPhoneNumber ?? null)
+      : '',
+    parentEmail: student?.primaryParent?.parentContactEmail ?? '',
+    status: student?.status ?? 'active',
+    password: '',
+    passwordConfirmation: '',
+  }
 }
 
 const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
   .object({
+    editing: yup.boolean().defined(),
     name: yup
       .string()
       .trim()
@@ -79,16 +91,17 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
     existingParentId: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'existing',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) =>
+          source === 'existing' && !editing,
         then: (schema) => schema.required('Pilih data orang tua.'),
         otherwise: (schema) => schema.default('').defined(),
       }),
     parentName: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'new',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) => source === 'new' || editing,
         then: (schema) =>
           schema
             .trim()
@@ -99,8 +112,8 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
     parentPhoneNumber: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'new',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) => source === 'new' || editing,
         then: (schema) =>
           schema
             .trim()
@@ -111,8 +124,8 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
     parentEmail: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'new',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) => source === 'new' || editing,
         then: (schema) =>
           schema
             .trim()
@@ -127,8 +140,8 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
     password: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'new',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) => source === 'new' && !editing,
         then: (schema) =>
           schema
             .min(5, 'Kata sandi minimal 5 karakter.')
@@ -138,8 +151,8 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
     passwordConfirmation: yup
       .string()
       .defined()
-      .when('parentSource', {
-        is: 'new',
+      .when(['parentSource', 'editing'], {
+        is: (source: string, editing: boolean) => source === 'new' && !editing,
         then: (schema) =>
           schema
             .oneOf([yup.ref('password')], 'Konfirmasi kata sandi tidak sama.')
@@ -149,14 +162,25 @@ const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
   })
   .required()
 
-export function StudentCreateForm({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState(initialForm)
+export function StudentCreateForm({
+  student,
+  onClose,
+}: {
+  student?: StudentListItem
+  onClose: () => void
+}) {
+  const isEditing = Boolean(student)
+  const [form, setForm] = useState(() => getInitialForm(student))
   const [submitted, setSubmitted] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const createMutation = useCreateStudentRegistration()
-  const parentsQuery = useActiveParents(form.parentSource === 'existing')
+  const updateMutation = useUpdateStudentRegistration()
+  const isPending = createMutation.isPending || updateMutation.isPending
+  const parentsQuery = useActiveParents(
+    !isEditing && form.parentSource === 'existing',
+  )
 
   const validation = useMemo<{
     errors: FormFieldErrors<keyof StudentRegistrationForm>
@@ -183,7 +207,7 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (createMutation.isPending) return
+    if (isPending) return
     setSubmitted(true)
     setFormError(null)
 
@@ -207,17 +231,44 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
       gender: value.gender,
       educationLevel: value.educationLevel,
       school: value.school,
-      ...(value.phoneNumber
-        ? { phoneNumber: normalizePhone(value.phoneNumber) }
-        : {}),
       address: value.address,
       status: value.status,
-      relationship: 'guardian' as const,
     }
+    const phoneNumber = value.phoneNumber
+      ? normalizePhone(value.phoneNumber)
+      : null
+
+    if (student) {
+      const updateInput: StudentRegistrationUpdateInput = {
+        ...base,
+        phoneNumber,
+        parent: {
+          name: value.parentName,
+          phoneNumber: normalizePhone(value.parentPhoneNumber),
+          email: value.parentEmail,
+        },
+      }
+      updateMutation.mutate(
+        { id: student.id, input: updateInput },
+        {
+          onSuccess: onClose,
+          onError: (error: unknown) =>
+            setFormError(getMutationError(error, true)),
+        },
+      )
+      return
+    }
+
+    const registrationBase = {
+      ...base,
+      ...(phoneNumber ? { phoneNumber } : {}),
+    }
+
     const input: StudentRegistrationInput =
       value.parentSource === 'new'
         ? {
-            ...base,
+            ...registrationBase,
+            relationship: 'guardian',
             parentSource: 'new',
             newParent: {
               name: value.parentName,
@@ -227,14 +278,15 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
             },
           }
         : {
-            ...base,
+            ...registrationBase,
+            relationship: 'guardian',
             parentSource: 'existing',
             parentId: value.existingParentId,
           }
 
     createMutation.mutate(input, {
       onSuccess: onClose,
-      onError: (error: unknown) => setFormError(getMutationError(error)),
+      onError: (error: unknown) => setFormError(getMutationError(error, false)),
     })
   }
 
@@ -243,12 +295,12 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
 
   return (
     <StudentDialog
-      title="Tambah Siswa"
-      isPending={createMutation.isPending}
+      title={isEditing ? 'Ubah Data Siswa' : 'Tambah Siswa'}
+      isPending={isPending}
       onDismiss={onClose}
     >
       <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-        <fieldset disabled={createMutation.isPending} className="space-y-3">
+        <fieldset disabled={isPending} className="space-y-3">
           <FormSection
             title="Data Siswa"
             description="Identitas dasar yang dipakai pada kelompok belajar, invoice, dan laporan."
@@ -308,37 +360,46 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
                 ]}
                 placeholder="Pilih jenis kelamin"
               />
-              <FormField
-                id="student-address"
-                label="Alamat siswa"
+              <SelectField
+                id="student-status"
+                label="Status siswa"
                 required
-                value={form.address}
-                error={visibleErrors.address}
-                placeholder="Jl. Melati No. 12, Bandung"
-                onChange={(value) => updateField('address', value)}
+                value={form.status}
+                onChange={(value) => {
+                  if (value === 'active' || value === 'inactive') {
+                    updateField('status', value)
+                  }
+                }}
+                options={[
+                  { value: 'active', label: 'Aktif' },
+                  { value: 'inactive', label: 'Nonaktif' },
+                ]}
               />
+              <div className="md:col-span-2">
+                <FormField
+                  id="student-address"
+                  label="Alamat siswa"
+                  required
+                  value={form.address}
+                  error={visibleErrors.address}
+                  placeholder="Jl. Melati No. 12, Bandung"
+                  onChange={(value) => updateField('address', value)}
+                />
+              </div>
             </div>
           </FormSection>
 
           <FormSection
             title="Data Orang Tua"
-            description="Gunakan akun yang sudah ada untuk saudara kandung, atau isi data orang tua di bawah."
-            action={
-              <div className="flex flex-wrap gap-3 text-[13px] font-semibold">
-                <ModeOption
-                  label="Orang tua baru"
-                  checked={form.parentSource === 'new'}
-                  onChange={() => updateField('parentSource', 'new')}
-                />
-                <ModeOption
-                  label="Gunakan data yang ada"
-                  checked={form.parentSource === 'existing'}
-                  onChange={() => updateField('parentSource', 'existing')}
-                />
-              </div>
-            }
+            description="Tambahkan orang tua baru atau gunakan data orang tua yang sudah terdaftar."
           >
-            {form.parentSource === 'new' ? (
+            {!isEditing ? (
+              <ParentSourceTabs
+                value={form.parentSource}
+                onChange={(value) => updateField('parentSource', value)}
+              />
+            ) : null}
+            {isEditing ? (
               <div className="grid gap-3.5 md:grid-cols-2">
                 <FormField
                   id="parent-name"
@@ -367,20 +428,35 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
                   type="email"
                   onChange={(value) => updateField('parentEmail', value)}
                 />
-                <SelectField
-                  id="parent-status"
-                  label="Status"
+              </div>
+            ) : form.parentSource === 'new' ? (
+              <div className="grid gap-3.5 md:grid-cols-2">
+                <FormField
+                  id="parent-name"
+                  label="Nama orang tua"
                   required
-                  value={form.status}
-                  onChange={(value) => {
-                    if (value === 'active' || value === 'inactive') {
-                      updateField('status', value)
-                    }
-                  }}
-                  options={[
-                    { value: 'active', label: 'Aktif' },
-                    { value: 'inactive', label: 'Nonaktif' },
-                  ]}
+                  value={form.parentName}
+                  error={visibleErrors.parentName}
+                  onChange={(value) => updateField('parentName', value)}
+                />
+                <FormField
+                  id="parent-phone"
+                  label="Nomor HP orang tua"
+                  required
+                  value={form.parentPhoneNumber}
+                  error={visibleErrors.parentPhoneNumber}
+                  type="tel"
+                  isPhone
+                  onChange={(value) => updateField('parentPhoneNumber', value)}
+                />
+                <FormField
+                  id="parent-email"
+                  label="Email orang tua"
+                  required
+                  value={form.parentEmail}
+                  error={visibleErrors.parentEmail}
+                  type="email"
+                  onChange={(value) => updateField('parentEmail', value)}
                 />
                 <PasswordField
                   id="parent-password"
@@ -466,12 +542,14 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
           >
             {issueCount > 0
               ? `${issueCount} validasi perlu diperbaiki sebelum menyimpan.`
-              : 'Data siswa dan orang tua akan disimpan bersamaan.'}
+              : isEditing
+                ? 'Perubahan hanya berlaku pada data siswa.'
+                : 'Data siswa dan orang tua akan disimpan bersamaan.'}
           </p>
           <div className="flex justify-end gap-2.5">
             <button
               type="button"
-              disabled={createMutation.isPending}
+              disabled={isPending}
               className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 text-[13px] font-semibold disabled:opacity-50"
               onClick={onClose}
             >
@@ -479,10 +557,14 @@ export function StudentCreateForm({ onClose }: { onClose: () => void }) {
             </button>
             <button
               type="submit"
-              disabled={createMutation.isPending}
+              disabled={isPending}
               className="inline-flex h-9 items-center justify-center rounded-md bg-[var(--color-primary)] px-4 text-[13px] font-semibold text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50"
             >
-              {createMutation.isPending ? 'Menyimpan...' : 'Simpan Siswa'}
+              {isPending
+                ? 'Menyimpan...'
+                : isEditing
+                  ? 'Simpan Perubahan'
+                  : 'Simpan Siswa'}
             </button>
           </div>
         </footer>
@@ -528,6 +610,7 @@ function FormField({
   placeholder,
   type = 'text',
   isPhone = false,
+  disabled = false,
 }: {
   id: string
   label: string
@@ -538,6 +621,7 @@ function FormField({
   placeholder?: string
   type?: string
   isPhone?: boolean
+  disabled?: boolean
 }) {
   return (
     <div className="grid gap-[7px]">
@@ -547,6 +631,7 @@ function FormField({
         value={value}
         type={type}
         isPhone={isPhone}
+        disabled={disabled}
         placeholder={placeholder}
         aria-required={required}
         aria-invalid={error ? true : undefined}
@@ -693,26 +778,43 @@ function FieldError({ id, error }: { id: string; error?: string }) {
   ) : null
 }
 
-function ModeOption({
-  label,
-  checked,
+function ParentSourceTabs({
+  value,
   onChange,
 }: {
-  label: string
-  checked: boolean
-  onChange: () => void
+  value: 'new' | 'existing'
+  onChange: (value: 'new' | 'existing') => void
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2">
-      <input
-        type="radio"
-        name="parent-source"
-        checked={checked}
-        className="h-4 w-4 accent-[var(--color-primary)]"
-        onChange={onChange}
-      />
-      {label}
-    </label>
+    <div
+      role="tablist"
+      aria-label="Sumber data orang tua"
+      className="mb-3.5 grid grid-cols-2 overflow-hidden rounded border border-[var(--color-border)] bg-white"
+    >
+      {([
+        ['new', 'Data baru'],
+        ['existing', 'Data yang sudah ada'],
+      ] as const).map(([source, label]) => {
+        const selected = value === source
+
+        return (
+          <button
+            key={source}
+            type="button"
+            role="tab"
+            aria-selected={selected}
+            className={`min-h-10 px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
+              selected
+                ? 'rounded bg-primary text-primary-foreground'
+                : 'bg-white text-[var(--color-muted)] hover:bg-[var(--color-gray-50)] hover:text-[var(--color-text)]'
+            }`}
+            onClick={() => onChange(source)}
+          >
+            {label}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 
@@ -735,12 +837,20 @@ function normalizePhone(value: string) {
   return `+62${value.replace(/\D/g, '').replace(/^(?:62|0+)/, '')}`
 }
 
-function getMutationError(error: unknown) {
-  if (error instanceof ApiError && error.status === 409) {
+function normalizeEditablePhone(value: string | null) {
+  return value?.replace(/\D/g, '').replace(/^(?:62|0+)/, '') ?? ''
+}
+
+function getMutationError(error: unknown, isEditing: boolean) {
+  if (!isEditing && error instanceof ApiError && error.status === 409) {
     return 'Email orang tua sudah digunakan. Gunakan data orang tua yang sudah ada.'
   }
   if (error instanceof ApiError && error.status === 403) {
-    return 'Hanya pemilik bimbel yang dapat menambahkan siswa dan akun orang tua.'
+    return isEditing
+      ? 'Anda tidak memiliki izin untuk mengubah data siswa.'
+      : 'Hanya pemilik bimbel yang dapat menambahkan siswa dan akun orang tua.'
   }
-  return 'Data siswa belum dapat disimpan. Silakan coba lagi.'
+  return isEditing
+    ? 'Data siswa belum dapat diperbarui. Silakan coba lagi.'
+    : 'Data siswa belum dapat disimpan. Silakan coba lagi.'
 }

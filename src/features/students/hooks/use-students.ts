@@ -3,11 +3,15 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createStudentRegistration,
   getActiveParents,
+  getStudent,
+  getStudentParents,
   getStudents,
   getStudentsSummary,
   type StudentsFilters,
   type StudentUpdateInput,
   updateStudent,
+  type StudentRegistrationUpdateInput,
+  updateStudentRegistration,
 } from '@/features/students/api/students-api'
 
 export const studentsQueryKey = ['students'] as const
@@ -39,6 +43,22 @@ export function useStudentsSummary() {
   })
 }
 
+export function useStudent(id: string) {
+  return useQuery({
+    queryKey: [...studentsQueryKey, 'detail', id],
+    queryFn: ({ signal }) => getStudent(id, signal),
+    enabled: Boolean(id),
+  })
+}
+
+export function useStudentParents(id: string) {
+  return useQuery({
+    queryKey: [...studentsQueryKey, 'detail', id, 'parents'],
+    queryFn: ({ signal }) => getStudentParents(id, signal),
+    enabled: Boolean(id),
+  })
+}
+
 export function useUpdateStudent() {
   const queryClient = useQueryClient()
 
@@ -47,6 +67,24 @@ export function useUpdateStudent() {
       updateStudent(id, input),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: studentsQueryKey })
+    },
+  })
+}
+
+export function useUpdateStudentRegistration() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: string
+      input: StudentRegistrationUpdateInput
+    }) => updateStudentRegistration(id, input),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: studentsQueryKey })
+      await queryClient.invalidateQueries({ queryKey: activeParentsQueryKey })
     },
   })
 }

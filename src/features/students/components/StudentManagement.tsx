@@ -30,7 +30,6 @@ import type {
   EntityStatus,
   StudentListItem,
   StudentsFilters,
-  StudentUpdateInput,
 } from '@/features/students/api/students-api'
 import {
   useStudents,
@@ -38,16 +37,12 @@ import {
   useUpdateStudent,
 } from '@/features/students/hooks/use-students'
 import { ApiError } from '@/services/api-client'
-import { StudentDialog } from './StudentDialog'
-import { studentSelectClass } from './StudentForm'
+import { StudentCreateForm } from './StudentCreateForm'
 
-type DialogState =
-  | { type: 'edit'; student: StudentListItem }
-  | { type: 'detail'; student: StudentListItem }
-  | null
+type DialogState = { type: 'edit'; student: StudentListItem } | null
 
 const pageSize = 5
-const cellClass = 'border-b border-[var(--color-neutral-100)] px-3 py-4'
+const cellClass = 'border-b border-[var(--color-neutral-100)] px-3 py-3'
 
 export function StudentManagement() {
   const navigate = useNavigate()
@@ -331,20 +326,29 @@ export function StudentManagement() {
                 </thead>
                 <tbody>
                   {data.map((student) => (
-                    <tr key={student.id} className="h-[82px]">
+                    <tr
+                      key={student.id}
+                      className="relative h-[70px] border-b border-[var(--color-neutral-100)] text-xs leading-[1.3] text-[var(--color-text)]"
+                    >
                       <th
                         scope="row"
                         className={`${cellClass} min-w-[135px] text-[13px] font-bold`}
                       >
                         {student.name}
                       </th>
-                      <td className={`${cellClass} min-w-[145px]`}>
+                      <td
+                        className={`${cellClass} min-w-[145px] whitespace-pre-line font-medium`}
+                      >
                         {student.educationLevel} / {student.school}
                       </td>
-                      <td className={`${cellClass} min-w-[120px]`}>
+                      <td
+                        className={`${cellClass} min-w-[120px] whitespace-pre-line font-semibold`}
+                      >
                         {student.primaryParent?.parentName ?? '-'}
                       </td>
-                      <td className={`${cellClass} min-w-[180px] break-words`}>
+                      <td
+                        className={`${cellClass} min-w-[180px] whitespace-pre-line break-words font-medium`}
+                      >
                         {student.primaryParent?.parentPhoneNumber ??
                           student.phoneNumber ??
                           '-'}
@@ -356,7 +360,7 @@ export function StudentManagement() {
                         ) : null}
                       </td>
                       <td
-                        className={`${cellClass} min-w-[155px] max-w-[210px]`}
+                        className={`${cellClass} min-w-[155px] max-w-[210px] font-medium`}
                       >
                         {student.address}
                       </td>
@@ -411,7 +415,7 @@ export function StudentManagement() {
                               className="h-8 w-full text-xs"
                               onClick={() => {
                                 setMenuId(null)
-                                setDialog({ type: 'detail', student })
+                                void navigate(`/students/${student.id}`)
                               }}
                             >
                               <Eye className="h-4 w-4" aria-hidden="true" />
@@ -455,249 +459,13 @@ export function StudentManagement() {
         ) : null}
       </Card>
 
-      {dialog ? (
-        <StudentDialog
-          title={dialog.type === 'edit' ? 'Ubah Data Siswa' : 'Detail Siswa'}
-          isPending={updateMutation.isPending}
-          onDismiss={() => setDialog(null)}
-        >
-          {dialog.type === 'edit' ? (
-            <StudentEditForm
-              student={dialog.student}
-              isPending={updateMutation.isPending}
-              onCancel={() => setDialog(null)}
-              onSave={(input) =>
-                updateMutation.mutate(
-                  { id: dialog.student.id, input },
-                  {
-                    onSuccess: () => {
-                      setNotice(
-                        `Data ${input.name ?? dialog.student.name} berhasil diperbarui.`,
-                      )
-                      setDialog(null)
-                    },
-                    onError: (error: unknown) => {
-                      setDialog(null)
-                      setActionError(getMutationError(error))
-                    },
-                  },
-                )
-              }
-            />
-          ) : (
-            <StudentDetail
-              student={dialog.student}
-              onEdit={() =>
-                setDialog({ type: 'edit', student: dialog.student })
-              }
-            />
-          )}
-        </StudentDialog>
+      {dialog?.type === 'edit' ? (
+        <StudentCreateForm
+          student={dialog.student}
+          onClose={() => setDialog(null)}
+        />
       ) : null}
     </div>
-  )
-}
-
-function StudentEditForm({
-  student,
-  isPending,
-  onCancel,
-  onSave,
-}: {
-  student: StudentListItem
-  isPending: boolean
-  onCancel: () => void
-  onSave: (input: StudentUpdateInput) => void
-}) {
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    onSave({
-      name: getFormValue(data, 'name'),
-      gender: getFormValue(data, 'gender') === 'male' ? 'male' : 'female',
-      educationLevel: getFormValue(data, 'educationLevel'),
-      school: getFormValue(data, 'school'),
-      phoneNumber: getFormValue(data, 'phoneNumber') || null,
-      address: getFormValue(data, 'address'),
-      status:
-        getFormValue(data, 'status') === 'inactive' ? 'inactive' : 'active',
-    })
-  }
-  return (
-    <form className="space-y-5" onSubmit={submit}>
-      <fieldset disabled={isPending} className="grid gap-4 sm:grid-cols-2">
-        <EditField
-          id="edit-name"
-          name="name"
-          label="Nama siswa"
-          value={student.name}
-          required
-        />
-        <EditSelect
-          id="edit-gender"
-          name="gender"
-          label="Jenis kelamin"
-          value={student.gender}
-          options={[
-            ['female', 'Perempuan'],
-            ['male', 'Laki-laki'],
-          ]}
-        />
-        <EditField
-          id="edit-level"
-          name="educationLevel"
-          label="Jenjang"
-          value={student.educationLevel}
-          required
-        />
-        <EditField
-          id="edit-school"
-          name="school"
-          label="Sekolah"
-          value={student.school}
-          required
-        />
-        <EditField
-          id="edit-phone"
-          name="phoneNumber"
-          label="Nomor HP siswa"
-          value={student.phoneNumber ?? ''}
-          type="tel"
-        />
-        <EditSelect
-          id="edit-status"
-          name="status"
-          label="Status"
-          value={student.status}
-          options={[
-            ['active', 'Aktif'],
-            ['inactive', 'Nonaktif'],
-          ]}
-        />
-        <div className="sm:col-span-2">
-          <EditField
-            id="edit-address"
-            name="address"
-            label="Alamat siswa"
-            value={student.address}
-            required
-          />
-        </div>
-      </fieldset>
-      <footer className="flex justify-end gap-2.5">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={isPending}
-          onClick={onCancel}
-        >
-          Batal
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
-        </Button>
-      </footer>
-    </form>
-  )
-}
-
-function EditField({
-  id,
-  name,
-  label,
-  value,
-  required = false,
-  type = 'text',
-}: {
-  id: string
-  name: string
-  label: string
-  value: string
-  required?: boolean
-  type?: string
-}) {
-  return (
-    <div>
-      <Label htmlFor={id}>
-        {label}
-        {required ? ' *' : ''}
-      </Label>
-      <Input
-        id={id}
-        name={name}
-        type={type}
-        defaultValue={value}
-        required={required}
-        className="mt-1.5"
-      />
-    </div>
-  )
-}
-
-function EditSelect({
-  id,
-  name,
-  label,
-  value,
-  options,
-}: {
-  id: string
-  name: string
-  label: string
-  value: string
-  options: Array<[string, string]>
-}) {
-  return (
-    <div>
-      <Label htmlFor={id}>{label}</Label>
-      <select
-        id={id}
-        name={name}
-        defaultValue={value}
-        className={`mt-1.5 ${studentSelectClass}`}
-      >
-        {options.map(([optionValue, optionLabel]) => (
-          <option key={optionValue} value={optionValue}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
-function StudentDetail({
-  student,
-  onEdit,
-}: {
-  student: StudentListItem
-  onEdit: () => void
-}) {
-  const values = [
-    ['Kode siswa', student.studentCode],
-    ['Nama siswa', student.name],
-    ['Jenis kelamin', student.gender === 'female' ? 'Perempuan' : 'Laki-laki'],
-    ['Jenjang / Sekolah', `${student.educationLevel} / ${student.school}`],
-    ['Orang tua', student.primaryParent?.parentName ?? '-'],
-    ['Kontak orang tua', student.primaryParent?.parentPhoneNumber ?? '-'],
-    ['Email orang tua', student.primaryParent?.parentContactEmail ?? '-'],
-    ['Nomor HP siswa', student.phoneNumber ?? '-'],
-    ['Alamat', student.address],
-  ]
-  return (
-    <>
-      <dl className="grid gap-4 sm:grid-cols-2">
-        {values.map(([label, value]) => (
-          <div key={label}>
-            <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className="mt-1 break-words text-sm font-medium">{value}</dd>
-          </div>
-        ))}
-      </dl>
-      <div className="mt-6 flex justify-end">
-        <Button onClick={onEdit}>Ubah data</Button>
-      </div>
-    </>
   )
 }
 
