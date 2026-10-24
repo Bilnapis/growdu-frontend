@@ -21,6 +21,9 @@ import { LoginPage } from '@/pages/client/LoginPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
 import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
+import { StudyGroupDetailPage } from '@/pages/client/StudyGroupDetailPage'
+import { StudyGroupFormPage } from '@/pages/client/StudyGroupFormPage'
+import { StudyGroupsPage } from '@/pages/client/StudyGroupsPage'
 import { StaffCreatePage } from '@/pages/client/StaffCreatePage'
 import { StaffDetailPage } from '@/pages/client/StaffDetailPage'
 import { StaffPage } from '@/pages/client/StaffPage'
@@ -99,6 +102,22 @@ export const router = createBrowserRouter([
                       {
                         path: 'staff/:id',
                         element: <StaffDetailPage />,
+                      },
+                      {
+                        path: 'study-groups',
+                        element: <StudyGroupsPage />,
+                      },
+                      {
+                        path: 'study-groups/new',
+                        element: <StudyGroupFormPage />,
+                      },
+                      {
+                        path: 'study-groups/:id/edit',
+                        element: <StudyGroupFormPage />,
+                      },
+                      {
+                        path: 'study-groups/:id',
+                        element: <StudyGroupDetailPage />,
                       },
                       {
                         path: ':section',
