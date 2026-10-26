@@ -40,6 +40,71 @@
 }
 
 @layer components {
+  @keyframes session-success-icon-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.55) rotate(-12deg);
+    }
+
+    65% {
+      opacity: 1;
+      transform: scale(1.12) rotate(2deg);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  @keyframes session-success-ring-pulse {
+    0% {
+      opacity: 0.7;
+      transform: scale(0.8);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(1.65);
+    }
+  }
+
+  @keyframes session-success-check-bounce {
+    0%,
+    35% {
+      opacity: 0;
+      transform: scale(0.45);
+    }
+
+    75% {
+      opacity: 1;
+      transform: scale(1.18);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .session-success-icon {
+    animation: session-success-icon-pop 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .session-success-icon::after {
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--color-success-border);
+    border-radius: 9999px;
+    animation: session-success-ring-pulse 620ms ease-out 120ms both;
+    content: '';
+  }
+
+  .session-success-check {
+    animation: session-success-check-bounce 580ms
+      cubic-bezier(0.34, 1.56, 0.64, 1) 80ms both;
+  }
+
   .create-platform-user-modal-scroll {
     scrollbar-color: hsl(var(--muted));
     scrollbar-gutter: stable;

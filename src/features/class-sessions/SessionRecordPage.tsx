@@ -6,7 +6,7 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom'
-import { ArrowLeft, CheckCheck } from 'lucide-react'
+import { ArrowLeft, CheckCheck, CircleCheckBig } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ApiError } from '@/services/api-client'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -19,14 +19,38 @@ import {
   type SessionRecord,
 } from './api'
 
-const statuses: { value: AttendanceStatus; label: string }[] = [
-  { value: 'present', label: 'Hadir' },
-  { value: 'excused', label: 'Izin' },
-  { value: 'sick', label: 'Sakit' },
-  { value: 'absent', label: 'Alpha' },
+const statuses: {
+  value: AttendanceStatus
+  label: string
+  selectedClassName: string
+}[] = [
+  {
+    value: 'present',
+    label: 'Hadir',
+    selectedClassName:
+      'border-[var(--color-success)] bg-[var(--color-success-bg)] text-[var(--color-success)]',
+  },
+  {
+    value: 'excused',
+    label: 'Izin',
+    selectedClassName:
+      'border-primary bg-[var(--color-primary-soft)] text-primary',
+  },
+  {
+    value: 'sick',
+    label: 'Sakit',
+    selectedClassName:
+      'border-[var(--color-warning)] bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+  },
+  {
+    value: 'absent',
+    label: 'Alpha',
+    selectedClassName:
+      'border-[var(--color-danger)] bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+  },
 ]
 const fieldClass =
-  'mt-2 w-full rounded-md border bg-card p-3 text-sm focus-visible:ring-2 focus-visible:ring-ring'
+  'mt-[7px] w-full resize-none rounded-md border bg-card p-3 text-xs font-normal leading-[1.5] focus-visible:ring-2 focus-visible:ring-ring'
 export function SessionRecordPage() {
   const { sessionId = '', id = '' } = useParams()
   const query = useSession(sessionId || id)
@@ -87,16 +111,22 @@ export function SessionRecordForm({
   const [saved, setSaved] = useState(false)
   const [version] = useState(session.version)
   const mutation = useSaveSession(session.id)
-  const dialog = useRef<HTMLDialogElement>(null)
+  const leaveDialog = useRef<HTMLDialogElement>(null)
+  const successDialog = useRef<HTMLDialogElement>(null)
   const readonly = !!session.lockedAt || session.status === 'cancelled'
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
       dirty && currentLocation.pathname !== nextLocation.pathname,
   )
   useEffect(() => {
-    if (blocker.state === 'blocked') dialog.current?.showModal()
-    else dialog.current?.close()
+    if (blocker.state === 'blocked') leaveDialog.current?.showModal()
+    else leaveDialog.current?.close()
   }, [blocker.state])
+  useEffect(() => {
+    const currentDialog = successDialog.current
+
+    if (saved && !currentDialog?.open) currentDialog?.showModal()
+  }, [saved])
   useEffect(() => {
     if (!dirty) return
     const handler = (event: BeforeUnloadEvent) => {
@@ -148,27 +178,42 @@ export function SessionRecordForm({
   const conflict =
     mutation.error instanceof ApiError && mutation.error.status === 409
   return (
-    <main className="min-h-dvh bg-background pb-36 text-foreground">
-      <div className="mx-auto max-w-[430px]">
-        <header className="border-b bg-card px-[18px] py-4">
+    <main className="min-h-dvh bg-background pb-28 text-foreground">
+      <div className="mx-auto w-full max-w-[390px]">
+        <header className="border-b bg-card px-[18px] pb-3.5 pt-4">
           <div className="flex items-center gap-2">
-            <Link
-              to={backTo}
-              aria-label="Kembali ke jadwal"
-              className="rounded p-2 focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <ArrowLeft size={18} />
-            </Link>
-            <h1 className="flex-1 text-center text-base font-bold">
+            {step === 'notes' ? (
+              <button
+                type="button"
+                aria-label="Kembali ke pengisian presensi"
+                className="rounded p-2 focus-visible:ring-2 focus-visible:ring-ring"
+                onClick={() => setParams({ step: 'attendance' })}
+              >
+                <ArrowLeft size={16} />
+              </button>
+            ) : (
+              <Link
+                to={backTo}
+                aria-label="Kembali ke jadwal"
+                className="rounded p-2 focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <ArrowLeft size={16} />
+              </Link>
+            )}
+            <h1 className="flex-1 text-center text-base font-bold leading-[1.3]">
               {step === 'attendance'
                 ? 'Isi Presensi'
                 : 'Materi & Catatan Sesi Pertemuan'}
             </h1>
           </div>
-          <h2 className="mt-3 font-bold">{session.studyGroupName}</h2>
-          <p className="mt-2 text-[13px] text-muted-foreground">
-            {sessionDateLabel(session.sessionDate)} {session.startTime} –{' '}
-            {session.endTime} • {session.roomName ?? 'Ruang belum ditentukan'}
+          <h2 className="mt-3 text-base font-bold leading-[1.3]">
+            {session.studyGroupName}
+          </h2>
+          <p className="mt-2 text-[13px] font-medium leading-[1.3] text-muted-foreground">
+            {sessionDateLabel(session.sessionDate)}{' '}
+            {formatSessionTime(session.startTime)} -{' '}
+            {formatSessionTime(session.endTime)} •{' '}
+            {session.roomName ?? 'Ruang belum ditentukan'}
           </p>
         </header>
         {readonly ? (
@@ -178,34 +223,18 @@ export function SessionRecordForm({
               : 'Sesi terkunci untuk penggajian.'}
           </p>
         ) : null}
-        {saved ? (
-          <div role="status" className="m-3 rounded border bg-card p-3">
-            <p>Presensi dan catatan berhasil disimpan.</p>
-            <Button className="mt-2" onClick={() => void navigate(backTo)}>
-              Kembali ke jadwal
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSaved(false)
-                onReload()
-              }}
-            >
-              Muat data terbaru
-            </Button>
-          </div>
-        ) : null}
         <form onSubmit={submit} className="p-3.5">
           {step === 'attendance' ? (
             <>
               <div className="mb-3.5 flex items-center justify-between gap-2">
-                <p className="text-xs font-semibold text-muted-foreground">
+                <p className="rounded-md px-2.5 py-1.5 text-xs font-extrabold leading-[1.3] text-muted-foreground">
                   {students.length} siswa
                 </p>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
+                  className="h-[34px] px-4 text-[13px] font-semibold"
                   disabled={
                     readonly || mutation.isPending || saved || !students.length
                   }
@@ -234,20 +263,22 @@ export function SessionRecordForm({
                     <div className="flex items-center gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-soft font-bold text-primary"
+                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-soft text-[15px] font-extrabold text-primary"
                       >
                         {student.name.slice(0, 1)}
                       </span>
-                      <div>
-                        <h3 className="text-sm font-bold">{student.name}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {student.school} · {student.educationLevel}
+                      <div className="min-w-0 flex-1">
+                        <h3 className="truncate text-sm font-bold leading-[1.3]">
+                          {student.name}
+                        </h3>
+                        <p className="mt-0.5 truncate text-xs font-medium leading-[1.3] text-muted-foreground">
+                          {student.school} - {student.educationLevel}
                         </p>
                       </div>
                     </div>
                     <fieldset
                       disabled={readonly || mutation.isPending || saved}
-                      className="mt-3.5 grid grid-cols-4 gap-1.5"
+                      className="mt-3.5 grid grid-cols-4 gap-1.5 disabled:pointer-events-none disabled:opacity-60"
                     >
                       <legend className="sr-only">
                         Presensi {student.name}
@@ -256,10 +287,10 @@ export function SessionRecordForm({
                         <label
                           key={option.value}
                           className={
-                            'flex min-h-11 cursor-pointer items-center justify-center rounded-md border text-xs font-semibold focus-within:ring-2 focus-within:ring-ring ' +
+                            'flex h-[26px] cursor-pointer items-center justify-center rounded-md border px-2 text-xs font-extrabold leading-[1.3] transition-colors ' +
                             (student.status === option.value
-                              ? 'border-primary bg-primary-soft text-primary'
-                              : 'text-muted-foreground')
+                              ? option.selectedClassName
+                              : 'border-input bg-card text-muted-foreground hover:bg-accent')
                           }
                         >
                           <input
@@ -277,18 +308,23 @@ export function SessionRecordForm({
                       ))}
                     </fieldset>
                     {student.status && student.status !== 'present' ? (
-                      <label className="mt-2 block text-xs">
-                        Keterangan{' '}
-                        {
-                          statuses.find((s) => s.value === student.status)
-                            ?.label
-                        }
+                      <label className="mt-3.5 block">
+                        <span className="sr-only">
+                          Keterangan{' '}
+                          {
+                            statuses.find((s) => s.value === student.status)
+                              ?.label
+                          }{' '}
+                          untuk {student.name}
+                        </span>
                         <input
                           maxLength={1000}
                           disabled={readonly || mutation.isPending || saved}
-                          className={fieldClass}
+                          className="h-[38px] w-full rounded-md border bg-card px-2.5 text-[11px] text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
                           value={student.note ?? ''}
-                          placeholder="Tulis keterangan..."
+                          placeholder={`Tulis keterangan ${statuses
+                            .find((status) => status.value === student.status)
+                            ?.label.toLowerCase()}...`}
                           onChange={(event) => {
                             setStudents((current) =>
                               current.map((s) =>
@@ -307,11 +343,12 @@ export function SessionRecordForm({
               </div>
             </>
           ) : (
-            <>
-              <label className="block text-xs font-bold">
+            <div className="grid gap-3">
+              <label className="block text-xs font-bold leading-[1.35]">
                 Topik *
                 <textarea
                   required
+                  rows={2}
                   maxLength={2000}
                   disabled={readonly || mutation.isPending || saved}
                   className={fieldClass}
@@ -322,12 +359,13 @@ export function SessionRecordForm({
                   }}
                 />
               </label>
-              <label className="mt-3 block text-xs font-bold">
+              <label className="block text-xs font-bold leading-[1.35]">
                 Catatan Tentor
                 <textarea
+                  rows={3}
                   maxLength={10000}
                   disabled={readonly || mutation.isPending || saved}
-                  className={fieldClass + ' min-h-32'}
+                  className={fieldClass}
                   value={note}
                   onChange={(e) => {
                     setNote(e.target.value)
@@ -335,7 +373,7 @@ export function SessionRecordForm({
                   }}
                 />
               </label>
-            </>
+            </div>
           )}
           {mutation.isError ? (
             <div
@@ -370,16 +408,16 @@ export function SessionRecordForm({
               ) : null}
             </div>
           ) : null}
-          <footer className="fixed inset-x-0 bottom-0 border-t bg-card p-3.5 pb-[max(14px,env(safe-area-inset-bottom))]">
-            <div className="mx-auto max-w-[402px]">
+          <footer className="fixed bottom-0 left-1/2 z-10 w-full max-w-[390px] -translate-x-1/2 border-t bg-card p-3.5 pb-[max(14px,env(safe-area-inset-bottom))]">
+            <div className="mx-auto w-full">
               {step === 'attendance' ? (
                 <>
-                  <p className="mb-2 text-sm font-semibold">
+                  <p className="mb-2.5 text-[13px] font-bold leading-[1.3]">
                     {count}/{students.length} siswa sudah diisi
                   </p>
                   <Button
                     type="button"
-                    className="w-full"
+                    className="h-[38px] w-full text-[13px] font-semibold"
                     disabled={
                       !readonly &&
                       (!students.length || count !== students.length)
@@ -390,37 +428,27 @@ export function SessionRecordForm({
                   </Button>
                 </>
               ) : (
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setParams({ step: 'attendance' })}
-                  >
-                    Kembali
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex-1"
-                    disabled={
-                      readonly ||
-                      mutation.isPending ||
-                      saved ||
-                      mutation.isPending ||
-                      !topic.trim() ||
-                      !students.length ||
-                      count !== students.length
-                    }
-                  >
-                    {mutation.isPending ? 'Menyimpan...' : 'Simpan'}
-                  </Button>
-                </div>
+                <Button
+                  type="submit"
+                  className="h-10 w-full text-[13px] font-bold"
+                  disabled={
+                    readonly ||
+                    mutation.isPending ||
+                    saved ||
+                    !topic.trim() ||
+                    !students.length ||
+                    count !== students.length
+                  }
+                >
+                  {mutation.isPending ? 'Menyimpan...' : 'Simpan'}
+                </Button>
               )}
             </div>
           </footer>
         </form>
       </div>
       <dialog
-        ref={dialog}
+        ref={leaveDialog}
         onCancel={() => blocker.state === 'blocked' && blocker.reset()}
         aria-labelledby="leave-session"
         className="max-w-[calc(100%-2rem)] rounded-lg border bg-card p-6 text-foreground backdrop:bg-[var(--color-modal-overlay)]"
@@ -444,6 +472,46 @@ export function SessionRecordForm({
           </Button>
         </div>
       </dialog>
+      {saved ? (
+        <dialog
+          ref={successDialog}
+          aria-labelledby="save-success-title"
+          aria-describedby="save-success-description"
+          onCancel={(event) => event.preventDefault()}
+          className="w-[calc(100%-2rem)] max-w-[358px] rounded-xl border bg-card p-6 text-center text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)]"
+        >
+          <div className="session-success-icon relative mx-auto grid h-12 w-12 place-items-center rounded-full bg-[var(--color-success-bg)] text-[var(--color-success)]">
+            <CircleCheckBig
+              className="session-success-check h-6 w-6"
+              aria-hidden="true"
+            />
+          </div>
+          <h2 id="save-success-title" className="mt-4 text-base font-bold">
+            Pengisian berhasil disimpan
+          </h2>
+          <p
+            id="save-success-description"
+            className="mt-2 text-sm leading-relaxed text-muted-foreground"
+          >
+            Data presensi, materi, dan catatan sesi telah berhasil disimpan.
+          </p>
+          <Button
+            autoFocus
+            type="button"
+            className="mt-5 w-full"
+            onClick={() => {
+              successDialog.current?.close()
+              void navigate(backTo)
+            }}
+          >
+            Kembali ke Jadwal
+          </Button>
+        </dialog>
+      ) : null}
     </main>
   )
+}
+
+function formatSessionTime(value: string) {
+  return value.slice(0, 5)
 }
