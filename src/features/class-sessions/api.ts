@@ -19,9 +19,11 @@ export type ClassSession = {
   endTime: string
   tutorId: string
   tutorName: string
+  tutorPhoneNumber: string
   roomId: string | null
   roomName: string | null
   roomCode: string | null
+  roomCapacity: number | null
   subject: string | null
   status: 'scheduled' | 'completed' | 'cancelled'
   attendanceStatus: 'pending' | 'saved'
@@ -59,7 +61,10 @@ export type SessionOverride = {
   roomId?: string
   status?: 'cancelled'
 }
-export type SessionListItem = Omit<ClassSession, 'students'>
+export type SessionListItem = Omit<
+  ClassSession,
+  'students' | 'tutorPhoneNumber' | 'roomCapacity'
+>
 type Page = {
   data: SessionListItem[]
   meta: { page: number; limit: number; total: number; totalPages: number }

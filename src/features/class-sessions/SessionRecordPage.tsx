@@ -72,10 +72,18 @@ export function SessionRecordForm({
       ? '/tutor/sessions'
       : `/schedule/${session.id}`
   const step = params.get('step') === 'notes' ? 'notes' : 'attendance'
-  const [students, setStudents] = useState(session.students)
+  const markAll = params.get('markAll') === '1'
+  const [students, setStudents] = useState(() =>
+    markAll
+      ? session.students.map((student) => ({
+          ...student,
+          status: 'present' as const,
+        }))
+      : session.students,
+  )
   const [topic, setTopic] = useState(session.topic ?? '')
   const [note, setNote] = useState(session.tutorNote ?? '')
-  const [dirty, setDirty] = useState(false)
+  const [dirty, setDirty] = useState(markAll)
   const [saved, setSaved] = useState(false)
   const [version] = useState(session.version)
   const mutation = useSaveSession(session.id)
