@@ -1,16 +1,15 @@
 import {
   Bell,
   CalendarDays,
-  DoorOpen,
   FileText,
   Megaphone,
   UserRound,
   UsersRound,
 } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
 import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
+import { TutorScheduleCard } from '@/features/tutor-dashboard/components/TutorScheduleCard'
 import { useSessions, todayInJakarta } from '@/features/class-sessions/api'
 import { getStoredAuthUser } from '@/lib/auth-session'
 
@@ -34,33 +33,7 @@ function getFirstName(name: string | null) {
   return firstName || 'Tentor'
 }
 
-function formatTime(value: string) {
-  return value.slice(0, 5)
-}
-
-function getScheduleStatus(status: 'scheduled' | 'completed' | 'cancelled') {
-  if (status === 'completed') {
-    return {
-      label: 'Selesai',
-      className: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
-    }
-  }
-
-  if (status === 'cancelled') {
-    return {
-      label: 'Dibatalkan',
-      className: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
-    }
-  }
-
-  return {
-    label: 'Belum selesai',
-    className: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
-  }
-}
-
 export function TutorDashboardPage() {
-  const navigate = useNavigate()
   const user = getStoredAuthUser()
   const today = new Date()
   const schedulesQuery = useSessions({
@@ -189,78 +162,9 @@ export function TutorDashboardPage() {
           ) : null}
 
           <div className="mt-3 grid gap-3">
-            {schedulesQuery.data?.data.map((schedule) => {
-              const scheduleStatus = getScheduleStatus(schedule.status)
-
-              return (
-                <article key={schedule.id} className="rounded-xl bg-card p-3.5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-sm font-bold">
-                        {schedule.studyGroupName}
-                      </h3>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {dateFormatter.format(today)}
-                      </p>
-                    </div>
-                    <span
-                      className={`rounded-full px-2 py-1 text-[10px] font-semibold ${scheduleStatus.className}`}
-                    >
-                      {scheduleStatus.label}
-                    </span>
-                  </div>
-                  <div className="my-3.5 border-t" />
-                  <div className="grid gap-3">
-                    <div className="flex gap-2">
-                      <CalendarDays
-                        className="mt-0.5 h-[18px] w-[18px] shrink-0 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <p className="text-[10px] text-muted-foreground">
-                          Waktu
-                        </p>
-                        <p className="text-xs font-semibold">
-                          {formatTime(schedule.startTime)} –{' '}
-                          {formatTime(schedule.endTime)} WIB
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <DoorOpen
-                        className="mt-0.5 h-[18px] w-[18px] shrink-0 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <p className="text-[10px] text-muted-foreground">
-                          Ruang
-                        </p>
-                        <p className="text-xs font-semibold">
-                          {schedule.roomName ?? 'Belum ditentukan'} •{' '}
-                          {schedule.studentCount} siswa
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    className="mt-4 w-full"
-                    onClick={() =>
-                      void navigate(
-                        `/tutor/sessions/${schedule.id}/record?step=attendance`,
-                      )
-                    }
-                  >
-                    {schedule.status === 'completed' ||
-                    schedule.status === 'cancelled' ||
-                    schedule.lockedAt
-                      ? 'Lihat Sesi'
-                      : 'Mulai Presensi'}
-                  </Button>
-                </article>
-              )
-            })}
+            {schedulesQuery.data?.data.map((schedule) => (
+              <TutorScheduleCard key={schedule.id} session={schedule} />
+            ))}
           </div>
         </section>
       </div>
