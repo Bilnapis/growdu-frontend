@@ -1,158 +1,217 @@
-import { type FormEvent, useMemo, useState } from "react";
-import { CheckCircle2, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
+import { type FormEvent, useMemo, useState } from 'react'
+import { CheckCircle2, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import * as yup from 'yup'
 
-import { TutorDialog } from './TutorDialog';
+import { TutorDialog } from './TutorDialog'
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useCreateTutor, useUpdateTutor } from "@/features/tutors/hooks/use-tutors";
-import type { Tutor } from "@/features/tutors/api/tutors-api";
-import { ApiError } from "@/services/api-client";
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  useCreateTutor,
+  useUpdateTutor,
+} from '@/features/tutors/hooks/use-tutors'
+import type { Tutor } from '@/features/tutors/api/tutors-api'
+import { ApiError } from '@/services/api-client'
 import {
   getYupFieldErrors,
   getYupValidationMessage,
   type FormFieldErrors,
-} from "@/lib/yup-validation";
+} from '@/lib/yup-validation'
 
 type TutorCreateForm = {
-  name: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  expertise: string;
-  education: string;
-  bankName: string;
-  accountName: string;
-  accountNumber: string;
-};
+  name: string
+  phoneNumber: string
+  email: string
+  address: string
+  expertise: string
+  education: string
+  bankName: string
+  accountName: string
+  accountNumber: string
+  password: string
+  passwordConfirmation: string
+}
 
 const initialForm: TutorCreateForm = {
-  name: "",
-  phoneNumber: "",
-  email: "",
-  address: "",
-  expertise: "",
-  education: "",
-  bankName: "",
-  accountName: "",
-  accountNumber: "",
-};
+  name: '',
+  phoneNumber: '',
+  email: '',
+  address: '',
+  expertise: '',
+  education: '',
+  bankName: '',
+  accountName: '',
+  accountNumber: '',
+  password: '',
+  passwordConfirmation: '',
+}
 
-const tutorCreateSchema: yup.ObjectSchema<TutorCreateForm> = yup.object({
-  name: yup
-    .string()
-    .trim()
-    .min(2, "Nama tentor wajib diisi.")
-    .required("Nama tentor wajib diisi."),
-  phoneNumber: yup
-    .string()
-    .trim()
-    .min(6, "Nomor HP minimal 6 karakter.")
-    .required("Nomor HP minimal 6 karakter."),
-  email: yup
-    .string()
-    .trim()
-    .email("Email wajib valid.")
-    .required("Email wajib valid."),
-  address: yup.string().trim().required("Alamat wajib diisi."),
-  expertise: yup.string().trim().required("Keahlian wajib diisi."),
-  education: yup.string().trim().required("Jurusan wajib diisi."),
-  bankName: yup.string().trim().required("Bank atau e-wallet wajib diisi."),
-  accountName: yup
-    .string()
-    .trim()
-    .min(2, "Atas nama rekening minimal 2 karakter.")
-    .required("Atas nama rekening minimal 2 karakter."),
-  accountNumber: yup
-    .string()
-    .trim()
-    .min(3, "Nomor rekening minimal 3 karakter.")
-    .required("Nomor rekening minimal 3 karakter."),
-});
+function createTutorSchema(
+  passwordRequired: boolean,
+): yup.ObjectSchema<TutorCreateForm> {
+  return yup.object({
+    name: yup
+      .string()
+      .trim()
+      .min(2, 'Nama tentor wajib diisi.')
+      .required('Nama tentor wajib diisi.'),
+    phoneNumber: yup
+      .string()
+      .trim()
+      .min(6, 'Nomor HP minimal 6 karakter.')
+      .required('Nomor HP minimal 6 karakter.'),
+    email: yup
+      .string()
+      .trim()
+      .email('Email wajib valid.')
+      .required('Email wajib valid.'),
+    address: yup.string().trim().required('Alamat wajib diisi.'),
+    expertise: yup.string().trim().required('Keahlian wajib diisi.'),
+    education: yup.string().trim().required('Jurusan wajib diisi.'),
+    bankName: yup.string().trim().required('Bank atau e-wallet wajib diisi.'),
+    accountName: yup
+      .string()
+      .trim()
+      .min(2, 'Atas nama rekening minimal 2 karakter.')
+      .required('Atas nama rekening minimal 2 karakter.'),
+    accountNumber: yup
+      .string()
+      .trim()
+      .min(3, 'Nomor rekening minimal 3 karakter.')
+      .required('Nomor rekening minimal 3 karakter.'),
+    password: yup
+      .string()
+      .defined()
+      .min(5, 'Kata sandi minimal 5 karakter.')
+      .max(128, 'Kata sandi maksimal 128 karakter.')
+      .test(
+        'required-for-account',
+        'Kata sandi wajib diisi untuk membuat akun login.',
+        (value) => !passwordRequired || Boolean(value),
+      ),
+    passwordConfirmation: yup
+      .string()
+      .defined()
+      .oneOf([yup.ref('password')], 'Konfirmasi kata sandi belum sama.')
+      .test(
+        'required-for-account',
+        'Konfirmasi kata sandi wajib diisi.',
+        (value) => !passwordRequired || Boolean(value),
+      ),
+  })
+}
 
-export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => void }) {
-  const navigate = useNavigate();
-  const createMutation = useCreateTutor();
-  const updateMutation = useUpdateTutor();
-  const isPending = createMutation.isPending || updateMutation.isPending;
-  const closeForm = onClose ?? (() => void navigate('/tutors', { replace: true }));
-  const [form, setForm] = useState<TutorCreateForm>(() => tutor ? {
-    name: tutor.name,
-    phoneNumber: normalizeTutorPhoneNumber(tutor.phoneNumber),
-    email: tutor.email ?? '',
-    address: tutor.address ?? '',
-    expertise: tutor.expertise ?? '',
-    education: tutor.education ?? '',
-    bankName: tutor.bankName ?? '',
-    accountName: tutor.accountName ?? '',
-    accountNumber: tutor.accountNumber ?? '',
-  } : initialForm);
-  const [submitted, setSubmitted] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+export function TutorForm({
+  tutor,
+  onClose,
+}: {
+  tutor?: Tutor
+  onClose?: () => void
+}) {
+  const navigate = useNavigate()
+  const createMutation = useCreateTutor()
+  const updateMutation = useUpdateTutor()
+  const isPending = createMutation.isPending || updateMutation.isPending
+  const closeForm =
+    onClose ?? (() => void navigate('/tutors', { replace: true }))
+  const [form, setForm] = useState<TutorCreateForm>(() =>
+    tutor
+      ? {
+          name: tutor.name,
+          phoneNumber: normalizeTutorPhoneNumber(tutor.phoneNumber),
+          email: tutor.email ?? '',
+          address: tutor.address ?? '',
+          expertise: tutor.expertise ?? '',
+          education: tutor.education ?? '',
+          bankName: tutor.bankName ?? '',
+          accountName: tutor.accountName ?? '',
+          accountNumber: tutor.accountNumber ?? '',
+          password: '',
+          passwordConfirmation: '',
+        }
+      : initialForm,
+  )
+  const [submitted, setSubmitted] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const passwordRequired = !tutor || !tutor.userId
+  const schema = useMemo(
+    () => createTutorSchema(passwordRequired),
+    [passwordRequired],
+  )
 
   const validation = useMemo<{
-    errors: FormFieldErrors<keyof TutorCreateForm>;
-    issues: string[];
+    errors: FormFieldErrors<keyof TutorCreateForm>
+    issues: string[]
   }>(() => {
     try {
-      tutorCreateSchema.validateSync(form, { abortEarly: false });
+      schema.validateSync(form, { abortEarly: false })
       return {
         errors: {},
         issues: [],
-      };
+      }
     } catch (error) {
       return {
         errors: getYupFieldErrors<keyof TutorCreateForm>(error),
         issues: error instanceof yup.ValidationError ? error.errors : [],
-      };
+      }
     }
-  }, [form]);
+  }, [form, schema])
 
-  const canSubmit = validation.issues.length === 0 && !isPending;
+  const canSubmit = validation.issues.length === 0 && !isPending
 
   function updateField(field: keyof TutorCreateForm, value: string) {
-    setForm((current) => ({ ...current, [field]: value }));
-    setSuccessMessage(null);
-    if (formError) setFormError(null);
+    setForm((current) => ({ ...current, [field]: value }))
+    setSuccessMessage(null)
+    if (formError) setFormError(null)
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (isPending) return;
-    setSubmitted(true);
-    setSuccessMessage(null);
-    setFormError(null);
+    event.preventDefault()
+    if (isPending) return
+    setSubmitted(true)
+    setSuccessMessage(null)
+    setFormError(null)
 
-    let input: TutorCreateForm;
+    let input: TutorCreateForm
     try {
-      input = tutorCreateSchema.validateSync(form, { abortEarly: false });
+      input = schema.validateSync(form, { abortEarly: false })
     } catch (error) {
       setFormError(
-        getYupValidationMessage(error, "Periksa kembali data tentor."),
-      );
-      return;
+        getYupValidationMessage(error, 'Periksa kembali data tentor.'),
+      )
+      return
     }
 
+    const {
+      password: inputPassword,
+      passwordConfirmation,
+      ...inputWithoutPassword
+    } = input
+    void passwordConfirmation
     const payload = {
-      ...input,
+      ...inputWithoutPassword,
+      ...(inputPassword ? { password: inputPassword } : {}),
       phoneNumber: `+62${normalizeTutorPhoneNumber(input.phoneNumber)}`,
       sessionRate: tutor?.sessionRate ?? '0',
       status: tutor?.status ?? 'active',
-    };
+    }
     const options = {
       onSuccess: () => {
-        setSuccessMessage(tutor ? 'Data tentor berhasil diperbarui.' : 'Tentor baru berhasil ditambahkan.');
-        closeForm();
+        setSuccessMessage(
+          tutor
+            ? 'Data tentor berhasil diperbarui.'
+            : 'Tentor baru berhasil ditambahkan.',
+        )
+        closeForm()
       },
       onError: (error: unknown) => setFormError(getMutationError(error)),
-    };
+    }
     if (tutor) {
-      updateMutation.mutate({ id: tutor.id, input: payload }, options);
+      updateMutation.mutate({ id: tutor.id, input: payload }, options)
     } else {
-      createMutation.mutate(payload, options);
+      createMutation.mutate(payload, options)
     }
   }
 
@@ -160,14 +219,19 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
     <div className="min-w-0 font-sans text-[var(--color-text)]">
       <header className="flex items-center justify-between gap-4">
         <div className="min-w-0 space-y-1">
-          <h1 id="tutor-form-title" className="text-2xl font-bold leading-[1.35] tracking-normal text-[var(--color-text)]">
+          <h1
+            id="tutor-form-title"
+            className="text-2xl font-bold leading-[1.35] tracking-normal text-[var(--color-text)]"
+          >
             {tutor ? 'Ubah Data Tentor' : 'Tambah Tentor'}
           </h1>
         </div>
         <button
           type="button"
           disabled={isPending}
-          aria-label={tutor ? "Tutup modal ubah tentor" : "Tutup modal tambah tentor"}
+          aria-label={
+            tutor ? 'Tutup modal ubah tentor' : 'Tutup modal tambah tentor'
+          }
           className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--color-muted)] hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
           onClick={closeForm}
         >
@@ -189,7 +253,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 value={form.name}
                 required
                 error={submitted ? validation.errors.name : undefined}
-                onChange={(value) => updateField("name", value)}
+                onChange={(value) => updateField('name', value)}
               />
               <FormField
                 id="tutor-phone"
@@ -200,7 +264,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 placeholder="81234567890"
                 isPhone
                 type="tel"
-                onChange={(value) => updateField("phoneNumber", value)}
+                onChange={(value) => updateField('phoneNumber', value)}
               />
               <FormField
                 id="tutor-email"
@@ -210,7 +274,39 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 error={submitted ? validation.errors.email : undefined}
                 placeholder="nama@email.com"
                 type="email"
-                onChange={(value) => updateField("email", value)}
+                onChange={(value) => updateField('email', value)}
+              />
+              <FormField
+                id="tutor-password"
+                label={passwordRequired ? 'Kata Sandi' : 'Kata Sandi Baru'}
+                value={form.password}
+                required={passwordRequired}
+                error={submitted ? validation.errors.password : undefined}
+                placeholder={
+                  passwordRequired
+                    ? 'Minimal 5 karakter'
+                    : 'Kosongkan bila tidak diubah'
+                }
+                type="password"
+                autoComplete="new-password"
+                onChange={(value) => updateField('password', value)}
+              />
+              <FormField
+                id="tutor-password-confirmation"
+                label={
+                  passwordRequired
+                    ? 'Konfirmasi Kata Sandi'
+                    : 'Konfirmasi Kata Sandi Baru'
+                }
+                value={form.passwordConfirmation}
+                required={passwordRequired}
+                error={
+                  submitted ? validation.errors.passwordConfirmation : undefined
+                }
+                placeholder="Ulangi kata sandi"
+                type="password"
+                autoComplete="new-password"
+                onChange={(value) => updateField('passwordConfirmation', value)}
               />
               <FormField
                 id="tutor-address"
@@ -219,7 +315,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 required
                 error={submitted ? validation.errors.address : undefined}
                 placeholder="Jl. Melati No. 12, Bandung"
-                onChange={(value) => updateField("address", value)}
+                onChange={(value) => updateField('address', value)}
               />
               <FormField
                 id="tutor-expertise"
@@ -228,7 +324,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 required
                 placeholder="Matematika, Bahasa Inggris"
                 error={submitted ? validation.errors.expertise : undefined}
-                onChange={(value) => updateField("expertise", value)}
+                onChange={(value) => updateField('expertise', value)}
               />
               <FormField
                 id="tutor-education"
@@ -237,7 +333,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 required
                 placeholder="Pendidikan Matematika"
                 error={submitted ? validation.errors.education : undefined}
-                onChange={(value) => updateField("education", value)}
+                onChange={(value) => updateField('education', value)}
               />
             </div>
           </section>
@@ -245,7 +341,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
           <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
             <SectionHeader
               title="Data Rekening Tentor"
-              description={"Dipakai untuk invoice atau penggajian"}
+              description={'Dipakai untuk invoice atau penggajian'}
             />
             <div className="mt-4 grid gap-3.5 md:grid-cols-3">
               <FormField
@@ -255,7 +351,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 required
                 placeholder="Contoh: BCA, Mandiri, GoPay"
                 error={submitted ? validation.errors.bankName : undefined}
-                onChange={(value) => updateField("bankName", value)}
+                onChange={(value) => updateField('bankName', value)}
               />
               <FormField
                 id="tutor-account-name"
@@ -264,7 +360,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 required
                 error={submitted ? validation.errors.accountName : undefined}
                 placeholder="Tentor"
-                onChange={(value) => updateField("accountName", value)}
+                onChange={(value) => updateField('accountName', value)}
               />
               <FormField
                 id="tutor-account-number"
@@ -274,7 +370,7 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
                 error={submitted ? validation.errors.accountNumber : undefined}
                 placeholder="12345678"
                 inputMode="numeric"
-                onChange={(value) => updateField("accountNumber", value)}
+                onChange={(value) => updateField('accountNumber', value)}
               />
             </div>
           </section>
@@ -313,27 +409,31 @@ export function TutorForm({ tutor, onClose }: { tutor?: Tutor; onClose?: () => v
               className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-gray-50)] px-4 text-[13px] font-semibold text-[var(--color-gray-400)] enabled:border-[var(--color-primary)] enabled:bg-[var(--color-primary)] enabled:text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               disabled={!canSubmit}
             >
-              {isPending ? "Menyimpan..." : tutor ? "Simpan Perubahan" : "Simpan Tentor"}
+              {isPending
+                ? 'Menyimpan...'
+                : tutor
+                  ? 'Simpan Perubahan'
+                  : 'Simpan Tentor'}
             </button>
           </div>
         </footer>
       </form>
     </div>
-  );
+  )
 
   return (
     <TutorDialog isPending={isPending} onDismiss={closeForm}>
       {content}
     </TutorDialog>
-  );
+  )
 }
 
 function SectionHeader({
   title,
   description,
 }: {
-  title: string;
-  description: string;
+  title: string
+  description: string
 }) {
   return (
     <div className="space-y-1">
@@ -344,7 +444,7 @@ function SectionHeader({
         {description}
       </p>
     </div>
-  );
+  )
 }
 
 function FormField({
@@ -355,20 +455,22 @@ function FormField({
   error,
   required = false,
   placeholder,
-  type = "text",
+  type = 'text',
   inputMode,
   isPhone = false,
+  autoComplete,
 }: {
-  id: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-  required?: boolean;
-  placeholder?: string;
-  type?: string;
-  inputMode?: "email" | "numeric" | "search" | "tel" | "text" | "url";
-  isPhone?: boolean;
+  id: string
+  label: string
+  value: string
+  onChange: (value: string) => void
+  error?: string
+  required?: boolean
+  placeholder?: string
+  type?: string
+  inputMode?: 'email' | 'numeric' | 'search' | 'tel' | 'text' | 'url'
+  isPhone?: boolean
+  autoComplete?: string
 }) {
   return (
     <div className="grid gap-[7px]">
@@ -389,15 +491,17 @@ function FormField({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         type={type}
+        autoComplete={autoComplete}
         inputMode={inputMode}
         isPhone={isPhone}
         aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] rounded-md bg-[var(--color-bg-light)] px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${error
-          ? "border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]"
-          : "border-[var(--color-border)]"
-          }`}
+        className={`h-[42px] rounded-md bg-[var(--color-bg-light)] px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${
+          error
+            ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]'
+            : 'border-[var(--color-border)]'
+        }`}
       />
       {error ? (
         <p
@@ -408,14 +512,15 @@ function FormField({
         </p>
       ) : null}
     </div>
-  );
+  )
 }
 
 function normalizeTutorPhoneNumber(value: string) {
-  return value.replace(/\D/g, '').replace(/^(?:62|0+)/, '');
+  return value.replace(/\D/g, '').replace(/^(?:62|0+)/, '')
 }
 
 function getMutationError(error: unknown) {
-  if (error instanceof ApiError && error.status === 403) return 'Anda tidak memiliki izin untuk mengubah data tentor.';
-  return "Data tentor belum dapat disimpan. Silakan coba lagi.";
+  if (error instanceof ApiError && error.status === 403)
+    return 'Anda tidak memiliki izin untuk mengubah data tentor.'
+  return 'Data tentor belum dapat disimpan. Silakan coba lagi.'
 }

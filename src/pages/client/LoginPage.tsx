@@ -16,7 +16,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ApiError } from '@/services/api-client'
 import { login } from '@/services/auth.service'
-import { clearAuthSession, storeAuthSession } from '@/lib/auth-session'
+import {
+  clearAuthSession,
+  getDefaultAuthenticatedPath,
+  storeAuthSession,
+} from '@/lib/auth-session'
 import { getYupValidationMessage } from '@/lib/yup-validation'
 
 type IconName = 'calendar' | 'users' | 'file' | 'eye' | 'eyeOff'
@@ -89,11 +93,7 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
       void navigate(
         getRedirectPath(
           location.state,
-          adminOnly
-            ? '/admin'
-            : response.user.role === 'owner'
-              ? '/bimbel/select'
-              : '/dashboard',
+          adminOnly ? '/admin' : getDefaultAuthenticatedPath(response.user),
           adminOnly ? '/admin/login' : '/login',
         ),
         { replace: true },
@@ -152,7 +152,9 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
           </span>
           <span className="flex flex-col gap-0.5 leading-tight">
             <strong className="text-base">GrowDu</strong>
-            <span className="text-xs text-[var(--color-primary-soft)]">Operasional Bimbel</span>
+            <span className="text-xs text-[var(--color-primary-soft)]">
+              Operasional Bimbel
+            </span>
           </span>
         </div>
 
@@ -237,7 +239,9 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
                           : 'Tampilkan kata sandi'
                       }
                       disabled={loginMutation.isPending}
-                      onClick={() => setIsPasswordVisible((visible) => !visible)}
+                      onClick={() =>
+                        setIsPasswordVisible((visible) => !visible)
+                      }
                     >
                       <LoginIcon name={isPasswordVisible ? 'eyeOff' : 'eye'} />
                     </Button>

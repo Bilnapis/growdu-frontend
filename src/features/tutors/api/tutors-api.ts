@@ -42,6 +42,8 @@ export type TutorInput = {
   name: string
   phoneNumber: string
   email?: string
+  /** Required when creating a tutor; optional on updates to change login password. */
+  password?: string
   address?: string
   expertise?: string
   education?: string

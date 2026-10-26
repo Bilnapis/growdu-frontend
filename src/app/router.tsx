@@ -6,6 +6,7 @@ import {
   OwnerRoute,
   PlatformAdminRoute,
   TenantContextRoute,
+  TutorRoute,
   UnauthenticatedRoute,
 } from '@/app/route-guards'
 import { AdminLayout } from '@/features/admin/components/AdminLayout'
@@ -36,6 +37,8 @@ import { StaffPage } from '@/pages/client/StaffPage'
 import { TutorCreatePage } from '@/pages/client/TutorCreatePage'
 import { TutorDetailPage } from '@/pages/client/TutorDetailPage'
 import { TutorEditPage } from '@/pages/client/TutorEditPage'
+import { TutorDashboardPage } from '@/pages/client/TutorDashboardPage'
+import { TutorProfilePage } from '@/pages/client/TutorProfilePage'
 import { TutorsPage } from '@/pages/client/TutorsPage'
 import { UserSettingsPage } from '@/pages/client/UserSettingsPage'
 import { NotFoundPage } from '@/pages/shared/NotFoundPage'
@@ -65,6 +68,19 @@ export const router = createBrowserRouter([
           {
             element: <TenantContextRoute />,
             children: [
+              {
+                element: <TutorRoute />,
+                children: [
+                  {
+                    path: 'tutor/dashboard',
+                    element: <TutorDashboardPage />,
+                  },
+                  {
+                    path: 'tutor/profile',
+                    element: <TutorProfilePage />,
+                  },
+                ],
+              },
               {
                 element: <DashboardLandingPage />,
                 children: [

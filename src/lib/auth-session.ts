@@ -17,6 +17,20 @@ export type AuthSession = {
   user: AuthUser
 }
 
+export function getDefaultAuthenticatedPath(
+  user: Pick<AuthUser, 'role'> | null,
+) {
+  if (user?.role === 'owner') {
+    return '/bimbel/select'
+  }
+
+  if (user?.role === 'tutor') {
+    return '/tutor/dashboard'
+  }
+
+  return '/dashboard'
+}
+
 export function getStoredAccessToken() {
   if (typeof window === 'undefined') {
     return null
