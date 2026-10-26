@@ -65,7 +65,7 @@ export function TutorBottomNavigation() {
       className="fixed inset-x-0 bottom-0 z-10 border-t bg-card"
       aria-label="Navigasi tentor"
     >
-      <div className="mx-auto grid h-16 w-full max-w-[430px] grid-cols-5 gap-2 px-[18px] py-2">
+      <div className="mx-auto grid h-16 w-full max-w-[390px] grid-cols-5 gap-2 px-[18px] py-2">
         {navigationItems.map((item) => (
           <TutorNavigationItem key={item.label} item={item} />
         ))}

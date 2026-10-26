@@ -7,8 +7,9 @@ import {
   UserRound,
   UsersRound,
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
+import { Button } from '@/components/ui/button'
 import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { useSessions, todayInJakarta } from '@/features/class-sessions/api'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -37,7 +38,29 @@ function formatTime(value: string) {
   return value.slice(0, 5)
 }
 
+function getScheduleStatus(status: 'scheduled' | 'completed' | 'cancelled') {
+  if (status === 'completed') {
+    return {
+      label: 'Selesai',
+      className: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
+    }
+  }
+
+  if (status === 'cancelled') {
+    return {
+      label: 'Dibatalkan',
+      className: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+    }
+  }
+
+  return {
+    label: 'Belum selesai',
+    className: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+  }
+}
+
 export function TutorDashboardPage() {
+  const navigate = useNavigate()
   const user = getStoredAuthUser()
   const today = new Date()
   const schedulesQuery = useSessions({
@@ -49,8 +72,8 @@ export function TutorDashboardPage() {
   const greetingName = getFirstName(user?.profileName ?? null)
 
   return (
-    <main className="min-h-screen bg-background pb-20 text-foreground">
-      <div className="mx-auto w-full max-w-[430px]">
+    <main className="min-h-dvh bg-background pb-20 text-foreground">
+      <div className="mx-auto w-full max-w-[390px]">
         <header className="flex items-center justify-between px-4 py-[18px]">
           <div>
             <h1 className="text-lg font-bold leading-tight">
@@ -63,7 +86,7 @@ export function TutorDashboardPage() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-full border bg-card text-muted-foreground transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="grid h-9 w-9 place-items-center rounded-full bg-card text-muted-foreground transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Notifikasi"
             >
               <Bell className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -82,8 +105,8 @@ export function TutorDashboardPage() {
           <h2 id="announcements-title" className="text-[15px] font-bold">
             Pengumuman
           </h2>
-          <article className="mt-2 flex items-center gap-2.5 rounded-[10px] border border-[#fde68a] bg-warning-bg p-3.5">
-            <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-warning">
+          <article className="mt-2 flex items-center gap-2.5 rounded-[10px] bg-[var(--color-warning-bg)] p-3.5">
+            <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-[var(--color-warning)]">
               <Megaphone className="h-[17px] w-[17px]" aria-hidden="true" />
             </div>
             <div>
@@ -108,7 +131,7 @@ export function TutorDashboardPage() {
                 <Link
                   key={label}
                   to="/tutor/sessions"
-                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] border bg-card text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                   <span className="text-[11px] font-bold">{label}</span>
@@ -116,7 +139,7 @@ export function TutorDashboardPage() {
               ) : (
                 <div
                   key={label}
-                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] border bg-card text-muted-foreground"
+                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground"
                   aria-label={`${label} segera tersedia`}
                 >
                   <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
@@ -136,14 +159,14 @@ export function TutorDashboardPage() {
             <h2 id="today-schedule-title" className="text-[15px] font-bold">
               Jadwal Hari Ini
             </h2>
-            <span className="text-[11px] font-extrabold text-primary">
+            <span className="text-[11px] font-semibold text-primary">
               <Link to="/tutor/sessions">Lihat semua</Link>
             </span>
           </div>
 
           {schedulesQuery.isPending ? (
             <div
-              className="mt-3 h-40 animate-pulse rounded-xl border bg-card"
+              className="mt-3 h-40 animate-pulse rounded-xl bg-card"
               aria-label="Memuat jadwal"
             />
           ) : null}
@@ -166,69 +189,78 @@ export function TutorDashboardPage() {
           ) : null}
 
           <div className="mt-3 grid gap-3">
-            {schedulesQuery.data?.data.map((schedule) => (
-              <article
-                key={schedule.id}
-                className="rounded-xl border bg-card p-3.5 shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-sm font-bold">
-                      {schedule.studyGroupName}
-                    </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {dateFormatter.format(today)}
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-warning-bg px-2 py-1 text-[10px] font-bold text-warning">
-                    {schedule.status === 'completed'
-                      ? 'Tersimpan'
-                      : schedule.status === 'cancelled'
-                        ? 'Dibatalkan'
-                        : 'Belum selesai'}
-                  </span>
-                </div>
-                <div className="my-3.5 border-t" />
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex gap-2">
-                    <CalendarDays
-                      className="mt-0.5 h-[18px] w-[18px] shrink-0 text-primary"
-                      aria-hidden="true"
-                    />
+            {schedulesQuery.data?.data.map((schedule) => {
+              const scheduleStatus = getScheduleStatus(schedule.status)
+
+              return (
+                <article key={schedule.id} className="rounded-xl bg-card p-3.5">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-[10px] text-muted-foreground">Waktu</p>
-                      <p className="text-xs font-bold">
-                        {formatTime(schedule.startTime)} –{' '}
-                        {formatTime(schedule.endTime)} WIB
+                      <h3 className="text-sm font-bold">
+                        {schedule.studyGroupName}
+                      </h3>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {dateFormatter.format(today)}
                       </p>
                     </div>
+                    <span
+                      className={`rounded-full px-2 py-1 text-[10px] font-semibold ${scheduleStatus.className}`}
+                    >
+                      {scheduleStatus.label}
+                    </span>
                   </div>
-                  <div className="flex gap-2">
-                    <DoorOpen
-                      className="mt-0.5 h-[18px] w-[18px] shrink-0 text-primary"
-                      aria-hidden="true"
-                    />
-                    <div>
-                      <p className="text-[10px] text-muted-foreground">Ruang</p>
-                      <p className="text-xs font-bold">
-                        {schedule.roomName ?? 'Belum ditentukan'} •{' '}
-                        {schedule.studentCount} siswa
-                      </p>
+                  <div className="my-3.5 border-t" />
+                  <div className="grid gap-3">
+                    <div className="flex gap-2">
+                      <CalendarDays
+                        className="mt-0.5 h-[18px] w-[18px] shrink-0 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                      <div>
+                        <p className="text-[10px] text-muted-foreground">
+                          Waktu
+                        </p>
+                        <p className="text-xs font-semibold">
+                          {formatTime(schedule.startTime)} –{' '}
+                          {formatTime(schedule.endTime)} WIB
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <DoorOpen
+                        className="mt-0.5 h-[18px] w-[18px] shrink-0 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                      <div>
+                        <p className="text-[10px] text-muted-foreground">
+                          Ruang
+                        </p>
+                        <p className="text-xs font-semibold">
+                          {schedule.roomName ?? 'Belum ditentukan'} •{' '}
+                          {schedule.studentCount} siswa
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <Link
-                  to={`/tutor/sessions/${schedule.id}/record?step=attendance`}
-                  className="mt-3.5 flex h-9 w-full items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground transition-colors hover:bg-[var(--color-brand-600)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                >
-                  {schedule.status === 'completed' ||
-                  schedule.status === 'cancelled' ||
-                  schedule.lockedAt
-                    ? 'Lihat Sesi'
-                    : 'Mulai Presensi'}
-                </Link>
-              </article>
-            ))}
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="mt-4 w-full"
+                    onClick={() =>
+                      void navigate(
+                        `/tutor/sessions/${schedule.id}/record?step=attendance`,
+                      )
+                    }
+                  >
+                    {schedule.status === 'completed' ||
+                    schedule.status === 'cancelled' ||
+                    schedule.lockedAt
+                      ? 'Lihat Sesi'
+                      : 'Mulai Presensi'}
+                  </Button>
+                </article>
+              )
+            })}
           </div>
         </section>
       </div>
