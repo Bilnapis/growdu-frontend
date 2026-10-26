@@ -28,6 +28,7 @@ import {
 } from './api'
 
 const PAGE_SIZE = 6
+const tableCellClass = 'px-[18px] py-3'
 
 export function SessionsPage() {
   const navigate = useNavigate()
@@ -287,10 +288,15 @@ function ListView({
 }) {
   return (
     <>
-      <div className="mt-3.5 hidden overflow-x-auto md:block">
-        <table className="w-full min-w-[900px] table-fixed border-collapse text-left text-xs">
+      <div
+        className="mt-[14px] hidden overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring md:block"
+        role="region"
+        aria-label="Tabel sesi jadwal belajar, geser untuk melihat semua kolom"
+        tabIndex={0}
+      >
+        <table className="w-full min-w-[900px] table-fixed border-collapse text-left text-[13px]">
           <caption className="sr-only">Daftar sesi jadwal belajar</caption>
-          <thead className="bg-[var(--color-gray-50)] text-[var(--color-muted)]">
+          <thead className="bg-slate-50 text-muted-foreground">
             <tr className="h-11">
               <TableHeading className="w-[17%] rounded-l-md">
                 Hari &amp; Jam
@@ -306,26 +312,26 @@ function ListView({
               </TableHeading>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[var(--color-bg-alt)]">
+          <tbody className="divide-y divide-slate-100">
             {sessions.map((session) => (
               <tr
                 key={session.id}
-                className="h-[70px] text-[var(--color-text)]"
+                className="h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
               >
-                <td className="px-3 font-bold">{compactDateLabel(session)}</td>
-                <th scope="row" className="px-3 text-[13px] font-bold">
+                <td className={`${tableCellClass} font-bold`}>{compactDateLabel(session)}</td>
+                <th scope="row" className={`${tableCellClass} font-bold`}>
                   {session.studyGroupName}
                 </th>
-                <td className="px-3 font-medium">{session.subject ?? '—'}</td>
-                <td className="px-3 font-semibold">{session.tutorName}</td>
-                <td className="px-3 font-medium">
+                <td className={`${tableCellClass} font-medium`}>{session.subject ?? '—'}</td>
+                <td className={`${tableCellClass} font-semibold`}>{session.tutorName}</td>
+                <td className={`${tableCellClass} font-medium`}>
                   {session.roomCode ?? session.roomName ?? '—'}
                 </td>
-                <td className="px-3 font-semibold">{session.studentCount}</td>
-                <td className="px-3">
+                <td className={`${tableCellClass} font-semibold`}>{session.studentCount}</td>
+                <td className={tableCellClass}>
                   <AttendanceBadge session={session} />
                 </td>
-                <td className="px-3 text-center">
+                <td className="px-3 py-3 text-center">
                   <Link
                     to={sessionLink(session.id, tutor)}
                     className="inline-grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
@@ -798,7 +804,7 @@ function TableHeading({
   className?: string
 }) {
   return (
-    <th scope="col" className={`px-3 font-extrabold ${className}`}>
+    <th scope="col" className={`px-[18px] font-bold ${className}`}>
       {children}
     </th>
   )

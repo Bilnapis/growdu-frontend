@@ -9,6 +9,7 @@ import { useStudyGroups, useStudyGroupsSummary, useUpdateStudyGroupStatus } from
 import type { StudyGroupFilters, StudyGroupListItem } from '@/features/study-groups/api/study-groups-api'
 
 const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+const tableCellClass = 'px-[18px] py-3'
 export function StudyGroupManagement({ filters, onFiltersChange }: { filters: StudyGroupFilters; onFiltersChange: (filters: StudyGroupFilters) => void }) {
   const navigate = useNavigate()
   const groups = useStudyGroups(filters)
@@ -69,33 +70,38 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
           </p>
         ) : null}
         {groups.data ? (
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[850px] text-left text-sm">
+          <div
+            className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
+            role="region"
+            aria-label="Tabel kelompok belajar, geser untuk melihat semua kolom"
+            tabIndex={0}
+          >
+            <table className="w-full min-w-[900px] border-collapse text-left text-[13px]">
               <caption className="sr-only">Daftar kelompok belajar</caption>
-              <thead className="bg-muted text-xs text-muted-foreground">
-                <tr>
-                  <th className="p-3">Nama Kelompok</th>
-                  <th className="p-3">Mata Pelajaran</th>
-                  <th className="p-3">Tentor</th>
-                  <th className="p-3">Jadwal</th>
-                  <th className="p-3">Siswa</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Aksi</th>
+              <thead className="bg-slate-50 text-muted-foreground">
+                <tr className="h-11">
+                  <th scope="col" className="px-[18px] font-bold">Nama Kelompok</th>
+                  <th scope="col" className="px-[18px] font-bold">Mata Pelajaran</th>
+                  <th scope="col" className="px-[18px] font-bold">Tentor</th>
+                  <th scope="col" className="px-[18px] font-bold">Jadwal</th>
+                  <th scope="col" className="px-[18px] font-bold">Siswa</th>
+                  <th scope="col" className="px-[18px] font-bold">Status</th>
+                  <th scope="col" className="px-3 font-bold">Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {groups.data.data.map((group) => (
-                  <tr className="border-b border-border" key={group.id}>
-                    <td className="p-3 font-semibold">
-                      <Link className="hover:underline" to={`/study-groups/${group.id}`}>
+                  <tr className="h-[70px] bg-card text-[13px] leading-[1.3] text-foreground" key={group.id}>
+                    <th scope="row" className={`${tableCellClass} min-w-[150px] font-bold`}>
+                      <Link className="hover:underline focus-visible:ring-2 focus-visible:ring-ring" to={`/study-groups/${group.id}`}>
                         {group.name}
                       </Link>
-                    </td>
-                    <td className="p-3">{group.subjects.join(', ') || '—'}</td>
-                    <td className="p-3">{[...new Set(group.schedules.map((s) => s.tutorName))].join(', ')}</td>
-                    <td className="p-3">{group.schedules.map((s) => `${days[s.dayOfWeek - 1]} ${s.startTime}–${s.endTime}`).join(', ')}</td>
-                    <td className="p-3">{group.studentCount}</td>
-                    <td className="p-3">
+                    </th>
+                    <td className={`${tableCellClass} min-w-[150px] font-medium`}>{group.subjects.join(', ') || '—'}</td>
+                    <td className={`${tableCellClass} min-w-[150px] font-semibold`}>{[...new Set(group.schedules.map((s) => s.tutorName))].join(', ')}</td>
+                    <td className={`${tableCellClass} min-w-[200px] font-medium`}>{group.schedules.map((s) => `${days[s.dayOfWeek - 1]} ${s.startTime}–${s.endTime}`).join(', ')}</td>
+                    <td className={`${tableCellClass} font-semibold`}>{group.studentCount}</td>
+                    <td className={tableCellClass}>
                       <span
                         className={
                           group.status === 'active'
@@ -106,7 +112,7 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
                         {group.status === 'active' ? 'Aktif' : 'Nonaktif'}
                       </span>
                     </td>
-                    <td className="w-[52px] p-3">
+                    <td className="w-[52px] px-3 py-3">
                       <StudyGroupRowActions
                         group={group}
                         statusPending={status.isPending}
