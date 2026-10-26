@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
-  Plus,
   Search,
   SlidersHorizontal,
   UserRoundX,
@@ -9,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Input } from '@/components/ui/input'
 
 import {
@@ -82,12 +82,9 @@ export function StaffManagement() {
             Kelola daftar akun dan status pegawai.
           </p>
         </div>
-        <Button asChild className="text-[13px] font-semibold">
-          <Link to="/staff/new">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Tambah Pegawai
-          </Link>
-        </Button>
+        <AddButton onClick={() => void navigate('/staff/new')}>
+          Tambah Pegawai
+        </AddButton>
       </header>
 
       {actionMessage ? (

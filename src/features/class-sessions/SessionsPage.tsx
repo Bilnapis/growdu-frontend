@@ -9,12 +9,12 @@ import {
   ChevronRight,
   MoreHorizontal,
   PauseCircle,
-  Plus,
   Search,
   SlidersHorizontal,
 } from 'lucide-react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Input } from '@/components/ui/input'
 import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -30,6 +30,7 @@ import {
 const PAGE_SIZE = 6
 
 export function SessionsPage() {
+  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const from = isDate(params.get('from'))
     ? params.get('from')!
@@ -136,12 +137,9 @@ export function SessionsPage() {
             </WeekButton>
           </div>
           {!tutor && !calendarView ? (
-            <Button size="sm" asChild>
-              <Link to="/study-groups/new">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-                Tambah Jadwal
-              </Link>
-            </Button>
+            <AddButton onClick={() => void navigate('/study-groups/new')}>
+              Tambah Jadwal
+            </AddButton>
           ) : null}
         </div>
       </header>

@@ -20402,6 +20402,7 @@
                   "id": "KBErx29v",
                   "type": "ref",
                   "ref": "btn_cmp_lead_icon",
+                  "height": "fit_content",
                   "descendants": {
                     "btn_ic_lead": {
                       "icon": "add",
@@ -31528,6 +31529,7 @@
                   "id": "btn_2d3a6d1",
                   "type": "ref",
                   "ref": "btn_cmp_lead_icon",
+                  "height": "fit_content",
                   "descendants": {
                     "btn_ic_lead": {
                       "icon": "plus",

@@ -5,7 +5,6 @@ import {
   Eye,
   MoreHorizontal,
   Pencil,
-  Plus,
   Search,
   SlidersHorizontal,
   Users,
@@ -18,6 +17,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { RoomListItem, RoomStatus } from '@/features/rooms/api/rooms-api'
@@ -105,12 +105,9 @@ export function RoomManagement() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2.5">
-          <Button size="sm" asChild>
-            <Link to="/rooms/new">
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              Tambah Data
-            </Link>
-          </Button>
+          <AddButton onClick={() => void navigate('/rooms/new')}>
+            Tambah Ruangan
+          </AddButton>
         </div>
       </header>
 
@@ -248,18 +245,13 @@ export function RoomManagement() {
                       key={room.id}
                       className="h-[70px] bg-card text-foreground"
                     >
-                      <th
-                        scope="row"
-                        className="px-[18px] py-3 font-bold"
-                      >
+                      <th scope="row" className="px-[18px] py-3 font-bold">
                         {room.name}
                       </th>
                       <td className="px-[18px] py-3 font-medium">
                         {room.code}
                       </td>
-                      <td className="px-[18px] py-3">
-                        {room.capacity} Siswa
-                      </td>
+                      <td className="px-[18px] py-3">{room.capacity} Siswa</td>
                       <td className="px-[18px] py-3">
                         {room.activeGroupCount} Kelompok
                       </td>
@@ -490,6 +482,8 @@ function todayLabel(room: RoomListItem) {
 }
 
 function EmptyState({ filtered }: { filtered: boolean }) {
+  const navigate = useNavigate()
+
   return (
     <div className="grid min-h-[360px] place-items-center py-12 text-center">
       <div>
@@ -505,12 +499,12 @@ function EmptyState({ filtered }: { filtered: boolean }) {
             : 'Tambahkan ruangan kelas agar dapat digunakan saat membuat kelompok belajar dan mendeteksi bentrok jadwal mengajar.'}
         </p>
         {!filtered ? (
-          <Button asChild size="sm" className="mt-4">
-            <Link to="/rooms/new">
-              <Plus className="h-4 w-4" />
-              Tambah Data
-            </Link>
-          </Button>
+          <AddButton
+            className="mt-4"
+            onClick={() => void navigate('/rooms/new')}
+          >
+            Tambah Data
+          </AddButton>
         ) : null}
       </div>
     </div>

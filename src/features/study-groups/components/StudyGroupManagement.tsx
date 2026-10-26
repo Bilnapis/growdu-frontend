@@ -1,8 +1,9 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { BookOpen, CalendarDays, CheckCircle2, Eye, MoreHorizontal, PauseCircle, Pencil, Plus, Search, UserCheck, UserX } from 'lucide-react'
+import { BookOpen, CalendarDays, CheckCircle2, Eye, MoreHorizontal, PauseCircle, Pencil, Search, UserCheck, UserX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Input } from '@/components/ui/input'
 import { useStudyGroups, useStudyGroupsSummary, useUpdateStudyGroupStatus } from '@/features/study-groups/hooks/use-study-groups'
 import type { StudyGroupFilters, StudyGroupListItem } from '@/features/study-groups/api/study-groups-api'
@@ -32,10 +33,9 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
           <h1 className="text-2xl font-bold">Kelompok Belajar</h1>
           <p className="mt-1 text-sm text-[var(--color-muted)]">Kelola jadwal, tentor, dan siswa dalam kelompok belajar.</p>
         </div>
-        <Button onClick={() => void navigate('/study-groups/new')}>
-          <Plus className="h-4 w-4" />
+        <AddButton onClick={() => void navigate('/study-groups/new')}>
           Tambah Kelompok
-        </Button>
+        </AddButton>
       </header>
       <section className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4" aria-label="Ringkasan kelompok belajar">
         <Metric icon={BookOpen} label="Total Kelompok" value={summary.data?.total} tone="blue" />

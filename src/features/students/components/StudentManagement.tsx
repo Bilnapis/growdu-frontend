@@ -14,7 +14,6 @@ import {
   Mail,
   MoreHorizontal,
   Pencil,
-  Plus,
   Search,
   SlidersHorizontal,
   UserRoundX,
@@ -23,6 +22,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -182,13 +182,9 @@ export function StudentManagement() {
             Kelola siswa aktif, kontak orang tua, dan status belajar.
           </p>
         </div>
-        <Button
-          className="text-[13px] font-semibold"
-          onClick={() => void navigate('/students/new')}
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
+        <AddButton onClick={() => void navigate('/students/new')}>
           Tambah Siswa
-        </Button>
+        </AddButton>
       </header>
 
       <section

@@ -15,7 +15,6 @@ import {
   Mail,
   MoreHorizontal,
   Pencil,
-  Plus,
   Search,
   SlidersHorizontal,
   UserRoundX,
@@ -25,7 +24,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Button } from '@/components/ui/button'
+import { AddButton } from '@/components/ui/add-button'
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -142,14 +141,12 @@ export function TutorManagement({
             Kelola data tentor aktif dan nonaktif.
           </p>
         </div>
-        <Button
+        <AddButton
           type="button"
-          className="text-[13px] font-semibold"
           onClick={() => void navigate("/tutors/new")}
         >
-          <Plus className="h-4 w-4" aria-hidden="true" />
           Tambah Tentor
-        </Button>
+        </AddButton>
       </header>
 
       <section
