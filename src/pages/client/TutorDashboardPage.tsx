@@ -10,7 +10,7 @@ import {
 import { Link } from 'react-router-dom'
 
 import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
-import { useSchedules } from '@/features/schedules/hooks/use-schedules'
+import { useSessions, todayInJakarta } from '@/features/class-sessions/api'
 import { getStoredAuthUser } from '@/lib/auth-session'
 
 const dateFormatter = new Intl.DateTimeFormat('id-ID', {
@@ -18,6 +18,7 @@ const dateFormatter = new Intl.DateTimeFormat('id-ID', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
+  timeZone: 'Asia/Jakarta',
 })
 
 const quickActions = [
@@ -25,10 +26,6 @@ const quickActions = [
   { label: 'Siswa', icon: UsersRound },
   { label: 'Laporan', icon: FileText },
 ] as const
-
-function getTodayDayOfWeek(date: Date) {
-  return date.getDay() === 0 ? 7 : date.getDay()
-}
 
 function getFirstName(name: string | null) {
   const firstName = name?.trim().split(/\s+/)[0]
@@ -43,10 +40,11 @@ function formatTime(value: string) {
 export function TutorDashboardPage() {
   const user = getStoredAuthUser()
   const today = new Date()
-  const schedulesQuery = useSchedules({
+  const schedulesQuery = useSessions({
     page: 1,
-    limit: 10,
-    dayOfWeek: getTodayDayOfWeek(today),
+    limit: 100,
+    from: todayInJakarta(),
+    to: todayInJakarta(),
   })
   const greetingName = getFirstName(user?.profileName ?? null)
 
@@ -105,16 +103,27 @@ export function TutorDashboardPage() {
             Menu
           </h2>
           <div className="mt-3 grid grid-cols-3 gap-2.5">
-            {quickActions.map(({ label, icon: Icon }) => (
-              <div
-                key={label}
-                className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] border bg-card text-muted-foreground"
-                aria-label={`${label} segera tersedia`}
-              >
-                <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
-                <span className="text-[11px] font-bold">{label}</span>
-              </div>
-            ))}
+            {quickActions.map(({ label, icon: Icon }) =>
+              label === 'Jadwal' ? (
+                <Link
+                  key={label}
+                  to="/tutor/sessions"
+                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] border bg-card text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <span className="text-[11px] font-bold">{label}</span>
+                </Link>
+              ) : (
+                <div
+                  key={label}
+                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] border bg-card text-muted-foreground"
+                  aria-label={`${label} segera tersedia`}
+                >
+                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <span className="text-[11px] font-bold">{label}</span>
+                </div>
+              ),
+            )}
           </div>
         </section>
 
@@ -128,7 +137,7 @@ export function TutorDashboardPage() {
               Jadwal Hari Ini
             </h2>
             <span className="text-[11px] font-extrabold text-primary">
-              Lihat semua
+              <Link to="/tutor/sessions">Lihat semua</Link>
             </span>
           </div>
 
@@ -172,7 +181,11 @@ export function TutorDashboardPage() {
                     </p>
                   </div>
                   <span className="rounded-full bg-warning-bg px-2 py-1 text-[10px] font-bold text-warning">
-                    Belum selesai
+                    {schedule.status === 'completed'
+                      ? 'Tersimpan'
+                      : schedule.status === 'cancelled'
+                        ? 'Dibatalkan'
+                        : 'Belum selesai'}
                   </span>
                 </div>
                 <div className="my-3.5 border-t" />
@@ -204,13 +217,16 @@ export function TutorDashboardPage() {
                     </div>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  disabled
-                  className="mt-3.5 h-9 w-full rounded-md bg-primary text-xs font-bold text-primary-foreground transition-colors hover:bg-[var(--color-brand-600)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                <Link
+                  to={`/tutor/sessions/${schedule.id}/record?step=attendance`}
+                  className="mt-3.5 flex h-9 w-full items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground transition-colors hover:bg-[var(--color-brand-600)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                  Mulai Presensi
-                </button>
+                  {schedule.status === 'completed' ||
+                  schedule.status === 'cancelled' ||
+                  schedule.lockedAt
+                    ? 'Lihat Sesi'
+                    : 'Mulai Presensi'}
+                </Link>
               </article>
             ))}
           </div>

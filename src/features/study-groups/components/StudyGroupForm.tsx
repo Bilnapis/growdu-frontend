@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Plus, Search, Trash2, X } from 'lucide-react'
+import { AlertCircle, Info, Plus, Search, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import './study-group-form.css'
@@ -19,6 +19,7 @@ import { useStudents } from '@/features/students/hooks/use-students'
 import { useTutors } from '@/features/tutors/hooks/use-tutors'
 import { useRooms } from '@/features/rooms/hooks/use-rooms'
 import { ApiError } from '@/services/api-client'
+import { todayInJakarta, shiftDate } from '@/features/class-sessions/api'
 
 type ScheduleDraft = {
   id?: string
@@ -28,6 +29,16 @@ type ScheduleDraft = {
   startTime: string
   endTime: string
 }
+const days = [
+  'Senin',
+  'Selasa',
+  'Rabu',
+  'Kamis',
+  'Jumat',
+  'Sabtu',
+  'Minggu',
+] as const
+
 const newSchedule = (): ScheduleDraft => ({
   tutorId: '',
   roomId: '',
@@ -38,6 +49,10 @@ const newSchedule = (): ScheduleDraft => ({
 export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const navigate = useNavigate()
   const [name, setName] = useState(group?.name ?? '')
+  const [effectiveFrom, setEffectiveFrom] = useState(todayInJakarta())
+  const [effectiveUntil, setEffectiveUntil] = useState(
+    shiftDate(todayInJakarta(), 180),
+  )
   const [schedules, setSchedules] = useState<ScheduleDraft[]>(
     group?.schedules.map(
       ({ id, tutorId, roomId, dayOfWeek, startTime, endTime }) => ({
@@ -68,6 +83,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const pending = create.isPending || update.isPending
   const invalid =
     !name.trim() ||
+    !effectiveFrom ||
+    !effectiveUntil ||
+    effectiveFrom > effectiveUntil ||
     schedules.length === 0 ||
     schedules.some(
       (s) =>
@@ -76,6 +94,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
         !s.startTime ||
         !s.endTime ||
         s.startTime >= s.endTime,
+    ) ||
+    schedules.some((schedule, index) =>
+      findScheduleConflict(schedule, index, schedules),
     )
   const pickerStudents =
     students.data?.data.filter(
@@ -124,7 +145,13 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
     setSubmitted(true)
     setError(null)
     if (invalid || pending) return
-    const payload = { name: name.trim(), schedules, studentIds }
+    const payload = {
+      name: name.trim(),
+      schedules,
+      studentIds,
+      effectiveFrom,
+      effectiveUntil,
+    }
     const options = {
       onSuccess: (saved: StudyGroup) =>
         void navigate(`/study-groups/${saved.id}`),
@@ -141,6 +168,18 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   return (
     <div className="study-group-form">
       <header>
+        <p className="study-group-form__breadcrumb">
+          <Link to="/study-groups">Kelompok Belajar</Link>
+          {' / '}
+          {group ? (
+            <>
+              <Link to={`/study-groups/${group.id}`}>{group.name}</Link>
+              {' / Ubah Data'}
+            </>
+          ) : (
+            'Tambah Kelompok Belajar'
+          )}
+        </p>
         <h1>
           {group ? 'Ubah Data Kelompok Belajar' : 'Tambah Kelompok Belajar'}
         </h1>
@@ -151,7 +190,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
             className="study-group-form__section"
             aria-labelledby="group-information"
           >
-            <h2 id="group-information">1. Informasi Kelompok</h2>
+            <h2 id="group-information">
+              {group ? 'Informasi Kelompok' : '1. Informasi Kelompok'}
+            </h2>
             <Field label="Nama Kelompok" required>
               <Input
                 id="group-name"
@@ -181,10 +222,51 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
           >
             <h2 id="group-schedules">2. Jadwal &amp; Tentor</h2>
             <p className="study-group-form__hint">
-              Satu jadwal berisi tentor, hari belajar, jam mulai, dan jam
-              selesai. Tambahkan jadwal lain bila kelompok belajar diajar di
-              hari/tentor/jam berbeda.
+              Satu jadwal berisi tentor, ruangan, hari belajar, jam mulai, dan
+              jam selesai. Tambahkan jadwal lain bila kelompok belajar diajar di
+              hari/tentor/jam/ruangan berbeda.
             </p>
+            <fieldset className="study-group-form__period">
+              <legend>Periode Belajar</legend>
+              <p className="study-group-form__hint">
+                Tentukan rentang tanggal aktif untuk kelompok belajar ini.
+              </p>
+              <div className="study-group-form__row">
+                <Field label="Tanggal Mulai" required>
+                  <Input
+                    required
+                    type="date"
+                    value={effectiveFrom}
+                    aria-invalid={
+                      submitted &&
+                      (!effectiveFrom || effectiveFrom > effectiveUntil)
+                    }
+                    onChange={(event) => setEffectiveFrom(event.target.value)}
+                  />
+                </Field>
+                <Field label="Tanggal Selesai" required>
+                  <Input
+                    required
+                    type="date"
+                    min={effectiveFrom}
+                    value={effectiveUntil}
+                    aria-invalid={
+                      submitted &&
+                      (!effectiveUntil || effectiveFrom > effectiveUntil)
+                    }
+                    onChange={(event) => setEffectiveUntil(event.target.value)}
+                  />
+                </Field>
+              </div>
+              {submitted &&
+              (!effectiveFrom ||
+                !effectiveUntil ||
+                effectiveFrom > effectiveUntil) ? (
+                <p className="study-group-form__error" role="alert">
+                  Pilih rentang tanggal belajar yang valid.
+                </p>
+              ) : null}
+            </fieldset>
             {tutors.isPending ? (
               <p role="status" className="study-group-form__hint">
                 Memuat tentor...
@@ -224,15 +306,32 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                   !schedule.endTime ||
                   schedule.startTime >= schedule.endTime)
               const errorId = `schedule-error-${index}`
+              const conflict = findScheduleConflict(schedule, index, schedules)
+              const tutorName =
+                tutors.data?.data.find((tutor) => tutor.id === schedule.tutorId)
+                  ?.name ??
+                group?.schedules.find(
+                  (item) => item.tutorId === schedule.tutorId,
+                )?.tutorName ??
+                'Tentor terpilih'
               return (
                 <fieldset
-                  className="study-group-form__schedule"
+                  className={`study-group-form__schedule${conflict ? ' study-group-form__schedule--conflict' : ''}`}
                   key={schedule.id ?? index}
                   aria-describedby={scheduleInvalid ? errorId : undefined}
                 >
                   <legend className="sr-only">Jadwal {index + 1}</legend>
                   <div className="study-group-form__toolbar">
-                    <h3 aria-hidden="true">Jadwal {index + 1}</h3>
+                    <div>
+                      <h3 aria-hidden="true">Jadwal {index + 1}</h3>
+                      {group ? (
+                        <p className="study-group-form__schedule-caption">
+                          {index === 0
+                            ? 'Jadwal utama kelompok'
+                            : 'Jadwal tambahan'}
+                        </p>
+                      ) : null}
+                    </div>
                     {schedules.length > 1 ? (
                       <Button
                         className="study-group-form__remove"
@@ -324,15 +423,7 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                           })
                         }
                       >
-                        {[
-                          'Senin',
-                          'Selasa',
-                          'Rabu',
-                          'Kamis',
-                          'Jumat',
-                          'Sabtu',
-                          'Minggu',
-                        ].map((day, dayIndex) => (
+                        {days.map((day, dayIndex) => (
                           <option value={dayIndex + 1} key={day}>
                             {day}
                           </option>
@@ -384,6 +475,16 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                       setelah jam mulai.
                     </p>
                   ) : null}
+                  {conflict ? (
+                    <p className="study-group-form__conflict" role="alert">
+                      <AlertCircle aria-hidden="true" />
+                      <span>
+                        Bentrok: {tutorName} sudah memiliki jadwal pada{' '}
+                        {days[schedule.dayOfWeek - 1]}, {schedule.startTime} -{' '}
+                        {schedule.endTime}.
+                      </span>
+                    </p>
+                  ) : null}
                 </fieldset>
               )
             })}
@@ -405,7 +506,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
           >
             <div className="study-group-form__toolbar">
               <div className="study-group-form__student-title">
-                <h2 id="group-students">3. Pilih Siswa Peserta</h2>
+                <h2 id="group-students">
+                  {group ? 'Pilih Siswa Peserta' : '3. Pilih Siswa Peserta'}
+                </h2>
                 <span className="study-group-form__badge" role="status">
                   {studentIds.length} siswa terpilih
                 </span>
@@ -489,6 +592,15 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                 </p>
               ) : null}
             </div>
+            {!group ? (
+              <p className="study-group-form__capacity">
+                <Info aria-hidden="true" />
+                <span>
+                  Kapasitas ideal kelompok belajar: 4 - 8 siswa. Klik tombol “+
+                  Tambah Siswa” untuk menambah peserta.
+                </span>
+              </p>
+            ) : null}
           </section>
           {error ? (
             <p role="alert" className="study-group-form__error">
@@ -503,6 +615,7 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
           <div>
             <Button asChild variant="outline">
               <Link to={group ? `/study-groups/${group.id}` : '/study-groups'}>
+                <X aria-hidden="true" />
                 Batal
               </Link>
             </Button>
@@ -710,5 +823,24 @@ function Field({
       </span>
       {children}
     </label>
+  )
+}
+
+function findScheduleConflict(
+  schedule: ScheduleDraft,
+  index: number,
+  schedules: ScheduleDraft[],
+) {
+  if (!schedule.tutorId || !schedule.startTime || !schedule.endTime) {
+    return false
+  }
+
+  return schedules.some(
+    (other, otherIndex) =>
+      otherIndex !== index &&
+      other.tutorId === schedule.tutorId &&
+      other.dayOfWeek === schedule.dayOfWeek &&
+      schedule.startTime < other.endTime &&
+      schedule.endTime > other.startTime,
   )
 }

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
 import {
-  getScheduleById,
   getSchedules,
   getSchedulesSummary,
   type ScheduleFilters,
@@ -20,13 +19,5 @@ export function useSchedulesSummary() {
   return useQuery({
     queryKey: [...schedulesQueryKey, 'summary'],
     queryFn: ({ signal }) => getSchedulesSummary(signal),
-  })
-}
-
-export function useSchedule(id: string | undefined) {
-  return useQuery({
-    queryKey: [...schedulesQueryKey, 'detail', id],
-    queryFn: ({ signal }) => getScheduleById(id ?? '', signal),
-    enabled: Boolean(id),
   })
 }

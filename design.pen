@@ -22263,7 +22263,7 @@
       "name": "Screen - Tambah Kelompok Belajar",
       "clip": true,
       "width": 1440,
-      "height": 1460,
+      "height": 1660,
       "fill": "$bk-bg",
       "children": [
         {
@@ -22478,6 +22478,223 @@
                           "fontFamily": "$bk-font",
                           "fontSize": 12,
                           "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "J1zd0n",
+                          "name": "Periode Jadwal",
+                          "width": "fill_container",
+                          "cornerRadius": 8,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "gap": 12,
+                          "padding": 14,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "DrVE4",
+                              "name": "Periode Jadwal Header",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "SP1gp",
+                                  "name": "Periode Jadwal Title",
+                                  "fill": "$bk-text",
+                                  "content": "Periode Belajar",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "q7fzo",
+                              "name": "Periode Jadwal Hint",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Tentukan rentang tanggal aktif untuk kelompok belajar ini.",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "w0eFNN",
+                              "name": "Tanggal Awal dan Akhir",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "J1svM",
+                                  "name": "TKB Field - Tanggal Mulai",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 6,
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "f2D9cZ",
+                                      "name": "Label - Tanggal Mulai",
+                                      "width": "fill_container",
+                                      "gap": 2,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "onmQD",
+                                          "name": "Text Label - Tanggal Mulai",
+                                          "fill": "$bk-text",
+                                          "content": "Tanggal Mulai",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "ypK8F",
+                                          "name": "Required - Tanggal Mulai",
+                                          "fill": "$bk-danger",
+                                          "content": "*",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "x4Ioh",
+                                      "name": "Input - Tanggal Mulai",
+                                      "width": "fill_container",
+                                      "fill": "$bk-surface",
+                                      "cornerRadius": 6,
+                                      "stroke": "$bk-border",
+                                      "strokeWidth": 1,
+                                      "padding": [
+                                        9,
+                                        11
+                                      ],
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "vGTtz",
+                                          "name": "Value - Tanggal Mulai",
+                                          "fill": "$bk-text",
+                                          "content": "01 Juli 2025",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 13,
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "icon",
+                                          "id": "G2vTnN",
+                                          "name": "Calendar - Tanggal Mulai",
+                                          "width": 18,
+                                          "height": 18,
+                                          "icon": "calendar-days",
+                                          "library": "lucide",
+                                          "fill": "$bk-muted"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "t8d2mf",
+                                  "name": "TKB Field - Tanggal Selesai",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 6,
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "P9sJk5",
+                                      "name": "Label - Tanggal Selesai",
+                                      "width": "fill_container",
+                                      "gap": 2,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "pOdGO",
+                                          "name": "Text Label - Tanggal Selesai",
+                                          "fill": "$bk-text",
+                                          "content": "Tanggal Selesai",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "NpTZe",
+                                          "name": "Required - Tanggal Selesai",
+                                          "fill": "$bk-danger",
+                                          "content": "*",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "jFytD",
+                                      "name": "Input - Tanggal Selesai",
+                                      "width": "fill_container",
+                                      "fill": "$bk-surface",
+                                      "cornerRadius": 6,
+                                      "stroke": "$bk-border",
+                                      "strokeWidth": 1,
+                                      "padding": [
+                                        9,
+                                        11
+                                      ],
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "ouihn",
+                                          "name": "Value - Tanggal Selesai",
+                                          "fill": "$bk-text",
+                                          "content": "31 Desember 2025",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 13,
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "icon",
+                                          "id": "FNedm",
+                                          "name": "Calendar - Tanggal Selesai",
+                                          "width": 18,
+                                          "height": 18,
+                                          "icon": "calendar-days",
+                                          "library": "lucide",
+                                          "fill": "$bk-muted"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
                         },
                         {
                           "type": "frame",
@@ -27690,13 +27907,19 @@
       "name": "Screen - Kelompok Belajar Edit",
       "clip": true,
       "width": 1440,
-      "height": 1560,
+      "height": 1740,
       "fill": "$bk-bg",
       "children": [
         {
           "id": "KBNaNsdc",
           "type": "ref",
-          "ref": "cmp_sidebar_kelompok"
+          "ref": "cmp_sidebar_kelompok",
+          "flipX": false,
+          "flipY": false,
+          "width": 264,
+          "height": "fill_container",
+          "x": 0,
+          "y": 0
         },
         {
           "type": "frame",
@@ -27887,6 +28110,223 @@
                           "fontFamily": "$bk-font",
                           "fontSize": 12,
                           "fontWeight": "500"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "F55vE",
+                          "name": "KB Edit Periode Jadwal",
+                          "width": "fill_container",
+                          "cornerRadius": 8,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "gap": 12,
+                          "padding": 14,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "j2PFRv",
+                              "name": "Periode Jadwal Header",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "getIW",
+                                  "name": "Periode Jadwal Title",
+                                  "fill": "$bk-text",
+                                  "content": "Periode Belajar",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "zgCWT",
+                              "name": "Periode Jadwal Hint",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Tentukan rentang tanggal aktif untuk kelompok belajar ini.",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "qiuvJ",
+                              "name": "Tanggal Awal dan Akhir",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "pv2Qt",
+                                  "name": "TKB Field - Tanggal Mulai",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 6,
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "yBQ9v",
+                                      "name": "Label - Tanggal Mulai",
+                                      "width": "fill_container",
+                                      "gap": 2,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "fItBO",
+                                          "name": "Text Label - Tanggal Mulai",
+                                          "fill": "$bk-text",
+                                          "content": "Tanggal Mulai",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "mjro1",
+                                          "name": "Required - Tanggal Mulai",
+                                          "fill": "$bk-danger",
+                                          "content": "*",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "dHuNA",
+                                      "name": "Input - Tanggal Mulai",
+                                      "width": "fill_container",
+                                      "fill": "$bk-surface",
+                                      "cornerRadius": 6,
+                                      "stroke": "$bk-border",
+                                      "strokeWidth": 1,
+                                      "padding": [
+                                        9,
+                                        11
+                                      ],
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "sGIvO",
+                                          "name": "Value - Tanggal Mulai",
+                                          "fill": "$bk-text",
+                                          "content": "01 Juli 2025",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 13,
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "icon",
+                                          "id": "CIVkn",
+                                          "name": "Calendar - Tanggal Mulai",
+                                          "width": 18,
+                                          "height": 18,
+                                          "icon": "calendar-days",
+                                          "library": "lucide",
+                                          "fill": "$bk-muted"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "r6iWtg",
+                                  "name": "TKB Field - Tanggal Selesai",
+                                  "width": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 6,
+                                  "children": [
+                                    {
+                                      "type": "frame",
+                                      "id": "JGJJj",
+                                      "name": "Label - Tanggal Selesai",
+                                      "width": "fill_container",
+                                      "gap": 2,
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "zTxcp",
+                                          "name": "Text Label - Tanggal Selesai",
+                                          "fill": "$bk-text",
+                                          "content": "Tanggal Selesai",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        },
+                                        {
+                                          "type": "text",
+                                          "id": "YDX7s",
+                                          "name": "Required - Tanggal Selesai",
+                                          "fill": "$bk-danger",
+                                          "content": "*",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 12,
+                                          "fontWeight": "600"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "O7UiQ",
+                                      "name": "Input - Tanggal Selesai",
+                                      "width": "fill_container",
+                                      "fill": "$bk-surface",
+                                      "cornerRadius": 6,
+                                      "stroke": "$bk-border",
+                                      "strokeWidth": 1,
+                                      "padding": [
+                                        9,
+                                        11
+                                      ],
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "rfowA",
+                                          "name": "Value - Tanggal Selesai",
+                                          "fill": "$bk-text",
+                                          "content": "31 Desember 2025",
+                                          "lineHeight": 1.35,
+                                          "fontFamily": "$bk-font",
+                                          "fontSize": 13,
+                                          "fontWeight": "normal"
+                                        },
+                                        {
+                                          "type": "icon",
+                                          "id": "bc5Jd",
+                                          "name": "Calendar - Tanggal Selesai",
+                                          "width": 18,
+                                          "height": 18,
+                                          "icon": "calendar-days",
+                                          "library": "lucide",
+                                          "fill": "$bk-muted"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
                         },
                         {
                           "type": "frame",

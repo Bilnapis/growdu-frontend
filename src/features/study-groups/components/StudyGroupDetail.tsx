@@ -1,5 +1,7 @@
 import { CirclePlay, PauseCircle, Pencil, Search } from 'lucide-react'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getConfigurations } from '@/features/study-groups/api/study-groups-api'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
@@ -25,6 +27,10 @@ const dayNames = [
 export function StudyGroupDetail({ id }: { id: string }) {
   const [studentSearch, setStudentSearch] = useState('')
   const detail = useStudyGroup(id)
+  const history = useQuery({
+    queryKey: ['configurations', id],
+    queryFn: ({ signal }) => getConfigurations(id, signal),
+  })
   const status = useUpdateStudyGroupStatus()
   const students = useStudents({ page: 1, limit: 100 })
   const group = detail.data
@@ -80,6 +86,27 @@ export function StudyGroupDetail({ id }: { id: string }) {
 
   return (
     <div className="study-group-detail min-w-0 space-y-5 text-[var(--color-text)]">
+      <section
+        className="rounded-lg border bg-card p-5"
+        aria-labelledby="configuration-history"
+      >
+        <h2 id="configuration-history" className="font-bold">
+          Riwayat Konfigurasi Kelompok
+        </h2>
+        {history.isPending ? <p role="status">Memuat riwayat...</p> : null}
+        {history.isError ? (
+          <p role="alert">Riwayat belum dapat dimuat.</p>
+        ) : null}
+        <ol className="mt-3 space-y-2">
+          {history.data?.map((c) => (
+            <li key={c.id} className="border-l-2 border-primary pl-3 text-sm">
+              {c.effectiveFrom} – {c.effectiveUntil}
+              {c.supersededAt ? ' (Digantikan revisi berikutnya)' : ''} ·{' '}
+              {c.schedules.length} pola mingguan · {c.studentIds.length} siswa
+            </li>
+          ))}
+        </ol>
+      </section>
       <header className="study-group-detail__header">
         <div className="study-group-detail__header-copy">
           <nav

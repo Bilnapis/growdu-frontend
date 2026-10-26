@@ -17,7 +17,7 @@ type TutorNavigationItem = {
 const navigationItems: readonly TutorNavigationItem[] = [
   { label: 'Beranda', icon: House, to: '/tutor/dashboard' },
   { label: 'Siswa', icon: UsersRound },
-  { label: 'Jadwal', icon: CalendarDays },
+  { label: 'Jadwal', icon: CalendarDays, to: '/tutor/sessions' },
   { label: 'Laporan', icon: FileText },
   { label: 'Profil', icon: CircleUserRound, to: '/tutor/profile' },
 ]

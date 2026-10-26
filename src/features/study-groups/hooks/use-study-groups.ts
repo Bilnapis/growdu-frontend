@@ -37,6 +37,9 @@ function useInvalidate() {
       client.invalidateQueries({ queryKey: studyGroupsQueryKey }),
       client.invalidateQueries({ queryKey: studentsQueryKey }),
       client.invalidateQueries({ queryKey: ['rooms'] }),
+      client.invalidateQueries({ queryKey: ['class-sessions'] }),
+      client.invalidateQueries({ queryKey: ['schedules'] }),
+      client.invalidateQueries({ queryKey: ['configurations'] }),
     ])
 }
 export function useCreateStudyGroup() {

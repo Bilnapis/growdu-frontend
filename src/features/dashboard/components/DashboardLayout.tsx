@@ -42,9 +42,8 @@ function getActiveItem(pathname: string): SidebarClientItemId {
 export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
-  const isStudyGroupDetail = /^\/study-groups\/[^/]+\/?$/.test(
-    location.pathname,
-  )
+  const isStudyGroupDetail =
+    /^\/study-groups\/(?:new|[^/]+(?:\/edit)?)\/?$/.test(location.pathname)
   const isScheduleDetail = /^\/schedule\/[^/]+\/?$/.test(location.pathname)
   const queryClient = useQueryClient()
   const user = getStoredAuthUser()

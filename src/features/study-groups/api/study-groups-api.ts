@@ -33,6 +33,8 @@ export type StudyGroupListItem = Omit<
   'tenantId' | 'studentIds' | 'createdAt' | 'updatedAt'
 >
 export type StudyGroupInput = {
+  effectiveFrom: string
+  effectiveUntil: string
   name: string
   schedules: Array<{
     id?: string
@@ -91,11 +93,40 @@ export function createStudyGroup(input: StudyGroupInput) {
     body: input,
   })
 }
-export function updateStudyGroup(id: string, input: StudyGroupInput) {
-  return apiRequest<StudyGroup>(`/study-groups/${encode(id)}`, {
-    method: 'PATCH',
+export async function updateStudyGroup(id: string, input: StudyGroupInput) {
+  await apiRequest(`/study-groups/${encode(id)}/configurations`, {
+    method: 'POST',
     body: input,
   })
+  return getStudyGroup(id)
+}
+export type ConfigurationHistory = {
+  id: string
+  effectiveFrom: string
+  effectiveUntil: string
+  createdAt: string
+  supersededAt: string | null
+  studentIds: string[]
+  schedules: Array<{
+    id: string
+    tutorId: string
+    roomId: string | null
+    dayOfWeek: number
+    startTime: string
+    endTime: string
+  }>
+}
+export function getConfigurations(id: string, signal?: AbortSignal) {
+  return apiRequest<ConfigurationHistory[]>(
+    `/study-groups/${encode(id)}/configurations`,
+    { signal },
+  )
+}
+export function previewConfiguration(id: string, input: StudyGroupInput) {
+  return apiRequest<{ created: number; updated: number; skipped: number }>(
+    `/study-groups/${encode(id)}/configurations/preview`,
+    { method: 'POST', body: input },
+  )
 }
 export function updateStudyGroupStatus(id: string, status: EntityStatus) {
   return apiRequest<StudyGroup>(`/study-groups/${encode(id)}/status`, {

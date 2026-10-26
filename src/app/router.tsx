@@ -1,4 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import { SessionsPage } from '@/features/class-sessions/SessionsPage'
+import { SessionDetailPage } from '@/features/class-sessions/SessionDetailPage'
+import { SessionRecordPage } from '@/features/class-sessions/SessionRecordPage'
 
 import {
   AdminLoginRoute,
@@ -23,8 +26,6 @@ import { RoomCreatePage } from '@/pages/client/RoomCreatePage'
 import { RoomDetailPage } from '@/pages/client/RoomDetailPage'
 import { RoomEditPage } from '@/pages/client/RoomEditPage'
 import { RoomsPage } from '@/pages/client/RoomsPage'
-import { SchedulePage } from '@/pages/client/SchedulePage'
-import { ScheduleDetailPage } from '@/pages/client/ScheduleDetailPage'
 import { StudentsPage } from '@/pages/client/StudentsPage'
 import { StudentCreatePage } from '@/pages/client/StudentCreatePage'
 import { StudentDetailPage } from '@/pages/client/StudentDetailPage'
@@ -78,6 +79,11 @@ export const router = createBrowserRouter([
                   {
                     path: 'tutor/profile',
                     element: <TutorProfilePage />,
+                  },
+                  { path: 'tutor/sessions', element: <SessionsPage /> },
+                  {
+                    path: 'tutor/sessions/:sessionId/record',
+                    element: <SessionRecordPage />,
                   },
                 ],
               },
@@ -155,11 +161,15 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: 'schedule',
-                        element: <SchedulePage />,
+                        element: <SessionsPage />,
                       },
                       {
                         path: 'schedule/:id',
-                        element: <ScheduleDetailPage />,
+                        element: <SessionDetailPage />,
+                      },
+                      {
+                        path: 'schedule/:id/record',
+                        element: <SessionRecordPage />,
                       },
                       {
                         path: ':section',
