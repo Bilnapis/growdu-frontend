@@ -33,10 +33,11 @@ const tableCellClass = 'px-[18px] py-3'
 export function SessionsPage() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
-  const from = isDate(params.get('from'))
-    ? params.get('from')!
-    : todayInJakarta()
-  const to = isDate(params.get('to')) ? params.get('to')! : shiftDate(from, 6)
+  const requestedFrom = params.get('from')
+  const from = mondayOfWeek(
+    isDate(requestedFrom) ? requestedFrom : todayInJakarta(),
+  )
+  const to = shiftDate(from, 6)
   const page = Math.max(1, Number(params.get('page')) || 1)
   const [view, setView] = useState<'list' | 'calendar'>('list')
   const [searchText, setSearchText] = useState(params.get('search') ?? '')
@@ -370,7 +371,7 @@ function CalendarView({
   const [tutorId, setTutorId] = useState('')
   const [roomId, setRoomId] = useState('')
   const [status, setStatus] = useState('')
-  const days = Array.from({ length: 6 }, (_, index) => shiftDate(from, index))
+  const days = Array.from({ length: 7 }, (_, index) => shiftDate(from, index))
   const filteredSessions = sessions.filter(
     (session) =>
       (!groupId || session.studyGroupId === groupId) &&
@@ -430,7 +431,7 @@ function CalendarView({
         <div
           className="grid min-w-[1050px] gap-2"
           style={{
-            gridTemplateColumns: '76px repeat(6, minmax(154px, 1fr))',
+            gridTemplateColumns: `76px repeat(${days.length}, minmax(154px, 1fr))`,
           }}
         >
           <TimeColumn />
@@ -1037,6 +1038,11 @@ function compactDateLabel(session: SessionListItem) {
     timeZone: 'Asia/Jakarta',
   }).format(new Date(`${session.sessionDate}T00:00:00+07:00`))
   return `${day} ${session.startTime} - ${session.endTime}`
+}
+
+function mondayOfWeek(date: string) {
+  const day = new Date(`${date}T00:00:00Z`).getUTCDay()
+  return shiftDate(date, -((day + 6) % 7))
 }
 
 function weekRangeLabel(from: string, to: string) {
