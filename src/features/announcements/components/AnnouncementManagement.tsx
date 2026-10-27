@@ -1,20 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  Filter,
-  Megaphone,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Search,
-  Trash2,
-} from 'lucide-react'
+import { Megaphone, MoreHorizontal, Pencil, Search, Trash2 } from 'lucide-react'
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import type { Announcement, AnnouncementStatus } from '../api/announcements-api'
 import {
@@ -29,6 +21,7 @@ import {
 } from '../utils/announcements'
 import { AnnouncementDialog } from './AnnouncementDialog'
 import { AnnouncementPagination } from './AnnouncementPagination'
+import { AddButton } from '@/components/ui/add-button'
 
 const statusLabels: Record<AnnouncementStatus, string> = {
   active: 'Aktif',
@@ -78,7 +71,7 @@ export function AnnouncementManagement() {
   }
 
   return (
-    <div className="mx-auto max-w-[1120px] space-y-5">
+    <div className="min-w-0 space-y-5">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-[26px] font-extrabold leading-[1.3]">
@@ -88,24 +81,11 @@ export function AnnouncementManagement() {
             Buat pengumuman untuk Admin, Tentor, Siswa/Wali, atau Semua role
           </p>
         </div>
-        <div className="flex flex-wrap gap-2.5">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => targetRef.current?.focus()}
-          >
-            <Filter className="h-4 w-4" aria-hidden="true" />
-            Filter Target
-          </Button>
-          <Link
-            data-announcement-trigger
-            to={`/announcements/new${locationSearch}`}
-            className={buttonVariants()}
-          >
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            Buat Pengumuman
-          </Link>
-        </div>
+        <AddButton
+          onClick={() => void navigate(`/announcements/new${locationSearch}`)}
+        >
+          Buat Pengumuman
+        </AddButton>
       </header>
       {flash ? (
         <p

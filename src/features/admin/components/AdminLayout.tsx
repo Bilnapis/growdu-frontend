@@ -1,36 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Building2, LogOut, ShieldCheck, Users } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Building2, LogOut, ShieldCheck, Users } from 'lucide-react'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 
-import { Button } from "@/components/ui/button";
-import { platformAdminLogout } from "@/features/platform-admin/api/platform-admin-api";
+import { Button } from '@/components/ui/button'
+import { platformAdminLogout } from '@/features/platform-admin/api/platform-admin-api'
 import {
   clearPlatformAdminSession,
   getStoredPlatformAdmin,
-} from "@/lib/platform-admin-session";
-import { cn } from "@/lib/utils";
+} from '@/lib/platform-admin-session'
+import { cn } from '@/lib/utils'
 
 const navigationItems = [
-  { to: "/admin", label: "Ringkasan", icon: ShieldCheck, end: true },
-  { to: "/admin/tenants", label: "Bimbel", icon: Building2, end: false },
-  { to: "/admin/users", label: "Pengguna", icon: Users, end: false },
-] as const;
+  { to: '/admin', label: 'Ringkasan', icon: ShieldCheck, end: true },
+  { to: '/admin/tenants', label: 'Bimbel', icon: Building2, end: false },
+  { to: '/admin/users', label: 'Pengguna', icon: Users, end: false },
+] as const
 
 export function AdminLayout() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const admin = getStoredPlatformAdmin();
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const admin = getStoredPlatformAdmin()
   const logoutMutation = useMutation({
     mutationFn: platformAdminLogout,
     onSettled: () => {
-      clearPlatformAdminSession();
-      queryClient.clear();
-      void navigate("/admin/login", { replace: true });
+      clearPlatformAdminSession()
+      queryClient.clear()
+      void navigate('/admin/login', { replace: true })
     },
-  });
+  })
 
   function handleSignOut() {
-    logoutMutation.mutate();
+    logoutMutation.mutate()
   }
 
   return (
@@ -68,10 +68,10 @@ export function AdminLayout() {
             >
               <LogOut className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">
-                {logoutMutation.isPending ? "Keluar..." : "Keluar"}
+                {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
               </span>
               <span className="sr-only sm:hidden">
-                {logoutMutation.isPending ? "Memproses logout" : "Keluar"}
+                {logoutMutation.isPending ? 'Memproses logout' : 'Keluar'}
               </span>
             </Button>
           </div>
@@ -91,9 +91,9 @@ export function AdminLayout() {
                   end={end}
                   className={({ isActive }) =>
                     cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+                      'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground',
                       isActive &&
-                        "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+                        'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
                     )
                   }
                 >
@@ -110,5 +110,5 @@ export function AdminLayout() {
         </main>
       </div>
     </div>
-  );
+  )
 }

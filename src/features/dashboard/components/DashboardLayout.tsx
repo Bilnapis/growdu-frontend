@@ -1,6 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { LogOut } from 'lucide-react'
-import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 
 import {
   SidebarClient,
@@ -19,6 +24,7 @@ import {
 import { logout } from '@/services/auth.service'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { hasMenuAccess } from '@/lib/menu-access'
+import { DashboardAccountMenu } from './DashboardAccountMenu'
 
 const sidebarItemIds: readonly SidebarClientItemId[] = [
   'dashboard',
@@ -50,8 +56,11 @@ export function DashboardLayout() {
   const queryClient = useQueryClient()
   const user = getStoredAuthUser()
   const currentUserQuery = useCurrentUser()
-  const currentUser = user?.role === 'operator' ? currentUserQuery.data ?? null : user
-  const visibleItems = sidebarItemIds.filter((item) => hasMenuAccess(currentUser, item))
+  const currentUser =
+    user?.role === 'operator' ? (currentUserQuery.data ?? null) : user
+  const visibleItems = sidebarItemIds.filter((item) =>
+    hasMenuAccess(currentUser, item),
+  )
   const activeItem = getActiveItem(location.pathname)
   const firstMenu = visibleItems[0]
   const canAccess = hasMenuAccess(currentUser, activeItem)
@@ -98,40 +107,69 @@ export function DashboardLayout() {
 
       <div className="min-w-0 flex-1">
         {!isStudyGroupDetail && !isScheduleDetail ? (
-          <header className="flex justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => logoutMutation.mutate()}
-              disabled={logoutMutation.isPending}
-            >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-              {logoutMutation.isPending ? 'Keluar...' : 'Keluar'}
-            </Button>
+          <header className="flex h-[61px] items-center justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
+            <DashboardAccountMenu
+              accountName={
+                currentUser?.profileName?.trim() ||
+                user?.profileName?.trim() ||
+                user?.email ||
+                'Akun saya'
+              }
+              isLoggingOut={logoutMutation.isPending}
+              onLogout={() => logoutMutation.mutate()}
+            />
           </header>
         ) : null}
 
         <main className="min-w-0 p-5 sm:p-7">
           {user?.role === 'operator' && currentUserQuery.isPending ? (
-            <p role="status" className="text-sm text-muted-foreground">Memuat hak akses...</p>
+            <p role="status" className="text-sm text-muted-foreground">
+              Memuat hak akses...
+            </p>
           ) : user?.role === 'operator' && currentUserQuery.isError ? (
-            <section role="alert" className="space-y-3 rounded-lg border bg-card p-6">
-              <h1 className="text-xl font-bold">Hak akses belum dapat dimuat</h1>
-              <p className="text-sm text-muted-foreground">Periksa koneksi Anda lalu coba kembali.</p>
-              <Button variant="outline" onClick={() => void currentUserQuery.refetch()}>Coba lagi</Button>
+            <section
+              role="alert"
+              className="space-y-3 rounded-lg border bg-card p-6"
+            >
+              <h1 className="text-xl font-bold">
+                Hak akses belum dapat dimuat
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Periksa koneksi Anda lalu coba kembali.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => void currentUserQuery.refetch()}
+              >
+                Coba lagi
+              </Button>
             </section>
           ) : !canAccess ? (
             activeItem === 'dashboard' && firstMenu ? (
               <Navigate to={`/${firstMenu}`} replace />
             ) : (
-              <section role="alert" className="space-y-3 rounded-lg border bg-card p-6">
-                <h1 className="text-xl font-bold">{firstMenu ? 'Anda tidak memiliki akses ke menu ini' : 'Belum ada akses menu'}</h1>
-                <p className="text-sm text-muted-foreground">Hubungi pemilik bimbel untuk mengatur hak akses Anda.</p>
-                {firstMenu ? <Button asChild variant="outline"><Link to={`/${firstMenu}`}>Buka menu yang tersedia</Link></Button> : null}
+              <section
+                role="alert"
+                className="space-y-3 rounded-lg border bg-card p-6"
+              >
+                <h1 className="text-xl font-bold">
+                  {firstMenu
+                    ? 'Anda tidak memiliki akses ke menu ini'
+                    : 'Belum ada akses menu'}
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Hubungi pemilik bimbel untuk mengatur hak akses Anda.
+                </p>
+                {firstMenu ? (
+                  <Button asChild variant="outline">
+                    <Link to={`/${firstMenu}`}>Buka menu yang tersedia</Link>
+                  </Button>
+                ) : null}
               </section>
             )
-          ) : <Outlet />}
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
     </div>

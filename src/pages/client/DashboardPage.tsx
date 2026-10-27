@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from 'lucide-react'
 import {
   AlertCircle,
   BookOpen,
@@ -8,163 +8,163 @@ import {
   TrendingUp,
   Users,
   Wallet,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-import { Badge } from "@/components/ui/badge";
-import { DashboardAnnouncements } from '@/features/announcements/components/DashboardAnnouncements';
+import { Badge } from '@/components/ui/badge'
+import { DashboardAnnouncements } from '@/features/announcements/components/DashboardAnnouncements'
 
 type Metric = {
-  label: string;
-  value: string;
-  helper: string;
-  icon: LucideIcon;
-  tone: "success" | "primary" | "warning" | "danger";
-};
+  label: string
+  value: string
+  helper: string
+  icon: LucideIcon
+  tone: 'success' | 'primary' | 'warning' | 'danger'
+}
 
 type OperationalAlert = {
-  title: string;
-  description: string;
-  tone: "danger" | "warning" | "primary";
-};
+  title: string
+  description: string
+  tone: 'danger' | 'warning' | 'primary'
+}
 
 const metrics: readonly Metric[] = [
   {
-    label: "Pendapatan",
-    value: "Rp 42,8 jt",
-    helper: "Naik dari bulan lalu",
+    label: 'Pendapatan',
+    value: 'Rp 42,8 jt',
+    helper: 'Naik dari bulan lalu',
     icon: TrendingUp,
-    tone: "success",
+    tone: 'success',
   },
   {
-    label: "Gaji Tentor",
-    value: "Rp 18,6 jt",
-    helper: "Payroll bulan ini",
+    label: 'Gaji Tentor',
+    value: 'Rp 18,6 jt',
+    helper: 'Payroll bulan ini',
     icon: Wallet,
-    tone: "primary",
+    tone: 'primary',
   },
   {
-    label: "Siswa Aktif",
-    value: "184",
-    helper: "12 siswa baru",
+    label: 'Siswa Aktif',
+    value: '184',
+    helper: '12 siswa baru',
     icon: Users,
-    tone: "primary",
+    tone: 'primary',
   },
   {
-    label: "Invoice Pending",
-    value: "27",
-    helper: "8 terlambat",
+    label: 'Invoice Pending',
+    value: '27',
+    helper: '8 terlambat',
     icon: Receipt,
-    tone: "warning",
+    tone: 'warning',
   },
   {
-    label: "Tentor Aktif",
-    value: "24",
-    helper: "19 mengajar minggu ini",
+    label: 'Tentor Aktif',
+    value: '24',
+    helper: '19 mengajar minggu ini',
     icon: Users,
-    tone: "success",
+    tone: 'success',
   },
   {
-    label: "Kelompok",
-    value: "38",
-    helper: "5 jadwal hari ini",
+    label: 'Kelompok',
+    value: '38',
+    helper: '5 jadwal hari ini',
     icon: BookOpen,
-    tone: "primary",
+    tone: 'primary',
   },
   {
-    label: "Presensi Hari Ini",
-    value: "6/9",
-    helper: "3 belum presensi",
+    label: 'Presensi Hari Ini',
+    value: '6/9',
+    helper: '3 belum presensi',
     icon: ClipboardCheck,
-    tone: "warning",
+    tone: 'warning',
   },
   {
-    label: "Laporan Belum",
-    value: "14",
-    helper: "Perlu ditindaklanjuti",
+    label: 'Laporan Belum',
+    value: '14',
+    helper: 'Perlu ditindaklanjuti',
     icon: FileText,
-    tone: "danger",
+    tone: 'danger',
   },
-];
+]
 
 const alerts: readonly OperationalAlert[] = [
   {
-    title: "Invoice terlambat",
-    description: "8 invoice melewati jatuh tempo",
-    tone: "danger",
+    title: 'Invoice terlambat',
+    description: '8 invoice melewati jatuh tempo',
+    tone: 'danger',
   },
   {
-    title: "Laporan perkembangan belum dibuat",
-    description: "14 laporan perkembangan belum dikirim",
-    tone: "warning",
+    title: 'Laporan perkembangan belum dibuat',
+    description: '14 laporan perkembangan belum dikirim',
+    tone: 'warning',
   },
   {
-    title: "Payroll siap dicek",
-    description: "3 slip gaji menunggu approval",
-    tone: "primary",
+    title: 'Payroll siap dicek',
+    description: '3 slip gaji menunggu approval',
+    tone: 'primary',
   },
-];
+]
 
 const schedules = [
   {
-    time: "08:00 - 09:00",
-    group: "Kelas 8A Matematika",
-    detail: "Bu Rina • Ruang 2",
-    status: "Selesai",
+    time: '08:00 - 09:00',
+    group: 'Kelas 8A Matematika',
+    detail: 'Bu Rina • Ruang 2',
+    status: 'Selesai',
   },
   {
-    time: "10:00 - 11:00",
-    group: "SMA UTBK Fisika",
-    detail: "Pak Dimas • Ruang 1",
-    status: "Belum selesai",
+    time: '10:00 - 11:00',
+    group: 'SMA UTBK Fisika',
+    detail: 'Pak Dimas • Ruang 1',
+    status: 'Belum selesai',
   },
   {
-    time: "13:00 - 14:30",
-    group: "Kelas 7B Bahasa Inggris",
-    detail: "Bu Sari • Ruang 3",
-    status: "Belum selesai",
+    time: '13:00 - 14:30',
+    group: 'Kelas 7B Bahasa Inggris',
+    detail: 'Bu Sari • Ruang 3',
+    status: 'Belum selesai',
   },
-] as const;
+] as const
 
 const financeItems = [
   {
-    label: "Invoice Lunas",
-    value: "Rp 42,8 jt",
-    tone: "text-[var(--color-success)]",
+    label: 'Invoice Lunas',
+    value: 'Rp 42,8 jt',
+    tone: 'text-[var(--color-success)]',
   },
   {
-    label: "Invoice Belum Dibayar",
-    value: "Rp 9,4 jt",
-    tone: "text-[var(--color-warning)]",
+    label: 'Invoice Belum Dibayar',
+    value: 'Rp 9,4 jt',
+    tone: 'text-[var(--color-warning)]',
   },
   {
-    label: "Terlambat",
-    value: "Rp 3,1 jt",
-    tone: "text-[var(--color-danger)]",
+    label: 'Terlambat',
+    value: 'Rp 3,1 jt',
+    tone: 'text-[var(--color-danger)]',
   },
   {
-    label: "Payroll Dibayar",
-    value: "Rp 12,2 jt",
-    tone: "text-[var(--color-primary-darker)]",
+    label: 'Payroll Dibayar',
+    value: 'Rp 12,2 jt',
+    tone: 'text-[var(--color-primary-darker)]',
   },
-] as const;
+] as const
 
 const metricToneClasses = {
-  success: "bg-[var(--color-success-bg)] text-[var(--color-success)]",
-  primary: "bg-[var(--color-primary-soft)] text-primary",
-  warning: "bg-[var(--color-warning-bg)] text-[var(--color-warning)]",
-  danger: "bg-[var(--color-danger-bg)] text-[var(--color-danger)]",
-} as const;
+  success: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
+  primary: 'bg-[var(--color-primary-soft)] text-primary',
+  warning: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+  danger: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+} as const
 
 const alertToneClasses = {
-  danger: "bg-[var(--color-danger-bg)] text-[var(--color-danger)]",
-  warning: "bg-[var(--color-warning-bg)] text-[var(--color-warning)]",
-  primary: "bg-[var(--color-info-bg)] text-[var(--color-primary-darker)]",
-} as const;
+  danger: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+  warning: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+  primary: 'bg-[var(--color-info-bg)] text-[var(--color-primary-darker)]',
+} as const
 
 export function DashboardPage() {
   return (
-    <div className="mx-auto max-w-[1120px]" aria-labelledby="dashboard-title">
+    <div className="min-w-0" aria-labelledby="dashboard-title">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1
@@ -297,7 +297,7 @@ export function DashboardPage() {
                       </td>
                       <td className="py-3 text-right">
                         <Badge
-                          variant={status === "Selesai" ? "success" : "warning"}
+                          variant={status === 'Selesai' ? 'success' : 'warning'}
                         >
                           {status}
                         </Badge>
@@ -367,5 +367,5 @@ export function DashboardPage() {
         </aside>
       </div>
     </div>
-  );
+  )
 }
