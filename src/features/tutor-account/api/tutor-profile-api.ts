@@ -10,6 +10,19 @@ export type TutorProfileInput = {
   education: string
 }
 
+export type TutorBankAccountInput = {
+  bankName: string
+  accountNumber: string
+  accountName: string
+}
+
+export function updateTutorBankAccount(input: TutorBankAccountInput) {
+  return apiRequest<Tutor>('/tutors/me/bank-account', {
+    method: 'PATCH',
+    body: input,
+  })
+}
+
 export function getTutorProfile(signal?: AbortSignal) {
   return apiRequest<Tutor>('/tutors/me', { signal })
 }

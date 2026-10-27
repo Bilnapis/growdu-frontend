@@ -33,6 +33,7 @@ const accountMenuItems: readonly AccountMenuItem[] = [
     label: 'Ubah Data Rekening',
     description: 'Kelola rekening untuk penggajian',
     icon: Landmark,
+    to: '/tutor/profile/bank-account',
   },
   {
     label: 'Ubah Kata Sandi',
