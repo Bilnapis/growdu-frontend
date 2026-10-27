@@ -1,3 +1,4 @@
+import { useId, useRef, useState } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   BookOpen,
@@ -7,11 +8,13 @@ import {
   GraduationCap,
   LayoutDashboard,
   Megaphone,
+  Menu,
   Receipt,
   Settings,
   UserCog,
   Users,
   Wallet,
+  X,
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -68,6 +71,9 @@ export function SidebarClient({
   userRole,
   className,
 }: SidebarClientProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigationId = useId()
+  const menuToggleRef = useRef<HTMLButtonElement>(null)
   const roleLabel = getRoleLabel(userRole)
 
   return (
@@ -76,6 +82,12 @@ export function SidebarClient({
         'w-full shrink-0 border-b border-border bg-card p-5 lg:min-h-screen lg:w-[264px] lg:border-b-0 lg:border-r',
         className,
       )}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && isMenuOpen) {
+          setIsMenuOpen(false)
+          menuToggleRef.current?.focus()
+        }
+      }}
     >
       <div className="flex items-center gap-2.5">
         {tenantLogoUrl ? (
@@ -92,7 +104,7 @@ export function SidebarClient({
             {getInitials(tenantName)}
           </div>
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="truncate text-sm text-base font-bold leading-[1.2] text-foreground">
             {tenantName}
           </p>
@@ -100,33 +112,62 @@ export function SidebarClient({
             {roleLabel}
           </p>
         </div>
+        <button
+          ref={menuToggleRef}
+          type="button"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:hidden"
+          aria-label={isMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+          aria-expanded={isMenuOpen}
+          aria-controls={navigationId}
+          onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
+        >
+          {isMenuOpen ? (
+            <X className="h-5 w-5" aria-hidden="true" />
+          ) : (
+            <Menu className="h-5 w-5" aria-hidden="true" />
+          )}
+        </button>
       </div>
 
-      <nav className="mt-[18px]" aria-label="Navigasi operasional bimbel">
-        <ul className="grid gap-1">
-          {sidebarClientItems.map(({ id, label, icon: Icon }) => {
-            const isActive = activeItem === id
+      <nav
+        id={navigationId}
+        className="sidebar-client-navigation"
+        data-open={isMenuOpen}
+        aria-label="Navigasi operasional bimbel"
+      >
+        <div className="min-h-0 overflow-hidden">
+          <ul className="grid gap-1 p-1">
+            {sidebarClientItems.map(({ id, label, icon: Icon }) => {
+              const isActive = activeItem === id
 
-            return (
-              <li key={id}>
-                <button
-                  type="button"
-                  className={cn(
-                    'flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] font-semibold leading-[1.3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                    isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:bg-accent hover:text-foreground',
-                  )}
-                  aria-current={isActive ? 'page' : undefined}
-                  onClick={() => onItemSelect(id)}
-                >
-                  <Icon className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
-                  <span>{label}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+              return (
+                <li key={id}>
+                  <button
+                    type="button"
+                    className={cn(
+                      'flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] font-semibold leading-[1.3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                      isActive
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground',
+                    )}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      if (isMenuOpen) menuToggleRef.current?.focus()
+                      onItemSelect(id)
+                    }}
+                  >
+                    <Icon
+                      className="h-[18px] w-[18px] shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{label}</span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
       </nav>
     </aside>
   )

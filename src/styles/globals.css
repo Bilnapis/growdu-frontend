@@ -40,6 +40,36 @@
 }
 
 @layer components {
+  .sidebar-client-navigation {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin-top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--motion-slow),
+      margin-top var(--motion-slow),
+      opacity var(--motion-slow),
+      visibility var(--motion-slow);
+  }
+
+  .sidebar-client-navigation[data-open='true'] {
+    grid-template-rows: 1fr;
+    margin-top: var(--space-4);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @screen lg {
+    .sidebar-client-navigation {
+      grid-template-rows: 1fr;
+      margin-top: var(--space-4);
+      opacity: 1;
+      visibility: visible;
+      transition: none;
+    }
+  }
+
   @keyframes session-success-icon-pop {
     0% {
       opacity: 0;
