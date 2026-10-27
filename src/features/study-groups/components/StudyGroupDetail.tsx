@@ -109,19 +109,6 @@ export function StudyGroupDetail({ id }: { id: string }) {
       </section>
       <header className="study-group-detail__header">
         <div className="study-group-detail__header-copy">
-          <nav
-            aria-label="Breadcrumb"
-            className="text-xs font-semibold leading-[1.35] text-[var(--color-muted)]"
-          >
-            <Link
-              to="/study-groups"
-              className="rounded-sm hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-            >
-              Kelompok Belajar
-            </Link>
-            <span aria-hidden="true"> / </span>
-            <span aria-current="page">{group.name}</span>
-          </nav>
           <h1 className="mt-[3px] break-words text-2xl font-bold leading-[1.35]">
             {group.name}
           </h1>

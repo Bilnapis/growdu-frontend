@@ -7,6 +7,8 @@ export type OwnedTenant = {
   whatsappNumber: string | null
   email: string | null
   logoUrl: string | null
+  websiteUrl: string | null
+  primaryColor: string
   status: 'active' | 'inactive'
 }
 

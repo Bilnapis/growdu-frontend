@@ -378,7 +378,7 @@ export function StudentManagement() {
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-primary"
+                            className="h-8 w-8 text-primary-text"
                             aria-label={`Edit ${student.name}`}
                             onClick={() => setDialog({ type: 'edit', student })}
                           >

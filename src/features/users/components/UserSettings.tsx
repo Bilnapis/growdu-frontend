@@ -232,7 +232,7 @@ function UserEditor({ user, onClose }: { user: ManagedUser; onClose: () => void 
       <section className="h-full w-full max-w-xl overflow-y-auto bg-background p-5 shadow-xl sm:rounded-lg sm:p-6" role="dialog" aria-modal="true" aria-labelledby="user-editor-title">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">Pengaturan pengguna</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-primary-text">Pengaturan pengguna</span>
             <h2 id="user-editor-title" className="mt-1 text-xl font-semibold">{user.email}</h2>
           </div>
           <Button type="button" variant="ghost" size="icon" onClick={onClose} aria-label="Tutup pengaturan pengguna">
@@ -257,7 +257,7 @@ function UserEditor({ user, onClose }: { user: ManagedUser; onClose: () => void 
 
         <div className="mt-8 border-t pt-6">
           <div className="flex gap-3">
-            <KeyRound className="mt-0.5 h-5 w-5 text-primary" aria-hidden="true" />
+            <KeyRound className="mt-0.5 h-5 w-5 text-primary-text" aria-hidden="true" />
             <div>
               <h3 className="font-semibold">Reset kata sandi</h3>
               <p className="mt-1 text-sm leading-6 text-muted-foreground">Minimal 12 karakter. Tindakan ini akan mengakhiri semua sesi aktif pengguna.</p>

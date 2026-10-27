@@ -67,7 +67,7 @@ export function DashboardLayout() {
   const selectedTenantId = user ? getStoredSelectedTenantId(user.id) : null
   const tenantsQuery = useOwnedTenants({ enabled: user?.role === 'owner' })
   const currentTenantQuery = useCurrentTenant({
-    enabled: Boolean(user && user.role !== 'owner'),
+    enabled: Boolean(user),
   })
   const logoutMutation = useMutation({
     mutationFn: logout,
@@ -86,7 +86,7 @@ export function DashboardLayout() {
   const selectedTenant = tenantsQuery.data?.find(
     (tenant) => tenant.id === selectedTenantId,
   )
-  const sidebarTenant = selectedTenant ?? currentTenantQuery.data
+  const sidebarTenant = currentTenantQuery.data ?? selectedTenant
   const tenantName =
     sidebarTenant?.name ??
     (user?.role === 'owner' && tenantsQuery.isPending
@@ -126,7 +126,7 @@ export function DashboardLayout() {
             <p role="status" className="text-sm text-muted-foreground">
               Memuat hak akses...
             </p>
-          ) : user?.role === 'operator' && currentUserQuery.isError ? (
+          ) : user?.role === 'operator' && currentUserQuery.isError && !currentUserQuery.data ? (
             <section
               role="alert"
               className="space-y-3 rounded-lg border bg-card p-6"

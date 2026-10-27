@@ -96,7 +96,7 @@ export function TutorStudentDetail({ studentId }: { studentId: string }) {
                 <div className="grid gap-3 rounded-[10px] border bg-card p-3.5">
                   <div className="flex flex-col items-center gap-3">
                     <span
-                      className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[var(--color-primary-soft)] text-[17px] font-bold text-primary"
+                      className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-[var(--color-primary-soft)] text-[17px] font-bold text-primary-text"
                       aria-hidden="true"
                     >
                       {initials}

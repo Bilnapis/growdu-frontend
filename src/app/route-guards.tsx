@@ -7,6 +7,7 @@ import {
   isAuthenticated,
 } from '@/lib/auth-session'
 import { getStoredSelectedTenantId } from '@/lib/tenant-session'
+import { TenantThemeProvider } from '@/features/tenant-context/components/TenantThemeProvider'
 import {
   getStoredPlatformAdmin,
   isPlatformAdminAuthenticated,
@@ -106,7 +107,7 @@ export function TenantContextRoute({ children }: GuardProps) {
     return <Navigate to="/bimbel/select" replace />
   }
 
-  return children ?? <Outlet />
+  return <TenantThemeProvider>{children ?? <Outlet />}</TenantThemeProvider>
 }
 
 export function TutorRoute({ children }: GuardProps) {

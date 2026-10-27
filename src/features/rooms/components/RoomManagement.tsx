@@ -487,7 +487,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <div className="grid min-h-[360px] place-items-center py-12 text-center">
       <div>
-        <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-blue-50 text-primary">
+        <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-blue-50 text-primary-text">
           <DoorOpen className="h-6 w-6" />
         </span>
         <h2 className="mt-4 font-bold">

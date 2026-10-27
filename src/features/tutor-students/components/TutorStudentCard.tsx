@@ -32,7 +32,7 @@ export function TutorStudentCard({ student }: { student: TutorStudent }) {
 
       <Link
         to={`${tutorStudentPath(student.id)}${search}`}
-        className="flex h-[38px] items-center justify-center rounded-md border bg-card text-[13px] font-semibold text-primary hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="flex h-[38px] items-center justify-center rounded-md border bg-card text-[13px] font-semibold text-primary-text hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         aria-label={`Lihat siswa ${student.name}`}
       >
         Lihat Siswa

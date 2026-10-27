@@ -49,7 +49,7 @@ function TutorNavigationItem({ item }: { item: TutorNavigationItem }) {
       className={({ isActive }) =>
         `flex min-w-0 flex-col items-center justify-center gap-[3px] rounded-lg px-1 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
           isActive
-            ? 'bg-[var(--color-primary-soft)] text-primary'
+            ? 'bg-[var(--color-primary-soft)] text-primary-text'
             : 'text-muted-foreground hover:bg-accent hover:text-foreground'
         }`
       }

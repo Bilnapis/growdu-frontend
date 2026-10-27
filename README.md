@@ -14,6 +14,23 @@ npm run dev
 Di PowerShell, gunakan `Copy-Item .env.example .env.local` untuk menyalin file
 environment.
 
+## Pengaturan bimbel
+
+`/settings` mengarah ke `/settings/bimbel` untuk mengubah logo, nama, kontak,
+website, dan alamat. `/settings/theme` menyediakan lima preset, slider hue,
+input HEX, dan preview. Owner serta operator berizin `settings` dapat menyimpan.
+Tema tersimpan di backend per bimbel dan berlaku pada dashboard serta tentor;
+draft warna hanya berlaku di preview sampai penyimpanan berhasil. Data tenant
+diambil ulang ketika jendela kembali aktif setelah cache menjadi stale.
+
+Logo menerima PNG/JPEG maksimal 2 MB dengan crop 1:1. Website tanpa protokol
+dinormalisasi menjadi HTTPS. Perubahan identitas dan tema dikirim secara
+terpisah agar tidak saling menimpa. Route `/settings/users` tetap tersedia.
+
+Deploy migration/backend pengaturan terlebih dahulu sebelum frontend.
+Verifikasi UI dilakukan pada 375, 768, 1280, dan 1440 px, termasuk keyboard,
+preview warna terang, gagal simpan, refresh, pergantian bimbel, dan dialog crop.
+
 ## Perintah
 
 - `npm run dev` — menjalankan development server.

@@ -64,7 +64,7 @@ export function StaffRowActions({
         type="button"
         variant="ghost"
         size="icon"
-        className="h-8 w-8 text-primary"
+        className="h-8 w-8 text-primary-text"
         onClick={() => onAction('edit')}
         aria-label={`Edit ${staff.name}`}
       >

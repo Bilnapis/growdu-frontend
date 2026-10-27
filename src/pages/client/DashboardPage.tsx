@@ -151,7 +151,7 @@ const financeItems = [
 
 const metricToneClasses = {
   success: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
-  primary: 'bg-[var(--color-primary-soft)] text-primary',
+  primary: 'bg-[var(--color-primary-soft)] text-primary-text',
   warning: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
   danger: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
 } as const
@@ -266,7 +266,7 @@ export function DashboardPage() {
                 Jadwal Hari Ini
               </h2>
               <Link
-                className="text-[13px] font-bold text-primary hover:underline"
+                className="text-[13px] font-bold text-primary-text hover:underline"
                 to="/schedule"
               >
                 Lihat semua

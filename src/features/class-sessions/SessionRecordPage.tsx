@@ -34,7 +34,7 @@ const statuses: {
     value: 'excused',
     label: 'Izin',
     selectedClassName:
-      'border-primary bg-[var(--color-primary-soft)] text-primary',
+      'border-primary bg-[var(--color-primary-soft)] text-primary-text',
   },
   {
     value: 'sick',
@@ -263,7 +263,7 @@ export function SessionRecordForm({
                     <div className="flex items-center gap-2.5">
                       <span
                         aria-hidden="true"
-                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-soft text-[15px] font-extrabold text-primary"
+                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-soft text-[15px] font-extrabold text-primary-text"
                       >
                         {student.name.slice(0, 1)}
                       </span>

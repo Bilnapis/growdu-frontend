@@ -23,7 +23,7 @@ export function UserSettingsPage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <span className="text-xs font-bold uppercase tracking-wider text-primary">Akses & keamanan</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-primary-text">Akses & keamanan</span>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">Pengaturan pengguna</h1>
       <p className="mt-2 max-w-2xl leading-6 text-muted-foreground">Kelola akun pada tenant Anda, termasuk status akses dan kredensial pengguna.</p>
       <div className="mt-8"><UserSettings filters={filters} onFiltersChange={handleFiltersChange} /></div>

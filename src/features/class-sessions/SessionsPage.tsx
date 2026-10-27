@@ -526,7 +526,7 @@ function CalendarDayColumn({
           <h3
             className={
               today
-                ? 'text-xs font-extrabold text-primary'
+                ? 'text-xs font-extrabold text-primary-text'
                 : 'text-xs font-extrabold'
             }
           >
@@ -561,7 +561,7 @@ function CalendarDayColumn({
             return (
               <div
                 key={event.id}
-                className="absolute z-20 grid place-items-center overflow-hidden rounded-md border border-border bg-[var(--color-gray-50)] px-1 text-center text-[9px] font-extrabold leading-[1.1] text-primary"
+                className="absolute z-20 grid place-items-center overflow-hidden rounded-md border border-border bg-[var(--color-gray-50)] px-1 text-center text-[9px] font-extrabold leading-[1.1] text-primary-text"
                 style={style}
                 aria-label={`${event.count} jadwal lain pada waktu yang sama`}
               >
@@ -647,7 +647,7 @@ function SessionCard({
     <article className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold text-primary">
+          <p className="text-xs font-semibold text-primary-text">
             {sessionDateLabel(session.sessionDate)}
           </p>
           <h3 className="mt-2 font-bold">{session.studyGroupName}</h3>
@@ -761,7 +761,7 @@ function Pagination({
             type="button"
             className={
               pageNumber === page
-                ? 'h-8 min-w-8 rounded-md bg-primary px-2 text-[13px] font-semibold text-primary-foreground'
+                ? 'h-8 min-w-8 rounded-md bg-primary px-2 text-[13px] font-semibold text-white'
                 : 'h-8 min-w-8 rounded-md border border-border bg-card px-2 text-[13px] font-semibold hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring'
             }
             aria-current={pageNumber === page ? 'page' : undefined}
@@ -820,7 +820,7 @@ function EmptyState() {
   return (
     <div className="grid min-h-64 place-items-center py-10 text-center">
       <div>
-        <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-[var(--color-primary-soft)] text-primary">
+        <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-[var(--color-primary-soft)] text-primary-text">
           <CalendarDays className="h-6 w-6" aria-hidden="true" />
         </span>
         <h2 className="mt-4 font-bold">Jadwal tidak ditemukan</h2>
@@ -1111,6 +1111,6 @@ function sessionLink(id: string, tutor: boolean) {
 
 function viewButtonClass(active: boolean) {
   return active
-    ? 'rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-primary-foreground shadow-sm focus-visible:ring-2 focus-visible:ring-ring'
+    ? 'rounded-md bg-primary px-4 py-2 text-[13px] font-semibold text-white shadow-sm focus-visible:ring-2 focus-visible:ring-ring'
     : 'rounded-md px-4 py-2 text-[13px] font-semibold hover:bg-white focus-visible:ring-2 focus-visible:ring-ring'
 }

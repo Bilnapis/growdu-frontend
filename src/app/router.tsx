@@ -51,6 +51,7 @@ import { TutorStudentsPage } from '@/pages/client/TutorStudentsPage'
 import { TutorStudentDetailPage } from '@/pages/client/TutorStudentDetailPage'
 import { TutorsPage } from '@/pages/client/TutorsPage'
 import { UserSettingsPage } from '@/pages/client/UserSettingsPage'
+import { TenantSettingsPage } from '@/pages/client/TenantSettingsPage'
 import { NotFoundPage } from '@/pages/shared/NotFoundPage'
 import { DashboardLayout } from '@/features/dashboard/components/DashboardLayout'
 
@@ -209,6 +210,9 @@ export const router = createBrowserRouter([
                         path: ':section',
                         element: <DashboardModulePlaceholderPage />,
                       },
+                      { path: 'settings', element: <Navigate to="/settings/bimbel" replace /> },
+                      { path: 'settings/bimbel', element: <TenantSettingsPage section="bimbel" /> },
+                      { path: 'settings/theme', element: <TenantSettingsPage section="theme" /> },
                     ],
                   },
                 ],

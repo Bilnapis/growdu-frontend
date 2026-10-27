@@ -47,6 +47,9 @@
   --color-text: var(--color-neutral-900);
   --color-muted: var(--color-neutral-500);
   --color-primary: var(--color-brand-500);
+  --color-primary-text: var(--color-brand-700);
+  --color-primary-foreground: #fff;
+  --color-primary-hover: var(--color-brand-600);
   --color-primary-soft: var(--color-brand-100);
   --color-primary-dark: var(--color-info-text);
   --color-primary-darker: #3538cd;
@@ -91,6 +94,7 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
   --primary: 207 78% 51%;
+  --primary-text: 206 84% 34%;
   --primary-foreground: 0 0% 100%;
   --secondary: 210 40% 96%;
   --secondary-foreground: 222 47% 11%;

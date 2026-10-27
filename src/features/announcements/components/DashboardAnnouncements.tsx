@@ -65,7 +65,7 @@ export function DashboardAnnouncements({
               className="flex min-w-0 items-start gap-3.5 rounded-lg border bg-card p-4"
             >
               <Megaphone
-                className="mt-0.5 h-6 w-6 shrink-0 text-primary"
+                className="mt-0.5 h-6 w-6 shrink-0 text-primary-text"
                 aria-hidden="true"
               />
               <div className="min-w-0 flex-1">

@@ -805,7 +805,7 @@ function ParentSourceTabs({
             aria-selected={selected}
             className={`min-h-10 px-4 py-2.5 text-sm font-semibold transition-colors focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
               selected
-                ? 'rounded bg-primary text-primary-foreground'
+                ? 'rounded bg-primary text-white'
                 : 'bg-white text-[var(--color-muted)] hover:bg-[var(--color-gray-50)] hover:text-[var(--color-text)]'
             }`}
             onClick={() => onChange(source)}

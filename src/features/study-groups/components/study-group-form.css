@@ -188,7 +188,7 @@
 }
 .study-group-form .study-group-form__add-schedule {
   width: 100%;
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-text);
   background: var(--color-surface);
   color: var(--color-brand-600);
   font-size: 13px;
@@ -406,7 +406,7 @@
 .study-group-form__modal-table input[type='checkbox'] {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary);
+  accent-color: var(--color-primary-text);
 }
 .study-group-form__status {
   display: inline-flex;

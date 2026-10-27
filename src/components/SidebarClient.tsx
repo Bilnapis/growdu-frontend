@@ -149,7 +149,7 @@ export function SidebarClient({
                     className={cn(
                       'flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] font-semibold leading-[1.3] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                       isActive
-                        ? 'bg-primary text-primary-foreground'
+                        ? 'bg-primary text-white'
                         : 'text-muted-foreground hover:bg-accent hover:text-foreground',
                     )}
                     aria-current={isActive ? 'page' : undefined}

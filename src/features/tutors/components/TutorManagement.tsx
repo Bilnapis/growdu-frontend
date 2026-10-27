@@ -312,7 +312,7 @@ export function TutorManagement({
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
-                            className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary)]"
+                            className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary-text)]"
                             onClick={() => {
                               setActionMenu(null);
                               void navigate(`/tutors/${tutor.id}/edit`);

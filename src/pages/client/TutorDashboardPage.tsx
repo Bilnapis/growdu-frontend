@@ -66,7 +66,7 @@ export function TutorDashboardPage() {
             </button>
             <Link
               to="/tutor/profile"
-              className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground transition-colors hover:bg-[var(--color-brand-600)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="grid h-9 w-9 place-items-center rounded-full bg-primary text-white transition-colors hover:bg-[var(--color-brand-600)] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label="Profil tentor"
             >
               <UserRound className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -93,7 +93,7 @@ export function TutorDashboardPage() {
                   to="/tutor/sessions"
                   className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <Icon className="h-5 w-5 text-primary-text" aria-hidden="true" />
                   <span className="text-[11px] font-bold">{label}</span>
                 </Link>
               ) : (
@@ -102,7 +102,7 @@ export function TutorDashboardPage() {
                   className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground"
                   aria-label={`${label} segera tersedia`}
                 >
-                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <Icon className="h-5 w-5 text-primary-text" aria-hidden="true" />
                   <span className="text-[11px] font-bold">{label}</span>
                 </div>
               ),
@@ -119,7 +119,7 @@ export function TutorDashboardPage() {
             <h2 id="today-schedule-title" className="text-[15px] font-bold">
               Jadwal Hari Ini
             </h2>
-            <span className="text-[11px] font-semibold text-primary">
+            <span className="text-[11px] font-semibold text-primary-text">
               <Link to="/tutor/sessions">Lihat semua</Link>
             </span>
           </div>

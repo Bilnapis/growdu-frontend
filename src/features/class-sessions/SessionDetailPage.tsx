@@ -199,7 +199,7 @@ function SessionDetail({ session }: { session: ClassSession }) {
             <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold">Data Presensi Siswa</h2>
-                <span className="rounded-md bg-primary-soft px-2 py-1 text-[11px] font-bold text-primary">
+                <span className="rounded-md bg-primary-soft px-2 py-1 text-[11px] font-bold text-primary-text">
                   {session.students.length} Siswa
                 </span>
               </div>
