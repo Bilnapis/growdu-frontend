@@ -6,6 +6,20 @@ export type LoginRequest = {
   password: string
 }
 
+export type ChangePasswordRequest = {
+  currentPassword: string
+  newPassword: string
+}
+
+export function changePassword(request: ChangePasswordRequest) {
+  return apiRequest<void>('/auth/password', {
+    method: 'PATCH',
+    body: JSON.stringify(request),
+    // A wrong current password also returns 401; the form handles this response.
+    unauthorizedHandling: 'manual',
+  })
+}
+
 export type LoginResponse = {
   accessToken: string
   tokenType: 'Bearer'

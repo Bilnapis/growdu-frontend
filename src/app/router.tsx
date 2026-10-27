@@ -42,6 +42,7 @@ import { TutorDashboardPage } from '@/pages/client/TutorDashboardPage'
 import { TutorProfilePage } from '@/pages/client/TutorProfilePage'
 import { TutorProfileEditPage } from '@/pages/client/TutorProfileEditPage'
 import { TutorBankAccountEditPage } from '@/pages/client/TutorBankAccountEditPage'
+import { TutorPasswordEditPage } from '@/pages/client/TutorPasswordEditPage'
 import { TutorSchedulePage } from '@/pages/client/TutorSchedulePage'
 import { TutorStudentsPage } from '@/pages/client/TutorStudentsPage'
 import { TutorStudentDetailPage } from '@/pages/client/TutorStudentDetailPage'
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
                   {
                     path: 'tutor/profile/bank-account',
                     element: <TutorBankAccountEditPage />,
+                  },
+                  {
+                    path: 'tutor/profile/password',
+                    element: <TutorPasswordEditPage />,
                   },
                   { path: 'tutor/sessions', element: <TutorSchedulePage /> },
                   { path: 'tutor/students', element: <TutorStudentsPage /> },

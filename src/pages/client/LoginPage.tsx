@@ -200,6 +200,15 @@ export function LoginPage({ adminOnly = false }: LoginPageProps) {
           </CardHeader>
 
           <CardContent className="px-0 sm:px-8 sm:pb-8">
+            {isPasswordChangedState(location.state) ? (
+              <p
+                role="status"
+                className="mb-4 rounded-md border border-[var(--color-success-border)] bg-[var(--color-success-bg)] p-3 text-sm text-[var(--color-success)]"
+              >
+                Kata sandi berhasil diperbarui. Silakan masuk dengan kata sandi
+                baru. Semua sesi sebelumnya telah diakhiri.
+              </p>
+            ) : null}
             <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-5">
                 <div className="grid gap-2">
@@ -305,4 +314,13 @@ function getRedirectPath(
 
 function isLoginRedirectState(state: unknown): state is LoginRedirectState {
   return typeof state === 'object' && state !== null && 'from' in state
+}
+
+function isPasswordChangedState(state: unknown) {
+  return (
+    typeof state === 'object' &&
+    state !== null &&
+    'passwordChanged' in state &&
+    state.passwordChanged === true
+  )
 }

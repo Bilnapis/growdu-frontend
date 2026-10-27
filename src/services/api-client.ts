@@ -30,6 +30,7 @@ type ApiRequestOptions = Omit<
   'baseURL' | 'data' | 'headers' | 'method' | 'url'
 > & {
   authScope?: AuthScope
+  unauthorizedHandling?: 'automatic' | 'manual'
   body?: unknown
   headers?: Record<string, string>
   method?: AxiosRequestConfig['method']
@@ -63,7 +64,13 @@ export async function apiRequest<TResponse>(
   path: string,
   options: ApiRequestOptions = {},
 ): Promise<TResponse> {
-  const { authScope = 'user', body, headers, ...requestConfig } = options
+  const {
+    authScope = 'user',
+    unauthorizedHandling = 'automatic',
+    body,
+    headers,
+    ...requestConfig
+  } = options
   const requestHeaders = new AxiosHeaders(headers)
   const accessToken = getAccessToken(authScope)
 
@@ -94,7 +101,11 @@ export async function apiRequest<TResponse>(
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status ?? 0
-      if (status === 401 && await refreshSession(authScope)) {
+      if (
+        status === 401 &&
+        unauthorizedHandling === 'automatic' &&
+        (await refreshSession(authScope))
+      ) {
         const retryHeaders = new AxiosHeaders(requestHeaders)
         setAuthorizationHeader(retryHeaders, authScope)
 
@@ -124,7 +135,7 @@ export async function apiRequest<TResponse>(
         }
       }
 
-      if (status === 401) {
+      if (status === 401 && unauthorizedHandling === 'automatic') {
         handleUnauthorizedSession(authScope)
       }
 

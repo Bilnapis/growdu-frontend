@@ -39,6 +39,7 @@ const accountMenuItems: readonly AccountMenuItem[] = [
     label: 'Ubah Kata Sandi',
     description: 'Amankan akun Anda dengan kata sandi baru',
     icon: LockKeyhole,
+    to: '/tutor/profile/password',
   },
 ]
 
