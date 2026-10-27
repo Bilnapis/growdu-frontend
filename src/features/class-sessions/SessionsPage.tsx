@@ -1,4 +1,10 @@
-import { type FormEvent, type ReactNode, useState } from 'react'
+import {
+  type FormEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {
   type LucideIcon,
   BookOpen,
@@ -25,6 +31,7 @@ import {
   useSessions,
   type SessionListItem,
 } from './api'
+import './sessions-calendar.css'
 
 const PAGE_SIZE = 6
 const tableCellClass = 'px-[18px] py-3'
@@ -114,7 +121,7 @@ export function SessionsPage() {
               aria-pressed={view === 'list'}
               onClick={() => setView('list')}
             >
-              List View
+              List
             </button>
             <button
               type="button"
@@ -125,7 +132,7 @@ export function SessionsPage() {
               Kalender
             </button>
           </div>
-          <div className="flex h-9 items-center gap-1.5 rounded-md border border-border bg-card px-1.5">
+          <div className="flex  items-center gap-1.5 rounded-md border border-border bg-card px-1.5 py-1.5">
             <WeekButton label="Minggu sebelumnya" onClick={() => week(-7)}>
               <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
             </WeekButton>
@@ -372,6 +379,20 @@ function CalendarView({
   const [tutorId, setTutorId] = useState('')
   const [roomId, setRoomId] = useState('')
   const [status, setStatus] = useState('')
+  const scrollIndicatorTimeout = useRef<ReturnType<typeof setTimeout>>()
+
+  useEffect(() => {
+    return () => clearTimeout(scrollIndicatorTimeout.current)
+  }, [])
+
+  function showScrollIndicator(element: HTMLDivElement) {
+    clearTimeout(scrollIndicatorTimeout.current)
+    element.dataset.scrolling = 'true'
+    scrollIndicatorTimeout.current = setTimeout(() => {
+      delete element.dataset.scrolling
+    }, 1000)
+  }
+
   const days = Array.from({ length: 7 }, (_, index) => shiftDate(from, index))
   const filteredSessions = sessions.filter(
     (session) =>
@@ -428,24 +449,33 @@ function CalendarView({
           ]}
         />
       </div>
-      <div className="overflow-x-auto rounded-lg border border-border bg-card p-3.5">
+      <div className="rounded-lg border border-border bg-card p-3.5">
         <div
-          className="grid min-w-[1050px] gap-2"
-          style={{
-            gridTemplateColumns: `76px repeat(${days.length}, minmax(154px, 1fr))`,
-          }}
+          className="sessions-calendar-scroll isolate max-h-[70dvh] overflow-auto rounded-md focus-visible:ring-2 focus-visible:ring-ring"
+          role="region"
+          aria-label="Kalender jadwal mingguan"
+          tabIndex={0}
+          onScroll={(event) => showScrollIndicator(event.currentTarget)}
+          onPointerEnter={(event) => showScrollIndicator(event.currentTarget)}
         >
-          <TimeColumn />
-          {days.map((date) => (
-            <CalendarDayColumn
-              key={date}
-              date={date}
-              sessions={filteredSessions.filter(
-                (session) => session.sessionDate === date,
-              )}
-              tutor={tutor}
-            />
-          ))}
+          <div
+            className="grid min-w-[1500px] gap-2"
+            style={{
+              gridTemplateColumns: `76px repeat(${days.length}, minmax(154px, 1fr))`,
+            }}
+          >
+            <TimeColumn />
+            {days.map((date) => (
+              <CalendarDayColumn
+                key={date}
+                date={date}
+                sessions={filteredSessions.filter(
+                  (session) => session.sessionDate === date,
+                )}
+                tutor={tutor}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -454,11 +484,11 @@ function CalendarView({
 
 function TimeColumn() {
   return (
-    <div>
-      <div className="grid h-[42px] place-items-center text-xs font-extrabold text-muted-foreground">
+    <div className="sticky left-0 z-40 bg-card">
+      <div className="sticky top-0 z-50 grid h-12 place-items-center bg-card pb-1.5 text-xs font-extrabold text-muted-foreground">
         Jam
       </div>
-      <div className="mt-1.5 grid gap-1.5">
+      <div className="grid gap-1.5">
         {CALENDAR_TIMES.map((time) => (
           <div
             key={time}
@@ -485,35 +515,37 @@ function CalendarDayColumn({
   const events = layoutCalendarEvents(sessions)
   return (
     <section aria-label={sessionDateLabel(date)}>
-      <header
-        className={
-          today
-            ? 'flex h-[42px] flex-col items-center justify-center rounded-md bg-[var(--color-primary-soft)]'
-            : 'flex h-[42px] flex-col items-center justify-center rounded-md bg-[var(--color-gray-50)]'
-        }
-      >
-        <h3
+      <div className="sticky top-0 z-30 bg-card pb-1.5">
+        <header
           className={
             today
-              ? 'text-xs font-extrabold text-primary'
-              : 'text-xs font-extrabold'
+              ? 'flex h-[42px] flex-col items-center justify-center rounded-md bg-[var(--color-primary-soft)]'
+              : 'flex h-[42px] flex-col items-center justify-center rounded-md bg-[var(--color-gray-50)]'
           }
         >
-          {calendarDayName(date)}
-        </h3>
-        <p className="text-[10px] font-semibold text-muted-foreground">
-          {calendarDayDate(date)}
-        </p>
-      </header>
-      <div className="relative mt-1.5 h-[1218px]">
+          <h3
+            className={
+              today
+                ? 'text-xs font-extrabold text-primary'
+                : 'text-xs font-extrabold'
+            }
+          >
+            {calendarDayName(date)}
+          </h3>
+          <p className="text-[10px] font-semibold text-muted-foreground">
+            {calendarDayDate(date)}
+          </p>
+        </header>
+      </div>
+      <div className="relative h-[1218px]">
         <div className="grid gap-1.5">
-          {CALENDAR_TIMES.map((time, index) => (
+          {CALENDAR_TIMES.map((time) => (
             <div
               key={time}
               className="grid h-24 place-items-center rounded-md border border-border bg-card text-[10px] text-muted-foreground"
               aria-hidden="true"
             >
-              {index % 2 === 1 ? '—' : null}
+              -
             </div>
           ))}
         </div>
@@ -548,7 +580,9 @@ function CalendarDayColumn({
               style={style}
               aria-label={`${session.studyGroupName}, ${session.startTime} sampai ${session.endTime}`}
             >
-              <strong className="block text-[11px] font-extrabold leading-[1.15]">
+              <strong
+                className={`block font-extrabold leading-[1.15] ${event.laneCount > 1 ? 'text-[9px]' : 'text-[11px]'}`}
+              >
                 {session.studyGroupName}
               </strong>
               <span className="mt-1 block text-[9px] font-semibold leading-tight text-muted-foreground">
