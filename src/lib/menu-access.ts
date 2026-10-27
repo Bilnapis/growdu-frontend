@@ -10,7 +10,7 @@ export const operatorMenus = [
   { id: 'invoices', label: 'Invoice SPP', description: 'Membuat tagihan dan memantau pembayaran' },
   { id: 'payroll', label: 'Penggajian', description: 'Melihat komponen gaji tentor dan staf' },
   { id: 'reports', label: 'Laporan', description: 'Membuka laporan performa dan keuangan' },
-  { id: 'announcements', label: 'Pengumuman', description: 'Membuat pengumuman untuk siswa dan wali' },
+  { id: 'announcements', label: 'Pengumuman', description: 'Kelola pengumuman untuk admin, tentor, siswa, dan wali' },
   { id: 'settings', label: 'Pengaturan', description: 'Mengubah konfigurasi aplikasi' },
 ] as const
 

@@ -1,4 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import { AnnouncementsPage } from '@/pages/client/AnnouncementsPage'
+import { AnnouncementCreatePage } from '@/pages/client/AnnouncementCreatePage'
+import { AnnouncementEditPage } from '@/pages/client/AnnouncementEditPage'
 import { SessionsPage } from '@/features/class-sessions/SessionsPage'
 import { SessionDetailPage } from '@/features/class-sessions/SessionDetailPage'
 import { SessionRecordPage } from '@/features/class-sessions/SessionRecordPage'
@@ -193,6 +196,14 @@ export const router = createBrowserRouter([
                       {
                         path: 'schedule/:id/record',
                         element: <SessionRecordPage />,
+                      },
+                      {
+                        path: 'announcements',
+                        element: <AnnouncementsPage />,
+                        children: [
+                          { path: 'new', element: <AnnouncementCreatePage /> },
+                          { path: ':id/edit', element: <AnnouncementEditPage /> },
+                        ],
                       },
                       {
                         path: ':section',

@@ -4,7 +4,6 @@ import {
   BookOpen,
   ClipboardCheck,
   FileText,
-  Megaphone,
   Receipt,
   TrendingUp,
   Users,
@@ -13,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
+import { DashboardAnnouncements } from '@/features/announcements/components/DashboardAnnouncements';
 
 type Metric = {
   label: string;
@@ -189,24 +189,11 @@ export function DashboardPage() {
         </select>
       </header>
 
-      <section
-        className="mt-[22px] flex gap-3.5 rounded-lg border bg-card p-4"
-        aria-labelledby="announcement-title"
-      >
-        <Megaphone
-          className="mt-0.5 h-6 w-6 shrink-0 text-primary"
-          aria-hidden="true"
-        />
-        <div>
-          <h2 id="announcement-title" className="text-[15px] font-bold">
-            Pengumuman untuk Admin
-          </h2>
-          <p className="mt-0.5 text-[13px] leading-[1.3] text-muted-foreground">
-            Maintenance sistem pembayaran dijadwalkan malam ini pukul 21.00.
-            Pengumuman role “Semua” juga tampil di sini.
-          </p>
-        </div>
-      </section>
+      <DashboardAnnouncements
+        audience="admin"
+        className="mt-[22px]"
+        hideWhenEmpty
+      />
 
       <section
         className="mt-[22px] grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4"
@@ -235,8 +222,8 @@ export function DashboardPage() {
         ))}
       </section>
 
-      <div className="mt-[22px] grid gap-[18px] lg:grid-cols-[minmax(0,1.75fr)_minmax(18rem,1fr)]">
-        <div className="grid content-start gap-[18px]">
+      <div className="mt-[22px] grid grid-cols-1 gap-[18px] lg:grid-cols-[minmax(0,1.75fr)_minmax(18rem,1fr)]">
+        <div className="grid min-w-0 grid-cols-1 content-start gap-[18px]">
           <section
             className="rounded-lg border bg-card p-[18px]"
             aria-labelledby="priority-title"
@@ -323,7 +310,7 @@ export function DashboardPage() {
           </section>
         </div>
 
-        <aside className="grid content-start gap-[18px]">
+        <aside className="grid min-w-0 grid-cols-1 content-start gap-[18px]">
           <section
             className="rounded-lg border bg-card p-[18px]"
             aria-labelledby="finance-title"

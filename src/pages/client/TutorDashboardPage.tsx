@@ -2,7 +2,6 @@ import {
   Bell,
   CalendarDays,
   FileText,
-  Megaphone,
   UserRound,
   UsersRound,
 } from 'lucide-react'
@@ -12,6 +11,7 @@ import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/Tut
 import { TutorScheduleCard } from '@/features/tutor-dashboard/components/TutorScheduleCard'
 import { useSessions, todayInJakarta } from '@/features/class-sessions/api'
 import { getStoredAuthUser } from '@/lib/auth-session'
+import { DashboardAnnouncements } from '@/features/announcements/components/DashboardAnnouncements'
 
 const dateFormatter = new Intl.DateTimeFormat('id-ID', {
   weekday: 'long',
@@ -74,22 +74,9 @@ export function TutorDashboardPage() {
           </div>
         </header>
 
-        <section className="px-4" aria-labelledby="announcements-title">
-          <h2 id="announcements-title" className="text-[15px] font-bold">
-            Pengumuman
-          </h2>
-          <article className="mt-2 flex items-center gap-2.5 rounded-[10px] bg-[var(--color-warning-bg)] p-3.5">
-            <div className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-[#fef3c7] text-[var(--color-warning)]">
-              <Megaphone className="h-[17px] w-[17px]" aria-hidden="true" />
-            </div>
-            <div>
-              <h3 className="text-xs font-bold">Libur Lebaran</h3>
-              <p className="mt-0.5 text-[10px] text-muted-foreground">
-                18 Maret 2026 – 25 Maret 2026
-              </p>
-            </div>
-          </article>
-        </section>
+        <div className="px-4">
+          <DashboardAnnouncements audience="tutor" />
+        </div>
 
         <section
           className="mt-[18px] px-4"
