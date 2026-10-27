@@ -41,6 +41,8 @@ import { TutorEditPage } from '@/pages/client/TutorEditPage'
 import { TutorDashboardPage } from '@/pages/client/TutorDashboardPage'
 import { TutorProfilePage } from '@/pages/client/TutorProfilePage'
 import { TutorSchedulePage } from '@/pages/client/TutorSchedulePage'
+import { TutorStudentsPage } from '@/pages/client/TutorStudentsPage'
+import { TutorStudentDetailPage } from '@/pages/client/TutorStudentDetailPage'
 import { TutorsPage } from '@/pages/client/TutorsPage'
 import { UserSettingsPage } from '@/pages/client/UserSettingsPage'
 import { NotFoundPage } from '@/pages/shared/NotFoundPage'
@@ -82,6 +84,11 @@ export const router = createBrowserRouter([
                     element: <TutorProfilePage />,
                   },
                   { path: 'tutor/sessions', element: <TutorSchedulePage /> },
+                  { path: 'tutor/students', element: <TutorStudentsPage /> },
+                  {
+                    path: 'tutor/students/:studentId',
+                    element: <TutorStudentDetailPage />,
+                  },
                   {
                     path: 'tutor/sessions/:sessionId/record',
                     element: <SessionRecordPage />,
