@@ -12,9 +12,8 @@ import {
   Search,
   SlidersHorizontal,
 } from 'lucide-react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { AddButton } from '@/components/ui/add-button'
 import { Input } from '@/components/ui/input'
 import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -31,7 +30,6 @@ const PAGE_SIZE = 6
 const tableCellClass = 'px-[18px] py-3'
 
 export function SessionsPage() {
-  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const requestedFrom = params.get('from')
   const from = mondayOfWeek(
@@ -138,11 +136,6 @@ export function SessionsPage() {
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
             </WeekButton>
           </div>
-          {!tutor && !calendarView ? (
-            <AddButton onClick={() => void navigate('/study-groups/new')}>
-              Tambah Jadwal
-            </AddButton>
-          ) : null}
         </div>
       </header>
 
@@ -319,16 +312,24 @@ function ListView({
                 key={session.id}
                 className="h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
               >
-                <td className={`${tableCellClass} font-bold`}>{compactDateLabel(session)}</td>
+                <td className={`${tableCellClass} font-bold`}>
+                  {compactDateLabel(session)}
+                </td>
                 <th scope="row" className={`${tableCellClass} font-bold`}>
                   {session.studyGroupName}
                 </th>
-                <td className={`${tableCellClass} font-medium`}>{session.subject ?? '—'}</td>
-                <td className={`${tableCellClass} font-semibold`}>{session.tutorName}</td>
+                <td className={`${tableCellClass} font-medium`}>
+                  {session.subject ?? '—'}
+                </td>
+                <td className={`${tableCellClass} font-semibold`}>
+                  {session.tutorName}
+                </td>
                 <td className={`${tableCellClass} font-medium`}>
                   {session.roomCode ?? session.roomName ?? '—'}
                 </td>
-                <td className={`${tableCellClass} font-semibold`}>{session.studentCount}</td>
+                <td className={`${tableCellClass} font-semibold`}>
+                  {session.studentCount}
+                </td>
                 <td className={tableCellClass}>
                   <AttendanceBadge session={session} />
                 </td>

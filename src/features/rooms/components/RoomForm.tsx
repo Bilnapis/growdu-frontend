@@ -192,7 +192,6 @@ export function RoomForm({
               value={values.code}
               error={submitted ? validation.errors.code : undefined}
               placeholder="R-01"
-              helper="Kode unik (contoh: R-01, LAB-1)"
               onChange={(value) => setField('code', value)}
             />
           </div>
