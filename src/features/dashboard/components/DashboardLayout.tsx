@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { LogOut } from 'lucide-react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import {
   SidebarClient,
@@ -17,6 +17,8 @@ import {
   getStoredSelectedTenantId,
 } from '@/lib/tenant-session'
 import { logout } from '@/services/auth.service'
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { hasMenuAccess } from '@/lib/menu-access'
 
 const sidebarItemIds: readonly SidebarClientItemId[] = [
   'dashboard',
@@ -47,6 +49,12 @@ export function DashboardLayout() {
   const isScheduleDetail = /^\/schedule\/[^/]+\/?$/.test(location.pathname)
   const queryClient = useQueryClient()
   const user = getStoredAuthUser()
+  const currentUserQuery = useCurrentUser()
+  const currentUser = user?.role === 'operator' ? currentUserQuery.data ?? null : user
+  const visibleItems = sidebarItemIds.filter((item) => hasMenuAccess(currentUser, item))
+  const activeItem = getActiveItem(location.pathname)
+  const firstMenu = visibleItems[0]
+  const canAccess = hasMenuAccess(currentUser, activeItem)
   const selectedTenantId = user ? getStoredSelectedTenantId(user.id) : null
   const tenantsQuery = useOwnedTenants({ enabled: user?.role === 'owner' })
   const currentTenantQuery = useCurrentTenant({
@@ -85,6 +93,7 @@ export function DashboardLayout() {
         tenantName={tenantName}
         userRole={user?.role ?? null}
         onItemSelect={handleItemSelect}
+        visibleItems={visibleItems}
       />
 
       <div className="min-w-0 flex-1">
@@ -104,7 +113,25 @@ export function DashboardLayout() {
         ) : null}
 
         <main className="min-w-0 p-5 sm:p-7">
-          <Outlet />
+          {user?.role === 'operator' && currentUserQuery.isPending ? (
+            <p role="status" className="text-sm text-muted-foreground">Memuat hak akses...</p>
+          ) : user?.role === 'operator' && currentUserQuery.isError ? (
+            <section role="alert" className="space-y-3 rounded-lg border bg-card p-6">
+              <h1 className="text-xl font-bold">Hak akses belum dapat dimuat</h1>
+              <p className="text-sm text-muted-foreground">Periksa koneksi Anda lalu coba kembali.</p>
+              <Button variant="outline" onClick={() => void currentUserQuery.refetch()}>Coba lagi</Button>
+            </section>
+          ) : !canAccess ? (
+            activeItem === 'dashboard' && firstMenu ? (
+              <Navigate to={`/${firstMenu}`} replace />
+            ) : (
+              <section role="alert" className="space-y-3 rounded-lg border bg-card p-6">
+                <h1 className="text-xl font-bold">{firstMenu ? 'Anda tidak memiliki akses ke menu ini' : 'Belum ada akses menu'}</h1>
+                <p className="text-sm text-muted-foreground">Hubungi pemilik bimbel untuk mengatur hak akses Anda.</p>
+                {firstMenu ? <Button asChild variant="outline"><Link to={`/${firstMenu}`}>Buka menu yang tersedia</Link></Button> : null}
+              </section>
+            )
+          ) : <Outlet />}
         </main>
       </div>
     </div>

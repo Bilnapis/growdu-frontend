@@ -61,6 +61,7 @@ type SidebarClientProps = {
   tenantLogoUrl?: string | null
   userRole?: string | null
   className?: string
+  visibleItems?: readonly SidebarClientItemId[]
 }
 
 export function SidebarClient({
@@ -70,6 +71,7 @@ export function SidebarClient({
   tenantLogoUrl,
   userRole,
   className,
+  visibleItems,
 }: SidebarClientProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const navigationId = useId()
@@ -137,7 +139,7 @@ export function SidebarClient({
       >
         <div className="min-h-0 overflow-hidden">
           <ul className="grid gap-1 p-1">
-            {sidebarClientItems.map(({ id, label, icon: Icon }) => {
+            {sidebarClientItems.filter(({ id }) => !visibleItems || visibleItems.includes(id)).map(({ id, label, icon: Icon }) => {
               const isActive = activeItem === id
 
               return (

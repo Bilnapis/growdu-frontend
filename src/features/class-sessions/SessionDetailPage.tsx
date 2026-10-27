@@ -21,8 +21,7 @@ import {
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useRooms } from '@/features/rooms/hooks/use-rooms'
-import { useTutors } from '@/features/tutors/hooks/use-tutors'
+import { useSchedulingOptions } from './use-scheduling-options'
 import { ApiError } from '@/services/api-client'
 import {
   sessionDateLabel,
@@ -546,8 +545,8 @@ function SessionOverrideDialog({
   const [room, setRoom] = useState(session.roomId ?? '')
   const [reason, setReason] = useState('')
   const mutation = useOverrideSession(session.id)
-  const tutors = useTutors({ page: 1, limit: 100, status: 'active' })
-  const rooms = useRooms({ page: 1, limit: 100, status: 'active' })
+  const tutors = useSchedulingOptions('tutors')
+  const rooms = useSchedulingOptions('rooms')
 
   useEffect(() => {
     const dialogElement = dialogRef.current

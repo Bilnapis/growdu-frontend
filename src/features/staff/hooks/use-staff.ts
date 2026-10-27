@@ -23,6 +23,8 @@ export function useStaffMember(tenantId: string | null, id: string) {
       return getStaffMember(tenantId, id, signal)
     },
     enabled: Boolean(tenantId && id),
+    staleTime: 0,
+    retry: false,
   })
 }
 

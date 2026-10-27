@@ -87914,7 +87914,7 @@
                       "type": "frame",
                       "id": "sv9yx",
                       "name": "Form Akun Pegawai Card",
-                      "width": 650,
+                      "width": "fill_container",
                       "height": "fill_container",
                       "fill": "$bk-surface",
                       "cornerRadius": 12,

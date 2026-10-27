@@ -1,6 +1,7 @@
 import { apiRequest, ApiError } from '@/services/api-client'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import { getStoredSelectedTenantId } from '@/lib/tenant-session'
+import type { OperatorMenu } from '@/lib/menu-access'
 
 export type StaffStatus = 'active' | 'inactive'
 export type StaffMember = {
@@ -12,6 +13,7 @@ export type StaffMember = {
   address: string | null
   email: string
   status: StaffStatus
+  menuPermissions: OperatorMenu[]
   createdAt: string
   updatedAt: string
 }
@@ -21,6 +23,7 @@ export type StaffInput = {
   address?: string
   email: string
   password: string
+  menuPermissions: OperatorMenu[]
 }
 export type StaffFilters = { page: number; limit: number; search?: string; status?: StaffStatus }
 type StaffResponse = {
@@ -53,13 +56,13 @@ export function getStaffError(error: unknown) {
     if (error.status === 403) return 'Anda tidak memiliki izin untuk mengelola pegawai bimbel ini.'
     if (error.status === 409) return 'Email sudah terdaftar. Gunakan email lain.'
     if (error.status === 400) return 'Periksa kembali data pegawai yang Anda isi.'
-    if (error.status === 404) return 'Bimbel tidak ditemukan atau tidak dapat diakses.'
+    if (error.status === 404) return 'Pegawai atau bimbel tidak ditemukan atau tidak dapat diakses.'
     if (error.status === 401) return 'Sesi telah berakhir. Silakan masuk kembali.'
   }
   return 'Data pegawai belum dapat diproses. Silakan coba lagi.'
 }
 
-export type StaffUpdateInput = Partial<Pick<StaffMember, 'name' | 'email' | 'phoneNumber' | 'status'>> & { address?: string; password?: string }
+export type StaffUpdateInput = Partial<Pick<StaffMember, 'name' | 'email' | 'phoneNumber' | 'status' | 'menuPermissions'>> & { address?: string; password?: string }
 
 export function updateStaff(tenantId: string, id: string, input: StaffUpdateInput) {
   return apiRequest<StaffMember>(`/tenants/${encodeURIComponent(tenantId)}/operators/${encodeURIComponent(id)}`, { method: 'PATCH', body: input })

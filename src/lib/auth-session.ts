@@ -1,3 +1,5 @@
+import { isOperatorMenu, type OperatorMenu } from './menu-access'
+
 export const authTokenStorageKey = 'growdu.auth.accessToken'
 export const authUserStorageKey = 'growdu.auth.user'
 
@@ -10,6 +12,7 @@ export type AuthUser = {
   tenantName: string | null
   profileId: string | null
   profileName: string | null
+  menuPermissions?: OperatorMenu[] | null
 }
 
 export type AuthSession = {
@@ -90,6 +93,8 @@ function isAuthUser(value: unknown): value is AuthUser {
     typeof user.status === 'string' &&
     (typeof user.tenantName === 'string' || user.tenantName === null) &&
     (typeof user.profileId === 'string' || user.profileId === null) &&
-    (typeof user.profileName === 'string' || user.profileName === null)
+    (typeof user.profileName === 'string' || user.profileName === null) &&
+    (user.menuPermissions === undefined || user.menuPermissions === null ||
+      (Array.isArray(user.menuPermissions) && user.menuPermissions.every(isOperatorMenu)))
   )
 }

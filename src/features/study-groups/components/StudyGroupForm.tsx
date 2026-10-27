@@ -14,10 +14,8 @@ import type { StudyGroup } from '@/features/study-groups/api/study-groups-api'
 import {
   useCreateStudyGroup,
   useUpdateStudyGroup,
+  useStudyGroupOptions,
 } from '@/features/study-groups/hooks/use-study-groups'
-import { useStudents } from '@/features/students/hooks/use-students'
-import { useTutors } from '@/features/tutors/hooks/use-tutors'
-import { useRooms } from '@/features/rooms/hooks/use-rooms'
 import { ApiError } from '@/services/api-client'
 import { todayInJakarta, shiftDate } from '@/features/class-sessions/api'
 
@@ -75,9 +73,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const studentSearchRef = useRef<HTMLInputElement>(null)
-  const tutors = useTutors({ page: 1, limit: 100, status: 'active' })
-  const rooms = useRooms({ page: 1, limit: 100, status: 'active' })
-  const students = useStudents({ page: 1, limit: 100, status: 'active' })
+  const tutors = useStudyGroupOptions('tutors')
+  const rooms = useStudyGroupOptions('rooms')
+  const students = useStudyGroupOptions('students')
   const create = useCreateStudyGroup()
   const update = useUpdateStudyGroup()
   const pending = create.isPending || update.isPending

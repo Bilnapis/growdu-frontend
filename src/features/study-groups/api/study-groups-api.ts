@@ -3,6 +3,26 @@ import type {
   EntityStatus,
   StudentListItem,
 } from '@/features/students/api/students-api'
+import type { SchedulingOptions } from '@/features/class-sessions/use-scheduling-options'
+
+export type StudyGroupStudentOption = {
+  id: string
+  name: string
+  school: string
+  educationLevel: string
+  status: EntityStatus
+}
+export type StudyGroupFormOptions = SchedulingOptions & {
+  students: (StudyGroupStudentOption & { address: string })[]
+}
+
+export function getStudyGroupFormOptions(signal?: AbortSignal) {
+  return apiRequest<StudyGroupFormOptions>('/study-groups/form-options', { signal })
+}
+
+export function getStudyGroupStudents(id: string, signal?: AbortSignal) {
+  return apiRequest<StudyGroupStudentOption[]>(`/study-groups/${encodeURIComponent(id)}/students`, { signal })
+}
 
 export type StudyGroupSchedule = {
   id: string

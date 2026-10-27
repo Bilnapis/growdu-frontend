@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button'
 import {
   useStudyGroup,
   useUpdateStudyGroupStatus,
+  useStudyGroupStudents,
 } from '@/features/study-groups/hooks/use-study-groups'
-import { useStudents } from '@/features/students/hooks/use-students'
 import { ApiError } from '@/services/api-client'
 
 import './study-group-detail.css'
@@ -32,7 +32,7 @@ export function StudyGroupDetail({ id }: { id: string }) {
     queryFn: ({ signal }) => getConfigurations(id, signal),
   })
   const status = useUpdateStudyGroupStatus()
-  const students = useStudents({ page: 1, limit: 100 })
+  const students = useStudyGroupStudents(id)
   const group = detail.data
 
   if (detail.isPending) {

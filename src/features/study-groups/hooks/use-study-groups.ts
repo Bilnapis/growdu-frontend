@@ -8,9 +8,28 @@ import {
   updateStudyGroupStatus,
   type StudyGroupFilters,
   type StudyGroupInput,
+  getStudyGroupFormOptions,
+  getStudyGroupStudents,
+  type StudyGroupFormOptions,
 } from '@/features/study-groups/api/study-groups-api'
 import { studentsQueryKey } from '@/features/students/hooks/use-students'
 export const studyGroupsQueryKey = ['study-groups'] as const
+
+export function useStudyGroupOptions<K extends keyof StudyGroupFormOptions>(kind: K) {
+  return useQuery({
+    queryKey: ['study-group-options'],
+    queryFn: ({ signal }) => getStudyGroupFormOptions(signal),
+    select: (options) => ({ data: options[kind] }),
+  })
+}
+
+export function useStudyGroupStudents(id: string) {
+  return useQuery({
+    queryKey: [...studyGroupsQueryKey, id, 'students'],
+    queryFn: ({ signal }) => getStudyGroupStudents(id, signal),
+    select: (students) => ({ data: students }),
+  })
+}
 export function useStudyGroups(filters: StudyGroupFilters) {
   return useQuery({
     queryKey: [...studyGroupsQueryKey, filters],

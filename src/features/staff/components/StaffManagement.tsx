@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import {
-  Search,
-  SlidersHorizontal,
-  UserRoundX,
-  UsersRound,
-} from 'lucide-react'
+import { Search, SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
@@ -20,6 +15,7 @@ import {
 import { StaffActionDialog } from './StaffActionDialog'
 import { StaffRowActions } from './StaffRowActions'
 import { useStaff } from '@/features/staff/hooks/use-staff'
+import { operatorMenus } from '@/lib/menu-access'
 
 export function StaffManagement() {
   const [action, setAction] = useState<{
@@ -79,7 +75,7 @@ export function StaffManagement() {
             Pegawai
           </h1>
           <p className="mt-1.5 text-sm leading-[1.4] text-muted-foreground">
-            Kelola daftar akun dan status pegawai.
+            Kelola daftar akun pegawai, status, dan akses menu.
           </p>
         </div>
         <AddButton onClick={() => void navigate('/staff/new')}>
@@ -206,14 +202,14 @@ export function StaffManagement() {
             <caption className="sr-only">Daftar pegawai bimbel</caption>
             <thead className="bg-slate-50 text-muted-foreground">
               <tr className="h-11">
-                <th scope="col" className="w-[25%] px-[26px] font-bold">
+                <th scope="col" className="w-[21%] px-[26px] font-bold">
                   Nama
                 </th>
-                <th scope="col" className="w-[28%] px-[26px] font-bold">
+                <th scope="col" className="w-[26%] px-[26px] font-bold">
                   Email
                 </th>
-                <th scope="col" className="w-[22%] px-[26px] font-bold">
-                  Nomor HP
+                <th scope="col" className="w-[29%] px-[26px] font-bold">
+                  Akses menu
                 </th>
                 <th scope="col" className="w-[11%] px-[26px] font-bold">
                   Status
@@ -233,7 +229,10 @@ export function StaffManagement() {
                     {staff.email}
                   </td>
                   <td className="px-[26px] font-medium text-foreground">
-                    {staff.phoneNumber}
+                    {operatorMenus
+                      .filter((menu) => staff.menuPermissions.includes(menu.id))
+                      .map((menu) => menu.label)
+                      .join(', ') || 'Belum ada akses menu'}
                   </td>
                   <td className="px-[26px]">
                     <StatusBadge status={staff.status} />
@@ -314,7 +313,7 @@ export function StaffManagement() {
           onSuccess={() => {
             setActionMessage(
               action.mode === 'edit'
-                ? 'Data pegawai berhasil diperbarui.'
+                ? 'Data dan hak akses menu pegawai berhasil diperbarui.'
                 : 'Status pegawai berhasil diperbarui.',
             )
             if (
