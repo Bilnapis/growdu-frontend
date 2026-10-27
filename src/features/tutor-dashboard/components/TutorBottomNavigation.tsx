@@ -45,7 +45,7 @@ function TutorNavigationItem({ item }: { item: TutorNavigationItem }) {
   return (
     <NavLink
       to={to}
-      end
+      end={to !== '/tutor/profile'}
       className={({ isActive }) =>
         `flex min-w-0 flex-col items-center justify-center gap-[3px] rounded-lg px-1 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
           isActive
