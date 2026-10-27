@@ -112,9 +112,6 @@ function SessionDetail({ session }: { session: ClassSession }) {
     <div className="mx-auto max-w-[1120px]">
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-xs font-semibold text-muted-foreground">
-            Jadwal Belajar / Detail Sesi #{session.id.slice(0, 8).toUpperCase()}
-          </p>
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight">
               {session.studyGroupName}
@@ -191,7 +188,7 @@ function SessionDetail({ session }: { session: ClassSession }) {
                 </Link>
               </Button>
             </div>
-            <ReadonlyField label="Topik *" value={session.topic} />
+            <ReadonlyField label="Topik" value={session.topic} />
             <ReadonlyField
               label="Catatan Tentor"
               value={session.tutorNote}
