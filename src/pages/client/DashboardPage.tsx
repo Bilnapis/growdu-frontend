@@ -166,14 +166,14 @@ export function DashboardPage() {
   return (
     <div className="min-w-0" aria-labelledby="dashboard-title">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div className="space-y-1">
           <h1
             id="dashboard-title"
-            className="text-[26px] font-bold leading-[1.3]"
+            className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]"
           >
             Dashboard
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Ringkasan operasional September 2026
           </p>
         </div>

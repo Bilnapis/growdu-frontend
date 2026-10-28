@@ -103,11 +103,13 @@ export function SessionsPage() {
     >
       {tutor ? <TutorPageHeader title="Jadwal Belajar" /> : null}
       <header className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-        <div>
+        <div className="space-y-1">
           {!tutor ? (
-            <h1 className="text-2xl font-bold leading-[1.3]">Jadwal Belajar</h1>
+            <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
+              Jadwal Belajar
+            </h1>
           ) : null}
-          <p className="mt-1 text-[13px] text-[var(--color-muted)]">
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             {calendarView
               ? 'Tinjauan alokasi ruangan per jam dengan toolbar filter di sisi kanan.'
               : 'Kelola sesi pertemuan, penugasan tentor, dan alokasi ruangan.'}
@@ -258,11 +260,7 @@ export function SessionsPage() {
         ) : null}
         {!calendarView && query.data?.data.length === 0 ? <EmptyState /> : null}
         {calendarView && query.data ? (
-          <CalendarView
-            sessions={query.data.data}
-            tutor={tutor}
-            from={from}
-          />
+          <CalendarView sessions={query.data.data} tutor={tutor} from={from} />
         ) : null}
         {!calendarView && (query.isPending || query.data?.data.length) ? (
           <ListView

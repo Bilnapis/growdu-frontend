@@ -82,9 +82,11 @@ export function RoomManagement() {
   return (
     <div className="space-y-5">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-[26px] font-bold leading-tight">Data Ruangan</h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">
+        <div className="space-y-1">
+          <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
+            Data Ruangan
+          </h1>
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Kelola ruangan kelas, kapasitas belajar, dan status ketersediaan
             jadwal.
           </p>
@@ -531,11 +533,7 @@ function ErrorState({
 
 function RoomTableSkeleton() {
   return (
-    <div
-      className="space-y-3"
-      role="status"
-      aria-label="Memuat data ruangan"
-    >
+    <div className="space-y-3" role="status" aria-label="Memuat data ruangan">
       {Array.from({ length: 5 }, (_, index) => (
         <div key={index} className="h-14 animate-pulse rounded-md bg-muted" />
       ))}

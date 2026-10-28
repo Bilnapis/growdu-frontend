@@ -4,7 +4,7 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
+} from 'react'
 import {
   BookOpen,
   ChevronDown,
@@ -20,96 +20,90 @@ import {
   UserX,
   Users,
   type LucideIcon,
-} from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+} from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
-import { Label } from "@/components/ui/label";
-import {
-  type Tutor,
-  type TutorStatus,
-} from "@/features/tutors/api/tutors-api";
-import {
-  useTutors,
-  useUpdateTutor,
-} from "@/features/tutors/hooks/use-tutors";
+import { Label } from '@/components/ui/label'
+import { type Tutor, type TutorStatus } from '@/features/tutors/api/tutors-api'
+import { useTutors, useUpdateTutor } from '@/features/tutors/hooks/use-tutors'
 
 type TutorManagementProps = {
   filters: {
-    page: number;
-    search?: string;
-    status?: TutorStatus;
-  };
-  onFiltersChange: (filters: TutorManagementProps["filters"]) => void;
-};
+    page: number
+    search?: string
+    status?: TutorStatus
+  }
+  onFiltersChange: (filters: TutorManagementProps['filters']) => void
+}
 
 type ActionMenuState = {
-  tutorId: string;
-  top: number;
-  left: number;
-} | null;
+  tutorId: string
+  top: number
+  left: number
+} | null
 
-const actionMenuWidth = 180;
+const actionMenuWidth = 180
 
 export function TutorManagement({
   filters,
   onFiltersChange,
 }: TutorManagementProps) {
-  const navigate = useNavigate();
-  const actionMenuBoundaryRef = useRef<HTMLElement | null>(null);
-  const [actionMenu, setActionMenu] = useState<ActionMenuState>(null);
-  const tutorsQuery = useTutors({ ...filters, limit: 20 });
-  const updateMutation = useUpdateTutor();
+  const navigate = useNavigate()
+  const actionMenuBoundaryRef = useRef<HTMLElement | null>(null)
+  const [actionMenu, setActionMenu] = useState<ActionMenuState>(null)
+  const tutorsQuery = useTutors({ ...filters, limit: 20 })
+  const updateMutation = useUpdateTutor()
   const summary = useMemo(() => {
-    const tutors = tutorsQuery.data?.data ?? [];
+    const tutors = tutorsQuery.data?.data ?? []
 
     return {
-      active: tutors.filter((tutor) => tutor.status === "active").length,
+      active: tutors.filter((tutor) => tutor.status === 'active').length,
       missingGroup: tutors.filter((tutor) => !tutor.userId).length,
       missingRate: tutors.filter((tutor) => Number(tutor.sessionRate) <= 0)
         .length,
-      inactive: tutors.filter((tutor) => tutor.status === "inactive").length,
+      inactive: tutors.filter((tutor) => tutor.status === 'inactive').length,
       total: tutorsQuery.data?.meta.total ?? 0,
-    };
-  }, [tutorsQuery.data]);
+    }
+  }, [tutorsQuery.data])
   const openActionTutor =
     tutorsQuery.data?.data.find((tutor) => tutor.id === actionMenu?.tutorId) ??
-    null;
+    null
 
   function handleFilterSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const search = getFormValue(formData, "search");
-    const status = getOptionalStatus(getFormValue(formData, "status"));
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const search = getFormValue(formData, 'search')
+    const status = getOptionalStatus(getFormValue(formData, 'status'))
 
     onFiltersChange({
       page: 1,
       ...(search ? { search } : {}),
       ...(status ? { status } : {}),
-    });
+    })
   }
 
   function handleActionMenuToggle(tutor: Tutor, button: HTMLButtonElement) {
     setActionMenu((current) => {
-      if (current?.tutorId === tutor.id) return null;
+      if (current?.tutorId === tutor.id) return null
 
-      const boundary = actionMenuBoundaryRef.current;
-      if (!boundary) return current;
+      const boundary = actionMenuBoundaryRef.current
+      if (!boundary) return current
 
-      const buttonRect = button.getBoundingClientRect();
-      const boundaryRect = boundary.getBoundingClientRect();
-      const maxLeft = Math.max(8, boundaryRect.width - actionMenuWidth - 8);
+      const buttonRect = button.getBoundingClientRect()
+      const boundaryRect = boundary.getBoundingClientRect()
+      const maxLeft = Math.max(8, boundaryRect.width - actionMenuWidth - 8)
       const preferredLeft =
-        buttonRect.right - boundaryRect.left - actionMenuWidth;
+        buttonRect.right - boundaryRect.left - actionMenuWidth
 
       return {
         tutorId: tutor.id,
         top: buttonRect.bottom - boundaryRect.top + 8,
         left: Math.max(8, Math.min(preferredLeft, maxLeft)),
-      };
-    });
+      }
+    })
   }
 
   function handleDeactivateTutor(tutor: Tutor) {
@@ -119,9 +113,9 @@ export function TutorManagement({
         name: tutor.name,
         phoneNumber: tutor.phoneNumber,
         sessionRate: tutor.sessionRate,
-        status: "inactive",
+        status: 'inactive',
       },
-    });
+    })
   }
 
   return (
@@ -133,7 +127,7 @@ export function TutorManagement({
         <div className="space-y-1">
           <h1
             id="tutors-title"
-            className="text-[26px] font-bold leading-[1.3] tracking-normal text-[var(--color-text)]"
+            className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]"
           >
             Data Tentor
           </h1>
@@ -141,10 +135,7 @@ export function TutorManagement({
             Kelola data tentor aktif dan nonaktif.
           </p>
         </div>
-        <AddButton
-          type="button"
-          onClick={() => void navigate("/tutors/new")}
-        >
+        <AddButton type="button" onClick={() => void navigate('/tutors/new')}>
           Tambah Tentor
         </AddButton>
       </header>
@@ -292,10 +283,7 @@ export function TutorManagement({
                       key={tutor.id}
                       className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
-                      <th
-                        scope="row"
-                        className="px-[18px] py-3 font-bold"
-                      >
+                      <th scope="row" className="px-[18px] py-3 font-bold">
                         {tutor.name}
                       </th>
                       <td className="whitespace-pre-line px-[18px] py-3 font-medium">
@@ -322,8 +310,8 @@ export function TutorManagement({
                             type="button"
                             className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary-text)]"
                             onClick={() => {
-                              setActionMenu(null);
-                              void navigate(`/tutors/${tutor.id}/edit`);
+                              setActionMenu(null)
+                              void navigate(`/tutors/${tutor.id}/edit`)
                             }}
                             aria-label={`Edit ${tutor.name}`}
                           >
@@ -369,21 +357,20 @@ export function TutorManagement({
                   top: actionMenu.top,
                 }}
                 onEdit={() => {
-                  setActionMenu(null);
-                  void navigate(`/tutors/${openActionTutor.id}/edit`);
+                  setActionMenu(null)
+                  void navigate(`/tutors/${openActionTutor.id}/edit`)
                 }}
                 onDeactivate={() => {
-                  setActionMenu(null);
-                  handleDeactivateTutor(openActionTutor);
+                  setActionMenu(null)
+                  handleDeactivateTutor(openActionTutor)
                 }}
               />
             ) : null}
           </>
         ) : null}
       </section>
-
     </div>
-  );
+  )
 }
 
 function SummaryCard({
@@ -392,10 +379,10 @@ function SummaryCard({
   value,
   toneClass,
 }: {
-  icon: LucideIcon;
-  label: string;
-  value: number;
-  toneClass: string;
+  icon: LucideIcon
+  label: string
+  value: number
+  toneClass: string
 }) {
   return (
     <article className="rounded-lg border border-[var(--color-border)] bg-white p-4">
@@ -413,7 +400,7 @@ function SummaryCard({
         {value}
       </p>
     </article>
-  );
+  )
 }
 
 function TutorActionMenu({
@@ -422,10 +409,10 @@ function TutorActionMenu({
   onEdit,
   onDeactivate,
 }: {
-  tutor: Tutor;
-  style: CSSProperties;
-  onEdit: () => void;
-  onDeactivate: () => void;
+  tutor: Tutor
+  style: CSSProperties
+  onEdit: () => void
+  onDeactivate: () => void
 }) {
   return (
     <div
@@ -457,7 +444,7 @@ function TutorActionMenu({
         Nonaktifkan tentor
       </button>
     </div>
-  );
+  )
 }
 
 function Pagination({
@@ -466,18 +453,18 @@ function Pagination({
   totalPages,
   onPageChange,
 }: {
-  page: number;
-  total: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
+  page: number
+  total: number
+  totalPages: number
+  onPageChange: (page: number) => void
 }) {
-  if (total === 0) return null;
+  if (total === 0) return null
 
   const pages = Array.from({ length: Math.min(totalPages, 3) }, (_, index) => {
-    return index + 1;
-  });
-  const firstItem = (page - 1) * 20 + 1;
-  const lastItem = Math.min(page * 20, total);
+    return index + 1
+  })
+  const firstItem = (page - 1) * 20 + 1
+  const lastItem = Math.min(page * 20, total)
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 text-xs leading-[1.3] text-[var(--color-muted)]">
@@ -498,12 +485,13 @@ function Pagination({
           <button
             key={paginationPage}
             type="button"
-            className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${paginationPage === page
-              ? "bg-[var(--color-primary)] text-white"
-              : "border border-[var(--color-border)] bg-white text-[var(--color-muted)]"
-              }`}
+            className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${
+              paginationPage === page
+                ? 'bg-[var(--color-primary)] text-white'
+                : 'border border-[var(--color-border)] bg-white text-[var(--color-muted)]'
+            }`}
             onClick={() => onPageChange(paginationPage)}
-            aria-current={paginationPage === page ? "page" : undefined}
+            aria-current={paginationPage === page ? 'page' : undefined}
           >
             {paginationPage}
           </button>
@@ -519,22 +507,23 @@ function Pagination({
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 function TutorStatusBadge({ status }: { status: TutorStatus }) {
-  const isActive = status === "active";
+  const isActive = status === 'active'
 
   return (
     <span
-      className={`inline-flex rounded-full px-2.5 py-[5px] text-xs font-bold leading-[1.2] ${isActive
-        ? "bg-[var(--color-success-bg)] text-[var(--color-success)]"
-        : "bg-slate-100 text-muted-foreground"
-        }`}
+      className={`inline-flex rounded-full px-2.5 py-[5px] text-xs font-bold leading-[1.2] ${
+        isActive
+          ? 'bg-[var(--color-success-bg)] text-[var(--color-success)]'
+          : 'bg-slate-100 text-muted-foreground'
+      }`}
     >
-      {status === "active" ? "Aktif" : "Nonaktif"}
+      {status === 'active' ? 'Aktif' : 'Nonaktif'}
     </span>
-  );
+  )
 }
 
 function ErrorState() {
@@ -551,7 +540,7 @@ function ErrorState() {
         </p>
       </div>
     </div>
-  );
+  )
 }
 
 function EmptyState() {
@@ -568,7 +557,7 @@ function EmptyState() {
         </p>
       </div>
     </div>
-  );
+  )
 }
 
 function getTutorExpertise(tutor: Tutor) {
@@ -580,7 +569,8 @@ function getTutorExpertise(tutor: Tutor) {
 
 function getTutorBankInfo(tutor: Tutor) {
   const bankName = tutor.bankName?.trim() || 'Bank belum diisi'
-  const accountNumber = tutor.accountNumber?.trim() || 'Nomor rekening belum diisi'
+  const accountNumber =
+    tutor.accountNumber?.trim() || 'Nomor rekening belum diisi'
   const accountName = tutor.accountName?.trim()
 
   return `${bankName}\n${accountNumber}\n${accountName ? `a.n. ${accountName}` : 'Nama pemilik belum diisi'}`
@@ -597,15 +587,15 @@ function getTutorAddress(tutor: Tutor) {
 }
 
 function getTutorGroup(tutor: Tutor) {
-  if (tutor.status === "inactive") return "Nonaktif";
-  return tutor.userId ? "Terhubung" : "-";
+  if (tutor.status === 'inactive') return 'Nonaktif'
+  return tutor.userId ? 'Terhubung' : '-'
 }
 
 function getFormValue(formData: FormData, name: string) {
-  const value = formData.get(name);
-  return typeof value === "string" ? value.trim() : "";
+  const value = formData.get(name)
+  return typeof value === 'string' ? value.trim() : ''
 }
 
 function getOptionalStatus(value: string): TutorStatus | undefined {
-  return value === "active" || value === "inactive" ? value : undefined;
+  return value === 'active' || value === 'inactive' ? value : undefined
 }

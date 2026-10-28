@@ -67,15 +67,15 @@ export function StaffManagement() {
 
   return (
     <section aria-labelledby="staff-page-title">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
           <h1
             id="staff-page-title"
             className="text-[26px] font-bold leading-tight"
           >
-            Pegawai
+            Data Pegawai
           </h1>
-          <p className="mt-1.5 text-sm leading-[1.4] text-muted-foreground">
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Kelola daftar akun pegawai, status, dan akses menu.
           </p>
         </div>

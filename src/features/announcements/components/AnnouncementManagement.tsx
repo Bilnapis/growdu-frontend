@@ -74,11 +74,11 @@ export function AnnouncementManagement() {
   return (
     <div className="min-w-0 space-y-5">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-[26px] font-extrabold leading-[1.3]">
+        <div className="space-y-1">
+          <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
             Pengumuman
           </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Buat pengumuman untuk Admin, Tentor, Siswa/Wali, atau Semua role
           </p>
         </div>

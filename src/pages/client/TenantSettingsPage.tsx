@@ -14,13 +14,11 @@ export function TenantSettingsPage({
   const tenant = tenantQuery.data
   return (
     <div>
-      <h1 className="text-2xl font-bold tracking-tight">
-        {section === 'theme' ? 'Pengaturan Warna Tema' : 'Pengaturan'}
+      <h1 className="text-[26px] mb-1 font-bold leading-tight tracking-normal text-[var(--color-text)]">
+        Pengaturan
       </h1>
-      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-        {section === 'theme'
-          ? 'Atur warna utama yang digunakan pada tombol, menu aktif, dan elemen penting sistem.'
-          : 'Pilih submenu untuk mengubah data bimbel atau warna tema.'}
+      <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
+        Pilih submenu untuk mengubah data bimbel atau warna tema.
       </p>
       <div className="tenant-settings-layout mt-7">
         <nav className="tenant-settings-nav" aria-label="Submenu pengaturan">
