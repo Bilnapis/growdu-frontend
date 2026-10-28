@@ -1,15 +1,7 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-  type ReactNode,
-} from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   BookOpen,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Eye,
   Mail,
   MoreHorizontal,
@@ -27,6 +19,7 @@ import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
+import { TablePagination } from '@/components/ui/table-pagination'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import type {
   EntityStatus,
@@ -442,8 +435,10 @@ export function StudentManagement() {
               <StudentsEmptyState onReset={resetFilters} />
             ) : null}
             {meta && data.length > 0 ? (
-              <StudentsPagination
+              <TablePagination
                 meta={meta}
+                itemLabel="siswa"
+                ariaLabel="Halaman siswa"
                 onPageChange={(page) =>
                   setFilters((current) => ({ ...current, page }))
                 }
@@ -545,87 +540,6 @@ function StudentsEmptyState({ onReset }: { onReset: () => void }) {
         </Button>
       </div>
     </div>
-  )
-}
-
-function StudentsPagination({
-  meta,
-  onPageChange,
-}: {
-  meta: { page: number; limit: number; total: number; totalPages: number }
-  onPageChange: (page: number) => void
-}) {
-  const start = Math.min(
-    Math.max(meta.page - 1, 1),
-    Math.max(1, meta.totalPages - 2),
-  )
-  const pages = Array.from(
-    { length: Math.min(3, meta.totalPages) },
-    (_, index) => start + index,
-  )
-  return (
-    <footer className="flex flex-wrap items-center justify-between gap-3 px-3 py-4 text-xs text-muted-foreground">
-      <span>
-        Menampilkan {(meta.page - 1) * meta.limit + 1}-
-        {Math.min(meta.page * meta.limit, meta.total)} dari {meta.total} siswa
-      </span>
-      <nav aria-label="Halaman siswa" className="flex items-center gap-1.5">
-        <PageButton
-          label="Halaman sebelumnya"
-          disabled={meta.page === 1}
-          onClick={() => onPageChange(meta.page - 1)}
-        >
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-        </PageButton>
-        {pages.map((page) => (
-          <Button
-            type="button"
-            key={page}
-            variant={page === meta.page ? 'default' : 'outline'}
-            size="icon"
-            className="h-8 w-8"
-            aria-label={`Halaman ${page}`}
-            aria-current={page === meta.page ? 'page' : undefined}
-            onClick={() => onPageChange(page)}
-          >
-            {page}
-          </Button>
-        ))}
-        <PageButton
-          label="Halaman berikutnya"
-          disabled={meta.page === meta.totalPages}
-          onClick={() => onPageChange(meta.page + 1)}
-        >
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        </PageButton>
-      </nav>
-    </footer>
-  )
-}
-
-function PageButton({
-  label,
-  disabled,
-  onClick,
-  children,
-}: {
-  label: string
-  disabled: boolean
-  onClick: () => void
-  children: ReactNode
-}) {
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      size="icon"
-      className="h-8 w-8"
-      aria-label={label}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {children}
-    </Button>
   )
 }
 

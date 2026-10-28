@@ -14,9 +14,11 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
+import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
+import { TablePagination } from '@/components/ui/table-pagination'
 import {
   useStudyGroups,
   useStudyGroupsSummary,
@@ -28,6 +30,7 @@ import type {
 } from '@/features/study-groups/api/study-groups-api'
 
 const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+const PAGE_SIZE = 5
 const tableCellClass = 'px-[18px] py-3'
 export function StudyGroupManagement({
   filters,
@@ -47,7 +50,7 @@ export function StudyGroupManagement({
     const selected = formString(value.get('status'))
     onFiltersChange({
       page: 1,
-      limit: 20,
+      limit: PAGE_SIZE,
       ...(search ? { search } : {}),
       ...(selected === 'active' || selected === 'inactive'
         ? { status: selected }
@@ -55,7 +58,7 @@ export function StudyGroupManagement({
     })
   }
   return (
-    <div className="space-y-5 text-[var(--color-text)]">
+    <div className="min-w-0 space-y-5 text-[var(--color-text)]">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
           <h1
@@ -101,7 +104,7 @@ export function StudyGroupManagement({
           tone="warning"
         />
       </SummaryCardGrid>
-      <section className="rounded-lg border border-border bg-card p-4">
+      <Card className="mt-5 min-h-[560px] p-4 shadow-none sm:p-[18px]">
         <form className="flex flex-col gap-3 sm:flex-row" onSubmit={submit}>
           <div className="min-w-0 flex-1">
             <label htmlFor="study-group-search" className="sr-only">
@@ -146,7 +149,7 @@ export function StudyGroupManagement({
             aria-label="Tabel kelompok belajar, geser untuk melihat semua kolom"
             tabIndex={0}
           >
-            <table className="w-full min-w-[900px] border-collapse text-left text-[13px]">
+            <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
               <caption className="sr-only">Daftar kelompok belajar</caption>
               <thead className="bg-slate-50 text-muted-foreground">
                 <tr className="h-11">
@@ -180,6 +183,7 @@ export function StudyGroupManagement({
                 {groups.isPending ? (
                   <TableSkeletonRows
                     columns={7}
+                    rows={PAGE_SIZE}
                     label="Memuat kelompok belajar..."
                   />
                 ) : null}
@@ -263,37 +267,15 @@ export function StudyGroupManagement({
             Belum ada kelompok belajar. Tambahkan kelompok pertama.
           </p>
         ) : null}
-        {groups.data && groups.data.meta.totalPages > 1 ? (
-          <footer className="mt-4 flex justify-between text-sm">
-            <span>
-              Menampilkan halaman {groups.data.meta.page} dari{' '}
-              {groups.data.meta.totalPages}
-            </span>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={filters.page <= 1}
-                onClick={() =>
-                  onFiltersChange({ ...filters, page: filters.page - 1 })
-                }
-              >
-                Sebelumnya
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={filters.page >= groups.data.meta.totalPages}
-                onClick={() =>
-                  onFiltersChange({ ...filters, page: filters.page + 1 })
-                }
-              >
-                Berikutnya
-              </Button>
-            </div>
-          </footer>
+        {groups.data && groups.data.data.length > 0 ? (
+          <TablePagination
+            meta={groups.data.meta}
+            itemLabel="kelompok"
+            ariaLabel="Halaman kelompok"
+            onPageChange={(page) => onFiltersChange({ ...filters, page })}
+          />
         ) : null}
-      </section>
+      </Card>
     </div>
   )
 }

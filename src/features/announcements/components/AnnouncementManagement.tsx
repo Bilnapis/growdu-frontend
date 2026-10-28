@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Megaphone, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 import {
   Link,
@@ -9,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
+import { TablePagination } from '@/components/ui/table-pagination'
 import type { Announcement, AnnouncementStatus } from '../api/announcements-api'
 import {
   useAnnouncementMutations,
@@ -21,8 +23,9 @@ import {
   targetLabels,
 } from '../utils/announcements'
 import { AnnouncementDialog } from './AnnouncementDialog'
-import { AnnouncementPagination } from './AnnouncementPagination'
 import { AddButton } from '@/components/ui/add-button'
+
+const PAGE_SIZE = 5
 
 const statusLabels: Record<AnnouncementStatus, string> = {
   active: 'Aktif',
@@ -51,7 +54,7 @@ export function AnnouncementManagement() {
   const targetRole = isAnnouncementTarget(requestedTarget)
     ? requestedTarget
     : undefined
-  const query = useAnnouncements({ page, limit: 5, search, targetRole })
+  const query = useAnnouncements({ page, limit: PAGE_SIZE, search, targetRole })
   const [deleting, setDeleting] = useState<Announcement | null>(null)
   const flash =
     typeof state === 'object' &&
@@ -99,7 +102,7 @@ export function AnnouncementManagement() {
       <section
         aria-label="Daftar pengumuman"
         aria-busy={query.isPending}
-        className="min-h-[32rem] rounded-lg border bg-card p-[18px]"
+        className="mt-5 min-h-[560px] rounded-lg border bg-card p-4 text-card-foreground shadow-none sm:p-[18px]"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <AnnouncementSearch
@@ -167,49 +170,53 @@ export function AnnouncementManagement() {
           </div>
         ) : (
           <>
-            <div className="mt-[14px] hidden md:block">
-              <table className="w-full table-fixed text-left text-[13px]">
+            <div
+              className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
+              role="region"
+              aria-label="Tabel pengumuman, geser untuk melihat semua kolom"
+              tabIndex={0}
+            >
+              <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
                 <caption className="sr-only">Daftar pengumuman bimbel</caption>
-                <thead className="h-[42px] bg-background text-xs text-muted-foreground">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="w-[40%] rounded-l-md px-3 font-bold"
-                    >
+                <thead className="bg-slate-50 text-muted-foreground">
+                  <tr className="h-11">
+                    <th scope="col" className="px-[18px] font-bold">
                       Judul
                     </th>
-                    <th scope="col" className="w-[13%] px-3 font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Target
                     </th>
-                    <th scope="col" className="w-[13%] px-3 font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Status
                     </th>
-                    <th scope="col" className="w-[26%] px-3 font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Tampil
                     </th>
-                    <th
-                      scope="col"
-                      className="w-[8%] rounded-r-md px-3 font-bold"
-                    >
+                    <th scope="col" className="px-3 font-bold">
                       Aksi
                     </th>
                   </tr>
                 </thead>
-                <tbody aria-busy={query.isPending}>
+                <tbody
+                  className="divide-y divide-slate-100"
+                  aria-busy={query.isPending}
+                >
                   {query.isPending ? (
                     <TableSkeletonRows
                       columns={5}
+                      rows={PAGE_SIZE}
                       label="Memuat daftar pengumuman..."
-                      rowClassName="h-[96px]"
-                      cellClassName="px-3 py-4"
                     />
                   ) : null}
                   {query.data?.data.map((announcement) => (
                     <tr
                       key={announcement.id}
-                      className="h-[96px] border-b last:border-b-0"
+                      className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
-                      <th scope="row" className="px-3 py-4 font-normal">
+                      <th
+                        scope="row"
+                        className="min-w-[300px] max-w-[380px] px-[18px] py-3 font-normal"
+                      >
                         <p className="break-words font-bold">
                           {announcement.title}
                         </p>
@@ -217,16 +224,16 @@ export function AnnouncementManagement() {
                           {announcement.content}
                         </p>
                       </th>
-                      <td className="px-3 py-4 font-semibold">
+                      <td className="min-w-[120px] px-[18px] py-3 font-semibold">
                         {targetLabels[announcement.targetRole]}
                       </td>
-                      <td className="px-3 py-4">
+                      <td className="px-[18px] py-3">
                         <Status status={announcement.status} />
                       </td>
-                      <td className="px-3 py-4 text-xs leading-relaxed text-muted-foreground">
+                      <td className="min-w-[240px] px-[18px] py-3 font-medium">
                         <Schedule announcement={announcement} />
                       </td>
-                      <td className="px-3 py-4">
+                      <td className="relative px-3 py-3">
                         <Actions
                           announcement={announcement}
                           search={locationSearch}
@@ -240,63 +247,15 @@ export function AnnouncementManagement() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 grid gap-3 md:hidden">
-              {query.isPending ? (
-                <div role="status" className="grid gap-3">
-                  <span className="sr-only">Memuat daftar pengumuman...</span>
-                  {[1, 2, 3].map((index) => (
-                    <div
-                      key={index}
-                      className="h-20 animate-pulse rounded-md bg-muted"
-                    />
-                  ))}
-                </div>
-              ) : null}
-              {query.data?.data.map((announcement) => (
-                <article
-                  key={announcement.id}
-                  className="min-w-0 rounded-lg border p-4"
-                >
-                  <header className="flex items-start justify-between gap-3">
-                    <h2 className="min-w-0 break-words text-sm font-bold">
-                      {announcement.title}
-                    </h2>
-                    <Actions
-                      announcement={announcement}
-                      search={locationSearch}
-                      onDelete={() => {
-                        setDeleting(announcement)
-                      }}
-                    />
-                  </header>
-                  <p className="mt-2 line-clamp-2 break-words text-[13px] text-muted-foreground">
-                    {announcement.content}
-                  </p>
-                  <div className="my-3 flex items-center gap-3 text-xs">
-                    <span className="font-semibold">
-                      {targetLabels[announcement.targetRole]}
-                    </span>
-                    <Status status={announcement.status} />
-                  </div>
-                  <div className="text-xs leading-relaxed text-muted-foreground">
-                    <Schedule announcement={announcement} />
-                  </div>
-                </article>
-              ))}
-            </div>
           </>
         )}
-        {query.data ? (
-          <>
-            <div className="mt-4 text-xs text-muted-foreground">
-              {query.data.meta.total} pengumuman
-            </div>
-            <AnnouncementPagination
-              page={page}
-              totalPages={query.data.meta.totalPages}
-              onChange={(value) => setFilter('page', String(value))}
-            />
-          </>
+        {query.data && query.data.data.length > 0 ? (
+          <TablePagination
+            meta={query.data.meta}
+            itemLabel="pengumuman"
+            ariaLabel="Halaman pengumuman"
+            onPageChange={(value) => setFilter('page', String(value))}
+          />
         ) : null}
       </section>
       {deleting ? (
@@ -373,54 +332,128 @@ function Actions({
   search: string
   onDelete: () => void
 }) {
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [position, setPosition] = useState<{
+    top: number
+    left: number
+  } | null>(null)
+
+  useEffect(() => {
+    if (!position) return
+    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus()
+
+    function close() {
+      setPosition(null)
+    }
+    function onPointerDown(event: PointerEvent) {
+      if (
+        event.target instanceof Node &&
+        !menuRef.current?.contains(event.target) &&
+        !triggerRef.current?.contains(event.target)
+      )
+        close()
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        close()
+        triggerRef.current?.focus()
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    window.addEventListener('resize', close)
+    window.addEventListener('scroll', close, true)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('resize', close)
+      window.removeEventListener('scroll', close, true)
+    }
+  }, [position])
+
+  function closeMenu() {
+    setPosition(null)
+    triggerRef.current?.focus()
+  }
+
   return (
-    <details
-      className="relative"
-      onKeyDown={(event) => {
-        if (event.key === 'Escape') {
-          event.currentTarget.open = false
-          event.currentTarget.querySelector('summary')?.focus()
-        }
-      }}
-      onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget))
-          event.currentTarget.open = false
-      }}
-    >
-      <summary
+    <>
+      <Button
+        ref={triggerRef}
+        type="button"
+        variant="ghost"
+        size="icon"
         aria-label={`Aksi ${announcement.title}`}
-        className="grid h-8 w-8 cursor-pointer list-none place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden"
+        aria-expanded={Boolean(position)}
+        aria-controls={
+          position ? `announcement-actions-${announcement.id}` : undefined
+        }
+        className="h-8 w-8 text-muted-foreground"
+        onClick={() => {
+          const rect = triggerRef.current?.getBoundingClientRect()
+          if (!rect) return
+          setPosition((current) =>
+            current
+              ? null
+              : {
+                  left: Math.max(
+                    8,
+                    Math.min(rect.right - 160, window.innerWidth - 168),
+                  ),
+                  top: Math.max(
+                    8,
+                    rect.bottom + 96 > window.innerHeight
+                      ? rect.top - 88
+                      : rect.bottom + 8,
+                  ),
+                },
+          )
+        }}
       >
         <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-      </summary>
-      <div className="absolute right-0 z-20 mt-1 grid w-40 rounded-lg border bg-card p-1 shadow-md">
-        <Link
-          to={`/announcements/${announcement.id}/edit${search}`}
-          onClick={(event) => {
-            const details = event.currentTarget.closest('details')
-            details?.querySelector('summary')?.focus()
-            details?.removeAttribute('open')
-          }}
-          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Pencil className="h-4 w-4" aria-hidden="true" />
-          Ubah
-        </Link>
-        <button
-          type="button"
-          onClick={(event) => {
-            const details = event.currentTarget.closest('details')
-            details?.querySelector('summary')?.focus()
-            details?.removeAttribute('open')
-            onDelete()
-          }}
-          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Trash2 className="h-4 w-4" aria-hidden="true" />
-          Hapus
-        </button>
-      </div>
-    </details>
+      </Button>
+      {position
+        ? createPortal(
+            <div
+              ref={menuRef}
+              id={`announcement-actions-${announcement.id}`}
+              role="group"
+              aria-label={`Menu aksi ${announcement.title}`}
+              style={position}
+              className="fixed z-30 grid max-h-[calc(100vh-16px)] w-40 overflow-y-auto rounded-lg border bg-card p-1 shadow-md"
+              onBlur={(event) => {
+                if (
+                  !event.currentTarget.contains(event.relatedTarget) &&
+                  !triggerRef.current?.contains(event.relatedTarget)
+                )
+                  setPosition(null)
+              }}
+            >
+              <Link
+                to={`/announcements/${announcement.id}/edit${search}`}
+                onClick={closeMenu}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Pencil className="h-4 w-4" aria-hidden="true" />
+                Ubah
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  closeMenu()
+                  onDelete()
+                }}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
+                Hapus
+              </button>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   )
 }
 

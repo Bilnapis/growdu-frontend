@@ -4,8 +4,10 @@ import { SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
+import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
+import { TablePagination } from '@/components/ui/table-pagination'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 
 import {
@@ -18,6 +20,8 @@ import { StaffActionDialog } from './StaffActionDialog'
 import { StaffRowActions } from './StaffRowActions'
 import { useStaff } from '@/features/staff/hooks/use-staff'
 import { operatorMenus } from '@/lib/menu-access'
+
+const pageSize = 5
 
 export function StaffManagement() {
   const [action, setAction] = useState<{
@@ -40,7 +44,7 @@ export function StaffManagement() {
     routeState.staffCreated === true
   const staffQuery = useStaff(tenantId, {
     page,
-    limit: 10,
+    limit: pageSize,
     search: search.trim() || undefined,
     status: status === 'all' ? undefined : status,
   })
@@ -55,8 +59,7 @@ export function StaffManagement() {
     status: 'inactive',
   })
   const filteredStaff = staffQuery.data?.data ?? []
-  const total = staffQuery.data?.meta.total ?? 0
-  const totalPages = staffQuery.data?.meta.totalPages ?? 0
+  const meta = staffQuery.data?.meta
 
   if (!tenantId)
     return (
@@ -67,7 +70,7 @@ export function StaffManagement() {
     )
 
   return (
-    <section aria-labelledby="staff-page-title">
+    <section className="min-w-0" aria-labelledby="staff-page-title">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <h1
@@ -126,7 +129,7 @@ export function StaffManagement() {
         />
       </SummaryCardGrid>
 
-      <div className="mt-[22px] rounded-lg border bg-card p-[18px] shadow-sm">
+      <Card className="mt-5 min-h-[560px] p-4 shadow-none sm:p-[18px]">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="min-w-0 flex-1">
             <label htmlFor="staff-search" className="sr-only">
@@ -192,22 +195,25 @@ export function StaffManagement() {
         ) : null}
         <div
           aria-busy={staffQuery.isFetching}
-          className="mt-[14px] overflow-x-auto rounded-md border"
+          className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
+          role="region"
+          aria-label="Tabel pegawai, geser untuk melihat semua kolom"
+          tabIndex={0}
         >
-          <table className="w-full min-w-[760px] border-collapse text-left text-[13px]">
+          <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
             <caption className="sr-only">Daftar pegawai bimbel</caption>
             <thead className="bg-slate-50 text-muted-foreground">
               <tr className="h-11">
-                <th scope="col" className="w-[21%] px-[26px] font-bold">
+                <th scope="col" className="px-[18px] font-bold">
                   Nama
                 </th>
-                <th scope="col" className="w-[26%] px-[26px] font-bold">
+                <th scope="col" className="px-[18px] font-bold">
                   Email
                 </th>
-                <th scope="col" className="w-[29%] px-[26px] font-bold">
+                <th scope="col" className="px-[18px] font-bold">
                   Akses menu
                 </th>
-                <th scope="col" className="w-[11%] px-[26px] font-bold">
+                <th scope="col" className="px-[18px] font-bold">
                   Status
                 </th>
                 <th scope="col" className="px-3 font-bold">
@@ -222,28 +228,34 @@ export function StaffManagement() {
               {staffQuery.isPending ? (
                 <TableSkeletonRows
                   columns={5}
+                  rows={pageSize}
                   label="Memuat pegawai..."
-                  cellClassName="px-[26px]"
                 />
               ) : null}
               {filteredStaff.map((staff) => (
-                <tr key={staff.id} className="h-[70px] bg-card">
-                  <td className="px-[26px] font-bold text-foreground">
+                <tr
+                  key={staff.id}
+                  className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
+                >
+                  <th
+                    scope="row"
+                    className="min-w-[135px] px-[18px] py-3 font-bold"
+                  >
                     {staff.name}
-                  </td>
-                  <td className="px-[26px] font-medium text-foreground">
+                  </th>
+                  <td className="min-w-[180px] break-words px-[18px] py-3 font-medium">
                     {staff.email}
                   </td>
-                  <td className="px-[26px] font-medium text-foreground">
+                  <td className="min-w-[210px] px-[18px] py-3 font-medium">
                     {operatorMenus
                       .filter((menu) => staff.menuPermissions.includes(menu.id))
                       .map((menu) => menu.label)
                       .join(', ') || 'Belum ada akses menu'}
                   </td>
-                  <td className="px-[26px]">
+                  <td className="px-[18px] py-3">
                     <StatusBadge status={staff.status} />
                   </td>
-                  <td className="px-3">
+                  <td className="relative px-3 py-3">
                     <StaffRowActions
                       staff={staff}
                       onAction={(mode) => {
@@ -269,46 +281,15 @@ export function StaffManagement() {
           ) : null}
         </div>
 
-        <div className="mt-4 flex flex-col gap-3 text-[13px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            Menampilkan{' '}
-            {filteredStaff.length === 0
-              ? '0'
-              : `${(page - 1) * 10 + 1}-${(page - 1) * 10 + filteredStaff.length}`}{' '}
-            dari {total} pegawai
-          </p>
-          <nav
-            className="flex items-center gap-1"
-            aria-label="Pagination pegawai"
-          >
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={page <= 1 || staffQuery.isFetching}
-              onClick={() => setPage((current) => current - 1)}
-            >
-              Sebelumnya
-            </Button>
-            <span className="px-2" aria-current="page">
-              {page}
-            </span>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={
-                page >= totalPages ||
-                staffQuery.isFetching ||
-                staffQuery.isError
-              }
-              onClick={() => setPage((current) => current + 1)}
-            >
-              Berikutnya
-            </Button>
-          </nav>
-        </div>
-      </div>
+        {meta && filteredStaff.length > 0 ? (
+          <TablePagination
+            meta={meta}
+            itemLabel="pegawai"
+            ariaLabel="Halaman pegawai"
+            onPageChange={setPage}
+          />
+        ) : null}
+      </Card>
 
       {action ? (
         <StaffActionDialog

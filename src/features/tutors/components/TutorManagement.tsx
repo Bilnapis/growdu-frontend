@@ -8,8 +8,6 @@ import {
 import {
   BookOpen,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Eye,
   GraduationCap,
   Mail,
@@ -23,7 +21,9 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 
 import { AddButton } from '@/components/ui/add-button'
+import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TablePagination } from '@/components/ui/table-pagination'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from '@/components/ui/label'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
@@ -46,6 +46,7 @@ type ActionMenuState = {
 } | null
 
 const actionMenuWidth = 180
+const pageSize = 5
 
 export function TutorManagement({
   filters,
@@ -54,7 +55,7 @@ export function TutorManagement({
   const navigate = useNavigate()
   const actionMenuBoundaryRef = useRef<HTMLElement | null>(null)
   const [actionMenu, setActionMenu] = useState<ActionMenuState>(null)
-  const tutorsQuery = useTutors({ ...filters, limit: 20 })
+  const tutorsQuery = useTutors({ ...filters, limit: pageSize })
   const updateMutation = useUpdateTutor()
   const summary = useMemo(() => {
     const tutors = tutorsQuery.data?.data ?? []
@@ -172,7 +173,7 @@ export function TutorManagement({
 
       <section
         ref={actionMenuBoundaryRef}
-        className="relative mt-5 rounded-lg border border-[var(--color-border)] bg-white p-[18px]"
+        className="relative mt-5 min-h-[560px] rounded-lg border bg-card p-4 text-card-foreground shadow-none sm:p-[18px]"
       >
         <form
           className="flex flex-col gap-3 md:flex-row md:items-center"
@@ -242,28 +243,28 @@ export function TutorManagement({
                 <caption className="sr-only">Daftar tentor bimbel</caption>
                 <thead className="bg-slate-50 text-muted-foreground">
                   <tr className="h-11">
-                    <th scope="col" className="w-[150px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Nama Tentor
                     </th>
-                    <th scope="col" className="w-[140px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Keahlian / Jurusan
                     </th>
-                    <th scope="col" className="w-[120px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Rekening
                     </th>
-                    <th scope="col" className="w-[145px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Kontak & Email
                     </th>
-                    <th scope="col" className="w-[170px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Alamat
                     </th>
-                    <th scope="col" className="w-[95px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Kelompok
                     </th>
-                    <th scope="col" className="w-[78px] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Status
                     </th>
-                    <th scope="col" className="w-[72px] px-3 font-bold">
+                    <th scope="col" className="px-3 font-bold">
                       Aksi
                     </th>
                   </tr>
@@ -275,6 +276,7 @@ export function TutorManagement({
                   {tutorsQuery.isPending ? (
                     <TableSkeletonRows
                       columns={8}
+                      rows={pageSize}
                       label="Memuat data tentor..."
                     />
                   ) : null}
@@ -283,56 +285,61 @@ export function TutorManagement({
                       key={tutor.id}
                       className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
-                      <th scope="row" className="px-[18px] py-3 font-bold">
+                      <th
+                        scope="row"
+                        className="min-w-[135px] px-[18px] py-3 font-bold"
+                      >
                         {tutor.name}
                       </th>
-                      <td className="whitespace-pre-line px-[18px] py-3 font-medium">
+                      <td className="min-w-[145px] whitespace-pre-line px-[18px] py-3 font-medium">
                         {getTutorExpertise(tutor)}
                       </td>
-                      <td className="whitespace-pre-line px-[18px] py-3 font-semibold">
+                      <td className="min-w-[120px] whitespace-pre-line px-[18px] py-3 font-semibold">
                         {getTutorBankInfo(tutor)}
                       </td>
-                      <td className="whitespace-pre-line px-[18px] py-3 font-medium">
+                      <td className="min-w-[180px] whitespace-pre-line break-words px-[18px] py-3 font-medium">
                         {getTutorContact(tutor)}
                       </td>
-                      <td className="px-[18px] py-3 font-medium">
+                      <td className="min-w-[155px] max-w-[210px] px-[18px] py-3 font-medium">
                         {getTutorAddress(tutor)}
                       </td>
-                      <td className="px-[18px] py-3 font-semibold">
+                      <td className="min-w-[100px] px-[18px] py-3 font-semibold">
                         {getTutorGroup(tutor)}
                       </td>
                       <td className="px-[18px] py-3">
                         <TutorStatusBadge status={tutor.status} />
                       </td>
                       <td className="px-3 py-3">
-                        <div className="flex items-center gap-2">
-                          <button
+                        <div className="flex items-center">
+                          <Button
                             type="button"
-                            className="grid h-[18px] w-[18px] place-items-center text-[var(--color-primary-text)]"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-primary-text"
                             onClick={() => {
                               setActionMenu(null)
                               void navigate(`/tutors/${tutor.id}/edit`)
                             }}
                             aria-label={`Edit ${tutor.name}`}
                           >
-                            <Pencil
-                              className="h-[18px] w-[18px]"
-                              aria-hidden="true"
-                            />
-                          </button>
-                          <button
+                            <Pencil className="h-4 w-4" aria-hidden="true" />
+                          </Button>
+                          <Button
                             type="button"
-                            className="grid h-[18px] w-[18px] place-items-center text-[var(--color-muted)]"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground"
                             onClick={(event) =>
                               handleActionMenuToggle(tutor, event.currentTarget)
                             }
                             aria-label={`Menu aksi ${tutor.name}`}
+                            aria-expanded={actionMenu?.tutorId === tutor.id}
                           >
                             <MoreHorizontal
-                              className="h-[18px] w-[18px]"
+                              className="h-4 w-4"
                               aria-hidden="true"
                             />
-                          </button>
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -341,11 +348,11 @@ export function TutorManagement({
               </table>
             </div>
             {tutorsQuery.data?.data.length === 0 ? <EmptyState /> : null}
-            {tutorsQuery.data ? (
-              <Pagination
-                page={tutorsQuery.data.meta.page}
-                total={tutorsQuery.data.meta.total}
-                totalPages={tutorsQuery.data.meta.totalPages}
+            {tutorsQuery.data && tutorsQuery.data.data.length > 0 ? (
+              <TablePagination
+                meta={tutorsQuery.data.meta}
+                itemLabel="tentor"
+                ariaLabel="Halaman tentor"
                 onPageChange={(page) => onFiltersChange({ ...filters, page })}
               />
             ) : null}
@@ -413,69 +420,6 @@ function TutorActionMenu({
         <UserX className="h-4 w-4" aria-hidden="true" />
         Nonaktifkan tentor
       </button>
-    </div>
-  )
-}
-
-function Pagination({
-  page,
-  total,
-  totalPages,
-  onPageChange,
-}: {
-  page: number
-  total: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}) {
-  if (total === 0) return null
-
-  const pages = Array.from({ length: Math.min(totalPages, 3) }, (_, index) => {
-    return index + 1
-  })
-  const firstItem = (page - 1) * 20 + 1
-  const lastItem = Math.min(page * 20, total)
-
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 text-xs leading-[1.3] text-[var(--color-muted)]">
-      <span>
-        Menampilkan {firstItem}-{lastItem} dari {total} tentor
-      </span>
-      <div className="flex items-center gap-1.5">
-        <button
-          type="button"
-          className="grid h-8 min-w-9 place-items-center rounded-md border border-[var(--color-border)] bg-white px-2.5 text-[var(--color-muted)] disabled:opacity-50"
-          disabled={page <= 1}
-          onClick={() => onPageChange(page - 1)}
-          aria-label="Halaman sebelumnya"
-        >
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-        </button>
-        {pages.map((paginationPage) => (
-          <button
-            key={paginationPage}
-            type="button"
-            className={`grid h-8 min-w-9 place-items-center rounded-md px-3 text-[13px] font-semibold ${
-              paginationPage === page
-                ? 'bg-[var(--color-primary)] text-white'
-                : 'border border-[var(--color-border)] bg-white text-[var(--color-muted)]'
-            }`}
-            onClick={() => onPageChange(paginationPage)}
-            aria-current={paginationPage === page ? 'page' : undefined}
-          >
-            {paginationPage}
-          </button>
-        ))}
-        <button
-          type="button"
-          className="grid h-8 min-w-9 place-items-center rounded-md border border-[var(--color-border)] bg-white px-2.5 text-[var(--color-muted)] disabled:opacity-50"
-          disabled={page >= totalPages}
-          onClick={() => onPageChange(page + 1)}
-          aria-label="Halaman berikutnya"
-        >
-          <ChevronRight className="h-4 w-4" aria-hidden="true" />
-        </button>
-      </div>
     </div>
   )
 }

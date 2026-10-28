@@ -59,7 +59,7 @@ export function StaffRowActions({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center">
       <Button
         type="button"
         variant="ghost"
@@ -68,7 +68,7 @@ export function StaffRowActions({
         onClick={() => onAction('edit')}
         aria-label={`Edit ${staff.name}`}
       >
-        <Pencil className="h-[18px] w-[18px]" aria-hidden="true" />
+        <Pencil className="h-4 w-4" aria-hidden="true" />
       </Button>
       <Button
         ref={triggerRef}
@@ -100,7 +100,7 @@ export function StaffRowActions({
           )
         }}
       >
-        <MoreHorizontal className="h-[18px] w-[18px]" aria-hidden="true" />
+        <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
       </Button>
       {position
         ? createPortal(

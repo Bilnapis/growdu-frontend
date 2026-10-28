@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
+import { TablePagination } from '@/components/ui/table-pagination'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import {
@@ -33,7 +34,7 @@ import {
 } from './api'
 import './sessions-calendar.css'
 
-const PAGE_SIZE = 6
+const PAGE_SIZE = 5
 const tableCellClass = 'px-[18px] py-3'
 
 export function SessionsPage() {
@@ -185,7 +186,7 @@ export function SessionsPage() {
         className={
           calendarView
             ? ''
-            : 'rounded-lg border border-border bg-card p-4 sm:p-[18px]'
+            : 'mt-5 min-h-[560px] rounded-lg border border-border bg-card p-4 shadow-none sm:p-[18px]'
         }
         aria-busy={query.isPending}
       >
@@ -269,10 +270,10 @@ export function SessionsPage() {
           />
         ) : null}
         {!calendarView && query.data && query.data.data.length > 0 ? (
-          <Pagination
-            page={page}
-            total={query.data.meta.total}
-            totalPages={query.data.meta.totalPages}
+          <TablePagination
+            meta={query.data.meta}
+            itemLabel="sesi"
+            ariaLabel="Halaman sesi"
             onPageChange={(nextPage) => change('page', String(nextPage))}
           />
         ) : null}
@@ -293,27 +294,23 @@ function ListView({
   return (
     <>
       <div
-        className="mt-[14px] hidden overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring md:block"
+        className={`mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring ${tutor ? 'hidden md:block' : ''}`}
         role="region"
         aria-label="Tabel sesi jadwal belajar, geser untuk melihat semua kolom"
         tabIndex={0}
       >
-        <table className="w-full min-w-[900px] table-fixed border-collapse text-left text-[13px]">
+        <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
           <caption className="sr-only">Daftar sesi jadwal belajar</caption>
           <thead className="bg-slate-50 text-muted-foreground">
             <tr className="h-11">
-              <TableHeading className="w-[17%] rounded-l-md">
-                Hari &amp; Jam
-              </TableHeading>
-              <TableHeading className="w-[19%]">Nama Kelompok</TableHeading>
-              <TableHeading className="w-[13%]">Mata Pelajaran</TableHeading>
-              <TableHeading className="w-[15%]">Tentor</TableHeading>
-              <TableHeading className="w-[10%]">Ruangan</TableHeading>
-              <TableHeading className="w-[7%]">Siswa</TableHeading>
-              <TableHeading className="w-[12%]">Presensi</TableHeading>
-              <TableHeading className="w-[7%] rounded-r-md text-center">
-                Aksi
-              </TableHeading>
+              <TableHeading>Hari &amp; Jam</TableHeading>
+              <TableHeading>Nama Kelompok</TableHeading>
+              <TableHeading>Mata Pelajaran</TableHeading>
+              <TableHeading>Tentor</TableHeading>
+              <TableHeading>Ruangan</TableHeading>
+              <TableHeading>Siswa</TableHeading>
+              <TableHeading>Presensi</TableHeading>
+              <TableHeading className="px-3">Aksi</TableHeading>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100" aria-busy={pending}>
@@ -350,16 +347,13 @@ function ListView({
                 <td className={tableCellClass}>
                   <AttendanceBadge session={session} />
                 </td>
-                <td className="px-3 py-3 text-center">
+                <td className="px-3 py-3">
                   <Link
                     to={sessionLink(session.id, tutor)}
                     className="inline-grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
                     aria-label={`Buka sesi ${session.studyGroupName}`}
                   >
-                    <MoreHorizontal
-                      className="h-[18px] w-[18px]"
-                      aria-hidden="true"
-                    />
+                    <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
                   </Link>
                 </td>
               </tr>
@@ -367,12 +361,14 @@ function ListView({
           </tbody>
         </table>
       </div>
-      <div className="mt-4 grid gap-3 md:hidden">
-        {pending ? <SessionTableSkeleton /> : null}
-        {sessions.map((session) => (
-          <SessionCard key={session.id} session={session} tutor={tutor} />
-        ))}
-      </div>
+      {tutor ? (
+        <div className="mt-4 grid gap-3 md:hidden">
+          {pending ? <SessionTableSkeleton /> : null}
+          {sessions.map((session) => (
+            <SessionCard key={session.id} session={session} tutor={tutor} />
+          ))}
+        </div>
+      ) : null}
     </>
   )
 }
@@ -704,59 +700,6 @@ function AttendanceBadge({ session }: { session: SessionListItem }) {
   )
 }
 
-function Pagination({
-  page,
-  total,
-  totalPages,
-  onPageChange,
-}: {
-  page: number
-  total: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}) {
-  const start = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1
-  const end = Math.min(page * PAGE_SIZE, total)
-  return (
-    <footer className="mt-4 flex flex-col gap-3 border-t border-border px-1 pt-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-      <p>
-        Menampilkan {start}-{end} dari {total} sesi jadwal aktif
-      </p>
-      <nav className="flex items-center gap-1.5" aria-label="Pagination jadwal">
-        <PageButton
-          label="Halaman sebelumnya"
-          disabled={page <= 1}
-          onClick={() => onPageChange(page - 1)}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </PageButton>
-        {visiblePages(page, totalPages).map((pageNumber) => (
-          <button
-            key={pageNumber}
-            type="button"
-            className={
-              pageNumber === page
-                ? 'h-8 min-w-8 rounded-md bg-primary px-2 text-[13px] font-semibold text-white'
-                : 'h-8 min-w-8 rounded-md border border-border bg-card px-2 text-[13px] font-semibold hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring'
-            }
-            aria-current={pageNumber === page ? 'page' : undefined}
-            onClick={() => onPageChange(pageNumber)}
-          >
-            {pageNumber}
-          </button>
-        ))}
-        <PageButton
-          label="Halaman berikutnya"
-          disabled={page >= totalPages}
-          onClick={() => onPageChange(page + 1)}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </PageButton>
-      </nav>
-    </footer>
-  )
-}
-
 function FilterSelect({
   id,
   label,
@@ -809,13 +752,13 @@ function EmptyState() {
 
 function TableHeading({
   children,
-  className = '',
+  className = 'px-[18px]',
 }: {
   children: ReactNode
   className?: string
 }) {
   return (
-    <th scope="col" className={`px-[18px] font-bold ${className}`}>
+    <th scope="col" className={`${className} font-bold`}>
       {children}
     </th>
   )
@@ -835,30 +778,6 @@ function WeekButton({
       type="button"
       className="grid h-7 w-7 place-items-center rounded-md border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
       aria-label={label}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  )
-}
-
-function PageButton({
-  children,
-  label,
-  disabled,
-  onClick,
-}: {
-  children: ReactNode
-  label: string
-  disabled: boolean
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      className="grid h-8 w-8 place-items-center rounded-md border border-border bg-card hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40"
-      aria-label={label}
-      disabled={disabled}
       onClick={onClick}
     >
       {children}
@@ -1069,13 +988,6 @@ function weekRangeLabel(from: string, to: string) {
     timeZone: 'Asia/Jakarta',
   }).format(end)
   return `${startDay} - ${endLabel}`
-}
-
-function visiblePages(page: number, totalPages: number) {
-  if (totalPages <= 3)
-    return Array.from({ length: totalPages }, (_, index) => index + 1)
-  const start = Math.min(Math.max(page - 1, 1), totalPages - 2)
-  return [start, start + 1, start + 2]
 }
 
 function sessionLink(id: string, tutor: boolean) {

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   CalendarDays,
   DoorOpen,
@@ -19,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
+import { TablePagination } from '@/components/ui/table-pagination'
 import { Label } from '@/components/ui/label'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import type { RoomListItem, RoomStatus } from '@/features/rooms/api/rooms-api'
@@ -32,7 +34,6 @@ export function RoomManagement() {
   const navigate = useNavigate()
   const location = useLocation()
   const [params, setParams] = useSearchParams()
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
   const [action, setAction] = useState<{
     room: RoomListItem
     type: 'status'
@@ -81,7 +82,7 @@ export function RoomManagement() {
     (rooms.error.status === 401 || rooms.error.status === 403)
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
           <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
@@ -136,7 +137,7 @@ export function RoomManagement() {
       </SummaryCardGrid>
 
       <section
-        className="rounded-xl border border-border bg-card p-4 sm:p-5"
+        className="mt-5 min-h-[560px] rounded-lg border bg-card p-4 text-card-foreground shadow-none sm:p-[18px]"
         aria-busy={rooms.isPending}
       >
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
@@ -181,33 +182,35 @@ export function RoomManagement() {
           <EmptyState filtered={Boolean(search || status)} />
         ) : (
           <>
-            <div className="mt-[14px] hidden rounded-md border md:block">
-              <table className="w-full table-fixed border-collapse text-left text-[13px]">
+            <div
+              className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
+              role="region"
+              aria-label="Tabel ruangan, geser untuk melihat semua kolom"
+              tabIndex={0}
+            >
+              <table className="w-full min-w-[1080px] border-collapse text-left text-[13px]">
                 <caption className="sr-only">Daftar ruangan bimbel</caption>
                 <thead className="bg-slate-50 text-muted-foreground">
                   <tr className="h-11">
-                    <th scope="col" className="w-[22%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Nama Ruangan
                     </th>
-                    <th scope="col" className="w-[10%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Kode
                     </th>
-                    <th scope="col" className="w-[13%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Kapasitas
                     </th>
-                    <th scope="col" className="w-[15%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Kelompok Aktif
                     </th>
-                    <th scope="col" className="w-[23%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Jadwal Hari Ini
                     </th>
-                    <th scope="col" className="w-[11%] px-[18px] font-bold">
+                    <th scope="col" className="px-[18px] font-bold">
                       Status
                     </th>
-                    <th
-                      scope="col"
-                      className="w-[6%] px-3 font-bold text-center"
-                    >
+                    <th scope="col" className="px-3 font-bold">
                       Aksi
                     </th>
                   </tr>
@@ -226,49 +229,34 @@ export function RoomManagement() {
                   {rooms.data?.data.map((room) => (
                     <tr
                       key={room.id}
-                      className="h-[70px] bg-card text-foreground"
+                      className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
                     >
-                      <th scope="row" className="px-[18px] py-3 font-bold">
+                      <th
+                        scope="row"
+                        className="min-w-[135px] px-[18px] py-3 font-bold"
+                      >
                         {room.name}
                       </th>
-                      <td className="px-[18px] py-3 font-medium">
+                      <td className="min-w-[100px] px-[18px] py-3 font-medium">
                         {room.code}
                       </td>
-                      <td className="px-[18px] py-3">{room.capacity} Siswa</td>
-                      <td className="px-[18px] py-3">
+                      <td className="min-w-[100px] px-[18px] py-3 font-medium">
+                        {room.capacity} Siswa
+                      </td>
+                      <td className="min-w-[120px] px-[18px] py-3 font-semibold">
                         {room.activeGroupCount} Kelompok
                       </td>
-                      <td className="px-[18px] py-3">{todayLabel(room)}</td>
+                      <td className="min-w-[180px] px-[18px] py-3 font-medium">
+                        {todayLabel(room)}
+                      </td>
                       <td className="px-[18px] py-3">
                         <RoomStatusBadge status={room.status} />
                       </td>
-                      <td className="relative px-3 py-3 text-center">
-                        <button
-                          type="button"
-                          className="inline-grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
-                          aria-label={`Menu aksi ${room.name}`}
-                          aria-expanded={openMenuId === room.id}
-                          onClick={() =>
-                            setOpenMenuId((current) =>
-                              current === room.id ? null : room.id,
-                            )
-                          }
-                        >
-                          <MoreHorizontal
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          />
-                        </button>
-                        {openMenuId === room.id ? (
-                          <RoomMenu
-                            room={room}
-                            onClose={() => setOpenMenuId(null)}
-                            onStatus={() => {
-                              setOpenMenuId(null)
-                              setAction({ room, type: 'status' })
-                            }}
-                          />
-                        ) : null}
+                      <td className="relative px-3 py-3">
+                        <RoomActions
+                          room={room}
+                          onStatus={() => setAction({ room, type: 'status' })}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -276,70 +264,11 @@ export function RoomManagement() {
               </table>
             </div>
 
-            <div className="mt-5 grid gap-3 md:hidden">
-              {rooms.isPending ? <RoomTableSkeleton /> : null}
-              {rooms.data?.data.map((room) => (
-                <article
-                  key={room.id}
-                  className="rounded-lg border border-border p-4"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h2 className="font-bold">{room.name}</h2>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {room.code}
-                      </p>
-                    </div>
-                    <RoomStatusBadge status={room.status} />
-                  </div>
-                  <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                    <Metric
-                      label="Kapasitas"
-                      value={`${room.capacity} Siswa`}
-                    />
-                    <Metric
-                      label="Kelompok Aktif"
-                      value={`${room.activeGroupCount} Kelompok`}
-                    />
-                    <div className="col-span-2">
-                      <Metric
-                        label="Jadwal Hari Ini"
-                        value={todayLabel(room)}
-                      />
-                    </div>
-                  </dl>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" asChild>
-                      <Link to={`/rooms/${room.id}`}>
-                        <Eye className="h-4 w-4" />
-                        Detail
-                      </Link>
-                    </Button>
-                    <Button size="sm" variant="outline" asChild>
-                      <Link to={`/rooms/${room.id}/edit`}>
-                        <Pencil className="h-4 w-4" />
-                        Ubah
-                      </Link>
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        room.status === 'active' ? 'destructive' : 'default'
-                      }
-                      onClick={() => setAction({ room, type: 'status' })}
-                    >
-                      {room.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
-                    </Button>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            {rooms.data ? (
-              <Pagination
-                page={rooms.data.meta.page}
-                total={rooms.data.meta.total}
-                totalPages={rooms.data.meta.totalPages}
+            {rooms.data && rooms.data.data.length > 0 ? (
+              <TablePagination
+                meta={rooms.data.meta}
+                itemLabel="ruangan"
+                ariaLabel="Halaman ruangan"
                 onPageChange={(nextPage) => {
                   const next = new URLSearchParams(params)
                   next.set('page', String(nextPage))
@@ -378,51 +307,141 @@ function RoomStatusBadge({ status }: { status: RoomStatus }) {
   )
 }
 
-function RoomMenu({
+function RoomActions({
   room,
-  onClose,
   onStatus,
 }: {
   room: RoomListItem
-  onClose: () => void
   onStatus: () => void
 }) {
-  return (
-    <div className="absolute right-3 top-12 z-20 w-44 rounded-lg border border-border bg-card p-2 text-left shadow-lg">
-      <Link
-        to={`/rooms/${room.id}`}
-        onClick={onClose}
-        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
-      >
-        <Eye className="h-4 w-4" />
-        Lihat detail
-      </Link>
-      <Link
-        to={`/rooms/${room.id}/edit`}
-        onClick={onClose}
-        className="mt-1 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted"
-      >
-        <Pencil className="h-4 w-4" />
-        Ubah data
-      </Link>
-      <button
-        type="button"
-        className={`mt-1 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted ${room.status === 'active' ? 'text-destructive' : 'text-foreground'}`}
-        onClick={onStatus}
-      >
-        <DoorOpen className="h-4 w-4" />
-        {room.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
-      </button>
-    </div>
-  )
-}
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [position, setPosition] = useState<{
+    top: number
+    left: number
+  } | null>(null)
 
-function Metric({ label, value }: { label: string; value: string }) {
+  useEffect(() => {
+    if (!position) return
+    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus()
+
+    function close() {
+      setPosition(null)
+    }
+    function onPointerDown(event: PointerEvent) {
+      if (
+        event.target instanceof Node &&
+        !menuRef.current?.contains(event.target) &&
+        !triggerRef.current?.contains(event.target)
+      )
+        close()
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        close()
+        triggerRef.current?.focus()
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    window.addEventListener('resize', close)
+    window.addEventListener('scroll', close, true)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('resize', close)
+      window.removeEventListener('scroll', close, true)
+    }
+  }, [position])
+
+  function closeMenu() {
+    setPosition(null)
+    triggerRef.current?.focus()
+  }
+
   return (
-    <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="mt-1 font-medium">{value}</dd>
-    </div>
+    <>
+      <Button
+        ref={triggerRef}
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 text-muted-foreground"
+        aria-label={`Menu aksi ${room.name}`}
+        aria-expanded={Boolean(position)}
+        aria-controls={position ? `room-actions-${room.id}` : undefined}
+        onClick={() => {
+          const rect = triggerRef.current?.getBoundingClientRect()
+          if (!rect) return
+          setPosition((current) =>
+            current
+              ? null
+              : {
+                  left: Math.max(
+                    8,
+                    Math.min(rect.right - 176, window.innerWidth - 184),
+                  ),
+                  top: Math.max(
+                    8,
+                    rect.bottom + 152 > window.innerHeight
+                      ? rect.top - 144
+                      : rect.bottom + 8,
+                  ),
+                },
+          )
+        }}
+      >
+        <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+      </Button>
+      {position
+        ? createPortal(
+            <div
+              ref={menuRef}
+              id={`room-actions-${room.id}`}
+              role="group"
+              aria-label={`Aksi ${room.name}`}
+              style={position}
+              className="fixed z-30 max-h-[calc(100vh-16px)] w-44 overflow-y-auto rounded-lg border border-border bg-card p-2 text-left shadow-lg"
+              onBlur={(event) => {
+                if (
+                  !event.currentTarget.contains(event.relatedTarget) &&
+                  !triggerRef.current?.contains(event.relatedTarget)
+                )
+                  setPosition(null)
+              }}
+            >
+              <Link
+                to={`/rooms/${room.id}`}
+                onClick={closeMenu}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Eye className="h-4 w-4" />
+                Lihat detail
+              </Link>
+              <Link
+                to={`/rooms/${room.id}/edit`}
+                onClick={closeMenu}
+                className="mt-1 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Pencil className="h-4 w-4" />
+                Ubah data
+              </Link>
+              <button
+                type="button"
+                className={`mt-1 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${room.status === 'active' ? 'text-destructive' : 'text-foreground'}`}
+                onClick={() => {
+                  closeMenu()
+                  onStatus()
+                }}
+              >
+                <DoorOpen className="h-4 w-4" />
+                {room.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
+              </button>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
   )
 }
 
@@ -492,63 +511,6 @@ function ErrorState({
         ) : null}
       </div>
     </div>
-  )
-}
-
-function RoomTableSkeleton() {
-  return (
-    <div className="space-y-3" role="status" aria-label="Memuat data ruangan">
-      {Array.from({ length: 5 }, (_, index) => (
-        <div key={index} className="h-14 animate-pulse rounded-md bg-muted" />
-      ))}
-    </div>
-  )
-}
-
-function Pagination({
-  page,
-  total,
-  totalPages,
-  onPageChange,
-}: {
-  page: number
-  total: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}) {
-  const start = total === 0 ? 0 : (page - 1) * PAGE_SIZE + 1
-  const end = Math.min(page * PAGE_SIZE, total)
-  return (
-    <footer className="mt-5 flex flex-col gap-3 border-t border-border pt-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-      <p>
-        Menampilkan {start}-{end} dari {total} ruangan kelas
-      </p>
-      <div className="flex items-center gap-1">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={page <= 1}
-          aria-label="Halaman sebelumnya"
-          onClick={() => onPageChange(page - 1)}
-        >
-          ‹
-        </Button>
-        <span className="px-3 font-semibold text-foreground">
-          {page} / {Math.max(totalPages, 1)}
-        </span>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={page >= totalPages}
-          aria-label="Halaman berikutnya"
-          onClick={() => onPageChange(page + 1)}
-        >
-          ›
-        </Button>
-      </div>
-    </footer>
   )
 }
 
