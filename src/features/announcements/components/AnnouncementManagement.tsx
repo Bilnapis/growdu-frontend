@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import type { Announcement, AnnouncementStatus } from '../api/announcements-api'
 import {
   useAnnouncementMutations,
@@ -123,17 +124,7 @@ export function AnnouncementManagement() {
             ))}
           </select>
         </div>
-        {query.isPending ? (
-          <div role="status" className="mt-4 grid gap-3">
-            <span className="sr-only">Memuat daftar pengumuman...</span>
-            {[1, 2, 3].map((index) => (
-              <div
-                key={index}
-                className="h-20 animate-pulse rounded-md bg-muted"
-              />
-            ))}
-          </div>
-        ) : query.isError ? (
+        {query.isError ? (
           <div role="alert" className="py-16 text-center">
             <p className="text-sm text-muted-foreground">
               {announcementErrorMessage(query.error)}
@@ -147,7 +138,7 @@ export function AnnouncementManagement() {
               Coba lagi
             </Button>
           </div>
-        ) : !query.data?.data.length ? (
+        ) : !query.isPending && !query.data?.data.length ? (
           <div className="py-16 text-center">
             <Megaphone
               className="mx-auto mb-3 h-8 w-8 text-muted-foreground"
@@ -204,8 +195,16 @@ export function AnnouncementManagement() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {query.data.data.map((announcement) => (
+                <tbody aria-busy={query.isPending}>
+                  {query.isPending ? (
+                    <TableSkeletonRows
+                      columns={5}
+                      label="Memuat daftar pengumuman..."
+                      rowClassName="h-[96px]"
+                      cellClassName="px-3 py-4"
+                    />
+                  ) : null}
+                  {query.data?.data.map((announcement) => (
                     <tr
                       key={announcement.id}
                       className="h-[96px] border-b last:border-b-0"
@@ -242,7 +241,18 @@ export function AnnouncementManagement() {
               </table>
             </div>
             <div className="mt-4 grid gap-3 md:hidden">
-              {query.data.data.map((announcement) => (
+              {query.isPending ? (
+                <div role="status" className="grid gap-3">
+                  <span className="sr-only">Memuat daftar pengumuman...</span>
+                  {[1, 2, 3].map((index) => (
+                    <div
+                      key={index}
+                      className="h-20 animate-pulse rounded-md bg-muted"
+                    />
+                  ))}
+                </div>
+              ) : null}
+              {query.data?.data.map((announcement) => (
                 <article
                   key={announcement.id}
                   className="min-w-0 rounded-lg border p-4"

@@ -5,6 +5,7 @@ import { BookOpen, CalendarDays, CheckCircle2, Eye, MoreHorizontal, PauseCircle,
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { useStudyGroups, useStudyGroupsSummary, useUpdateStudyGroupStatus } from '@/features/study-groups/hooks/use-study-groups'
 import type { StudyGroupFilters, StudyGroupListItem } from '@/features/study-groups/api/study-groups-api'
 
@@ -73,17 +74,12 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
             Terapkan
           </Button>
         </form>
-        {groups.isPending ? (
-          <p className="p-8 text-center text-sm" role="status">
-            Memuat kelompok belajar...
-          </p>
-        ) : null}
         {groups.isError ? (
           <p className="p-8 text-center text-sm text-destructive" role="alert">
             Data belum dapat dimuat.
           </p>
         ) : null}
-        {groups.data ? (
+        {groups.isPending || groups.data ? (
           <div
             className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
             role="region"
@@ -103,8 +99,17 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
                   <th scope="col" className="px-3 font-bold">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                {groups.data.data.map((group) => (
+              <tbody
+                className="divide-y divide-slate-100"
+                aria-busy={groups.isPending}
+              >
+                {groups.isPending ? (
+                  <TableSkeletonRows
+                    columns={7}
+                    label="Memuat kelompok belajar..."
+                  />
+                ) : null}
+                {groups.data?.data.map((group) => (
                   <tr className="h-[70px] bg-card text-[13px] leading-[1.3] text-foreground" key={group.id}>
                     <th scope="row" className={`${tableCellClass} min-w-[150px] font-bold`}>
                       <Link className="hover:underline focus-visible:ring-2 focus-visible:ring-ring" to={`/study-groups/${group.id}`}>

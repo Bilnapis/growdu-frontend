@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from "@/components/ui/label";
 import {
   type Tutor,
@@ -237,9 +238,8 @@ export function TutorManagement({
           </div>
         </form>
 
-        {tutorsQuery.isPending ? <LoadingState /> : null}
         {tutorsQuery.isError ? <ErrorState /> : null}
-        {tutorsQuery.data ? (
+        {tutorsQuery.isPending || tutorsQuery.data ? (
           <>
             <div
               className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
@@ -277,8 +277,17 @@ export function TutorManagement({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {tutorsQuery.data.data.map((tutor) => (
+                <tbody
+                  className="divide-y divide-slate-100"
+                  aria-busy={tutorsQuery.isPending}
+                >
+                  {tutorsQuery.isPending ? (
+                    <TableSkeletonRows
+                      columns={8}
+                      label="Memuat data tentor..."
+                    />
+                  ) : null}
+                  {tutorsQuery.data?.data.map((tutor) => (
                     <tr
                       key={tutor.id}
                       className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground"
@@ -343,13 +352,15 @@ export function TutorManagement({
                 </tbody>
               </table>
             </div>
-            {tutorsQuery.data.data.length === 0 ? <EmptyState /> : null}
-            <Pagination
-              page={tutorsQuery.data.meta.page}
-              total={tutorsQuery.data.meta.total}
-              totalPages={tutorsQuery.data.meta.totalPages}
-              onPageChange={(page) => onFiltersChange({ ...filters, page })}
-            />
+            {tutorsQuery.data?.data.length === 0 ? <EmptyState /> : null}
+            {tutorsQuery.data ? (
+              <Pagination
+                page={tutorsQuery.data.meta.page}
+                total={tutorsQuery.data.meta.total}
+                totalPages={tutorsQuery.data.meta.totalPages}
+                onPageChange={(page) => onFiltersChange({ ...filters, page })}
+              />
+            ) : null}
             {openActionTutor && actionMenu ? (
               <TutorActionMenu
                 tutor={openActionTutor}
@@ -523,14 +534,6 @@ function TutorStatusBadge({ status }: { status: TutorStatus }) {
     >
       {status === "active" ? "Aktif" : "Nonaktif"}
     </span>
-  );
-}
-
-function LoadingState() {
-  return (
-    <div className="grid min-h-64 place-items-center p-6 text-sm text-muted-foreground">
-      Memuat data tentor...
-    </div>
   );
 }
 

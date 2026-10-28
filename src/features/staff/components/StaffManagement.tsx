@@ -5,6 +5,7 @@ import { SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 
 import {
   getStaffTenantId,
@@ -167,11 +168,6 @@ export function StaffManagement() {
           </div>
         </div>
 
-        {staffQuery.isPending ? (
-          <p role="status" className="mt-4 text-sm text-muted-foreground">
-            Memuat pegawai...
-          </p>
-        ) : null}
         {staffQuery.isError ? (
           <div role="alert" className="mt-4 text-sm text-destructive">
             <p>{getStaffError(staffQuery.error)}</p>
@@ -214,7 +210,17 @@ export function StaffManagement() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody
+              className="divide-y divide-slate-100"
+              aria-busy={staffQuery.isPending}
+            >
+              {staffQuery.isPending ? (
+                <TableSkeletonRows
+                  columns={5}
+                  label="Memuat pegawai..."
+                  cellClassName="px-[26px]"
+                />
+              ) : null}
               {filteredStaff.map((staff) => (
                 <tr key={staff.id} className="h-[70px] bg-card">
                   <td className="px-[26px] font-bold text-foreground">

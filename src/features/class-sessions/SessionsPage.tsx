@@ -20,6 +20,7 @@ import {
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import {
@@ -230,7 +231,11 @@ export function SessionsPage() {
           </form>
         ) : null}
 
-        {query.isPending ? <SessionTableSkeleton /> : null}
+        {calendarView && query.isPending ? (
+          <div className="mt-4">
+            <SessionTableSkeleton />
+          </div>
+        ) : null}
         {query.isError ? (
           <div
             className="grid min-h-64 place-items-center py-10 text-center"
@@ -252,16 +257,19 @@ export function SessionsPage() {
           </div>
         ) : null}
         {!calendarView && query.data?.data.length === 0 ? <EmptyState /> : null}
-        {query.data ? (
-          calendarView ? (
-            <CalendarView
-              sessions={query.data.data}
-              tutor={tutor}
-              from={from}
-            />
-          ) : query.data.data.length ? (
-            <ListView sessions={query.data.data} tutor={tutor} />
-          ) : null
+        {calendarView && query.data ? (
+          <CalendarView
+            sessions={query.data.data}
+            tutor={tutor}
+            from={from}
+          />
+        ) : null}
+        {!calendarView && (query.isPending || query.data?.data.length) ? (
+          <ListView
+            sessions={query.data?.data ?? []}
+            tutor={tutor}
+            pending={query.isPending}
+          />
         ) : null}
         {!calendarView && query.data && query.data.data.length > 0 ? (
           <Pagination
@@ -279,9 +287,11 @@ export function SessionsPage() {
 function ListView({
   sessions,
   tutor,
+  pending,
 }: {
   sessions: SessionListItem[]
   tutor: boolean
+  pending: boolean
 }) {
   return (
     <>
@@ -309,7 +319,14 @@ function ListView({
               </TableHeading>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100" aria-busy={pending}>
+            {pending ? (
+              <TableSkeletonRows
+                columns={8}
+                rows={PAGE_SIZE}
+                label="Memuat jadwal..."
+              />
+            ) : null}
             {sessions.map((session) => (
               <tr
                 key={session.id}
@@ -354,6 +371,7 @@ function ListView({
         </table>
       </div>
       <div className="mt-4 grid gap-3 md:hidden">
+        {pending ? <SessionTableSkeleton /> : null}
         {sessions.map((session) => (
           <SessionCard key={session.id} session={session} tutor={tutor} />
         ))}
@@ -889,7 +907,7 @@ function PageButton({
 
 function SessionTableSkeleton() {
   return (
-    <div className="mt-4 space-y-3" role="status" aria-label="Memuat jadwal">
+    <div className="space-y-3" role="status" aria-label="Memuat jadwal">
       {Array.from({ length: PAGE_SIZE }, (_, index) => (
         <div
           key={index}

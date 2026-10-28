@@ -25,6 +25,7 @@ import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import type {
   EntityStatus,
   StudentListItem,
@@ -285,11 +286,10 @@ export function StudentManagement() {
           </div>
         </form>
 
-        {studentsQuery.isPending ? <StudentsLoadingState /> : null}
         {studentsQuery.isError ? (
           <StudentsErrorState onRetry={() => void studentsQuery.refetch()} />
         ) : null}
-        {studentsQuery.data ? (
+        {studentsQuery.isPending || studentsQuery.data ? (
           <>
             <div
               className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
@@ -325,7 +325,17 @@ export function StudentManagement() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody
+                  className="divide-y divide-slate-100"
+                  aria-busy={studentsQuery.isPending}
+                >
+                  {studentsQuery.isPending ? (
+                    <TableSkeletonRows
+                      columns={8}
+                      rows={pageSize}
+                      label="Memuat daftar siswa..."
+                    />
+                  ) : null}
                   {data.map((student) => (
                     <tr
                       key={student.id}
@@ -445,7 +455,7 @@ export function StudentManagement() {
                 </tbody>
               </table>
             </div>
-            {data.length === 0 ? (
+            {studentsQuery.data && data.length === 0 ? (
               <StudentsEmptyState onReset={resetFilters} />
             ) : null}
             {meta && data.length > 0 ? (
@@ -506,23 +516,6 @@ function Notice({
     >
       {children}
     </p>
-  )
-}
-
-function StudentsLoadingState() {
-  return (
-    <div
-      className="mt-4 space-y-3"
-      aria-label="Memuat daftar siswa"
-      role="status"
-    >
-      {Array.from({ length: 5 }, (_, index) => (
-        <div
-          key={index}
-          className="h-[70px] animate-pulse rounded-md bg-muted"
-        />
-      ))}
-    </div>
   )
 }
 

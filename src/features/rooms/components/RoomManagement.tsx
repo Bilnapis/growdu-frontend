@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from '@/components/ui/label'
 import type { RoomListItem, RoomStatus } from '@/features/rooms/api/rooms-api'
 import { useRooms, useRoomsSummary } from '@/features/rooms/hooks/use-rooms'
@@ -173,14 +174,12 @@ export function RoomManagement() {
           </div>
         </div>
 
-        {rooms.isPending ? (
-          <RoomTableSkeleton />
-        ) : rooms.isError ? (
+        {rooms.isError ? (
           <ErrorState
             forbidden={forbidden}
             onRetry={() => void rooms.refetch()}
           />
-        ) : rooms.data.data.length === 0 ? (
+        ) : !rooms.isPending && rooms.data.data.length === 0 ? (
           <EmptyState filtered={Boolean(search || status)} />
         ) : (
           <>
@@ -215,8 +214,18 @@ export function RoomManagement() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {rooms.data.data.map((room) => (
+                <tbody
+                  className="divide-y divide-slate-100"
+                  aria-busy={rooms.isPending}
+                >
+                  {rooms.isPending ? (
+                    <TableSkeletonRows
+                      columns={7}
+                      rows={PAGE_SIZE}
+                      label="Memuat data ruangan..."
+                    />
+                  ) : null}
+                  {rooms.data?.data.map((room) => (
                     <tr
                       key={room.id}
                       className="h-[70px] bg-card text-foreground"
@@ -270,7 +279,8 @@ export function RoomManagement() {
             </div>
 
             <div className="mt-5 grid gap-3 md:hidden">
-              {rooms.data.data.map((room) => (
+              {rooms.isPending ? <RoomTableSkeleton /> : null}
+              {rooms.data?.data.map((room) => (
                 <article
                   key={room.id}
                   className="rounded-lg border border-border p-4"
@@ -327,16 +337,18 @@ export function RoomManagement() {
               ))}
             </div>
 
-            <Pagination
-              page={rooms.data.meta.page}
-              total={rooms.data.meta.total}
-              totalPages={rooms.data.meta.totalPages}
-              onPageChange={(nextPage) => {
-                const next = new URLSearchParams(params)
-                next.set('page', String(nextPage))
-                setParams(next)
-              }}
-            />
+            {rooms.data ? (
+              <Pagination
+                page={rooms.data.meta.page}
+                total={rooms.data.meta.total}
+                totalPages={rooms.data.meta.totalPages}
+                onPageChange={(nextPage) => {
+                  const next = new URLSearchParams(params)
+                  next.set('page', String(nextPage))
+                  setParams(next)
+                }}
+              />
+            ) : null}
           </>
         )}
       </section>
@@ -520,7 +532,7 @@ function ErrorState({
 function RoomTableSkeleton() {
   return (
     <div
-      className="mt-5 space-y-3"
+      className="space-y-3"
       role="status"
       aria-label="Memuat data ruangan"
     >
