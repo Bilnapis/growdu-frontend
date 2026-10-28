@@ -21,7 +21,7 @@ import {
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
+import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import {
   isDate,
@@ -98,12 +98,15 @@ export function SessionsPage() {
     <div
       className={
         'min-w-0 space-y-5 text-[var(--color-text)] ' +
-        (tutor ? 'mx-auto max-w-[600px] pb-20' : '')
+        (tutor ? 'mx-auto max-w-[600px] pb-6' : '')
       }
     >
+      {tutor ? <TutorPageHeader title="Jadwal Belajar" /> : null}
       <header className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div>
-          <h1 className="text-2xl font-bold leading-[1.3]">Jadwal Belajar</h1>
+          {!tutor ? (
+            <h1 className="text-2xl font-bold leading-[1.3]">Jadwal Belajar</h1>
+          ) : null}
           <p className="mt-1 text-[13px] text-[var(--color-muted)]">
             {calendarView
               ? 'Tinjauan alokasi ruangan per jam dengan toolbar filter di sisi kanan.'
@@ -275,7 +278,6 @@ export function SessionsPage() {
           />
         ) : null}
       </section>
-      {tutor ? <TutorBottomNavigation /> : null}
     </div>
   )
 }

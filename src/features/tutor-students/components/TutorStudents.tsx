@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
+import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { ApiError } from '@/services/api-client'
 import { useTutorStudents } from '../api/tutor-students-api'
 import { TutorStudentCard } from './TutorStudentCard'
@@ -33,10 +33,10 @@ export function TutorStudents() {
   }
 
   return (
-    <main className="min-h-dvh bg-background pb-[82px] text-foreground">
-      <div className="mx-auto w-full max-w-[390px] py-3">
-        <header className="grid gap-2.5 px-4 pb-3">
-          <h1 className="text-lg font-bold leading-[1.3]">Siswa Saya</h1>
+    <main className="min-h-dvh bg-background pb-6 text-foreground">
+      <div className="mx-auto w-full max-w-[390px]">
+        <TutorPageHeader title="Siswa Saya" />
+        <div className="px-4 py-3">
           <form role="search" onSubmit={submitSearch}>
             <label htmlFor="tutor-student-search" className="sr-only">
               Cari nama siswa
@@ -60,7 +60,7 @@ export function TutorStudents() {
               Cari siswa
             </button>
           </form>
-        </header>
+        </div>
 
         <section
           className="grid gap-2.5 px-4"
@@ -172,7 +172,6 @@ export function TutorStudents() {
           </nav>
         ) : null}
       </div>
-      <TutorBottomNavigation />
     </main>
   )
 }

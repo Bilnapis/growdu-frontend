@@ -69,7 +69,7 @@ export function DashboardAnnouncements({
                 aria-hidden="true"
               />
               <div className="min-w-0 flex-1">
-                <h4 className="break-words text-[14px] font-bold leading-[1.3]">
+                <h4 className="break-words text-[14px] font-semibold leading-[1.3]">
                   {announcement.title}
                 </h4>
                 <p className="mt-1 whitespace-pre-wrap break-words text-[13px] leading-relaxed text-muted-foreground">

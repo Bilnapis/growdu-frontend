@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { TutorPageHeader } from '@/components/TutorPageHeader'
 import {
   sessionDateLabel,
   shiftDate,
   todayInJakarta,
   useSessions,
 } from '@/features/class-sessions/api'
-import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { TutorScheduleCard } from '@/features/tutor-dashboard/components/TutorScheduleCard'
 
 const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] as const
@@ -88,10 +88,10 @@ export function TutorSchedule() {
   }
 
   return (
-    <main className="min-h-dvh bg-background pb-[82px] text-foreground">
-      <div className="mx-auto w-full max-w-[390px] py-3">
-        <header className="flex items-center justify-between gap-3 px-4">
-          <h1 className="text-lg font-bold leading-[1.3]">Jadwal Belajar</h1>
+    <main className="min-h-dvh bg-background pb-6 text-foreground">
+      <div className="mx-auto w-full max-w-[390px]">
+        <TutorPageHeader title="Jadwal Belajar" />
+        <div className="mt-[18px] flex justify-end px-4">
           <div className="relative shrink-0">
             <label htmlFor="tutor-schedule-month" className="sr-only">
               Pilih bulan jadwal
@@ -113,7 +113,7 @@ export function TutorSchedule() {
               aria-hidden="true"
             />
           </div>
-        </header>
+        </div>
 
         <div
           ref={dateListRef}
@@ -217,8 +217,6 @@ export function TutorSchedule() {
           ))}
         </section>
       </div>
-
-      <TutorBottomNavigation />
     </main>
   )
 }

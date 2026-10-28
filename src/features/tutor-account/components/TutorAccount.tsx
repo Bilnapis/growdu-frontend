@@ -8,6 +8,8 @@ import {
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
+import { TutorPageHeader } from '@/components/TutorPageHeader'
+
 type AccountMenuItem = {
   label: string
   description: string
@@ -65,85 +67,87 @@ export function TutorAccount({
 }: TutorAccountProps) {
   const navigate = useNavigate()
   return (
-    <div className="mx-auto w-full max-w-[430px] px-4 py-[18px]">
-      <h1 className="text-xl font-bold leading-tight">Profil</h1>
+    <div className="mx-auto w-full max-w-[390px]">
+      <TutorPageHeader title="Profil" />
 
-      <section
-        className="mt-5 flex items-center gap-3 rounded-[10px] border bg-card p-4"
-        aria-label="Identitas tentor"
-      >
-        <div
-          className="grid h-[54px] w-[54px] shrink-0 place-items-center rounded-full bg-primary text-[17px] font-bold text-primary-foreground"
-          aria-hidden="true"
+      <div className="px-4 py-5">
+        <section
+          className="flex items-center gap-3 rounded-[10px] border bg-card p-4"
+          aria-label="Identitas tentor"
         >
-          {getInitials(name)}
-        </div>
-        <div className="min-w-0">
-          <h2 className="truncate text-base font-bold">{name}</h2>
-          <p className="mt-1 truncate text-xs text-muted-foreground">
-            {roleLabel}
-          </p>
-        </div>
-      </section>
+          <div
+            className="grid h-[54px] w-[54px] shrink-0 place-items-center rounded-full bg-primary text-[17px] font-bold text-primary-foreground"
+            aria-hidden="true"
+          >
+            {getInitials(name)}
+          </div>
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-bold">{name}</h2>
+            <p className="mt-1 truncate text-xs text-muted-foreground">
+              {roleLabel}
+            </p>
+          </div>
+        </section>
 
-      <section className="mt-5" aria-labelledby="account-settings-title">
-        <h2
-          id="account-settings-title"
-          className="text-[11px] font-bold tracking-[0.6px] text-muted-foreground"
+        <section className="mt-5" aria-labelledby="account-settings-title">
+          <h2
+            id="account-settings-title"
+            className="text-[11px] font-bold tracking-[0.6px] text-muted-foreground"
+          >
+            PENGATURAN AKUN
+          </h2>
+          <div className="mt-2 overflow-hidden rounded-[10px] border bg-card">
+            {accountMenuItems.map(
+              ({ label, description, icon: Icon, to }, index) => (
+                <button
+                  key={label}
+                  type="button"
+                  disabled={!to}
+                  onClick={() => {
+                    if (to) void navigate(to)
+                  }}
+                  title={to ? undefined : 'Segera tersedia'}
+                  className={`flex h-[66px] w-full items-center gap-3 px-3.5 text-left enabled:hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
+                    index < accountMenuItems.length - 1 ? 'border-b' : ''
+                  }`}
+                >
+                  <Icon
+                    className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-foreground">
+                      {label}
+                    </span>
+                    <span className="mt-[3px] block truncate text-[11px] text-muted-foreground">
+                      {description}
+                    </span>
+                  </span>
+                  <ChevronRight
+                    className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  {!to ? <span className="sr-only">Segera tersedia</span> : null}
+                </button>
+              ),
+            )}
+          </div>
+        </section>
+
+        <button
+          type="button"
+          onClick={onLogout}
+          disabled={isLoggingOut}
+          className="mt-5 flex h-12 w-full items-center justify-center gap-2.5 rounded-lg border border-danger bg-card text-sm font-semibold text-danger transition-colors hover:bg-danger-bg focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
         >
-          PENGATURAN AKUN
-        </h2>
-        <div className="mt-2 overflow-hidden rounded-[10px] border bg-card">
-          {accountMenuItems.map(
-            ({ label, description, icon: Icon, to }, index) => (
-              <button
-                key={label}
-                type="button"
-                disabled={!to}
-                onClick={() => {
-                  if (to) void navigate(to)
-                }}
-                title={to ? undefined : 'Segera tersedia'}
-                className={`flex h-[66px] w-full items-center gap-3 px-3.5 text-left enabled:hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring ${
-                  index < accountMenuItems.length - 1 ? 'border-b' : ''
-                }`}
-              >
-                <Icon
-                  className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
-                  aria-hidden="true"
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold text-foreground">
-                    {label}
-                  </span>
-                  <span className="mt-[3px] block truncate text-[11px] text-muted-foreground">
-                    {description}
-                  </span>
-                </span>
-                <ChevronRight
-                  className="h-[18px] w-[18px] shrink-0 text-muted-foreground"
-                  aria-hidden="true"
-                />
-                {!to ? <span className="sr-only">Segera tersedia</span> : null}
-              </button>
-            ),
-          )}
-        </div>
-      </section>
+          <LogOut className="h-[18px] w-[18px]" aria-hidden="true" />
+          {isLoggingOut ? 'Keluar...' : 'Keluar'}
+        </button>
 
-      <button
-        type="button"
-        onClick={onLogout}
-        disabled={isLoggingOut}
-        className="mt-5 flex h-12 w-full items-center justify-center gap-2.5 rounded-lg border border-danger bg-card text-sm font-semibold text-danger transition-colors hover:bg-danger-bg focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
-      >
-        <LogOut className="h-[18px] w-[18px]" aria-hidden="true" />
-        {isLoggingOut ? 'Keluar...' : 'Keluar'}
-      </button>
-
-      <p className="mt-5 text-center text-[11px] text-muted-foreground">
-        BimbelKit v1.0.0
-      </p>
+        <p className="mt-5 text-center text-[11px] text-muted-foreground">
+          BimbelKit v1.0.0
+        </p>
+      </div>
     </div>
   )
 }

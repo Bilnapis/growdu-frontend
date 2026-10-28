@@ -7,7 +7,6 @@ import {
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { TutorScheduleCard } from '@/features/tutor-dashboard/components/TutorScheduleCard'
 import { useSessions, todayInJakarta } from '@/features/class-sessions/api'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -22,9 +21,9 @@ const dateFormatter = new Intl.DateTimeFormat('id-ID', {
 })
 
 const quickActions = [
-  { label: 'Jadwal', icon: CalendarDays },
-  { label: 'Siswa', icon: UsersRound },
-  { label: 'Laporan', icon: FileText },
+  { label: 'Jadwal', icon: CalendarDays, to: '/tutor/sessions' },
+  { label: 'Siswa', icon: UsersRound, to: '/tutor/students' },
+  { label: 'Laporan', icon: FileText, to: null },
 ] as const
 
 function getFirstName(name: string | null) {
@@ -45,7 +44,7 @@ export function TutorDashboardPage() {
   const greetingName = getFirstName(user?.profileName ?? null)
 
   return (
-    <main className="min-h-dvh bg-background pb-20 text-foreground">
+    <main className="min-h-dvh bg-background pb-6 text-foreground">
       <div className="mx-auto w-full max-w-[390px]">
         <header className="flex items-center justify-between px-4 py-[18px]">
           <div>
@@ -86,11 +85,11 @@ export function TutorDashboardPage() {
             Menu
           </h2>
           <div className="mt-3 grid grid-cols-3 gap-2.5">
-            {quickActions.map(({ label, icon: Icon }) =>
-              label === 'Jadwal' ? (
+            {quickActions.map(({ label, icon: Icon, to }) =>
+              to ? (
                 <Link
                   key={label}
-                  to="/tutor/sessions"
+                  to={to}
                   className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <Icon className="h-5 w-5 text-primary-text" aria-hidden="true" />
@@ -155,8 +154,6 @@ export function TutorDashboardPage() {
           </div>
         </section>
       </div>
-
-      <TutorBottomNavigation />
     </main>
   )
 }

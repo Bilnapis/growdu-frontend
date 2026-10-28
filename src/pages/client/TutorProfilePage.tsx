@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 import { TutorAccount } from '@/features/tutor-account/components/TutorAccount'
-import { TutorBottomNavigation } from '@/features/tutor-dashboard/components/TutorBottomNavigation'
 import { clearAuthSession, getStoredAuthUser } from '@/lib/auth-session'
 import { clearSelectedTenant } from '@/lib/tenant-session'
 import { logout } from '@/services/auth.service'
@@ -24,14 +23,13 @@ export function TutorProfilePage() {
   const roleLabel = `Tentor ${user?.tenantName?.trim() || 'BimbelKit'}`
 
   return (
-    <main className="min-h-dvh bg-background pb-20 text-foreground">
+    <main className="min-h-dvh bg-background pb-6 text-foreground">
       <TutorAccount
         name={displayName}
         roleLabel={roleLabel}
         isLoggingOut={logoutMutation.isPending}
         onLogout={() => logoutMutation.mutate()}
       />
-      <TutorBottomNavigation />
     </main>
   )
 }

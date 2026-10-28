@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
-  Link,
   useBlocker,
   useNavigate,
   useParams,
   useSearchParams,
 } from 'react-router-dom'
 import {
-  ArrowLeft,
   CheckCheck,
   CircleCheckBig,
   TriangleAlert,
 } from 'lucide-react'
+import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { Button } from '@/components/ui/button'
 import { ApiError } from '@/services/api-client'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -185,33 +184,24 @@ export function SessionRecordForm({
   return (
     <main className="min-h-dvh bg-background pb-28 text-foreground">
       <div className="mx-auto w-full max-w-[390px]">
-        <header className="border-b bg-card px-[18px] pb-3.5 pt-4">
-          <div className="flex items-center gap-2">
-            {step === 'notes' ? (
-              <button
-                type="button"
-                aria-label="Kembali ke pengisian presensi"
-                className="rounded p-2 focus-visible:ring-2 focus-visible:ring-ring"
-                onClick={() => setParams({ step: 'attendance' })}
-              >
-                <ArrowLeft size={16} />
-              </button>
-            ) : (
-              <Link
-                to={backTo}
-                aria-label="Kembali ke jadwal"
-                className="rounded p-2 focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <ArrowLeft size={16} />
-              </Link>
-            )}
-            <h1 className="flex-1 text-center text-base font-bold leading-[1.3]">
-              {step === 'attendance'
-                ? 'Isi Presensi'
-                : 'Materi & Catatan Sesi Pertemuan'}
-            </h1>
-          </div>
-          <h2 className="mt-3 text-base font-bold leading-[1.3]">
+        <TutorPageHeader
+          title={
+            step === 'attendance'
+              ? 'Isi Presensi'
+              : 'Materi & Catatan Sesi Pertemuan'
+          }
+          {...(step === 'notes'
+            ? {
+                backLabel: 'Kembali ke pengisian presensi',
+                onBack: () => setParams({ step: 'attendance' }),
+              }
+            : { backTo, backLabel: 'Kembali ke jadwal' })}
+        />
+        <section
+          className="border-b bg-card px-[18px] pb-3.5 pt-3"
+          aria-label="Informasi sesi"
+        >
+          <h2 className="text-base font-bold leading-[1.3]">
             {session.studyGroupName}
           </h2>
           <p className="mt-2 text-[13px] font-medium leading-[1.3] text-muted-foreground">
@@ -220,7 +210,7 @@ export function SessionRecordForm({
             {formatSessionTime(session.endTime)} •{' '}
             {session.roomName ?? 'Ruang belum ditentukan'}
           </p>
-        </header>
+        </section>
         {readonly ? (
           <p role="status" className="m-3 rounded border p-3 text-sm">
             {session.status === 'cancelled'

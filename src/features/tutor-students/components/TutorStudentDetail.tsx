@@ -1,6 +1,7 @@
-import { ArrowLeft, UsersRound } from 'lucide-react'
-import { Link, useLocation } from 'react-router-dom'
+import { UsersRound } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
 
+import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { Button } from '@/components/ui/button'
 import { ApiError } from '@/services/api-client'
 import { useTutorStudent } from '../api/tutor-students-api'
@@ -27,18 +28,11 @@ export function TutorStudentDetail({ studentId }: { studentId: string }) {
   return (
     <main className="min-h-dvh bg-background text-foreground">
       <div className="mx-auto w-full max-w-[390px]">
-        <header className="flex h-[52px] items-center gap-2.5 border-b bg-card px-4">
-          <Link
-            to={`${tutorStudentsPath}${search}`}
-            aria-label="Kembali ke daftar siswa"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          </Link>
-          <h1 className="flex-1 text-center text-base font-bold">
-            Detail Siswa
-          </h1>
-        </header>
+        <TutorPageHeader
+          title="Detail Siswa"
+          backTo={`${tutorStudentsPath}${search}`}
+          backLabel="Kembali ke daftar siswa"
+        />
 
         <div
           className="grid gap-3 px-4 py-3.5"
