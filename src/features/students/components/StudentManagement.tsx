@@ -171,14 +171,14 @@ export function StudentManagement() {
   return (
     <div className="min-w-0" aria-labelledby="students-title">
       <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
+        <div className="space-y-1">
           <h1
             id="students-title"
             className="text-[26px] font-bold leading-tight"
           >
             Data Siswa
           </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Kelola siswa aktif, kontak orang tua, dan status belajar.
           </p>
         </div>

@@ -6,7 +6,12 @@ import {
   useParams,
   useSearchParams,
 } from 'react-router-dom'
-import { ArrowLeft, CheckCheck, CircleCheckBig } from 'lucide-react'
+import {
+  ArrowLeft,
+  CheckCheck,
+  CircleCheckBig,
+  TriangleAlert,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ApiError } from '@/services/api-client'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -451,25 +456,43 @@ export function SessionRecordForm({
         ref={leaveDialog}
         onCancel={() => blocker.state === 'blocked' && blocker.reset()}
         aria-labelledby="leave-session"
-        className="max-w-[calc(100%-2rem)] rounded-lg border bg-card p-6 text-foreground backdrop:bg-[var(--color-modal-overlay)]"
+        aria-describedby="leave-session-description"
+        className="w-[calc(100%-3rem)] max-w-[342px] rounded-xl border-0 bg-card p-6 text-center text-foreground backdrop:bg-foreground/50"
       >
-        <div>
-          <h2 id="leave-session" className="font-bold">
-            Perubahan belum disimpan
-          </h2>
-          <p className="my-3">Keluar dan buang perubahan?</p>
-          <Button
-            autoFocus
-            onClick={() => blocker.state === 'blocked' && blocker.reset()}
-          >
-            Tetap di sini
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => blocker.state === 'blocked' && blocker.proceed()}
-          >
-            Keluar
-          </Button>
+        <div className="flex flex-col items-center gap-5">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-warning-icon-bg)] text-[var(--color-warning-icon)]">
+            <TriangleAlert className="h-6 w-6" aria-hidden="true" />
+          </div>
+          <div className="flex w-full flex-col gap-2.5">
+            <h2 id="leave-session" className="text-lg font-bold leading-[1.3]">
+              Perubahan belum disimpan
+            </h2>
+            <p
+              id="leave-session-description"
+              className="text-sm leading-[1.5] text-muted-foreground"
+            >
+              Perubahan yang sudah kamu isi akan hilang jika keluar sekarang.
+              Lanjutkan pengisian untuk menyimpan datamu.
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-2.5">
+            <Button
+              autoFocus
+              type="button"
+              className="h-11 w-full text-[13px] font-semibold leading-[1.3]"
+              onClick={() => blocker.state === 'blocked' && blocker.reset()}
+            >
+              Lanjutkan pengisian
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11 w-full bg-card text-[13px] font-semibold leading-[1.3] text-destructive hover:text-destructive"
+              onClick={() => blocker.state === 'blocked' && blocker.proceed()}
+            >
+              Keluar
+            </Button>
+          </div>
         </div>
       </dialog>
       {saved ? (

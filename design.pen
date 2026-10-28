@@ -90817,6 +90817,108 @@
                             },
                             {
                               "type": "frame",
+                              "id": "x0Eovo",
+                              "name": "Submenu - Akun Pemilik",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "N431Gs",
+                                  "name": "Active Bar - Akun Pemilik",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "xWo1G",
+                                  "name": "Copy - Akun Pemilik",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "BsEpU",
+                                      "name": "Title - Akun Pemilik",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Akun Pemilik",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "v9qix",
+                              "name": "Submenu - Kata Sandi",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "Jlz6K",
+                                  "name": "Active Bar - Kata Sandi",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "A3roh",
+                                  "name": "Copy - Kata Sandi",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "rA77L",
+                                      "name": "Title - Kata Sandi",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Kata Sandi",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
                               "id": "SDAt6",
                               "name": "Submenu - Warna Tema",
                               "width": 276,
@@ -91369,8 +91471,1377 @@
     },
     {
       "type": "frame",
-      "id": "bhk7o",
+      "id": "X6NOq",
       "x": 1520,
+      "y": 15998,
+      "name": "Screen - Pengaturan Edit Akun Pemilik",
+      "clip": true,
+      "width": 1440,
+      "height": 1181,
+      "fill": "$bk-bg",
+      "children": [
+        {
+          "id": "EZJXA",
+          "type": "ref",
+          "ref": "cmp_sidebar_dashboard",
+          "name": "Sidebar - Pengaturan Active",
+          "height": "fill_container",
+          "descendants": {
+            "cmp_sidebar_dashboard_nav_dashboard": {
+              "fill": "$bk-surface"
+            },
+            "cmp_sidebar_dashboard_nav_dashboard_ic": {
+              "fill": "$bk-muted"
+            },
+            "cmp_sidebar_dashboard_nav_dashboard_txt": {
+              "fill": "$bk-muted"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan": {
+              "fill": "$bk-primary"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan_ic": {
+              "fill": "$bk-surface"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan_txt": {
+              "fill": "$bk-surface"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "aLrpI",
+          "name": "Account Header & Page Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "id": "w9cVo",
+              "type": "ref",
+              "ref": "qDD92",
+              "name": "Account Header",
+              "width": "fill_container",
+              "height": 61
+            },
+            {
+              "type": "frame",
+              "id": "kEt6a",
+              "name": "Pengaturan Main",
+              "width": "fill_container",
+              "height": 1120,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "tY5HN",
+                  "name": "Pengaturan Header - Submenu",
+                  "width": 1112,
+                  "height": 68,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Xbum5",
+                      "name": "Header Copy",
+                      "width": 620,
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "o0oNfu",
+                          "name": "Page Title",
+                          "fill": "$bk-text",
+                          "content": "Pengaturan Akun Pemilik",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Gx88z",
+                          "name": "Page Subtitle",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 620,
+                          "content": "Submenu terpisah untuk nama, email login, dan kata sandi pemilik.",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "c74qN",
+                  "name": "Pengaturan Body - Submenu Terpisah",
+                  "width": 1112,
+                  "height": 930,
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "l2je6",
+                      "name": "Kolom Submenu",
+                      "width": 276,
+                      "layout": "vertical",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "M62Kd",
+                          "name": "Submenu Pengaturan",
+                          "clip": true,
+                          "width": 276,
+                          "fill": "$bk-surface",
+                          "cornerRadius": 8,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "jvA1a",
+                              "name": "Submenu - Data Bimbel",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "ktQHl",
+                                  "name": "Active Bar - Data Bimbel",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "gLk79",
+                                  "name": "Copy - Data Bimbel",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "WIpjq",
+                                      "name": "Title - Data Bimbel",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Data Bimbel",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "UrQIr",
+                              "name": "Submenu - Akun Pemilik Active",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-primary-soft",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "C7O9FM",
+                                  "name": "Active Bar - Akun Pemilik",
+                                  "fill": "$bk-primary",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "svejm",
+                                  "name": "Copy - Akun Pemilik",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "e14wy",
+                                      "name": "Title - Akun Pemilik",
+                                      "fill": "$bk-primary",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Akun Pemilik",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "bMjah",
+                              "name": "Submenu - Kata Sandi",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "bn1DF",
+                                  "name": "Active Bar - Kata Sandi",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "F0ufd",
+                                  "name": "Copy - Kata Sandi",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "PppIz",
+                                      "name": "Title - Kata Sandi",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Kata Sandi",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "wXhIa",
+                              "name": "Submenu - Warna Tema",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "WMim0",
+                                  "name": "Active Bar - Warna Tema",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "mrpQC",
+                                  "name": "Copy - Warna Tema",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "OzDB4",
+                                      "name": "Title - Warna Tema",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Warna Tema",
+                                      "lineHeight": 1.35,
+                                      "textAlign": "center",
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ucN1l",
+                      "name": "Form Edit - Akun Pemilik",
+                      "width": 812,
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 22,
+                      "padding": 32,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "YOsIh",
+                          "name": "Frame 12",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J3Jaf",
+                              "name": "Form Title",
+                              "fill": "$bk-text",
+                              "content": "Ubah Akun Pemilik",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 20,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "nBgub",
+                              "name": "Submenu Desc",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": 748,
+                              "content": "Submenu Akun Pemilik berisi nama, email login, dan password pemilik.",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "uxhJA",
+                          "name": "Foto Profil Section",
+                          "width": 748,
+                          "height": 128,
+                          "gap": 22,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "u082g",
+                              "name": "Foto Profil Pemilik",
+                              "width": 112,
+                              "height": 112,
+                              "fill": "$bk-primary-soft",
+                              "cornerRadius": 8,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "xx0hJ",
+                                  "name": "Avatar Initial",
+                                  "fill": "$bk-primary",
+                                  "content": "AS",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 34,
+                                  "fontWeight": "900"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "sa4Do",
+                              "name": "Foto Control Copy",
+                              "width": 614,
+                              "layout": "vertical",
+                              "gap": 10,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "O4XhH",
+                                  "name": "Foto Control Title",
+                                  "fill": "$bk-text",
+                                  "content": "Foto Profil",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 16,
+                                  "fontWeight": "700"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "J4ZIQf",
+                                  "name": "Foto Hint",
+                                  "fill": "$bk-muted",
+                                  "textGrowth": "fixed-width",
+                                  "width": 614,
+                                  "content": "Resolusi optimal 300x300, ukuran maksimal 2MB.",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "y8m993",
+                                  "name": "Button - Ubah Foto",
+                                  "width": 132,
+                                  "height": 40,
+                                  "fill": "$bk-surface",
+                                  "cornerRadius": 10,
+                                  "stroke": "$bk-primary",
+                                  "strokeWidth": 1,
+                                  "gap": 8,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "L4EuM",
+                                      "name": "Icon - Camera",
+                                      "width": 18,
+                                      "height": 18,
+                                      "icon": "camera",
+                                      "library": "lucide",
+                                      "fill": "$bk-primary"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "EXjFi",
+                                      "name": "Label - Ubah Foto",
+                                      "fill": "$bk-primary",
+                                      "content": "Ubah Foto",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "x9omD",
+                          "name": "Section Title - Identitas Pemilik",
+                          "fill": "$bk-text",
+                          "content": "Identitas Pemilik",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "JUban",
+                          "name": "Row - Nama Email",
+                          "width": 748,
+                          "height": 75,
+                          "gap": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "lem4J",
+                              "name": "Field - Nama Pemilik",
+                              "width": 366,
+                              "layout": "vertical",
+                              "gap": 8,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "W9Ghz",
+                                  "name": "Label - Nama Pemilik",
+                                  "fill": "$bk-text",
+                                  "content": "Nama Pemilik",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 13,
+                                  "fontWeight": "700"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "CMuCR",
+                                  "name": "Input - Nama Pemilik",
+                                  "width": 366,
+                                  "height": 46,
+                                  "fill": "$bk-bg-light",
+                                  "cornerRadius": 12,
+                                  "stroke": "$bk-border",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "eO1lr",
+                                      "name": "Value - Nama Pemilik",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": 338,
+                                      "content": "Andi Saputra",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "uhdcS",
+                              "name": "Field - Email Login",
+                              "width": 366,
+                              "layout": "vertical",
+                              "gap": 8,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "DZ8cz",
+                                  "name": "Label - Email Login",
+                                  "fill": "$bk-text",
+                                  "content": "Email Login",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 13,
+                                  "fontWeight": "700"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "kAFvp",
+                                  "name": "Input - Email Login",
+                                  "width": 366,
+                                  "height": 46,
+                                  "fill": "$bk-bg-light",
+                                  "cornerRadius": 12,
+                                  "stroke": "$bk-border",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "EyYeR",
+                                      "name": "Value - Email Login",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": 338,
+                                      "content": "andi@bimbelkit.id",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "howTq",
+                          "name": "Row - Kontak",
+                          "width": 748,
+                          "height": 75,
+                          "gap": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "mcT5r",
+                              "name": "Field - Jabatan",
+                              "width": 366,
+                              "layout": "vertical",
+                              "gap": 8,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "LYZ6i",
+                                  "name": "Label - Jabatan",
+                                  "fill": "$bk-text",
+                                  "content": "Jabatan",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 13,
+                                  "fontWeight": "700"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "Hgewp",
+                                  "name": "Input - Jabatan",
+                                  "width": 366,
+                                  "height": 46,
+                                  "fill": "$bk-bg-light",
+                                  "cornerRadius": 12,
+                                  "stroke": "$bk-border",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "o9VJBL",
+                                      "name": "Value - Jabatan",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": 338,
+                                      "content": "Owner / Admin Utama",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "GztRn",
+                              "name": "Field - No. WhatsApp",
+                              "width": 366,
+                              "layout": "vertical",
+                              "gap": 8,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "osfjs",
+                                  "name": "Label - No. WhatsApp",
+                                  "fill": "$bk-text",
+                                  "content": "No. WhatsApp",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 13,
+                                  "fontWeight": "700"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "FozyI",
+                                  "name": "Input - No. WhatsApp",
+                                  "width": 366,
+                                  "height": 46,
+                                  "fill": "$bk-bg-light",
+                                  "cornerRadius": 12,
+                                  "stroke": "$bk-border",
+                                  "strokeWidth": 1,
+                                  "padding": [
+                                    0,
+                                    14
+                                  ],
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "s6s6I",
+                                      "name": "Value - No. WhatsApp",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": 338,
+                                      "content": "0812-9876-5432",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RY1rx",
+                          "name": "Form Actions - Simpan",
+                          "width": 748,
+                          "height": 44,
+                          "justifyContent": "end",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "xobTw",
+                              "name": "Button - Simpan",
+                              "width": 200,
+                              "height": 44,
+                              "fill": "$bk-primary",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "zfZIP",
+                                  "name": "Label - Simpan",
+                                  "fill": "$bk-surface",
+                                  "content": "Simpan Perubahan",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "d0cKH",
+      "x": 3040,
+      "y": 15998,
+      "name": "Screen - Pengaturan Edit Kata Sandi",
+      "clip": true,
+      "width": 1440,
+      "height": 1181,
+      "fill": "$bk-bg",
+      "children": [
+        {
+          "id": "NIDma",
+          "type": "ref",
+          "ref": "cmp_sidebar_dashboard",
+          "name": "Sidebar - Pengaturan Active",
+          "height": "fill_container",
+          "descendants": {
+            "cmp_sidebar_dashboard_nav_dashboard": {
+              "fill": "$bk-surface"
+            },
+            "cmp_sidebar_dashboard_nav_dashboard_ic": {
+              "fill": "$bk-muted"
+            },
+            "cmp_sidebar_dashboard_nav_dashboard_txt": {
+              "fill": "$bk-muted"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan": {
+              "fill": "$bk-primary"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan_ic": {
+              "fill": "$bk-surface"
+            },
+            "cmp_sidebar_dashboard_nav_pengaturan_txt": {
+              "fill": "$bk-surface"
+            }
+          }
+        },
+        {
+          "type": "frame",
+          "id": "jdCOy",
+          "name": "Account Header & Page Content",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "children": [
+            {
+              "id": "fVpb4",
+              "type": "ref",
+              "ref": "qDD92",
+              "name": "Account Header",
+              "width": "fill_container",
+              "height": 61
+            },
+            {
+              "type": "frame",
+              "id": "gAqNp",
+              "name": "Pengaturan Main",
+              "width": "fill_container",
+              "height": 1120,
+              "layout": "vertical",
+              "gap": 24,
+              "padding": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "EOOjW",
+                  "name": "Pengaturan Header - Submenu",
+                  "width": 1112,
+                  "height": 68,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PbxEK",
+                      "name": "Header Copy",
+                      "width": 620,
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "W4a2W",
+                          "name": "Page Title",
+                          "fill": "$bk-text",
+                          "content": "Pengaturan Kata Sandi",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "YcAs3",
+                          "name": "Page Subtitle",
+                          "fill": "$bk-muted",
+                          "textGrowth": "fixed-width",
+                          "width": 620,
+                          "content": "Ubah password akun pemilik dengan memasukkan password lama dan password baru.",
+                          "lineHeight": 1.35,
+                          "fontFamily": "$bk-font",
+                          "fontSize": 14,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "f76MMT",
+                  "name": "Pengaturan Body - Submenu Terpisah",
+                  "width": 1112,
+                  "height": 930,
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "abFS7",
+                      "name": "Kolom Submenu",
+                      "width": 276,
+                      "layout": "vertical",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Fvavn",
+                          "name": "Submenu Pengaturan",
+                          "clip": true,
+                          "width": 276,
+                          "fill": "$bk-surface",
+                          "cornerRadius": 8,
+                          "stroke": "$bk-border",
+                          "strokeWidth": 1,
+                          "layout": "vertical",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "wo7T3",
+                              "name": "Submenu - Data Bimbel",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "obvkd",
+                                  "name": "Active Bar - Data Bimbel",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "U9IqfM",
+                                  "name": "Copy - Data Bimbel",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "hr7Js",
+                                      "name": "Title - Data Bimbel",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Data Bimbel",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "W7kbNM",
+                              "name": "Submenu - Akun Pemilik",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "YlkSR",
+                                  "name": "Active Bar - Akun Pemilik",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "otvRz",
+                                  "name": "Copy - Akun Pemilik",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "EPDY4",
+                                      "name": "Title - Akun Pemilik",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Akun Pemilik",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "WWabC",
+                              "name": "Submenu - Kata Sandi Active",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-primary-soft",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "eD2NH",
+                                  "name": "Active Bar - Kata Sandi",
+                                  "fill": "$bk-primary",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "ZFIY5",
+                                  "name": "Copy - Kata Sandi",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "DJmM7",
+                                      "name": "Title - Kata Sandi",
+                                      "fill": "$bk-primary",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Kata Sandi",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "u3pZa",
+                              "name": "Submenu - Warna Tema",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "Z46Shg",
+                                  "name": "Active Bar - Warna Tema",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "S6iaj",
+                                  "name": "Copy - Warna Tema",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "gap": 3,
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "jAMRS",
+                                      "name": "Title - Warna Tema",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Warna Tema",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "KXFmJ",
+                      "name": "Form Edit - Kata Sandi",
+                      "width": 812,
+                      "fill": "$bk-surface",
+                      "cornerRadius": 8,
+                      "stroke": "$bk-border",
+                      "strokeWidth": 1,
+                      "layout": "vertical",
+                      "gap": 22,
+                      "padding": 32,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PdWak",
+                          "name": "Frame 13",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "J6POGb",
+                              "name": "Form Title",
+                              "fill": "$bk-text",
+                              "content": "Ubah Kata Sandi",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 20,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZIXze",
+                              "name": "Form Desc",
+                              "fill": "$bk-muted",
+                              "textGrowth": "fixed-width",
+                              "width": 748,
+                              "content": "Masukkan password lama, lalu buat password baru dan konfirmasi password baru.",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RLePk",
+                          "name": "Field - Password Lama",
+                          "width": 748,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "B4jZ3",
+                              "name": "Label - Password Lama",
+                              "fill": "$bk-text",
+                              "content": "Password Lama",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "w3hk0L",
+                              "name": "Input - Password Lama",
+                              "width": 748,
+                              "height": 46,
+                              "fill": "$bk-bg-light",
+                              "cornerRadius": 12,
+                              "stroke": "$bk-border",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "YOAZh",
+                                  "name": "Value - Password Lama",
+                                  "fill": "$bk-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": 720,
+                                  "content": "Masukkan password lama",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "asF4J",
+                          "name": "Field - Password Baru",
+                          "width": 748,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "i8W2nd",
+                              "name": "Label - Password Baru",
+                              "fill": "$bk-text",
+                              "content": "Password Baru",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "WqOG6",
+                              "name": "Input - Password Baru",
+                              "width": 748,
+                              "height": 46,
+                              "fill": "$bk-bg-light",
+                              "cornerRadius": 12,
+                              "stroke": "$bk-border",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "SHZW3",
+                                  "name": "Value - Password Baru",
+                                  "fill": "$bk-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": 720,
+                                  "content": "Masukkan password baru",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "CWGQ3",
+                          "name": "Field - Konfirmasi Password Baru",
+                          "width": 748,
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "h3IK6",
+                              "name": "Label - Konfirmasi Password Baru",
+                              "fill": "$bk-text",
+                              "content": "Konfirmasi Password Baru",
+                              "lineHeight": 1.35,
+                              "fontFamily": "$bk-font",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "e9Fwz",
+                              "name": "Input - Konfirmasi Password Baru",
+                              "width": 748,
+                              "height": 46,
+                              "fill": "$bk-bg-light",
+                              "cornerRadius": 12,
+                              "stroke": "$bk-border",
+                              "strokeWidth": 1,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "ruH1Z",
+                                  "name": "Value - Konfirmasi Password Baru",
+                                  "fill": "$bk-text",
+                                  "textGrowth": "fixed-width",
+                                  "width": 720,
+                                  "content": "Ulangi password baru",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "e9UUCU",
+                          "name": "Form Actions - Simpan",
+                          "width": 748,
+                          "height": 44,
+                          "justifyContent": "end",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "bhINh",
+                              "name": "Button - Simpan",
+                              "width": 200,
+                              "height": 44,
+                              "fill": "$bk-primary",
+                              "cornerRadius": 12,
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "SPwvY",
+                                  "name": "Label - Simpan",
+                                  "fill": "$bk-surface",
+                                  "content": "Simpan Perubahan",
+                                  "lineHeight": 1.35,
+                                  "fontFamily": "$bk-font",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "bhk7o",
+      "x": 4560,
       "y": 15998,
       "name": "Screen - Pengaturan Warna Tema",
       "clip": true,
@@ -91544,6 +93015,104 @@
                                       "textGrowth": "fixed-width",
                                       "width": "fill_container",
                                       "content": "Data Bimbel",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "jEMo1",
+                              "name": "Submenu - Akun Pemilik",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "byBmj",
+                                  "name": "Active Bar - Akun Pemilik",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "WjIy2",
+                                  "name": "Copy - Akun Pemilik",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "f2XnU",
+                                      "name": "Title - Akun Pemilik",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Akun Pemilik",
+                                      "lineHeight": 1.35,
+                                      "fontFamily": "$bk-font",
+                                      "fontSize": 14,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "sZij6",
+                              "name": "Submenu - Kata Sandi",
+                              "width": 276,
+                              "height": 78,
+                              "fill": "$bk-surface",
+                              "gap": 12,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "rectangle",
+                                  "cornerRadius": 999,
+                                  "id": "zxK0K",
+                                  "name": "Active Bar - Kata Sandi",
+                                  "fill": "#FFFFFF00",
+                                  "width": 4,
+                                  "height": 46
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "ObzWd",
+                                  "name": "Copy - Kata Sandi",
+                                  "width": 220,
+                                  "height": "fill_container",
+                                  "layout": "vertical",
+                                  "justifyContent": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "VRITm",
+                                      "name": "Title - Kata Sandi",
+                                      "fill": "$bk-text",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Kata Sandi",
                                       "lineHeight": 1.35,
                                       "fontFamily": "$bk-font",
                                       "fontSize": 14,
@@ -93094,33 +94663,55 @@
           "children": [
             {
               "type": "frame",
+              "id": "F4pW2C",
+              "name": "Mobile Header Top - Jadwal Belajar",
+              "width": "fill_container",
+              "padding": [
+                0,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "L73LPh",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "name": "Kembali ke Beranda",
+                  "stroke": [],
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "E0PEzI",
+                  "name": "Mobile Page Title",
+                  "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": 291,
+                  "content": "Jadwal Belajar",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
               "id": "huTjN",
               "width": "fill_container",
               "padding": [
                 0,
                 16
               ],
-              "justifyContent": "space_between",
+              "justifyContent": "end",
               "alignItems": "center",
               "children": [
-                {
-                  "type": "frame",
-                  "id": "k8i7sn",
-                  "gap": 6,
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "tWKwY",
-                      "fill": "$bk-text",
-                      "content": "Jadwal Belajar",
-                      "lineHeight": 1.3,
-                      "fontFamily": "$bk-font",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    }
-                  ]
-                },
                 {
                   "type": "frame",
                   "id": "IXjax",
@@ -93444,7 +95035,7 @@
               "type": "frame",
               "id": "MZ6tw",
               "name": "Frame 21",
-              "width": "fit_content(390)",
+              "width": "fill_container",
               "layout": "vertical",
               "gap": 10,
               "padding": [
@@ -93941,14 +95532,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "id": "OBvmr",
-              "type": "ref",
-              "ref": "FPMm5",
-              "name": "Tentor Bottom Tab - Jadwal Active",
-              "width": "fill_container",
-              "height": 64
             }
           ]
         }
@@ -94044,23 +95627,48 @@
           "children": [
             {
               "type": "frame",
-              "id": "MOLu7",
-              "name": "Header Top",
+              "id": "e2sISo",
+              "name": "Mobile Header Top - Laporan Perkembangan",
               "width": "fill_container",
-              "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
-                  "type": "text",
-                  "id": "BK1XJ",
-                  "name": "Title",
-                  "fill": "$bk-text",
-                  "content": "Laporan Perkembangan",
-                  "lineHeight": 1.35,
-                  "fontFamily": "$bk-font",
-                  "fontSize": 18,
-                  "fontWeight": "700"
+                  "id": "x2TJw",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "name": "Kembali ke Beranda",
+                  "stroke": [],
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
                 },
+                {
+                  "type": "text",
+                  "id": "ZoqiS",
+                  "name": "Mobile Page Title",
+                  "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": 291,
+                  "content": "Laporan Perkembangan",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MOLu7",
+              "name": "Header Top",
+              "width": "fill_container",
+              "justifyContent": "end",
+              "alignItems": "center",
+              "children": [
                 {
                   "type": "frame",
                   "id": "BNhu7",
@@ -94629,14 +96237,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "LtcHY",
-          "type": "ref",
-          "ref": "vsQGo",
-          "width": "fill_container",
-          "height": 64,
-          "name": "Tentor Bottom Tab - Laporan Active"
         }
       ]
     },
@@ -94730,20 +96330,36 @@
           "children": [
             {
               "type": "frame",
-              "id": "HcIYo",
-              "name": "Siswa Header Row",
+              "id": "DyFQp",
+              "name": "Mobile Header Top - Siswa Saya",
               "width": "fill_container",
-              "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
+                  "id": "YeYoh",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "name": "Kembali ke Beranda",
+                  "stroke": [],
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
+                },
+                {
                   "type": "text",
-                  "id": "eKedk",
-                  "name": "Siswa Title",
+                  "id": "NfiEX",
+                  "name": "Mobile Page Title",
                   "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": 291,
                   "content": "Siswa Saya",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
                   "fontFamily": "$bk-font",
-                  "fontSize": 18,
+                  "fontSize": 16,
                   "fontWeight": "700"
                 }
               ]
@@ -94790,7 +96406,6 @@
           "id": "BpeIw",
           "name": "Student List",
           "width": "fill_container",
-          "height": 500,
           "layout": "vertical",
           "gap": 10,
           "padding": [
@@ -95210,14 +96825,6 @@
               ]
             }
           ]
-        },
-        {
-          "id": "dSq2f",
-          "type": "ref",
-          "ref": "yz4Dc",
-          "name": "Tentor Bottom Tab - Siswa Active",
-          "width": "fill_container",
-          "height": 64
         }
       ]
     },
@@ -95302,7 +96909,7 @@
           "id": "H1utB4",
           "name": "Profile Content",
           "width": "fill_container",
-          "height": 666,
+          "height": "fill_container",
           "fill": "$bk-bg",
           "layout": "vertical",
           "gap": 20,
@@ -95313,20 +96920,36 @@
           "children": [
             {
               "type": "frame",
-              "id": "G5qMMm",
-              "name": "Profile Header",
+              "id": "m8HRhK",
+              "name": "Mobile Header Top - Profil",
               "width": "fill_container",
-              "layout": "vertical",
-              "gap": 4,
+              "alignItems": "center",
               "children": [
                 {
+                  "id": "nzj9w",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "name": "Kembali ke Beranda",
+                  "stroke": [],
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
+                },
+                {
                   "type": "text",
-                  "id": "A3A9c",
-                  "name": "Profile Title",
+                  "id": "qlF1Y",
+                  "name": "Mobile Page Title",
                   "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": 291,
                   "content": "Profil",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
                   "fontFamily": "$bk-font",
-                  "fontSize": 20,
+                  "fontSize": 16,
                   "fontWeight": "700"
                 }
               ]
@@ -95692,14 +97315,6 @@
               "fontWeight": "normal"
             }
           ]
-        },
-        {
-          "id": "Ju4yn",
-          "type": "ref",
-          "ref": "OonY8",
-          "name": "Tentor Bottom Tab - Profil Active",
-          "width": "fill_container",
-          "height": 64
         }
       ]
     },
@@ -107933,6 +109548,443 @@
                       "fontFamily": "$bk-font",
                       "fontSize": 14,
                       "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W2vNp9",
+      "x": 14621,
+      "y": 2711,
+      "name": "Mobile - Tentor - Presensi - Konfirmasi Keluar",
+      "clip": true,
+      "width": 390,
+      "fill": "$bk-bg",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "gb5vc",
+          "name": "Mobile Status Bar",
+          "width": "fill_container",
+          "height": 38,
+          "fill": "$bk-surface",
+          "padding": [
+            0,
+            18
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "gmpCV",
+              "name": "Mobile Time",
+              "fill": "$bk-text",
+              "content": "09:41",
+              "lineHeight": 1.3,
+              "fontFamily": "$bk-font",
+              "fontSize": 13,
+              "fontWeight": "800"
+            },
+            {
+              "type": "text",
+              "id": "XJzim",
+              "name": "Mobile Battery",
+              "fill": "$bk-muted",
+              "content": "100%",
+              "lineHeight": 1.3,
+              "fontFamily": "$bk-font",
+              "fontSize": 12,
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Soqku",
+          "name": "Mobile Header",
+          "width": "fill_container",
+          "fill": "$bk-surface",
+          "stroke": "$bk-border",
+          "strokeWidth": {
+            "bottom": 1
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            16,
+            18,
+            14,
+            18
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "oEXKO",
+              "name": "Mobile Header Top",
+              "width": "fill_container",
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "Rpfaj",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "stroke": [],
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "arrow_back",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "WDMp1",
+                  "name": "Mobile Page Title",
+                  "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": 291,
+                  "content": "Materi & Catatan Sesi Pertemuan",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                },
+                {
+                  "id": "w6jGql",
+                  "type": "ref",
+                  "ref": "btn_cmp_size_icon",
+                  "enabled": false,
+                  "descendants": {
+                    "btn_ic_size_icon": {
+                      "icon": "more_horiz",
+                      "library": "Material Symbols Outlined"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dRfTj",
+              "name": "Class Summary",
+              "width": "fill_container",
+              "cornerRadius": 8,
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uxymW",
+                  "name": "Class Name",
+                  "fill": "$bk-text",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Kelas 8A Matematika",
+                  "lineHeight": 1.3,
+                  "fontFamily": "$bk-font",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "C2SC2",
+                  "name": "Class Meta",
+                  "fill": "$bk-muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Senin, 15 September 2026 15:00 - 16:00 • Ruang 2",
+                  "lineHeight": 1.3,
+                  "fontFamily": "$bk-font",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "PWVwJ",
+          "name": "Materi & Catatan Content",
+          "width": "fill_container",
+          "height": 536,
+          "layout": "vertical",
+          "gap": 12,
+          "padding": [
+            14,
+            14,
+            0,
+            14
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "xuLHD",
+              "name": "Field - Topik *",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 7,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ZFvY8",
+                  "name": "Label - Topik *",
+                  "fill": "$bk-text",
+                  "content": "Topik *",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$bk-font",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "AoocL",
+                  "name": "Input - Topik *",
+                  "width": "fill_container",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 6,
+                  "stroke": "$C:--border",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "MDp8S",
+                      "name": "Content - Topik *",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Persamaan Linier Dua Variabel (SPLDV) - Bagian 2 (Metode Eliminasi & Substitusi)",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "TuaG9",
+              "name": "Field - Catatan Tentor",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 7,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "DrGU2",
+                  "name": "Label - Catatan Tentor",
+                  "fill": "$bk-text",
+                  "content": "Catatan Tentor",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$bk-font",
+                  "fontSize": 12,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "frame",
+                  "id": "L6mnme",
+                  "name": "Textarea - Catatan Tentor",
+                  "width": "fill_container",
+                  "fill": "$bk-surface",
+                  "cornerRadius": 6,
+                  "stroke": "$bk-border",
+                  "strokeWidth": 1,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "pjKvd",
+                      "name": "Content - Catatan Tentor",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Seluruh siswa telah menyelesaikan 8 soal latihan mandiri dengan skor rata-rata 85. PR halaman 48 dikumpulkan pada sesi Senin depan.",
+                      "lineHeight": 1.5,
+                      "fontFamily": "$bk-font",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "WodNo",
+          "name": "Materi Sticky Footer",
+          "width": "fill_container",
+          "fill": "$bk-surface",
+          "stroke": "$bk-border",
+          "strokeWidth": {
+            "top": 1
+          },
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 14,
+          "children": [
+            {
+              "type": "frame",
+              "id": "OR8GV",
+              "name": "Simpan Catatan Button",
+              "width": "fill_container",
+              "height": 40,
+              "fill": "$bk-primary",
+              "cornerRadius": 7,
+              "gap": 7,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "IOF7K",
+                  "name": "Simpan Catatan Label",
+                  "fill": "#FFFFFF",
+                  "content": "Simpan",
+                  "fontFamily": "$bk-font",
+                  "fontSize": 13,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "XAjOk",
+          "layoutPosition": "absolute",
+          "x": 0,
+          "y": 0,
+          "name": "Overlay Konfirmasi Keluar",
+          "width": 390,
+          "height": 762,
+          "fill": "#0F172A80",
+          "layout": "vertical",
+          "padding": 24,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "A1s16",
+              "name": "Modal Perubahan Belum Disimpan",
+              "width": "fill_container",
+              "fill": "$bk-surface",
+              "cornerRadius": 12,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "bMTkr",
+                  "name": "Ikon Peringatan",
+                  "width": 44,
+                  "height": 44,
+                  "fill": "#FFF4DE",
+                  "cornerRadius": 22,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "Qjszf",
+                      "name": "Peringatan Perubahan",
+                      "width": 24,
+                      "height": 24,
+                      "icon": "triangle-alert",
+                      "library": "lucide",
+                      "fill": "#B77916"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KX5wT",
+                  "name": "Pesan Konfirmasi",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "feiBG",
+                      "name": "Judul Modal",
+                      "fill": "$bk-text",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Perubahan belum disimpan",
+                      "lineHeight": 1.3,
+                      "textAlign": "center",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "SpHuU",
+                      "name": "Penjelasan Kehilangan Perubahan",
+                      "fill": "$bk-muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Perubahan yang sudah kamu isi akan hilang jika keluar sekarang. Lanjutkan pengisian untuk menyimpan datamu.",
+                      "lineHeight": 1.5,
+                      "textAlign": "center",
+                      "fontFamily": "$bk-font",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "oOisT",
+                  "name": "Aksi Konfirmasi",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "id": "Y2aW1I",
+                      "type": "ref",
+                      "ref": "btn_cmp_default",
+                      "name": "Lanjutkan pengisian",
+                      "width": "fill_container",
+                      "height": 44,
+                      "descendants": {
+                        "btn_txt_default": {
+                          "content": "Lanjutkan pengisian"
+                        }
+                      }
+                    },
+                    {
+                      "id": "qy8As",
+                      "type": "ref",
+                      "ref": "btn_cmp_outline",
+                      "name": "Keluar tanpa menyimpan",
+                      "width": "fill_container",
+                      "height": 44,
+                      "descendants": {
+                        "btn_txt_outline": {
+                          "content": "Keluar",
+                          "fill": "#B42318"
+                        }
+                      }
                     }
                   ]
                 }

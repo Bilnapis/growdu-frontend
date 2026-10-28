@@ -138,11 +138,13 @@ export function TutorSchedule() {
                 onClick={() => updateParams(date)}
               >
                 <span
-                  className={`text-[10px] font-semibold leading-[1.3] ${active ? '' : 'text-muted-foreground'}`}
+                  className={`text-[10px] font-medium leading-[1.3] ${active ? 'text-white' : 'text-muted-foreground'}`}
                 >
                   {dayNames[getDayIndex(date)]}
                 </span>
-                <span className="text-sm font-bold leading-[1.3]">
+                <span
+                  className={`text-sm font-semibold leading-[1.3] ${active ? 'text-white' : 'text-foreground'}`}
+                >
                   {Number(date.slice(8, 10))}
                 </span>
               </button>

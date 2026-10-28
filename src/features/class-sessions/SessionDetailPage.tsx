@@ -108,7 +108,7 @@ function SessionDetail({ session }: { session: ClassSession }) {
   const recordPath = `/schedule/${session.id}/record?step=attendance`
 
   return (
-    <div className="mx-auto max-w-[1120px]">
+    <div className="mx-auto w-full min-w-0">
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -152,25 +152,21 @@ function SessionDetail({ session }: { session: ClassSession }) {
         </div>
       </header>
 
-      <div className="mt-[18px] grid items-start gap-[18px] xl:grid-cols-[minmax(0,780px)_minmax(260px,1fr)]">
+      <div className="mt-[18px] grid items-start gap-[18px] xl:grid-cols-[minmax(0,1fr)_minmax(260px,360px)]">
         <div className="grid min-w-0 gap-4">
           <section className="rounded-lg border bg-card p-5">
             <h2 className="text-base font-bold">Informasi Sesi Pertemuan</h2>
-            <dl className="mt-3.5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="mt-3.5 grid gap-y-4 sm:grid-cols-2 lg:grid-cols-4 ">
               <DetailItem label="Tentor Pengajar" value={session.tutorName} />
               <DetailItem
                 label="Mata Pelajaran"
                 value={session.subject ?? 'Belum ditentukan'}
               />
+              <DetailItem label="Ruangan" value={roomLabel(session)} />
               <DetailItem
                 label="Waktu & Durasi"
                 value={`${sessionDateLabel(session.sessionDate)}, ${session.startTime}–${session.endTime} (${sessionDuration(session)} menit)`}
                 emphasized
-              />
-              <DetailItem
-                label="Ruangan"
-                value={roomLabel(session)}
-                className="sm:col-span-2 lg:col-span-3"
               />
             </dl>
           </section>
@@ -237,7 +233,7 @@ function SessionDetail({ session }: { session: ClassSession }) {
           </section>
         </div>
 
-        <aside className="grid gap-4">
+        <aside className="grid w-full min-w-0 max-w-[360px] gap-4">
           <section className="rounded-lg border bg-card p-[18px]">
             <h2 className="text-sm font-bold">Ringkasan Presensi Sesi Ini</h2>
             <div className="mt-3 grid grid-cols-4 gap-2">
@@ -788,19 +784,19 @@ function SessionStatus({ session }: { session: ClassSession }) {
 function SessionDetailSkeleton() {
   return (
     <div
-      className="mx-auto max-w-[1120px] animate-pulse"
+      className="mx-auto w-full min-w-0 animate-pulse"
       aria-busy="true"
       aria-label="Memuat detail sesi"
     >
       <div className="h-4 w-56 rounded bg-muted" />
       <div className="mt-2 h-8 w-72 rounded bg-muted" />
-      <div className="mt-5 grid gap-[18px] xl:grid-cols-[minmax(0,780px)_minmax(260px,1fr)]">
-        <div className="grid gap-4">
+      <div className="mt-5 grid gap-[18px] xl:grid-cols-[minmax(0,1fr)_minmax(260px,360px)]">
+        <div className="grid min-w-0 gap-4">
           <div className="h-40 rounded-lg border bg-card" />
           <div className="h-52 rounded-lg border bg-card" />
           <div className="h-96 rounded-lg border bg-card" />
         </div>
-        <div className="grid content-start gap-4">
+        <div className="grid w-full min-w-0 max-w-[360px] content-start gap-4">
           <div className="h-36 rounded-lg border bg-card" />
           <div className="h-52 rounded-lg border bg-card" />
         </div>
@@ -830,10 +826,7 @@ function sessionDuration(session: ClassSession) {
 function roomLabel(session: ClassSession) {
   if (!session.roomName) return 'Belum ada ruangan'
   const code = session.roomCode ? ` (${session.roomCode})` : ''
-  const capacity = session.roomCapacity
-    ? ` · Kapasitas ${session.roomCapacity} siswa`
-    : ''
-  return `${session.roomName}${code}${capacity}`
+  return `${session.roomName}${code}`
 }
 
 function initials(name: string) {
