@@ -1,10 +1,10 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
-import { BookOpen, CalendarDays, CheckCircle2, Eye, MoreHorizontal, PauseCircle, Pencil, Search, UserCheck, UserX } from 'lucide-react'
+import { BookOpen, CalendarDays, CheckCircle2, Eye, MoreHorizontal, PauseCircle, Pencil, UserCheck, UserX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { useStudyGroups, useStudyGroupsSummary, useUpdateStudyGroupStatus } from '@/features/study-groups/hooks/use-study-groups'
 import type { StudyGroupFilters, StudyGroupListItem } from '@/features/study-groups/api/study-groups-api'
 
@@ -46,9 +46,23 @@ export function StudyGroupManagement({ filters, onFiltersChange }: { filters: St
       </section>
       <section className="rounded-lg border border-border bg-card p-4">
         <form className="flex flex-col gap-3 sm:flex-row" onSubmit={submit}>
-          <div className="relative min-w-0 flex-1">
-            <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-            <Input name="search" defaultValue={filters.search} className="pl-9" placeholder="Cari nama kelompok atau nama tentor" />
+          <div className="min-w-0 flex-1">
+            <label htmlFor="study-group-search" className="sr-only">
+              Cari nama kelompok atau nama tentor
+            </label>
+            <DebouncedSearchInput
+              id="study-group-search"
+              name="search"
+              value={filters.search}
+              onSearch={(search) =>
+                onFiltersChange({
+                  ...filters,
+                  page: 1,
+                  search: search || undefined,
+                })
+              }
+              placeholder="Cari nama kelompok atau nama tentor"
+            />
           </div>
           <select name="status" defaultValue={filters.status ?? ''} className="h-10 rounded-md border border-border bg-white px-3 text-sm">
             <option value="">Semua status</option>

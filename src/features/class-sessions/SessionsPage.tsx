@@ -15,12 +15,11 @@ import {
   ChevronRight,
   MoreHorizontal,
   PauseCircle,
-  Search,
   SlidersHorizontal,
 } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import {
@@ -45,7 +44,6 @@ export function SessionsPage() {
   const to = shiftDate(from, 6)
   const page = Math.max(1, Number(params.get('page')) || 1)
   const [view, setView] = useState<'list' | 'calendar'>('list')
-  const [searchText, setSearchText] = useState(params.get('search') ?? '')
   const tutor = getStoredAuthUser()?.role === 'tutor'
   const calendarView = view === 'calendar'
   const query = useSessions({
@@ -79,7 +77,8 @@ export function SessionsPage() {
 
   function search(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    change('search', searchText.trim())
+    const value = new FormData(event.currentTarget).get('search')
+    change('search', typeof value === 'string' ? value.trim() : '')
   }
 
   const summary = summaryQuery.data?.data
@@ -190,21 +189,16 @@ export function SessionsPage() {
       >
         {!calendarView ? (
           <form className="flex flex-col gap-3 md:flex-row" onSubmit={search}>
-            <div className="relative min-w-0 flex-1">
+            <div className="min-w-0 flex-1">
               <label htmlFor="session-search" className="sr-only">
                 Cari nama kelompok atau tentor
               </label>
-              <Search
-                className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
-              <Input
+              <DebouncedSearchInput
                 id="session-search"
-                type="search"
-                value={searchText}
-                className="h-10 bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium"
+                name="search"
+                value={params.get('search') ?? ''}
                 placeholder="Cari nama kelompok atau tentor"
-                onChange={(event) => setSearchText(event.target.value)}
+                onSearch={(value) => change('search', value)}
               />
             </div>
             <FilterSelect

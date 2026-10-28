@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Search, SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
+import { SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 
 import {
   getStaffTenantId,
@@ -122,23 +122,18 @@ export function StaffManagement() {
 
       <div className="mt-[22px] rounded-lg border bg-card p-[18px] shadow-sm">
         <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="relative min-w-0 flex-1">
+          <div className="min-w-0 flex-1">
             <label htmlFor="staff-search" className="sr-only">
               Cari pegawai
             </label>
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
+            <DebouncedSearchInput
               id="staff-search"
               value={search}
-              onChange={(event) => {
-                setSearch(event.target.value)
+              onSearch={(value) => {
+                setSearch(value)
                 setPage(1)
               }}
               placeholder="Cari nama atau email pegawai..."
-              className="h-10 bg-slate-50 pl-10"
             />
           </div>
           <div className="relative sm:w-36">

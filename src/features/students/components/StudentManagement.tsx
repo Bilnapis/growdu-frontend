@@ -14,7 +14,6 @@ import {
   Mail,
   MoreHorizontal,
   Pencil,
-  Search,
   SlidersHorizontal,
   UserRoundX,
   Users,
@@ -24,7 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
 import type {
   EntityStatus,
@@ -51,6 +50,7 @@ export function StudentManagement() {
     limit: pageSize,
   })
   const [dialog, setDialog] = useState<DialogState>(null)
+  const [searchResetKey, setSearchResetKey] = useState(0)
   const [notice, setNotice] = useState('')
   const [actionError, setActionError] = useState('')
   const [menuId, setMenuId] = useState<string | null>(null)
@@ -143,6 +143,7 @@ export function StudentManagement() {
 
   function resetFilters() {
     setFilters({ page: 1, limit: pageSize })
+    setSearchResetKey((current) => current + 1)
     setMenuId(null)
   }
 
@@ -226,20 +227,20 @@ export function StudentManagement() {
             <Label htmlFor="student-search" className="sr-only">
               Cari siswa
             </Label>
-            <div className="relative">
-              <Search
-                className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
-              <Input
-                key={filters.search ?? 'empty-search'}
-                id="student-search"
-                name="search"
-                defaultValue={filters.search}
-                placeholder="Cari nama siswa, sekolah, atau orang tua"
-                className="h-10 rounded-md border-[var(--color-border)] bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]"
-              />
-            </div>
+            <DebouncedSearchInput
+              key={searchResetKey}
+              id="student-search"
+              name="search"
+              value={filters.search}
+              onSearch={(search) =>
+                setFilters((current) => ({
+                  ...current,
+                  page: 1,
+                  search: search || undefined,
+                }))
+              }
+              placeholder="Cari nama siswa, sekolah, atau orang tua"
+            />
           </div>
           <div className="flex gap-3">
             <div className="relative">

@@ -15,7 +15,6 @@ import {
   Mail,
   MoreHorizontal,
   Pencil,
-  Search,
   SlidersHorizontal,
   UserRoundX,
   UserX,
@@ -25,7 +24,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 
 import { AddButton } from '@/components/ui/add-button'
-import { Input } from "@/components/ui/input";
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from "@/components/ui/label";
 import {
   type Tutor,
@@ -183,65 +182,65 @@ export function TutorManagement({
         ref={actionMenuBoundaryRef}
         className="relative mt-5 rounded-lg border border-[var(--color-border)] bg-white p-[18px]"
       >
+        <form
+          className="flex flex-col gap-3 md:flex-row md:items-center"
+          onSubmit={handleFilterSubmit}
+        >
+          <div className="min-w-0 flex-1">
+            <Label htmlFor="tutor-search" className="sr-only">
+              Cari tentor
+            </Label>
+            <DebouncedSearchInput
+              id="tutor-search"
+              name="search"
+              value={filters.search}
+              onSearch={(search) =>
+                onFiltersChange({
+                  ...filters,
+                  page: 1,
+                  search: search || undefined,
+                })
+              }
+              placeholder="Cari nama tentor, keahlian, atau jurusan"
+            />
+          </div>
+          <div className="flex gap-3">
+            <Label htmlFor="tutor-status" className="sr-only">
+              Filter status tentor
+            </Label>
+            <div className="relative">
+              <select
+                id="tutor-status"
+                name="status"
+                defaultValue={filters.status ?? ''}
+                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <option value="">Status</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Nonaktif</option>
+              </select>
+              <SlidersHorizontal
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
+                aria-hidden="true"
+              />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-3.5 text-[13px] font-semibold text-[var(--color-text)]"
+            >
+              Kelompok
+              <ChevronDown
+                className="h-4 w-4 text-[var(--color-muted)]"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        </form>
+
         {tutorsQuery.isPending ? <LoadingState /> : null}
         {tutorsQuery.isError ? <ErrorState /> : null}
         {tutorsQuery.data ? (
           <>
-            <form
-              className="flex flex-col gap-3 md:flex-row md:items-center"
-              onSubmit={handleFilterSubmit}
-            >
-              <div className="min-w-0 flex-1">
-                <Label htmlFor="tutor-search" className="sr-only">
-                  Cari tentor
-                </Label>
-                <div className="relative">
-                  <Search
-                    className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[var(--color-muted)]"
-                    aria-hidden="true"
-                  />
-                  <Input
-                    id="tutor-search"
-                    name="search"
-                    defaultValue={filters.search}
-                    placeholder="Cari nama tentor, keahlian, atau jurusan"
-                    className="h-10 rounded-md border-[var(--color-border)] bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Label htmlFor="tutor-status" className="sr-only">
-                  Filter status tentor
-                </Label>
-                <div className="relative">
-                  <select
-                    id="tutor-status"
-                    name="status"
-                    defaultValue={filters.status ?? ""}
-                    className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  >
-                    <option value="">Status</option>
-                    <option value="active">Aktif</option>
-                    <option value="inactive">Nonaktif</option>
-                  </select>
-                  <SlidersHorizontal
-                    className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
-                    aria-hidden="true"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-3.5 text-[13px] font-semibold text-[var(--color-text)]"
-                >
-                  Kelompok
-                  <ChevronDown
-                    className="h-4 w-4 text-[var(--color-muted)]"
-                    aria-hidden="true"
-                  />
-                </button>
-              </div>
-            </form>
-
             <div
               className="mt-[14px] overflow-x-auto rounded-md border focus-visible:ring-2 focus-visible:ring-ring"
               role="region"

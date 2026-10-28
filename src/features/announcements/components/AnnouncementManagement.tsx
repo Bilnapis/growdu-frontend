@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Megaphone, MoreHorizontal, Pencil, Search, Trash2 } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Megaphone, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 import {
   Link,
   useLocation,
@@ -7,7 +7,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import type { Announcement, AnnouncementStatus } from '../api/announcements-api'
 import {
   useAnnouncementMutations,
@@ -319,36 +319,17 @@ function AnnouncementSearch({
   initialValue: string
   onSearch: (value: string) => void
 }) {
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-  const inputRef = useRef<HTMLInputElement>(null)
-  useEffect(() => () => clearTimeout(timer.current), [])
-  useEffect(() => {
-    if (inputRef.current && inputRef.current.value.trim() !== initialValue) {
-      inputRef.current.value = initialValue
-    }
-  }, [initialValue])
   return (
-    <div className="relative min-w-0 flex-1">
+    <div className="min-w-0 flex-1">
       <label className="sr-only" htmlFor="announcement-search">
         Cari judul pengumuman
       </label>
-      <Search
-        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-        aria-hidden="true"
-      />
-      <Input
-        ref={inputRef}
+      <DebouncedSearchInput
         id="announcement-search"
-        type="search"
         maxLength={100}
-        defaultValue={initialValue}
+        value={initialValue}
         placeholder="Cari judul pengumuman..."
-        className="h-10 pl-9 text-[13px]"
-        onChange={(event) => {
-          clearTimeout(timer.current)
-          const value = event.target.value
-          timer.current = setTimeout(() => onSearch(value.trim()), 300)
-        }}
+        onSearch={onSearch}
       />
     </div>
   )

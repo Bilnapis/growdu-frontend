@@ -5,7 +5,6 @@ import {
   Eye,
   MoreHorizontal,
   Pencil,
-  Search,
   SlidersHorizontal,
   Users,
   Wrench,
@@ -18,7 +17,7 @@ import {
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
-import { Input } from '@/components/ui/input'
+import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
 import type { RoomListItem, RoomStatus } from '@/features/rooms/api/rooms-api'
 import { useRooms, useRoomsSummary } from '@/features/rooms/hooks/use-rooms'
@@ -31,7 +30,6 @@ export function RoomManagement() {
   const navigate = useNavigate()
   const location = useLocation()
   const [params, setParams] = useSearchParams()
-  const [searchText, setSearchText] = useState(params.get('search') ?? '')
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
   const [action, setAction] = useState<{
     room: RoomListItem
@@ -67,27 +65,13 @@ export function RoomManagement() {
     setParams(next, { replace: true })
   }, [params, setParams])
 
-  useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      const next = new URLSearchParams(params)
-      next.delete('capacity')
-      const value = searchText.trim()
-      if (value) next.set('search', value)
-      else next.delete('search')
-      next.delete('page')
-      if (next.toString() !== params.toString())
-        setParams(next, { replace: true })
-    }, 300)
-    return () => window.clearTimeout(timeout)
-  }, [params, searchText, setParams])
-
   function setFilter(key: string, value: string) {
     const next = new URLSearchParams(params)
     next.delete('capacity')
     if (value) next.set(key, value)
     else next.delete(key)
     next.delete('page')
-    setParams(next)
+    setParams(next, { replace: key === 'search' })
   }
 
   const forbidden =
@@ -161,20 +145,12 @@ export function RoomManagement() {
             <Label htmlFor="room-search" className="sr-only">
               Cari ruangan
             </Label>
-            <div className="relative">
-              <Search
-                className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
-              <Input
-                id="room-search"
-                type="search"
-                value={searchText}
-                placeholder="Cari nama ruangan atau kode"
-                className="h-10 rounded-md border-[var(--color-border)] bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]"
-                onChange={(event) => setSearchText(event.target.value)}
-              />
-            </div>
+            <DebouncedSearchInput
+              id="room-search"
+              value={search}
+              placeholder="Cari nama ruangan atau kode"
+              onSearch={(value) => setFilter('search', value)}
+            />
           </div>
           <div className="relative self-stretch md:self-auto">
             <Label htmlFor="room-status" className="sr-only">
