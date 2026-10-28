@@ -5,6 +5,7 @@ import { SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 
 import {
@@ -100,13 +101,17 @@ export function StaffManagement() {
           Akun pegawai berhasil dibuat.
         </p>
       ) : null}
-      <div className="mt-[22px] grid gap-[14px] sm:grid-cols-2">
+      <SummaryCardGrid
+        label="Ringkasan pegawai"
+        columns={2}
+        isLoading={activeQuery.isPending || inactiveQuery.isPending}
+      >
         <SummaryCard
           label="Pegawai Aktif"
           value={
             activeQuery.isError ? '—' : (activeQuery.data?.meta.total ?? '…')
           }
-          icon={<UsersRound className="h-[18px] w-[18px]" aria-hidden="true" />}
+          icon={UsersRound}
           tone="success"
         />
         <SummaryCard
@@ -116,10 +121,10 @@ export function StaffManagement() {
               ? '—'
               : (inactiveQuery.data?.meta.total ?? '…')
           }
-          icon={<UserRoundX className="h-[18px] w-[18px]" aria-hidden="true" />}
+          icon={UserRoundX}
           tone="muted"
         />
-      </div>
+      </SummaryCardGrid>
 
       <div className="mt-[22px] rounded-lg border bg-card p-[18px] shadow-sm">
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -328,41 +333,6 @@ export function StaffManagement() {
           }}
         />
       ) : null}
-    </section>
-  )
-}
-
-function SummaryCard({
-  label,
-  value,
-  icon,
-  tone,
-}: {
-  label: string
-  value: number | string
-  icon: React.ReactNode
-  tone: 'success' | 'muted'
-}) {
-  return (
-    <section
-      className="rounded-lg border bg-card p-4 shadow-sm"
-      aria-label={`${label}: ${value}`}
-    >
-      <div className="flex items-center gap-2">
-        <span
-          className={
-            tone === 'success'
-              ? 'grid h-8 w-8 place-items-center rounded-md bg-[var(--color-success-bg)] text-[var(--color-success)]'
-              : 'grid h-8 w-8 place-items-center rounded-md bg-slate-50 text-muted-foreground'
-          }
-        >
-          {icon}
-        </span>
-        <span className="text-xs font-bold text-muted-foreground">{label}</span>
-      </div>
-      <p className="mt-1.5 text-[26px] font-extrabold leading-[1.3] text-foreground">
-        {value}
-      </p>
     </section>
   )
 }

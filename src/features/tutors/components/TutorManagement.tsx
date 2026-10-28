@@ -18,8 +18,7 @@ import {
   SlidersHorizontal,
   UserRoundX,
   UserX,
-  Users,
-  type LucideIcon,
+  UsersRound,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -27,6 +26,7 @@ import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from '@/components/ui/label'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { type Tutor, type TutorStatus } from '@/features/tutors/api/tutors-api'
 import { useTutors, useUpdateTutor } from '@/features/tutors/hooks/use-tutors'
 
@@ -140,35 +140,35 @@ export function TutorManagement({
         </AddButton>
       </header>
 
-      <section
-        className="mt-5 grid gap-3.5 md:grid-cols-2 xl:grid-cols-4"
-        aria-label="Ringkasan tentor"
+      <SummaryCardGrid
+        label="Ringkasan tentor"
+        isLoading={tutorsQuery.isPending}
       >
         <SummaryCard
-          icon={Users}
+          icon={UsersRound}
           label="Tentor Aktif"
           value={summary.active || summary.total}
-          toneClass="bg-[var(--color-success-bg)] text-[var(--color-success)]"
+          tone="success"
         />
         <SummaryCard
           icon={UserRoundX}
           label="Nonaktif"
           value={summary.inactive}
-          toneClass="bg-[var(--color-gray-50)] text-[var(--color-muted)]"
+          tone="muted"
         />
         <SummaryCard
           icon={Mail}
           label="Tarif Mengajar Kosong"
           value={summary.missingRate}
-          toneClass="bg-[var(--color-warning-bg)] text-[var(--color-warning)]"
+          tone="warning"
         />
         <SummaryCard
           icon={BookOpen}
           label="Belum Masuk Kelompok"
           value={summary.missingGroup}
-          toneClass="bg-[var(--color-danger-bg)] text-[var(--color-danger)]"
+          tone="danger"
         />
-      </section>
+      </SummaryCardGrid>
 
       <section
         ref={actionMenuBoundaryRef}
@@ -370,36 +370,6 @@ export function TutorManagement({
         ) : null}
       </section>
     </div>
-  )
-}
-
-function SummaryCard({
-  icon: Icon,
-  label,
-  value,
-  toneClass,
-}: {
-  icon: LucideIcon
-  label: string
-  value: number
-  toneClass: string
-}) {
-  return (
-    <article className="rounded-lg border border-[var(--color-border)] bg-white p-4">
-      <div className="flex items-center gap-2">
-        <span
-          className={`grid h-8 w-8 shrink-0 place-items-center rounded-md ${toneClass}`}
-        >
-          <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-        </span>
-        <h2 className="min-w-0 text-xs font-bold leading-[1.3] text-[var(--color-muted)]">
-          {label}
-        </h2>
-      </div>
-      <p className="mt-1.5 text-[26px] font-bold leading-[1.3] text-[var(--color-text)]">
-        {value}
-      </p>
-    </article>
   )
 }
 

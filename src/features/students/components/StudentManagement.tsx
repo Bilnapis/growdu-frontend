@@ -17,6 +17,7 @@ import {
   SlidersHorizontal,
   UserRoundX,
   Users,
+  UsersRound,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
@@ -25,6 +26,7 @@ import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import type {
   EntityStatus,
@@ -87,29 +89,19 @@ export function StudentManagement() {
   }, [menuId])
 
   const summary = [
-    [
-      'Siswa Aktif',
-      summaryQuery.data?.active,
-      Users,
-      'bg-[var(--color-success-bg)] text-[var(--color-success)]',
-    ],
-    [
-      'Nonaktif',
-      summaryQuery.data?.inactive,
-      UserRoundX,
-      'bg-muted text-muted-foreground',
-    ],
+    ['Siswa Aktif', summaryQuery.data?.active, UsersRound, 'success'],
+    ['Nonaktif', summaryQuery.data?.inactive, UserRoundX, 'muted'],
     [
       'Kontak Orang Tua Kosong',
       summaryQuery.data?.missingParentContact,
       Mail,
-      'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
+      'warning',
     ],
     [
       'Belum Masuk Kelompok',
       summaryQuery.data?.withoutGroup,
       BookOpen,
-      'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
+      'danger',
     ],
   ] as const
 
@@ -189,29 +181,20 @@ export function StudentManagement() {
         </AddButton>
       </header>
 
-      <section
-        aria-label="Ringkasan siswa"
-        aria-busy={summaryQuery.isPending}
-        className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
+      <SummaryCardGrid
+        label="Ringkasan siswa"
+        isLoading={summaryQuery.isPending}
       >
-        {summary.map(([label, value, Icon, tone]) => (
-          <Card key={label} className="p-4 shadow-none">
-            <div className="flex items-center gap-2">
-              <span
-                className={`grid h-8 w-8 shrink-0 place-items-center rounded-md ${tone}`}
-              >
-                <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-              </span>
-              <h2 className="text-xs font-bold text-muted-foreground">
-                {label}
-              </h2>
-            </div>
-            <p className="mt-1.5 text-[26px] font-bold leading-[1.3]">
-              {value ?? '—'}
-            </p>
-          </Card>
+        {summary.map(([label, value, icon, tone]) => (
+          <SummaryCard
+            key={label}
+            label={label}
+            value={value}
+            icon={icon}
+            tone={tone}
+          />
         ))}
-      </section>
+      </SummaryCardGrid>
 
       <p role="status" className="sr-only">
         {notice}

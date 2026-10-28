@@ -6,7 +6,6 @@ import {
   useState,
 } from 'react'
 import {
-  type LucideIcon,
   BookOpen,
   CalendarDays,
   CheckCircle2,
@@ -20,6 +19,7 @@ import {
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -151,36 +151,35 @@ export function SessionsPage() {
         </div>
       </header>
 
-      <section
-        className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4"
-        aria-label="Ringkasan jadwal"
-        aria-busy={summaryQuery.isPending}
+      <SummaryCardGrid
+        label="Ringkasan jadwal"
+        isLoading={summaryQuery.isPending}
       >
         <SummaryCard
           icon={BookOpen}
           label="Total Sesi Jadwal"
           value={summaryQuery.data?.meta.total}
-          tone="blue"
+          tone="primary"
         />
         <SummaryCard
           icon={CheckCircle2}
           label="Sesi Terisi Presensi"
           value={completed}
-          tone="green"
+          tone="success"
         />
         <SummaryCard
           icon={PauseCircle}
           label="Belum Presensi"
           value={pending}
-          tone="gray"
+          tone="muted"
         />
         <SummaryCard
           icon={CalendarDays}
           label="Jadwal Hari Ini"
           value={todayCount}
-          tone="orange"
+          tone="warning"
         />
-      </section>
+      </SummaryCardGrid>
 
       <section
         className={
@@ -679,42 +678,6 @@ function SessionCard({
           {tutor ? 'Buka Sesi' : 'Detail Sesi'}
         </Link>
       </Button>
-    </article>
-  )
-}
-
-function SummaryCard({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: LucideIcon
-  label: string
-  value?: number
-  tone: 'blue' | 'green' | 'gray' | 'orange'
-}) {
-  const toneClass = {
-    blue: 'bg-[#D9ECFF] text-[#1F8FE5]',
-    green: 'bg-[#ECFDF3] text-[#027A48]',
-    gray: 'bg-[#F8FAFC] text-[#64748B]',
-    orange: 'bg-[#FFFAEB] text-[#B54708]',
-  }[tone]
-  return (
-    <article className="rounded-lg border border-[#E2E8F0] bg-white p-4">
-      <div className="flex items-center gap-2">
-        <span
-          className={`grid h-7 w-7 place-items-center rounded-md ${toneClass}`}
-        >
-          <Icon className="h-4 w-4" aria-hidden="true" />
-        </span>
-        <h2 className="text-xs font-semibold leading-[1.3] text-[#64748B]">
-          {label}
-        </h2>
-      </div>
-      <p className="mt-2 text-2xl font-bold leading-[1.3] text-[#0F172A]">
-        {value ?? '—'}
-      </p>
     </article>
   )
 }

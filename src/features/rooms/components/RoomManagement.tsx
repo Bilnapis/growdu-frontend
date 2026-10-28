@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import {
   CalendarDays,
   DoorOpen,
@@ -20,6 +20,7 @@ import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from '@/components/ui/label'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import type { RoomListItem, RoomStatus } from '@/features/rooms/api/rooms-api'
 import { useRooms, useRoomsSummary } from '@/features/rooms/hooks/use-rooms'
 import { ApiError } from '@/services/api-client'
@@ -107,37 +108,32 @@ export function RoomManagement() {
         </p>
       ) : null}
 
-      <section
-        aria-label="Ringkasan ruangan"
-        className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"
-      >
+      <SummaryCardGrid label="Ringkasan ruangan" isLoading={summary.isPending}>
         <SummaryCard
-          icon={<DoorOpen />}
+          icon={DoorOpen}
           label="Ruangan Aktif"
-          value={summary.data ? `${summary.data.activeRooms} Ruangan` : '—'}
+          value={summary.data ? `${summary.data.activeRooms}` : '—'}
           tone="success"
         />
         <SummaryCard
-          icon={<CalendarDays />}
-          label="Terpakai Hari Ini"
-          value={
-            summary.data ? `${summary.data.sessionsToday} Sesi Aktif` : '—'
-          }
+          icon={CalendarDays}
+          label="Sesi Aktif Hari Ini"
+          value={summary.data ? `${summary.data.sessionsToday}` : '—'}
           tone="primary"
         />
         <SummaryCard
-          icon={<Users />}
-          label="Total Kapasitas"
-          value={summary.data ? `${summary.data.totalCapacity} Siswa` : '—'}
+          icon={Users}
+          label="Total Kapasitas Siswa"
+          value={summary.data ? `${summary.data.totalCapacity}` : '—'}
           tone="warning"
         />
         <SummaryCard
-          icon={<Wrench />}
-          label="Nonaktif"
-          value={summary.data ? `${summary.data.inactiveRooms} Ruangan` : '—'}
+          icon={Wrench}
+          label="Ruangan Nonaktif"
+          value={summary.data ? `${summary.data.inactiveRooms}` : '—'}
           tone="muted"
         />
-      </section>
+      </SummaryCardGrid>
 
       <section
         className="rounded-xl border border-border bg-card p-4 sm:p-5"
@@ -363,38 +359,6 @@ export function RoomManagement() {
         />
       ) : null}
     </div>
-  )
-}
-
-function SummaryCard({
-  icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: ReactNode
-  label: string
-  value: string
-  tone: 'success' | 'primary' | 'warning' | 'muted'
-}) {
-  const toneClass = {
-    success: 'bg-emerald-50 text-emerald-700',
-    primary: 'bg-blue-50 text-blue-700',
-    warning: 'bg-amber-50 text-amber-700',
-    muted: 'bg-slate-100 text-slate-600',
-  }[tone]
-  return (
-    <article className="rounded-xl border border-border bg-card p-4">
-      <div className="flex items-center gap-2">
-        <span
-          className={`grid h-8 w-8 place-items-center rounded-md [&>svg]:h-[18px] [&>svg]:w-[18px] ${toneClass}`}
-        >
-          {icon}
-        </span>
-        <h2 className="text-xs font-bold text-muted-foreground">{label}</h2>
-      </div>
-      <p className="mt-2 text-xl font-bold">{value}</p>
-    </article>
   )
 }
 

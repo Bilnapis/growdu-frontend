@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import {
   useStudyGroups,
@@ -71,35 +72,35 @@ export function StudyGroupManagement({
           Tambah Kelompok
         </AddButton>
       </header>
-      <section
-        className="grid gap-3.5 sm:grid-cols-2 xl:grid-cols-4"
-        aria-label="Ringkasan kelompok belajar"
+      <SummaryCardGrid
+        label="Ringkasan kelompok belajar"
+        isLoading={summary.isPending}
       >
-        <Metric
+        <SummaryCard
           icon={BookOpen}
           label="Total Kelompok"
           value={summary.data?.total}
-          tone="blue"
+          tone="primary"
         />
-        <Metric
+        <SummaryCard
           icon={CheckCircle2}
           label="Aktif"
           value={summary.data?.active}
-          tone="green"
+          tone="success"
         />
-        <Metric
+        <SummaryCard
           icon={PauseCircle}
           label="Nonaktif"
           value={summary.data?.inactive}
-          tone="gray"
+          tone="muted"
         />
-        <Metric
+        <SummaryCard
           icon={CalendarDays}
           label="Jadwal Hari Ini"
           value={summary.data?.schedulesToday}
-          tone="orange"
+          tone="warning"
         />
-      </section>
+      </SummaryCardGrid>
       <section className="rounded-lg border border-border bg-card p-4">
         <form className="flex flex-col gap-3 sm:flex-row" onSubmit={submit}>
           <div className="min-w-0 flex-1">
@@ -462,44 +463,6 @@ function StudyGroupRowActions({
   )
 }
 
-type MetricTone = 'blue' | 'green' | 'gray' | 'orange'
-
-const metricToneClass: Record<MetricTone, string> = {
-  blue: 'bg-[#D9ECFF] text-[#1F8FE5]',
-  green: 'bg-[#ECFDF3] text-[#027A48]',
-  gray: 'bg-[#F8FAFC] text-[#64748B]',
-  orange: 'bg-[#FFFAEB] text-[#B54708]',
-}
-
-function Metric({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: typeof BookOpen
-  label: string
-  value?: number
-  tone: MetricTone
-}) {
-  return (
-    <div className="rounded-lg border border-[#E2E8F0] bg-white p-4">
-      <div className="flex items-center gap-2">
-        <span
-          className={`grid h-7 w-7 place-items-center rounded-md ${metricToneClass[tone]}`}
-        >
-          <Icon className="h-4 w-4" aria-hidden="true" />
-        </span>
-        <p className="text-xs font-semibold leading-[1.3] text-[#64748B]">
-          {label}
-        </p>
-      </div>
-      <p className="mt-2 text-2xl font-bold leading-[1.3] text-[#0F172A]">
-        {value ?? '—'}
-      </p>
-    </div>
-  )
-}
 function formString(value: FormDataEntryValue | null) {
   return typeof value === 'string' ? value : ''
 }
