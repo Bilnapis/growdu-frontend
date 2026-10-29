@@ -19,7 +19,7 @@ export function RoomEditPage() {
   const status = query.error instanceof ApiError ? query.error.status : 0
   const dismiss = () => void navigate('/rooms', { replace: true })
   return (
-    <Dialog title="Edit Ruangan" onDismiss={dismiss}>
+    <Dialog title="Ubah Ruangan" onDismiss={dismiss}>
       <DialogBody>
         {query.isPending ? (
           <p role="status" className="mt-5 text-sm text-muted-foreground">

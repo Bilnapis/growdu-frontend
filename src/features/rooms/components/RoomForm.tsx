@@ -148,7 +148,7 @@ export function RoomForm({
 
   return (
     <Dialog
-      title={room ? 'Edit Ruangan' : 'Tambah Ruangan'}
+      title={room ? 'Ubah Ruangan' : 'Tambah Ruangan'}
       description={
         room
           ? `Perbarui informasi ${room.name} (${room.code}).`
