@@ -38,6 +38,8 @@
   --color-info-bg: #eff8ff;
   --color-info-text: #175cd3;
   --color-info-border: #b2ddff;
+  --color-purple-bg: #f4f3ff;
+  --color-purple-text: #6941c6;
 
   /* Semantic colors from design.pen / Color Tokens (up7D4N). */
   --color-bg: var(--color-neutral-50);

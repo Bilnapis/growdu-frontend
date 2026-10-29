@@ -19,7 +19,7 @@ type Metric = {
   value: string
   helper: string
   icon: LucideIcon
-  tone: 'success' | 'primary' | 'warning' | 'danger'
+  tone: 'success' | 'purple' | 'info' | 'warning' | 'danger'
 }
 
 type OperationalAlert = {
@@ -41,14 +41,14 @@ const metrics: readonly Metric[] = [
     value: 'Rp 18,6 jt',
     helper: 'Payroll bulan ini',
     icon: Wallet,
-    tone: 'primary',
+    tone: 'purple',
   },
   {
     label: 'Siswa Aktif',
     value: '184',
     helper: '12 siswa baru',
     icon: Users,
-    tone: 'primary',
+    tone: 'success',
   },
   {
     label: 'Invoice Pending',
@@ -69,7 +69,7 @@ const metrics: readonly Metric[] = [
     value: '38',
     helper: '5 jadwal hari ini',
     icon: BookOpen,
-    tone: 'primary',
+    tone: 'info',
   },
   {
     label: 'Presensi Hari Ini',
@@ -151,7 +151,8 @@ const financeItems = [
 
 const metricToneClasses = {
   success: 'bg-[var(--color-success-bg)] text-[var(--color-success)]',
-  primary: 'bg-[var(--color-primary-soft)] text-primary-text',
+  purple: 'bg-[var(--color-purple-bg)] text-[var(--color-purple-text)]',
+  info: 'bg-[var(--color-info-bg)] text-[var(--color-info-text)]',
   warning: 'bg-[var(--color-warning-bg)] text-[var(--color-warning)]',
   danger: 'bg-[var(--color-danger-bg)] text-[var(--color-danger)]',
 } as const
