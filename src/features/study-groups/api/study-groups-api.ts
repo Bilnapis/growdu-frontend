@@ -76,6 +76,7 @@ export type StudyGroupFilters = {
 }
 export type StudyGroupsSummary = {
   total: number
+  previousMonthTotal: number
   active: number
   inactive: number
   schedulesToday: number

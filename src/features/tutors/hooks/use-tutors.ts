@@ -5,6 +5,7 @@ import {
   getTutor,
   getTutorFormOptions,
   getTutors,
+  getTutorsSummary,
   type TutorFormOptions,
   type TutorInput,
   type TutorsFilters,
@@ -13,6 +14,13 @@ import {
 
 export const tutorsQueryKey = ['tutors'] as const
 export const tutorFormOptionsQueryKey = [...tutorsQueryKey, 'form-options'] as const
+
+export function useTutorsSummary() {
+  return useQuery({
+    queryKey: [...tutorsQueryKey, 'summary'],
+    queryFn: ({ signal }) => getTutorsSummary(signal),
+  })
+}
 
 export function useTutors(filters: TutorsFilters) {
   return useQuery({

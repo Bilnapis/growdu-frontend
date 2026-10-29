@@ -2,6 +2,11 @@ import { apiRequest } from '@/services/api-client'
 
 export type TutorStatus = 'active' | 'inactive'
 
+export type TutorsSummary = {
+  active: number
+  previousMonthActive: number | null
+}
+
 export type Tutor = {
   id: string
   tenantId: string
@@ -72,6 +77,10 @@ export function getTutors(filters: TutorsFilters, signal?: AbortSignal) {
   return apiRequest<PaginatedTutorsResponse>(`/tutors?${params.toString()}`, {
     signal,
   })
+}
+
+export function getTutorsSummary(signal?: AbortSignal) {
+  return apiRequest<TutorsSummary>('/tutors/summary', { signal })
 }
 
 export function createTutor(input: TutorInput) {

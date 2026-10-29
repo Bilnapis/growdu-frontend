@@ -95,6 +95,7 @@ type PaginatedStudentsResponse = {
 
 export type StudentsSummary = {
   active: number
+  previousMonthActive: number | null
   inactive: number
   missingParentContact: number
   withoutGroup: number
