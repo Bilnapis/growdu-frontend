@@ -96548,7 +96548,7 @@
                           "content": "Matematika Intensif",
                           "fontFamily": "$bk-font",
                           "fontSize": 13,
-                          "fontWeight": "700"
+                          "fontWeight": "600"
                         }
                       ]
                     }
@@ -96685,7 +96685,7 @@
                           "content": "TIK Lanjutan",
                           "fontFamily": "$bk-font",
                           "fontSize": 13,
-                          "fontWeight": "700"
+                          "fontWeight": "600"
                         }
                       ]
                     }

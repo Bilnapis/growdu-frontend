@@ -1,14 +1,15 @@
-import {
-  type FormEvent,
-  type ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { type FormEvent, type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AlertCircle, Info, Plus, Search, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 import './study-group-form.css'
 import type { StudyGroup } from '@/features/study-groups/api/study-groups-api'
 import {
@@ -72,7 +73,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
   const [educationStage, setEducationStage] = useState('all')
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const studentSearchRef = useRef<HTMLInputElement>(null)
   const tutors = useStudyGroupOptions('tutors')
   const rooms = useStudyGroupOptions('rooms')
   const students = useStudyGroupOptions('students')
@@ -107,15 +107,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
             .toLocaleUpperCase('id')
             .startsWith(educationStage)),
     ) ?? []
-  useEffect(() => {
-    if (!pickerOpen) return
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setPickerOpen(false)
-    }
-    window.addEventListener('keydown', closeOnEscape)
-    studentSearchRef.current?.focus()
-    return () => window.removeEventListener('keydown', closeOnEscape)
-  }, [pickerOpen])
 
   function openStudentPicker() {
     setPickerStudentIds(studentIds)
@@ -616,172 +607,154 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
         </footer>
       </form>
       {pickerOpen ? (
-        <div
-          className="study-group-form__modal-backdrop"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setPickerOpen(false)
-          }}
+        <Dialog
+          id="group-student-picker"
+          title="Pilih Siswa Peserta"
+          description="Silahkan pilih siswa dengan menekan tombol centang"
+          initialFocusSelector="#group-student-search"
+          isPending={pending}
+          onDismiss={() => setPickerOpen(false)}
         >
-          <section
-            id="group-student-picker"
-            className="study-group-form__modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="student-picker-title"
-            aria-describedby="student-picker-description"
+          <DialogForm
+            onSubmit={(event) => {
+              event.preventDefault()
+              if (pending || students.isPending || students.isError) return
+              setStudentIds(pickerStudentIds)
+              setPickerOpen(false)
+            }}
           >
-            <header className="study-group-form__modal-header">
-              <div>
-                <h2 id="student-picker-title">Pilih Siswa Peserta</h2>
-                <p id="student-picker-description">
-                  Silahkan pilih siswa dengan menekan tombol centang
-                </p>
+            <DialogBody>
+              <div className="study-group-form__picker-toolbar">
+                <label className="study-group-form__search">
+                  <Search aria-hidden="true" />
+                  <span className="sr-only">Cari siswa</span>
+                  <input
+                    id="group-student-search"
+                    type="search"
+                    value={studentSearch}
+                    placeholder="Cari nama siswa, sekolah, atau alamat"
+                    onChange={(event) => setStudentSearch(event.target.value)}
+                  />
+                </label>
+                <label className="sr-only" htmlFor="student-education-stage">
+                  Filter jenjang
+                </label>
+                <select
+                  id="student-education-stage"
+                  className="study-group-form__picker-filter"
+                  value={educationStage}
+                  onChange={(event) => setEducationStage(event.target.value)}
+                >
+                  <option value="all">Semua Jenjang</option>
+                  <option value="SD">SD</option>
+                  <option value="SMP">SMP</option>
+                  <option value="SMA">SMA</option>
+                </select>
               </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label="Tutup pilih siswa"
+              {students.isPending ? (
+                <p role="status" className="study-group-form__picker-message">
+                  Memuat data siswa...
+                </p>
+              ) : students.isError ? (
+                <p
+                  role="alert"
+                  className="study-group-form__picker-message study-group-form__error"
+                >
+                  Data siswa belum dapat dimuat.{' '}
+                  <button type="button" onClick={() => void students.refetch()}>
+                    Coba lagi
+                  </button>
+                </p>
+              ) : (
+                <div className="study-group-form__picker-table-wrap">
+                  <table className="study-group-form__picker-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <input
+                            type="checkbox"
+                            aria-label="Pilih semua siswa yang ditampilkan"
+                            checked={
+                              pickerStudents.length > 0 &&
+                              pickerStudents.every((student) =>
+                                pickerStudentIds.includes(student.id),
+                              )
+                            }
+                            onChange={(event) =>
+                              setPickerStudentIds((current) => {
+                                const visibleIds = pickerStudents.map(
+                                  (student) => student.id,
+                                )
+                                return event.target.checked
+                                  ? [...new Set([...current, ...visibleIds])]
+                                  : current.filter(
+                                      (id) => !visibleIds.includes(id),
+                                    )
+                              })
+                            }
+                          />
+                        </th>
+                        <th scope="col">Nama Siswa</th>
+                        <th scope="col">Jenjang / Sekolah</th>
+                        <th scope="col">Alamat</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pickerStudents.map((student) => {
+                        const isSelected = pickerStudentIds.includes(student.id)
+                        return (
+                          <tr key={student.id} data-selected={isSelected}>
+                            <td>
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                aria-label={`Pilih ${student.name}`}
+                                onChange={() => togglePickerStudent(student.id)}
+                              />
+                            </td>
+                            <td>{student.name}</td>
+                            <td>
+                              {student.educationLevel} / {student.school}
+                            </td>
+                            <td>{student.address}</td>
+                            <td>
+                              <span className="study-group-form__status">
+                                Aktif
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                  {pickerStudents.length === 0 ? (
+                    <p className="study-group-form__picker-message">
+                      Tidak ada siswa yang sesuai dengan pencarian atau filter.
+                    </p>
+                  ) : null}
+                </div>
+              )}
+            </DialogBody>
+            <DialogFooter
+              description={`${pickerStudentIds.length} siswa terpilih untuk ditambahkan`}
+            >
+              <DialogButton
+                variant="outline"
+                disabled={pending}
                 onClick={() => setPickerOpen(false)}
               >
-                <X aria-hidden="true" />
-              </Button>
-            </header>
-            <div className="study-group-form__modal-toolbar">
-              <label className="study-group-form__search">
-                <Search aria-hidden="true" />
-                <span className="sr-only">Cari siswa</span>
-                <input
-                  ref={studentSearchRef}
-                  type="search"
-                  value={studentSearch}
-                  placeholder="Cari nama siswa, sekolah, atau alamat"
-                  onChange={(event) => setStudentSearch(event.target.value)}
-                />
-              </label>
-              <label className="sr-only" htmlFor="student-education-stage">
-                Filter jenjang
-              </label>
-              <select
-                id="student-education-stage"
-                className="study-group-form__modal-filter"
-                value={educationStage}
-                onChange={(event) => setEducationStage(event.target.value)}
+                Batal
+              </DialogButton>
+              <DialogButton
+                type="submit"
+                disabled={pending || students.isPending || students.isError}
               >
-                <option value="all">Semua Jenjang</option>
-                <option value="SD">SD</option>
-                <option value="SMP">SMP</option>
-                <option value="SMA">SMA</option>
-              </select>
-            </div>
-            {students.isPending ? (
-              <p role="status" className="study-group-form__modal-message">
-                Memuat data siswa...
-              </p>
-            ) : students.isError ? (
-              <p
-                role="alert"
-                className="study-group-form__modal-message study-group-form__error"
-              >
-                Data siswa belum dapat dimuat.{' '}
-                <button type="button" onClick={() => void students.refetch()}>
-                  Coba lagi
-                </button>
-              </p>
-            ) : (
-              <div className="study-group-form__modal-table-wrap">
-                <table className="study-group-form__modal-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">
-                        <input
-                          type="checkbox"
-                          aria-label="Pilih semua siswa yang ditampilkan"
-                          checked={
-                            pickerStudents.length > 0 &&
-                            pickerStudents.every((student) =>
-                              pickerStudentIds.includes(student.id),
-                            )
-                          }
-                          onChange={(event) =>
-                            setPickerStudentIds((current) => {
-                              const visibleIds = pickerStudents.map(
-                                (student) => student.id,
-                              )
-                              return event.target.checked
-                                ? [...new Set([...current, ...visibleIds])]
-                                : current.filter(
-                                    (id) => !visibleIds.includes(id),
-                                  )
-                            })
-                          }
-                        />
-                      </th>
-                      <th scope="col">Nama Siswa</th>
-                      <th scope="col">Jenjang / Sekolah</th>
-                      <th scope="col">Alamat</th>
-                      <th scope="col">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pickerStudents.map((student) => {
-                      const isSelected = pickerStudentIds.includes(student.id)
-                      return (
-                        <tr key={student.id} data-selected={isSelected}>
-                          <td>
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              aria-label={`Pilih ${student.name}`}
-                              onChange={() => togglePickerStudent(student.id)}
-                            />
-                          </td>
-                          <td>{student.name}</td>
-                          <td>
-                            {student.educationLevel} / {student.school}
-                          </td>
-                          <td>{student.address}</td>
-                          <td>
-                            <span className="study-group-form__status">
-                              Aktif
-                            </span>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-                {pickerStudents.length === 0 ? (
-                  <p className="study-group-form__modal-message">
-                    Tidak ada siswa yang sesuai dengan pencarian atau filter.
-                  </p>
-                ) : null}
-              </div>
-            )}
-            <footer className="study-group-form__modal-footer">
-              <p>{pickerStudentIds.length} siswa terpilih untuk ditambahkan</p>
-              <div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setPickerOpen(false)}
-                >
-                  Batal
-                </Button>
-                <Button
-                  type="button"
-                  disabled={students.isPending || students.isError}
-                  onClick={() => {
-                    setStudentIds(pickerStudentIds)
-                    setPickerOpen(false)
-                  }}
-                >
-                  Tambahkan Siswa
-                </Button>
-              </div>
-            </footer>
-          </section>
-        </div>
+                Tambahkan Siswa
+              </DialogButton>
+            </DialogFooter>
+          </DialogForm>
+        </Dialog>
       ) : null}
     </div>
   )

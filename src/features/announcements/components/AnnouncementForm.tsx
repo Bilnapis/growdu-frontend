@@ -1,7 +1,5 @@
 import { useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { X } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { Announcement, AnnouncementTarget } from '../api/announcements-api'
@@ -13,7 +11,13 @@ import {
   targetLabels,
   toJakartaInput,
 } from '../utils/announcements'
-import { AnnouncementDialog } from './AnnouncementDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 
 type FormValues = {
   title: string
@@ -127,161 +131,136 @@ export function AnnouncementForm({
   }
 
   return (
-    <AnnouncementDialog
-      pending={pending}
+    <Dialog
+      title={announcement ? 'Ubah Pengumuman' : 'Buat Pengumuman Baru'}
+      description="Isi detail pengumuman dan pilih target role dashboard."
+      isPending={pending}
       onDismiss={dismiss}
-      labelledBy="announcement-form-title"
+      initialFocusSelector="#announcement-title"
+      returnFocusSelector="[data-announcement-trigger]"
     >
-      <header className="mb-4 flex items-start justify-between gap-4">
-        <div>
-          <h1
-            id="announcement-form-title"
-            className="text-xl font-extrabold leading-[1.3]"
-          >
-            {announcement ? 'Ubah Pengumuman' : 'Buat Pengumuman Baru'}
-          </h1>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            Isi detail pengumuman dan pilih target role dashboard.
-          </p>
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          disabled={pending}
-          onClick={dismiss}
-          aria-label="Tutup modal pengumuman"
-          className="h-[34px] w-[34px] shrink-0 bg-muted"
-        >
-          <X className="h-[18px] w-[18px]" aria-hidden="true" />
-        </Button>
-      </header>
-      <form ref={formRef} onSubmit={submit} noValidate>
-        <fieldset disabled={pending} className="grid min-w-0 gap-4">
-          <Field
-            id="announcement-title"
-            label="Judul Pengumuman"
-            error={submitted ? errors.title : undefined}
-          >
-            <Input
+      <DialogForm ref={formRef} onSubmit={submit} noValidate>
+        <DialogBody>
+          <fieldset disabled={pending} className="grid min-w-0 gap-4">
+            <Field
               id="announcement-title"
-              required
-              maxLength={150}
-              autoFocus
-              value={values.title}
-              onChange={(event) => setField('title', event.target.value)}
-              placeholder="Contoh: Libur Maulid Nabi"
-              className="h-[42px] rounded-lg bg-card text-[13px]"
-              aria-invalid={submitted && Boolean(errors.title)}
-              aria-describedby={
-                submitted && errors.title
-                  ? 'announcement-title-error'
-                  : undefined
-              }
-            />
-          </Field>
-          <Field
-            id="announcement-content"
-            label="Isi Pengumuman"
-            error={submitted ? errors.content : undefined}
-          >
-            <textarea
+              label="Judul Pengumuman"
+              error={submitted ? errors.title : undefined}
+            >
+              <Input
+                id="announcement-title"
+                required
+                maxLength={150}
+                value={values.title}
+                onChange={(event) => setField('title', event.target.value)}
+                placeholder="Contoh: Libur Maulid Nabi"
+                className="h-[42px] rounded-lg bg-card text-[13px]"
+                aria-invalid={submitted && Boolean(errors.title)}
+                aria-describedby={
+                  submitted && errors.title
+                    ? 'announcement-title-error'
+                    : undefined
+                }
+              />
+            </Field>
+            <Field
               id="announcement-content"
-              required
-              maxLength={10_000}
-              rows={5}
-              value={values.content}
-              onChange={(event) => setField('content', event.target.value)}
-              placeholder="Tuliskan detail pengumuman, instruksi, dan tanggal penting..."
-              className="min-h-[132px] w-full resize-y rounded-lg border border-input bg-card p-3 text-[13px] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              aria-invalid={submitted && Boolean(errors.content)}
-              aria-describedby={
-                submitted && errors.content
-                  ? 'announcement-content-error'
-                  : undefined
-              }
-            />
-          </Field>
-          <Field id="announcement-target" label="Target Role">
-            <select
-              id="announcement-target"
-              value={values.targetRole}
-              onChange={(event) => {
-                if (isAnnouncementTarget(event.target.value))
-                  setField('targetRole', event.target.value)
-              }}
-              className="h-[42px] w-full rounded-lg border border-input bg-card px-3 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              label="Isi Pengumuman"
+              error={submitted ? errors.content : undefined}
             >
-              {Object.entries(targetLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-            <Field
-              id="announcement-start"
-              label="Mulai Tampil"
-              error={submitted ? errors.startsAt : undefined}
-            >
-              <Input
+              <textarea
+                id="announcement-content"
+                required
+                maxLength={10_000}
+                rows={5}
+                value={values.content}
+                onChange={(event) => setField('content', event.target.value)}
+                placeholder="Tuliskan detail pengumuman, instruksi, dan tanggal penting..."
+                className="min-h-[132px] w-full resize-y rounded-lg border border-input bg-card p-3 text-[13px] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-invalid={submitted && Boolean(errors.content)}
+                aria-describedby={
+                  submitted && errors.content
+                    ? 'announcement-content-error'
+                    : undefined
+                }
+              />
+            </Field>
+            <Field id="announcement-target" label="Target Role">
+              <select
+                id="announcement-target"
+                value={values.targetRole}
+                onChange={(event) => {
+                  if (isAnnouncementTarget(event.target.value))
+                    setField('targetRole', event.target.value)
+                }}
+                className="h-[42px] w-full rounded-lg border border-input bg-card px-3 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {Object.entries(targetLabels).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+              <Field
                 id="announcement-start"
-                type="datetime-local"
-                value={values.startsAt}
-                onChange={(event) => setField('startsAt', event.target.value)}
-                className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
-                aria-invalid={submitted && Boolean(errors.startsAt)}
-                aria-describedby={`announcement-schedule-help${submitted && errors.startsAt ? ' announcement-start-error' : ''}`}
-              />
-            </Field>
-            <Field
-              id="announcement-end"
-              label="Berakhir"
-              error={submitted ? errors.endsAt : undefined}
-            >
-              <Input
+                label="Mulai Tampil"
+                error={submitted ? errors.startsAt : undefined}
+              >
+                <Input
+                  id="announcement-start"
+                  type="datetime-local"
+                  value={values.startsAt}
+                  onChange={(event) => setField('startsAt', event.target.value)}
+                  className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
+                  aria-invalid={submitted && Boolean(errors.startsAt)}
+                  aria-describedby={`announcement-schedule-help${submitted && errors.startsAt ? ' announcement-start-error' : ''}`}
+                />
+              </Field>
+              <Field
                 id="announcement-end"
-                type="datetime-local"
-                value={values.endsAt}
-                onChange={(event) => setField('endsAt', event.target.value)}
-                className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
-                aria-invalid={submitted && Boolean(errors.endsAt)}
-                aria-describedby={`announcement-schedule-help${submitted && errors.endsAt ? ' announcement-end-error' : ''}`}
-              />
-            </Field>
-          </div>
-          <p
-            id="announcement-schedule-help"
-            className="text-xs leading-relaxed text-muted-foreground"
-          >
-            Waktu menggunakan WIB. Kosongkan tanggal untuk menyimpan Draft.
-            Berakhir boleh dikosongkan agar tampil tanpa batas waktu.
-          </p>
-          {formError ? (
+                label="Berakhir"
+                error={submitted ? errors.endsAt : undefined}
+              >
+                <Input
+                  id="announcement-end"
+                  type="datetime-local"
+                  value={values.endsAt}
+                  onChange={(event) => setField('endsAt', event.target.value)}
+                  className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
+                  aria-invalid={submitted && Boolean(errors.endsAt)}
+                  aria-describedby={`announcement-schedule-help${submitted && errors.endsAt ? ' announcement-end-error' : ''}`}
+                />
+              </Field>
+            </div>
             <p
-              role="alert"
-              className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+              id="announcement-schedule-help"
+              className="text-xs leading-relaxed text-muted-foreground"
             >
-              {formError}
+              Waktu menggunakan WIB. Kosongkan tanggal untuk menyimpan Draft.
+              Berakhir boleh dikosongkan agar tampil tanpa batas waktu.
             </p>
-          ) : null}
-          <footer className="flex justify-end gap-2.5">
-            <Button
-              type="button"
-              variant="outline"
-              disabled={pending}
-              onClick={dismiss}
-            >
-              Batal
-            </Button>
-            <Button type="submit" disabled={pending}>
-              {pending ? 'Menyimpan...' : 'Simpan'}
-            </Button>
-          </footer>
-        </fieldset>
-      </form>
-    </AnnouncementDialog>
+            {formError ? (
+              <p
+                role="alert"
+                className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive"
+              >
+                {formError}
+              </p>
+            ) : null}
+          </fieldset>
+        </DialogBody>
+        <DialogFooter>
+          <DialogButton variant="outline" disabled={pending} onClick={dismiss}>
+            Batal
+          </DialogButton>
+          <DialogButton type="submit" disabled={pending}>
+            {pending ? 'Menyimpan...' : 'Simpan'}
+          </DialogButton>
+        </DialogFooter>
+      </DialogForm>
+    </Dialog>
   )
 }
 

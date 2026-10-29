@@ -20,7 +20,13 @@ import {
   type FormFieldErrors,
 } from '@/lib/yup-validation'
 import { ApiError } from '@/services/api-client'
-import { StudentDialog } from './StudentDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 
 type StudentRegistrationForm = {
   editing: boolean
@@ -294,282 +300,282 @@ export function StudentCreateForm({
   const issueCount = submitted ? validation.issues.length : 0
 
   return (
-    <StudentDialog
+    <Dialog
       title={isEditing ? 'Ubah Data Siswa' : 'Tambah Siswa'}
       isPending={isPending}
       onDismiss={onClose}
     >
-      <form className="space-y-4" onSubmit={handleSubmit} noValidate>
-        <fieldset disabled={isPending} className="space-y-3">
-          <FormSection
-            title="Data Siswa"
-            description="Identitas dasar yang dipakai pada kelompok belajar, invoice, dan laporan."
-          >
-            <div className="grid gap-3.5 md:grid-cols-2">
-              <FormField
-                id="student-name"
-                label="Nama siswa"
-                required
-                value={form.name}
-                error={visibleErrors.name}
-                onChange={(value) => updateField('name', value)}
-              />
-              <FormField
-                id="student-phone"
-                label="Nomor HP siswa"
-                value={form.phoneNumber}
-                error={visibleErrors.phoneNumber}
-                placeholder="Opsional"
-                type="tel"
-                isPhone
-                onChange={(value) => updateField('phoneNumber', value)}
-              />
-              <FormField
-                id="student-school"
-                label="Sekolah"
-                required
-                value={form.school}
-                error={visibleErrors.school}
-                placeholder="SMP Negeri 2 Bandung"
-                onChange={(value) => updateField('school', value)}
-              />
-              <SelectField
-                id="student-level"
-                label="Jenjang"
-                required
-                value={form.educationLevel}
-                error={visibleErrors.educationLevel}
-                onChange={(value) => updateField('educationLevel', value)}
-                options={educationOptions}
-                placeholder="Pilih jenjang"
-              />
-              <SelectField
-                id="student-gender"
-                label="Jenis kelamin"
-                required
-                value={form.gender}
-                error={visibleErrors.gender}
-                onChange={(value) => {
-                  if (value === '' || value === 'male' || value === 'female') {
-                    updateField('gender', value)
-                  }
-                }}
-                options={[
-                  { value: 'female', label: 'Perempuan' },
-                  { value: 'male', label: 'Laki-laki' },
-                ]}
-                placeholder="Pilih jenis kelamin"
-              />
-              <SelectField
-                id="student-status"
-                label="Status siswa"
-                required
-                value={form.status}
-                onChange={(value) => {
-                  if (value === 'active' || value === 'inactive') {
-                    updateField('status', value)
-                  }
-                }}
-                options={[
-                  { value: 'active', label: 'Aktif' },
-                  { value: 'inactive', label: 'Nonaktif' },
-                ]}
-              />
-              <div className="md:col-span-2">
-                <FormField
-                  id="student-address"
-                  label="Alamat siswa"
-                  required
-                  value={form.address}
-                  error={visibleErrors.address}
-                  placeholder="Jl. Melati No. 12, Bandung"
-                  onChange={(value) => updateField('address', value)}
-                />
-              </div>
-            </div>
-          </FormSection>
-
-          <FormSection
-            title="Data Orang Tua"
-            description="Tambahkan orang tua baru atau gunakan data orang tua yang sudah terdaftar."
-          >
-            {!isEditing ? (
-              <ParentSourceTabs
-                value={form.parentSource}
-                onChange={(value) => updateField('parentSource', value)}
-              />
-            ) : null}
-            {isEditing ? (
+      <DialogForm onSubmit={handleSubmit} noValidate>
+        <DialogBody>
+          <fieldset disabled={isPending} className="space-y-3">
+            <FormSection
+              title="Data Siswa"
+              description="Identitas dasar yang dipakai pada kelompok belajar, invoice, dan laporan."
+            >
               <div className="grid gap-3.5 md:grid-cols-2">
                 <FormField
-                  id="parent-name"
-                  label="Nama orang tua"
+                  id="student-name"
+                  label="Nama siswa"
                   required
-                  value={form.parentName}
-                  error={visibleErrors.parentName}
-                  onChange={(value) => updateField('parentName', value)}
+                  value={form.name}
+                  error={visibleErrors.name}
+                  onChange={(value) => updateField('name', value)}
                 />
                 <FormField
-                  id="parent-phone"
-                  label="Nomor HP orang tua"
-                  required
-                  value={form.parentPhoneNumber}
-                  error={visibleErrors.parentPhoneNumber}
+                  id="student-phone"
+                  label="Nomor HP siswa"
+                  value={form.phoneNumber}
+                  error={visibleErrors.phoneNumber}
+                  placeholder="Opsional"
                   type="tel"
                   isPhone
-                  onChange={(value) => updateField('parentPhoneNumber', value)}
+                  onChange={(value) => updateField('phoneNumber', value)}
                 />
                 <FormField
-                  id="parent-email"
-                  label="Email orang tua"
+                  id="student-school"
+                  label="Sekolah"
                   required
-                  value={form.parentEmail}
-                  error={visibleErrors.parentEmail}
-                  type="email"
-                  onChange={(value) => updateField('parentEmail', value)}
+                  value={form.school}
+                  error={visibleErrors.school}
+                  placeholder="SMP Negeri 2 Bandung"
+                  onChange={(value) => updateField('school', value)}
                 />
-              </div>
-            ) : form.parentSource === 'new' ? (
-              <div className="grid gap-3.5 md:grid-cols-2">
-                <FormField
-                  id="parent-name"
-                  label="Nama orang tua"
-                  required
-                  value={form.parentName}
-                  error={visibleErrors.parentName}
-                  onChange={(value) => updateField('parentName', value)}
-                />
-                <FormField
-                  id="parent-phone"
-                  label="Nomor HP orang tua"
-                  required
-                  value={form.parentPhoneNumber}
-                  error={visibleErrors.parentPhoneNumber}
-                  type="tel"
-                  isPhone
-                  onChange={(value) => updateField('parentPhoneNumber', value)}
-                />
-                <FormField
-                  id="parent-email"
-                  label="Email orang tua"
-                  required
-                  value={form.parentEmail}
-                  error={visibleErrors.parentEmail}
-                  type="email"
-                  onChange={(value) => updateField('parentEmail', value)}
-                />
-                <PasswordField
-                  id="parent-password"
-                  label="Kata sandi"
-                  value={form.password}
-                  visible={showPassword}
-                  error={visibleErrors.password}
-                  onToggle={() => setShowPassword((current) => !current)}
-                  onChange={(value) => updateField('password', value)}
-                />
-                <PasswordField
-                  id="parent-password-confirmation"
-                  label="Konfirmasi kata sandi"
-                  value={form.passwordConfirmation}
-                  visible={showConfirmation}
-                  error={visibleErrors.passwordConfirmation}
-                  onToggle={() => setShowConfirmation((current) => !current)}
-                  onChange={(value) =>
-                    updateField('passwordConfirmation', value)
-                  }
-                />
-              </div>
-            ) : (
-              <div>
                 <SelectField
-                  id="existing-parent"
-                  label="Data orang tua"
+                  id="student-level"
+                  label="Jenjang"
                   required
-                  value={form.existingParentId}
-                  error={visibleErrors.existingParentId}
-                  disabled={parentsQuery.isPending || parentsQuery.isError}
-                  onChange={(value) => updateField('existingParentId', value)}
-                  options={(parentsQuery.data?.data ?? []).map((parent) => ({
-                    value: parent.id,
-                    label: `${parent.name} · ${parent.contactEmail}`,
-                  }))}
-                  placeholder={
-                    parentsQuery.isPending
-                      ? 'Memuat data orang tua...'
-                      : parentsQuery.isError
-                        ? 'Data orang tua gagal dimuat'
-                        : 'Pilih orang tua'
-                  }
+                  value={form.educationLevel}
+                  error={visibleErrors.educationLevel}
+                  onChange={(value) => updateField('educationLevel', value)}
+                  options={educationOptions}
+                  placeholder="Pilih jenjang"
                 />
-                {parentsQuery.data?.data.length === 0 ? (
-                  <p className="mt-2 text-xs text-[var(--color-muted)]">
-                    Belum ada data orang tua aktif. Pilih “Orang tua baru”.
-                  </p>
-                ) : null}
+                <SelectField
+                  id="student-gender"
+                  label="Jenis kelamin"
+                  required
+                  value={form.gender}
+                  error={visibleErrors.gender}
+                  onChange={(value) => {
+                    if (
+                      value === '' ||
+                      value === 'male' ||
+                      value === 'female'
+                    ) {
+                      updateField('gender', value)
+                    }
+                  }}
+                  options={[
+                    { value: 'female', label: 'Perempuan' },
+                    { value: 'male', label: 'Laki-laki' },
+                  ]}
+                  placeholder="Pilih jenis kelamin"
+                />
+                <SelectField
+                  id="student-status"
+                  label="Status siswa"
+                  required
+                  value={form.status}
+                  onChange={(value) => {
+                    if (value === 'active' || value === 'inactive') {
+                      updateField('status', value)
+                    }
+                  }}
+                  options={[
+                    { value: 'active', label: 'Aktif' },
+                    { value: 'inactive', label: 'Nonaktif' },
+                  ]}
+                />
+                <div className="md:col-span-2">
+                  <FormField
+                    id="student-address"
+                    label="Alamat siswa"
+                    required
+                    value={form.address}
+                    error={visibleErrors.address}
+                    placeholder="Jl. Melati No. 12, Bandung"
+                    onChange={(value) => updateField('address', value)}
+                  />
+                </div>
               </div>
-            )}
-          </FormSection>
+            </FormSection>
 
-          <FormSection
-            title="Kelompok Awal"
-            description="Siswa bisa disimpan tanpa kelompok lalu ditambahkan dari Kelompok Belajar."
-          >
-            <SelectField
-              id="student-group"
-              label="Kelompok aktif"
-              value=""
-              disabled
-              onChange={() => undefined}
-              options={[]}
-              placeholder="Pilih kelompok"
-            />
-          </FormSection>
-        </fieldset>
+            <FormSection
+              title="Data Orang Tua"
+              description="Tambahkan orang tua baru atau gunakan data orang tua yang sudah terdaftar."
+            >
+              {!isEditing ? (
+                <ParentSourceTabs
+                  value={form.parentSource}
+                  onChange={(value) => updateField('parentSource', value)}
+                />
+              ) : null}
+              {isEditing ? (
+                <div className="grid gap-3.5 md:grid-cols-2">
+                  <FormField
+                    id="parent-name"
+                    label="Nama orang tua"
+                    required
+                    value={form.parentName}
+                    error={visibleErrors.parentName}
+                    onChange={(value) => updateField('parentName', value)}
+                  />
+                  <FormField
+                    id="parent-phone"
+                    label="Nomor HP orang tua"
+                    required
+                    value={form.parentPhoneNumber}
+                    error={visibleErrors.parentPhoneNumber}
+                    type="tel"
+                    isPhone
+                    onChange={(value) =>
+                      updateField('parentPhoneNumber', value)
+                    }
+                  />
+                  <FormField
+                    id="parent-email"
+                    label="Email orang tua"
+                    required
+                    value={form.parentEmail}
+                    error={visibleErrors.parentEmail}
+                    type="email"
+                    onChange={(value) => updateField('parentEmail', value)}
+                  />
+                </div>
+              ) : form.parentSource === 'new' ? (
+                <div className="grid gap-3.5 md:grid-cols-2">
+                  <FormField
+                    id="parent-name"
+                    label="Nama orang tua"
+                    required
+                    value={form.parentName}
+                    error={visibleErrors.parentName}
+                    onChange={(value) => updateField('parentName', value)}
+                  />
+                  <FormField
+                    id="parent-phone"
+                    label="Nomor HP orang tua"
+                    required
+                    value={form.parentPhoneNumber}
+                    error={visibleErrors.parentPhoneNumber}
+                    type="tel"
+                    isPhone
+                    onChange={(value) =>
+                      updateField('parentPhoneNumber', value)
+                    }
+                  />
+                  <FormField
+                    id="parent-email"
+                    label="Email orang tua"
+                    required
+                    value={form.parentEmail}
+                    error={visibleErrors.parentEmail}
+                    type="email"
+                    onChange={(value) => updateField('parentEmail', value)}
+                  />
+                  <PasswordField
+                    id="parent-password"
+                    label="Kata sandi"
+                    value={form.password}
+                    visible={showPassword}
+                    error={visibleErrors.password}
+                    onToggle={() => setShowPassword((current) => !current)}
+                    onChange={(value) => updateField('password', value)}
+                  />
+                  <PasswordField
+                    id="parent-password-confirmation"
+                    label="Konfirmasi kata sandi"
+                    value={form.passwordConfirmation}
+                    visible={showConfirmation}
+                    error={visibleErrors.passwordConfirmation}
+                    onToggle={() => setShowConfirmation((current) => !current)}
+                    onChange={(value) =>
+                      updateField('passwordConfirmation', value)
+                    }
+                  />
+                </div>
+              ) : (
+                <div>
+                  <SelectField
+                    id="existing-parent"
+                    label="Data orang tua"
+                    required
+                    value={form.existingParentId}
+                    error={visibleErrors.existingParentId}
+                    disabled={parentsQuery.isPending || parentsQuery.isError}
+                    onChange={(value) => updateField('existingParentId', value)}
+                    options={(parentsQuery.data?.data ?? []).map((parent) => ({
+                      value: parent.id,
+                      label: `${parent.name} · ${parent.contactEmail}`,
+                    }))}
+                    placeholder={
+                      parentsQuery.isPending
+                        ? 'Memuat data orang tua...'
+                        : parentsQuery.isError
+                          ? 'Data orang tua gagal dimuat'
+                          : 'Pilih orang tua'
+                    }
+                  />
+                  {parentsQuery.data?.data.length === 0 ? (
+                    <p className="mt-2 text-xs text-[var(--color-muted)]">
+                      Belum ada data orang tua aktif. Pilih “Orang tua baru”.
+                    </p>
+                  ) : null}
+                </div>
+              )}
+            </FormSection>
 
-        {formError ? (
-          <p
-            role="alert"
-            className="rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
-          >
-            {formError}
-          </p>
-        ) : null}
+            <FormSection
+              title="Kelompok Awal"
+              description="Siswa bisa disimpan tanpa kelompok lalu ditambahkan dari Kelompok Belajar."
+            >
+              <SelectField
+                id="student-group"
+                label="Kelompok aktif"
+                value=""
+                disabled
+                onChange={() => undefined}
+                options={[]}
+                placeholder="Pilih kelompok"
+              />
+            </FormSection>
+          </fieldset>
 
-        <footer className="sticky -bottom-5 -mx-5 flex flex-col gap-3 border-t border-[var(--color-border)] bg-white px-5 pb-1 pt-4 sm:-bottom-6 sm:-mx-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p
-            className="text-xs font-medium text-[var(--color-muted)]"
-            role="status"
-          >
-            {issueCount > 0
+          {formError ? (
+            <p
+              role="alert"
+              className="rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
+            >
+              {formError}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter
+          description={
+            issueCount > 0
               ? `${issueCount} validasi perlu diperbaiki sebelum menyimpan.`
               : isEditing
                 ? 'Perubahan hanya berlaku pada data siswa.'
-                : 'Data siswa dan orang tua akan disimpan bersamaan.'}
-          </p>
-          <div className="flex justify-end gap-2.5">
-            <button
-              type="button"
-              disabled={isPending}
-              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 text-[13px] font-semibold disabled:opacity-50"
-              onClick={onClose}
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={isPending}
-              className="inline-flex h-9 items-center justify-center rounded-md bg-[var(--color-primary)] px-4 text-[13px] font-semibold text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50"
-            >
-              {isPending
-                ? 'Menyimpan...'
-                : isEditing
-                  ? 'Simpan Perubahan'
-                  : 'Simpan Siswa'}
-            </button>
-          </div>
-        </footer>
-      </form>
-    </StudentDialog>
+                : 'Data siswa dan orang tua akan disimpan bersamaan.'
+          }
+        >
+          <DialogButton
+            variant="outline"
+            disabled={isPending}
+            onClick={onClose}
+          >
+            Batal
+          </DialogButton>
+          <DialogButton type="submit" disabled={isPending}>
+            {isPending
+              ? 'Menyimpan...'
+              : isEditing
+                ? 'Simpan Perubahan'
+                : 'Simpan Siswa'}
+          </DialogButton>
+        </DialogFooter>
+      </DialogForm>
+    </Dialog>
   )
 }
 
@@ -791,10 +797,12 @@ function ParentSourceTabs({
       aria-label="Sumber data orang tua"
       className="mb-3.5 grid grid-cols-2 overflow-hidden rounded border border-[var(--color-border)] bg-white"
     >
-      {([
-        ['new', 'Data baru'],
-        ['existing', 'Data yang sudah ada'],
-      ] as const).map(([source, label]) => {
+      {(
+        [
+          ['new', 'Data baru'],
+          ['existing', 'Data yang sudah ada'],
+        ] as const
+      ).map(([source, label]) => {
         const selected = value === source
 
         return (

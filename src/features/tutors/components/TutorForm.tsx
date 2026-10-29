@@ -1,9 +1,15 @@
 import { type FormEvent, useMemo, useState } from 'react'
-import { CheckCircle2, X } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { TutorDialog } from './TutorDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -215,216 +221,192 @@ export function TutorForm({
     }
   }
 
-  const content = (
-    <div className="min-w-0 font-sans text-[var(--color-text)]">
-      <header className="flex items-center justify-between gap-4">
-        <div className="min-w-0 space-y-1">
-          <h1
-            id="tutor-form-title"
-            className="text-2xl font-bold leading-[1.35] tracking-normal text-[var(--color-text)]"
-          >
-            {tutor ? 'Ubah Data Tentor' : 'Tambah Tentor'}
-          </h1>
-        </div>
-        <button
-          type="button"
-          disabled={isPending}
-          aria-label={
-            tutor ? 'Tutup modal ubah tentor' : 'Tutup modal tambah tentor'
-          }
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--color-muted)] hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-          onClick={closeForm}
-        >
-          <X className="h-6 w-6" aria-hidden="true" />
-        </button>
-      </header>
-
-      <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
-        <fieldset disabled={isPending} className="min-w-0 space-y-4">
-          <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
-            <SectionHeader
-              title="Data Diri Tentor"
-              description="Identitas tentor yang dipakai pada kelompok belajar dan laporan"
-            />
-            <div className="mt-4 grid gap-3.5 md:grid-cols-2">
-              <FormField
-                id="tutor-name"
-                label="Nama"
-                value={form.name}
-                required
-                error={submitted ? validation.errors.name : undefined}
-                onChange={(value) => updateField('name', value)}
-              />
-              <FormField
-                id="tutor-phone"
-                label="Nomor HP"
-                value={form.phoneNumber}
-                required
-                error={submitted ? validation.errors.phoneNumber : undefined}
-                placeholder="81234567890"
-                isPhone
-                type="tel"
-                onChange={(value) => updateField('phoneNumber', value)}
-              />
-              <FormField
-                id="tutor-email"
-                label="Email"
-                value={form.email}
-                required
-                error={submitted ? validation.errors.email : undefined}
-                placeholder="nama@email.com"
-                type="email"
-                onChange={(value) => updateField('email', value)}
-              />
-              <FormField
-                id="tutor-password"
-                label={passwordRequired ? 'Kata Sandi' : 'Kata Sandi Baru'}
-                value={form.password}
-                required={passwordRequired}
-                error={submitted ? validation.errors.password : undefined}
-                placeholder={
-                  passwordRequired
-                    ? 'Minimal 5 karakter'
-                    : 'Kosongkan bila tidak diubah'
-                }
-                type="password"
-                autoComplete="new-password"
-                onChange={(value) => updateField('password', value)}
-              />
-              <FormField
-                id="tutor-password-confirmation"
-                label={
-                  passwordRequired
-                    ? 'Konfirmasi Kata Sandi'
-                    : 'Konfirmasi Kata Sandi Baru'
-                }
-                value={form.passwordConfirmation}
-                required={passwordRequired}
-                error={
-                  submitted ? validation.errors.passwordConfirmation : undefined
-                }
-                placeholder="Ulangi kata sandi"
-                type="password"
-                autoComplete="new-password"
-                onChange={(value) => updateField('passwordConfirmation', value)}
-              />
-              <FormField
-                id="tutor-address"
-                label="Alamat"
-                value={form.address}
-                required
-                error={submitted ? validation.errors.address : undefined}
-                placeholder="Jl. Melati No. 12, Bandung"
-                onChange={(value) => updateField('address', value)}
-              />
-              <FormField
-                id="tutor-expertise"
-                label="Keahlian"
-                value={form.expertise}
-                required
-                placeholder="Matematika, Bahasa Inggris"
-                error={submitted ? validation.errors.expertise : undefined}
-                onChange={(value) => updateField('expertise', value)}
-              />
-              <FormField
-                id="tutor-education"
-                label="Jurusan"
-                value={form.education}
-                required
-                placeholder="Pendidikan Matematika"
-                error={submitted ? validation.errors.education : undefined}
-                onChange={(value) => updateField('education', value)}
-              />
-            </div>
-          </section>
-
-          <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
-            <SectionHeader
-              title="Data Rekening Tentor"
-              description={'Dipakai untuk invoice atau penggajian'}
-            />
-            <div className="mt-4 grid gap-3.5 md:grid-cols-3">
-              <FormField
-                id="tutor-bank"
-                label="Bank / E-Wallet"
-                value={form.bankName}
-                required
-                placeholder="Contoh: BCA, Mandiri, GoPay"
-                error={submitted ? validation.errors.bankName : undefined}
-                onChange={(value) => updateField('bankName', value)}
-              />
-              <FormField
-                id="tutor-account-name"
-                label="Atas Nama"
-                value={form.accountName}
-                required
-                error={submitted ? validation.errors.accountName : undefined}
-                placeholder="Tentor"
-                onChange={(value) => updateField('accountName', value)}
-              />
-              <FormField
-                id="tutor-account-number"
-                label="Nomor Rekening"
-                value={form.accountNumber}
-                required
-                error={submitted ? validation.errors.accountNumber : undefined}
-                placeholder="12345678"
-                inputMode="numeric"
-                onChange={(value) => updateField('accountNumber', value)}
-              />
-            </div>
-          </section>
-        </fieldset>
-
-        {formError ? (
-          <p
-            className="max-w-[742px] rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
-            role="alert"
-          >
-            {formError}
-          </p>
-        ) : null}
-        {successMessage ? (
-          <p
-            className="flex max-w-[742px] items-center gap-2 rounded-md border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-3 py-2 text-sm font-medium text-[var(--color-success)]"
-            role="status"
-          >
-            <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-            {successMessage}
-          </p>
-        ) : null}
-
-        <footer className="flex max-w-full flex-col gap-3 bg-white py-3 sm:min-h-14 sm:flex-row sm:items-center sm:justify-end sm:py-0">
-          <div className="flex flex-wrap gap-2.5">
-            <button
-              type="button"
-              disabled={isPending}
-              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-white px-4 focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 text-[13px] font-semibold text-[var(--color-text)]"
-              onClick={closeForm}
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              className="inline-flex h-9 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-gray-50)] px-4 text-[13px] font-semibold text-[var(--color-gray-400)] enabled:border-[var(--color-primary)] enabled:bg-[var(--color-primary)] enabled:text-white focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              disabled={!canSubmit}
-            >
-              {isPending
-                ? 'Menyimpan...'
-                : tutor
-                  ? 'Simpan Perubahan'
-                  : 'Simpan Tentor'}
-            </button>
-          </div>
-        </footer>
-      </form>
-    </div>
-  )
-
   return (
-    <TutorDialog isPending={isPending} onDismiss={closeForm}>
-      {content}
-    </TutorDialog>
+    <Dialog
+      title={tutor ? 'Ubah Data Tentor' : 'Tambah Tentor'}
+      isPending={isPending}
+      onDismiss={closeForm}
+    >
+      <DialogForm onSubmit={handleSubmit}>
+        <DialogBody>
+          <fieldset disabled={isPending} className="min-w-0 space-y-4">
+            <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
+              <SectionHeader
+                title="Data Diri Tentor"
+                description="Identitas tentor yang dipakai pada kelompok belajar dan laporan"
+              />
+              <div className="mt-4 grid gap-3.5 md:grid-cols-2">
+                <FormField
+                  id="tutor-name"
+                  label="Nama"
+                  value={form.name}
+                  required
+                  error={submitted ? validation.errors.name : undefined}
+                  onChange={(value) => updateField('name', value)}
+                />
+                <FormField
+                  id="tutor-phone"
+                  label="Nomor HP"
+                  value={form.phoneNumber}
+                  required
+                  error={submitted ? validation.errors.phoneNumber : undefined}
+                  placeholder="81234567890"
+                  isPhone
+                  type="tel"
+                  onChange={(value) => updateField('phoneNumber', value)}
+                />
+                <FormField
+                  id="tutor-email"
+                  label="Email"
+                  value={form.email}
+                  required
+                  error={submitted ? validation.errors.email : undefined}
+                  placeholder="nama@email.com"
+                  type="email"
+                  onChange={(value) => updateField('email', value)}
+                />
+                <FormField
+                  id="tutor-password"
+                  label={passwordRequired ? 'Kata Sandi' : 'Kata Sandi Baru'}
+                  value={form.password}
+                  required={passwordRequired}
+                  error={submitted ? validation.errors.password : undefined}
+                  placeholder={
+                    passwordRequired
+                      ? 'Minimal 5 karakter'
+                      : 'Kosongkan bila tidak diubah'
+                  }
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={(value) => updateField('password', value)}
+                />
+                <FormField
+                  id="tutor-password-confirmation"
+                  label={
+                    passwordRequired
+                      ? 'Konfirmasi Kata Sandi'
+                      : 'Konfirmasi Kata Sandi Baru'
+                  }
+                  value={form.passwordConfirmation}
+                  required={passwordRequired}
+                  error={
+                    submitted
+                      ? validation.errors.passwordConfirmation
+                      : undefined
+                  }
+                  placeholder="Ulangi kata sandi"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={(value) =>
+                    updateField('passwordConfirmation', value)
+                  }
+                />
+                <FormField
+                  id="tutor-address"
+                  label="Alamat"
+                  value={form.address}
+                  required
+                  error={submitted ? validation.errors.address : undefined}
+                  placeholder="Jl. Melati No. 12, Bandung"
+                  onChange={(value) => updateField('address', value)}
+                />
+                <FormField
+                  id="tutor-expertise"
+                  label="Keahlian"
+                  value={form.expertise}
+                  required
+                  placeholder="Matematika, Bahasa Inggris"
+                  error={submitted ? validation.errors.expertise : undefined}
+                  onChange={(value) => updateField('expertise', value)}
+                />
+                <FormField
+                  id="tutor-education"
+                  label="Jurusan"
+                  value={form.education}
+                  required
+                  placeholder="Pendidikan Matematika"
+                  error={submitted ? validation.errors.education : undefined}
+                  onChange={(value) => updateField('education', value)}
+                />
+              </div>
+            </section>
+
+            <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
+              <SectionHeader
+                title="Data Rekening Tentor"
+                description={'Dipakai untuk invoice atau penggajian'}
+              />
+              <div className="mt-4 grid gap-3.5 md:grid-cols-3">
+                <FormField
+                  id="tutor-bank"
+                  label="Bank / E-Wallet"
+                  value={form.bankName}
+                  required
+                  placeholder="Contoh: BCA, Mandiri, GoPay"
+                  error={submitted ? validation.errors.bankName : undefined}
+                  onChange={(value) => updateField('bankName', value)}
+                />
+                <FormField
+                  id="tutor-account-name"
+                  label="Atas Nama"
+                  value={form.accountName}
+                  required
+                  error={submitted ? validation.errors.accountName : undefined}
+                  placeholder="Tentor"
+                  onChange={(value) => updateField('accountName', value)}
+                />
+                <FormField
+                  id="tutor-account-number"
+                  label="Nomor Rekening"
+                  value={form.accountNumber}
+                  required
+                  error={
+                    submitted ? validation.errors.accountNumber : undefined
+                  }
+                  placeholder="12345678"
+                  inputMode="numeric"
+                  onChange={(value) => updateField('accountNumber', value)}
+                />
+              </div>
+            </section>
+          </fieldset>
+
+          {formError ? (
+            <p
+              className="max-w-[742px] rounded-md border border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] px-3 py-2 text-sm font-medium text-[var(--color-danger)]"
+              role="alert"
+            >
+              {formError}
+            </p>
+          ) : null}
+          {successMessage ? (
+            <p
+              className="flex max-w-[742px] items-center gap-2 rounded-md border border-[var(--color-success-border)] bg-[var(--color-success-bg)] px-3 py-2 text-sm font-medium text-[var(--color-success)]"
+              role="status"
+            >
+              <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+              {successMessage}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter>
+          <DialogButton
+            variant="outline"
+            disabled={isPending}
+            onClick={closeForm}
+          >
+            Batal
+          </DialogButton>
+          <DialogButton type="submit" disabled={!canSubmit}>
+            {isPending
+              ? 'Menyimpan...'
+              : tutor
+                ? 'Simpan Perubahan'
+                : 'Simpan Tentor'}
+          </DialogButton>
+        </DialogFooter>
+      </DialogForm>
+    </Dialog>
   )
 }
 

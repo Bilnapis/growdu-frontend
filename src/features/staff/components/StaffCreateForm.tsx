@@ -1,9 +1,13 @@
 import { useRef, useState, type FormEvent } from 'react'
-import { X } from 'lucide-react'
-import { StaffCreateDialog } from './StaffCreateDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { getStaffTenantId, getStaffError } from '@/features/staff/api/staff-api'
@@ -151,172 +155,143 @@ export function StaffCreateForm() {
   }
 
   return (
-    <StaffCreateDialog
+    <Dialog
+      title="Tambah Pegawai"
+      description="Buat akun pegawai baru dan tentukan hak akses menu."
       isPending={createMutation.isPending}
       onDismiss={closeForm}
-      className="max-w-[1032px]"
+      initialFocusSelector="#staff-name"
     >
-      <header className="flex items-start justify-between gap-4">
-        <div className="space-y-1.5">
-          <h1
-            id="staff-create-title"
-            className="text-2xl font-bold leading-[1.3] tracking-tight"
-          >
-            Tambah Pegawai
-          </h1>
-          <p
-            id="staff-create-description"
-            className="text-sm leading-[1.4] text-muted-foreground"
-          >
-            Buat akun pegawai baru dan tentukan hak akses menu.
-          </p>
-        </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-9 w-9 shrink-0 text-muted-foreground"
-          disabled={createMutation.isPending}
-          onClick={closeForm}
-          aria-label="Tutup modal tambah pegawai"
-        >
-          <X className="h-5 w-5" aria-hidden="true" />
-        </Button>
-      </header>
-
-      {!tenantId ? (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          Hanya pemilik bimbel yang dapat menambahkan pegawai. Pilih bimbel
-          terlebih dahulu.
-        </p>
-      ) : null}
-      <form
+      <DialogForm
         aria-busy={createMutation.isPending}
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        className="mt-[22px] space-y-[22px]"
       >
-        <div className="grid items-stretch gap-[22px] md:grid-cols-2">
-          <fieldset
-            disabled={createMutation.isPending || !tenantId}
-            aria-labelledby="staff-account-title"
-            className="min-w-0 space-y-[18px] rounded-xl border bg-card p-4 sm:p-5"
-          >
-            <div className="space-y-1.5">
-              <h2
-                id="staff-account-title"
-                className="text-lg font-bold leading-[1.3]"
-              >
-                Data akun pegawai
-              </h2>
-              <p className="text-[13px] leading-[1.4] text-muted-foreground">
-                Isi informasi dasar untuk membuat akses login pegawai.
-              </p>
-            </div>
-            <div className="grid gap-3.5">
-              {accountFields.map((field) => (
-                <div key={field.id} className="space-y-2">
+        <DialogBody>
+          {!tenantId ? (
+            <p role="alert" className="mt-4 text-sm text-destructive">
+              Hanya pemilik bimbel yang dapat menambahkan pegawai. Pilih bimbel
+              terlebih dahulu.
+            </p>
+          ) : null}
+          <div className="grid items-stretch gap-[22px] md:grid-cols-2">
+            <fieldset
+              disabled={createMutation.isPending || !tenantId}
+              aria-labelledby="staff-account-title"
+              className="min-w-0 space-y-[18px] rounded-xl border bg-card p-4 sm:p-5"
+            >
+              <div className="space-y-1.5">
+                <h2
+                  id="staff-account-title"
+                  className="text-lg font-bold leading-[1.3]"
+                >
+                  Data akun pegawai
+                </h2>
+                <p className="text-[13px] leading-[1.4] text-muted-foreground">
+                  Isi informasi dasar untuk membuat akses login pegawai.
+                </p>
+              </div>
+              <div className="grid gap-3.5">
+                {accountFields.map((field) => (
+                  <div key={field.id} className="space-y-2">
+                    <Label
+                      htmlFor={`staff-${field.id}`}
+                      className="text-[13px] font-semibold"
+                    >
+                      {field.label}
+                    </Label>
+                    <Input
+                      id={`staff-${field.id}`}
+                      name={field.id}
+                      type={field.type}
+                      isPhone={field.id === 'phoneNumber'}
+                      autoComplete={field.autoComplete}
+                      placeholder={field.placeholder}
+                      value={values[field.id]}
+                      onChange={(event) =>
+                        updateField(field.id, event.target.value)
+                      }
+                      required
+                      maxLength={
+                        field.type === 'password'
+                          ? 128
+                          : field.id === 'phoneNumber'
+                            ? 20
+                            : 150
+                      }
+                      minLength={field.type === 'password' ? 5 : undefined}
+                      aria-invalid={Boolean(errors[field.id])}
+                      aria-describedby={
+                        errors[field.id] ? `staff-${field.id}-error` : undefined
+                      }
+                      className="rounded-lg bg-[var(--color-bg-light)] aria-[invalid=true]:border-destructive"
+                    />
+                    {errors[field.id] ? (
+                      <p
+                        id={`staff-${field.id}-error`}
+                        className="text-xs text-destructive"
+                      >
+                        {errors[field.id]}
+                      </p>
+                    ) : null}
+                  </div>
+                ))}
+                <div className="space-y-2">
                   <Label
-                    htmlFor={`staff-${field.id}`}
+                    htmlFor="staff-address"
                     className="text-[13px] font-semibold"
                   >
-                    {field.label}
+                    Alamat
                   </Label>
-                  <Input
-                    id={`staff-${field.id}`}
-                    name={field.id}
-                    type={field.type}
-                    isPhone={field.id === 'phoneNumber'}
-                    autoComplete={field.autoComplete}
-                    placeholder={field.placeholder}
-                    value={values[field.id]}
+                  <textarea
+                    id="staff-address"
+                    name="address"
+                    maxLength={1000}
+                    autoComplete="street-address"
+                    value={values.address}
                     onChange={(event) =>
-                      updateField(field.id, event.target.value)
+                      updateField('address', event.target.value)
                     }
-                    required
-                    maxLength={
-                      field.type === 'password'
-                        ? 128
-                        : field.id === 'phoneNumber'
-                          ? 20
-                          : 150
-                    }
-                    minLength={field.type === 'password' ? 5 : undefined}
-                    aria-invalid={Boolean(errors[field.id])}
-                    aria-describedby={
-                      errors[field.id] ? `staff-${field.id}-error` : undefined
-                    }
-                    className="rounded-lg bg-[var(--color-bg-light)] aria-[invalid=true]:border-destructive"
+                    placeholder="Tulis alamat domisili pegawai"
+                    className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-bg-light)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   />
-                  {errors[field.id] ? (
-                    <p
-                      id={`staff-${field.id}-error`}
-                      className="text-xs text-destructive"
-                    >
-                      {errors[field.id]}
-                    </p>
-                  ) : null}
                 </div>
-              ))}
-              <div className="space-y-2">
-                <Label
-                  htmlFor="staff-address"
-                  className="text-[13px] font-semibold"
-                >
-                  Alamat
-                </Label>
-                <textarea
-                  id="staff-address"
-                  name="address"
-                  maxLength={1000}
-                  autoComplete="street-address"
-                  value={values.address}
-                  onChange={(event) =>
-                    updateField('address', event.target.value)
-                  }
-                  placeholder="Tulis alamat domisili pegawai"
-                  className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-bg-light)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                />
               </div>
-            </div>
-          </fieldset>
-          <StaffMenuPermissionsFields
-            value={menuPermissions}
-            onChange={setMenuPermissions}
-            disabled={createMutation.isPending || !tenantId}
-          />
-        </div>
+            </fieldset>
+            <StaffMenuPermissionsFields
+              value={menuPermissions}
+              onChange={setMenuPermissions}
+              disabled={createMutation.isPending || !tenantId}
+            />
+          </div>
 
-        {submissionMessage ? (
-          <p
-            role="alert"
-            className="rounded-lg border border-[var(--color-info-border)] bg-[var(--color-info-bg)] p-4 text-sm text-[var(--color-info-text)]"
-          >
-            {submissionMessage}
-          </p>
-        ) : null}
-
-        <footer className="sticky -bottom-4 flex min-h-[60px] flex-wrap items-center justify-end gap-2.5 border-t bg-card py-3 sm:-bottom-6">
-          <Button
-            type="button"
-            disabled={createMutation.isPending}
+          {submissionMessage ? (
+            <p
+              role="alert"
+              className="rounded-lg border border-[var(--color-info-border)] bg-[var(--color-info-bg)] p-4 text-sm text-[var(--color-info-text)]"
+            >
+              {submissionMessage}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter>
+          <DialogButton
             variant="outline"
-            className="h-11 rounded-lg px-[18px] font-bold"
+            disabled={createMutation.isPending}
             onClick={closeForm}
           >
             Batal
-          </Button>
-          <Button
-            disabled={createMutation.isPending || !tenantId}
+          </DialogButton>
+          <DialogButton
             type="submit"
-            className="h-11 rounded-lg px-[18px] font-bold"
+            disabled={createMutation.isPending || !tenantId}
           >
             {createMutation.isPending ? 'Menyimpan...' : 'Buat Akun'}
-          </Button>
-        </footer>
-      </form>
-    </StaffCreateDialog>
+          </DialogButton>
+        </DialogFooter>
+      </DialogForm>
+    </Dialog>
   )
 }
 

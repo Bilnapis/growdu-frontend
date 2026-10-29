@@ -22,7 +22,13 @@ import {
   isAnnouncementTarget,
   targetLabels,
 } from '../utils/announcements'
-import { AnnouncementDialog } from './AnnouncementDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+  DialogForm,
+} from '@/components/ui/dialog'
 import { AddButton } from '@/components/ui/add-button'
 
 const PAGE_SIZE = 5
@@ -469,54 +475,57 @@ function DeleteAnnouncement({
   const { remove } = useAnnouncementMutations()
   const submitting = useRef(false)
   return (
-    <AnnouncementDialog
-      pending={remove.isPending}
+    <Dialog
+      title="Hapus Pengumuman?"
+      isPending={remove.isPending}
       onDismiss={onDismiss}
-      labelledBy="announcement-delete-title"
+      returnFocusSelector="[data-announcement-trigger]"
     >
-      <h2 id="announcement-delete-title" className="text-xl font-bold">
-        Hapus Pengumuman?
-      </h2>
-      <p className="mt-3 break-words text-sm text-muted-foreground">
-        Pengumuman “{announcement.title}” akan dihapus permanen dan tidak lagi
-        tampil di dashboard penerima.
-      </p>
-      {remove.isError ? (
-        <p role="alert" className="mt-4 text-sm text-destructive">
-          {announcementErrorMessage(
-            remove.error,
-            'Pengumuman gagal dihapus. Silakan coba lagi.',
-          )}
-        </p>
-      ) : null}
-      <footer className="mt-6 flex justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          disabled={remove.isPending}
-          onClick={onDismiss}
-          autoFocus
-        >
-          Batal
-        </Button>
-        <Button
-          type="button"
-          variant="destructive"
-          disabled={remove.isPending}
-          onClick={() => {
-            if (submitting.current) return
-            submitting.current = true
-            remove.mutate(announcement.id, {
-              onSuccess: onDeleted,
-              onSettled: () => {
-                submitting.current = false
-              },
-            })
-          }}
-        >
-          {remove.isPending ? 'Menghapus...' : 'Hapus Pengumuman'}
-        </Button>
-      </footer>
-    </AnnouncementDialog>
+      <DialogForm
+        onSubmit={(event) => {
+          event.preventDefault()
+          if (submitting.current || remove.isPending) return
+          submitting.current = true
+          remove.mutate(announcement.id, {
+            onSuccess: onDeleted,
+            onSettled: () => {
+              submitting.current = false
+            },
+          })
+        }}
+      >
+        <DialogBody>
+          <p className="mt-3 break-words text-sm text-muted-foreground">
+            Pengumuman “{announcement.title}” akan dihapus permanen dan tidak
+            lagi tampil di dashboard penerima.
+          </p>
+          {remove.isError ? (
+            <p role="alert" className="mt-4 text-sm text-destructive">
+              {announcementErrorMessage(
+                remove.error,
+                'Pengumuman gagal dihapus. Silakan coba lagi.',
+              )}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter>
+          <DialogButton
+            variant="outline"
+            disabled={remove.isPending}
+            onClick={onDismiss}
+            autoFocus
+          >
+            Batal
+          </DialogButton>
+          <DialogButton
+            type="submit"
+            variant="destructive"
+            disabled={remove.isPending}
+          >
+            {remove.isPending ? 'Menghapus...' : 'Hapus Pengumuman'}
+          </DialogButton>
+        </DialogFooter>
+      </DialogForm>
+    </Dialog>
   )
 }

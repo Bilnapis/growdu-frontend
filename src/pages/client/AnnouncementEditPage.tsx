@@ -1,6 +1,10 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { AnnouncementDialog } from '@/features/announcements/components/AnnouncementDialog'
+import {
+  Dialog,
+  DialogBody,
+  DialogButton,
+  DialogFooter,
+} from '@/components/ui/dialog'
 import { AnnouncementForm } from '@/features/announcements/components/AnnouncementForm'
 import { useAnnouncement } from '@/features/announcements/hooks/use-announcements'
 import { announcementErrorMessage } from '@/features/announcements/utils/announcements'
@@ -15,32 +19,32 @@ export function AnnouncementEditPage() {
   if (query.isSuccess)
     return <AnnouncementForm key={query.data.id} announcement={query.data} />
   return (
-    <AnnouncementDialog
+    <Dialog
+      title="Ubah Pengumuman"
       onDismiss={dismiss}
-      labelledBy="announcement-edit-title"
+      returnFocusSelector="[data-announcement-trigger]"
     >
-      <h1 id="announcement-edit-title" className="text-xl font-bold">
-        Ubah Pengumuman
-      </h1>
-      {query.isPending ? (
-        <p role="status" className="my-5 text-sm text-muted-foreground">
-          Memuat pengumuman...
-        </p>
-      ) : (
-        <p role="alert" className="my-5 text-sm">
-          {announcementErrorMessage(query.error)}
-        </p>
-      )}
-      <div className="flex justify-end gap-3">
-        <Button type="button" variant="outline" onClick={dismiss}>
+      <DialogBody>
+        {query.isPending ? (
+          <p role="status" className="my-5 text-sm text-muted-foreground">
+            Memuat pengumuman...
+          </p>
+        ) : (
+          <p role="alert" className="my-5 text-sm">
+            {announcementErrorMessage(query.error)}
+          </p>
+        )}
+      </DialogBody>
+      <DialogFooter>
+        <DialogButton type="button" variant="outline" onClick={dismiss}>
           Kembali
-        </Button>
+        </DialogButton>
         {query.isError ? (
-          <Button type="button" onClick={() => void query.refetch()}>
+          <DialogButton type="button" onClick={() => void query.refetch()}>
             Coba lagi
-          </Button>
+          </DialogButton>
         ) : null}
-      </div>
-    </AnnouncementDialog>
+      </DialogFooter>
+    </Dialog>
   )
 }
