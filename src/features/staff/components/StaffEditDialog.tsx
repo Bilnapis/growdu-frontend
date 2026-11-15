@@ -231,7 +231,7 @@ function StaffEditForm({
                         [field.id]: event.target.value,
                       }))
                     }
-                    className="rounded-lg bg-[var(--color-bg-light)]"
+                    className="rounded-lg"
                   />
                 </div>
               ))}
@@ -254,7 +254,7 @@ function StaffEditForm({
                       address: event.target.value,
                     }))
                   }
-                  className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-bg-light)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-surface)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
               </div>
             </div>

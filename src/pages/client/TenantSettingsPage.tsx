@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useCurrentTenant } from '@/features/tenant-context/hooks/use-owned-tenants'
 import { TenantIdentityForm } from '@/features/tenant-settings/components/TenantIdentityForm'
 import { TenantThemeForm } from '@/features/tenant-settings/components/TenantThemeForm'
+import { InvoiceBankSettings } from '@/features/invoices/components/InvoiceBankSettings'
 import '@/features/tenant-settings/tenant-settings.css'
 
 export function TenantSettingsPage({
@@ -52,7 +53,10 @@ export function TenantSettingsPage({
                 tenantName={tenant.name}
               />
             ) : (
-              <TenantIdentityForm key={tenant.id} tenant={tenant} />
+              <>
+                <TenantIdentityForm key={tenant.id} tenant={tenant} />
+                <InvoiceBankSettings key={`${tenant.id}-invoice-bank`} />
+              </>
             )
           ) : tenantQuery.isPending ? (
             <section

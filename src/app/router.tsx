@@ -1,4 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import { InvoicesPage } from '@/pages/client/InvoicesPage'
+import { InvoiceDetailPage } from '@/pages/client/InvoiceDetailPage'
+import { InvoicePaymentPage } from '@/pages/client/InvoicePaymentPage'
 import { AnnouncementsPage } from '@/pages/client/AnnouncementsPage'
 import { AnnouncementCreatePage } from '@/pages/client/AnnouncementCreatePage'
 import { AnnouncementEditPage } from '@/pages/client/AnnouncementEditPage'
@@ -120,6 +123,12 @@ export const router = createBrowserRouter([
                   {
                     element: <DashboardLayout />,
                     children: [
+                      { path: 'invoices', element: <InvoicesPage /> },
+                      { path: 'invoices/:id', element: <InvoiceDetailPage /> },
+                      {
+                        path: 'invoices/:id/payment',
+                        element: <InvoicePaymentPage />,
+                      },
                       {
                         path: 'dashboard',
                         element: <DashboardPage />,
@@ -203,16 +212,28 @@ export const router = createBrowserRouter([
                         element: <AnnouncementsPage />,
                         children: [
                           { path: 'new', element: <AnnouncementCreatePage /> },
-                          { path: ':id/edit', element: <AnnouncementEditPage /> },
+                          {
+                            path: ':id/edit',
+                            element: <AnnouncementEditPage />,
+                          },
                         ],
                       },
                       {
                         path: ':section',
                         element: <DashboardModulePlaceholderPage />,
                       },
-                      { path: 'settings', element: <Navigate to="/settings/bimbel" replace /> },
-                      { path: 'settings/bimbel', element: <TenantSettingsPage section="bimbel" /> },
-                      { path: 'settings/theme', element: <TenantSettingsPage section="theme" /> },
+                      {
+                        path: 'settings',
+                        element: <Navigate to="/settings/bimbel" replace />,
+                      },
+                      {
+                        path: 'settings/bimbel',
+                        element: <TenantSettingsPage section="bimbel" />,
+                      },
+                      {
+                        path: 'settings/theme',
+                        element: <TenantSettingsPage section="theme" />,
+                      },
                     ],
                   },
                 ],

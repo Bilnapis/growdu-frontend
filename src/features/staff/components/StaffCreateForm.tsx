@@ -225,7 +225,7 @@ export function StaffCreateForm() {
                       aria-describedby={
                         errors[field.id] ? `staff-${field.id}-error` : undefined
                       }
-                      className="rounded-lg bg-[var(--color-bg-light)] aria-[invalid=true]:border-destructive"
+                      className="rounded-lg aria-[invalid=true]:border-destructive"
                     />
                     {errors[field.id] ? (
                       <p
@@ -254,7 +254,7 @@ export function StaffCreateForm() {
                       updateField('address', event.target.value)
                     }
                     placeholder="Tulis alamat domisili pegawai"
-                    className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-bg-light)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="block min-h-28 w-full resize-y rounded-lg border border-input bg-[var(--color-surface)] p-3 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   />
                 </div>
               </div>

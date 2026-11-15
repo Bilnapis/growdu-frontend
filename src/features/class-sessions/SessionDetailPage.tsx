@@ -222,7 +222,7 @@ function SessionDetail({ session }: { session: ClassSession }) {
                   id="student-search"
                   type="search"
                   value={search}
-                  className="h-10 bg-[var(--color-gray-50)] pl-10 text-xs"
+                  className="h-10 pl-10 text-xs"
                   placeholder="Cari nama siswa atau sekolah..."
                   onChange={(event) => setSearch(event.target.value)}
                 />
@@ -634,7 +634,7 @@ function SessionOverrideDialog({
               <FormField label="Tentor" htmlFor="override-tutor">
                 <select
                   id="override-tutor"
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-11 w-full rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   value={tutor}
                   onChange={(event) => setTutor(event.target.value)}
                 >
@@ -673,7 +673,7 @@ function SessionOverrideDialog({
               >
                 <select
                   id="override-room"
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-11 w-full rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   value={room}
                   onChange={(event) => setRoom(event.target.value)}
                 >
@@ -703,7 +703,7 @@ function SessionOverrideDialog({
               autoFocus
               maxLength={1000}
               value={reason}
-              className="min-h-24 w-full rounded-md border border-input bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="min-h-24 w-full rounded-md border border-input bg-[var(--color-surface)] p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               onChange={(event) => setReason(event.target.value)}
             />
           </FormField>

@@ -165,7 +165,7 @@ export function TutorSchedule() {
               id="tutor-schedule-search"
               type="search"
               value={searchText}
-              className="h-10 bg-[var(--color-gray-50)] pl-8 text-[11px] font-normal"
+              className="h-10 pl-8 text-[11px] font-normal"
               placeholder="Cari nama kelompok"
               onChange={(event) => setSearchText(event.target.value)}
             />

@@ -133,7 +133,7 @@ export function PlatformTenantManagement({
           name="status"
           defaultValue={filters.status ?? ""}
           aria-label="Filter status"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           <option value="">Semua status</option>
           <option value="active">Aktif</option>
@@ -461,7 +461,7 @@ function TenantFormDialog({
                 disabled={
                   isPending || ownersQuery.isPending || ownersQuery.isError
                 }
-                className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <option value="">
                   {ownersQuery.isPending
@@ -509,7 +509,7 @@ function TenantFormDialog({
                 defaultValue={tenant?.address ?? ""}
                 maxLength={5000}
                 disabled={isPending}
-                className="min-h-24 rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="min-h-24 rounded-md border border-input bg-[var(--color-surface)] px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
 
@@ -567,7 +567,7 @@ function TenantFormDialog({
                   name="status"
                   defaultValue={tenant?.status ?? "active"}
                   disabled={isPending}
-                  className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="active">Aktif</option>
                   <option value="inactive">Nonaktif</option>

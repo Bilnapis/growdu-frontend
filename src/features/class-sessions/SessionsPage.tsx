@@ -9,15 +9,14 @@ import {
   BookOpen,
   CalendarDays,
   CheckCircle2,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   MoreHorizontal,
   PauseCircle,
-  SlidersHorizontal,
 } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
@@ -616,15 +615,14 @@ function CalendarFilterSelect({
   options: [string, string][]
 }) {
   const id = `calendar-filter-${label.toLocaleLowerCase('id-ID')}`
-  const Icon = label === 'Status' ? SlidersHorizontal : ChevronDown
   return (
     <div className="relative">
       <label className="sr-only" htmlFor={id}>
         Filter {label}
       </label>
-      <select
+      <Select
         id={id}
-        className="h-9 appearance-none rounded-md border border-border bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="h-9 min-w-32 text-[13px] font-semibold"
         value={value}
         onChange={(event) => onChange(event.target.value)}
       >
@@ -634,11 +632,7 @@ function CalendarFilterSelect({
             {optionLabel}
           </option>
         ))}
-      </select>
-      <Icon
-        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-        aria-hidden="true"
-      />
+      </Select>
     </div>
   )
 }
@@ -718,9 +712,9 @@ function FilterSelect({
       <label className="sr-only" htmlFor={id}>
         {label}
       </label>
-      <select
+      <Select
         id={id}
-        className="h-10 rounded-md border border-border bg-white px-3.5 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="h-10 min-w-32 text-[13px] font-semibold"
         value={value}
         onChange={(event) => onChange(event.target.value)}
       >
@@ -729,7 +723,7 @@ function FilterSelect({
             {optionLabel}
           </option>
         ))}
-      </select>
+      </Select>
     </>
   )
 }

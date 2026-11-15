@@ -4,6 +4,7 @@ export type EntityStatus = 'active' | 'inactive'
 export type StudentGender = 'male' | 'female'
 
 export type StudentRegistrationInput = {
+  monthlyFee?: number | null
   name: string
   gender: StudentGender
   educationLevel: string
@@ -40,6 +41,8 @@ export type Student = {
   address: string
   status: EntityStatus
   createdAt: string
+  administrativeStatus: EntityStatus
+  billingBlocked: boolean
   updatedAt: string
 }
 
@@ -76,6 +79,7 @@ export type StudentUpdateInput = {
 }
 
 export type StudentRegistrationUpdateInput = StudentUpdateInput & {
+  monthlyFee?: number | null
   parent: {
     name: string
     phoneNumber: string

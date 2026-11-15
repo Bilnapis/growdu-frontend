@@ -479,7 +479,7 @@ function FormField({
         aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] rounded-md bg-[var(--color-bg-light)] px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${
+        className={`h-[42px] rounded-md px-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] ${
           error
             ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]'
             : 'border-[var(--color-border)]'

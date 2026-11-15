@@ -23,6 +23,7 @@ type DialogProps = {
   onDismiss: () => void
   initialFocusSelector?: string
   returnFocusSelector?: string
+  size?: 'default' | 'small' | 'medium'
 }
 
 export function Dialog({
@@ -34,6 +35,7 @@ export function Dialog({
   onDismiss,
   initialFocusSelector,
   returnFocusSelector,
+  size = 'default',
 }: DialogProps) {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
@@ -79,7 +81,7 @@ export function Dialog({
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
       aria-busy={isPending}
-      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-[840px] overflow-hidden rounded-xl border-0 bg-card p-0 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] open:flex open:flex-col"
+      className={`fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'small' ? 'max-w-[560px]' : size === 'medium' ? 'max-w-[652px]' : 'max-w-[840px]'} overflow-hidden rounded-xl border-0 bg-card p-0 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] open:flex open:flex-col`}
       onCancel={(event) => {
         event.preventDefault()
         if (!isPending) onDismiss()

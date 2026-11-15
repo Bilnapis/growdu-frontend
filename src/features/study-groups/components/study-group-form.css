@@ -59,7 +59,7 @@
   font-size: 13px;
 }
 .study-group-form__field input,
-.study-group-form__field select {
+.study-group-form__field select:not(.sr-only) {
   width: 100%;
   min-width: 0;
   height: 38px;
@@ -71,11 +71,11 @@
   font-size: 13px;
   font-weight: 400;
 }
-.study-group-form__field select:focus-visible {
+.study-group-form__field select:not(.sr-only):focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
-.study-group-form__field select:disabled {
+.study-group-form__field select:not(.sr-only):disabled {
   background: var(--color-bg);
   color: var(--color-muted);
   cursor: not-allowed;
@@ -305,7 +305,7 @@
   padding: 0 12px;
   border: var(--border-default);
   border-radius: var(--radius-sm);
-  background: var(--color-gray-50);
+  background: var(--color-surface);
   color: var(--color-muted);
 }
 .study-group-form__search input {
@@ -320,16 +320,6 @@
 .study-group-form__search:focus-within {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-}
-.study-group-form__picker-filter {
-  height: 40px;
-  padding: 0 28px 0 11px;
-  border: var(--border-default);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-size: 13px;
-  font-weight: 600;
 }
 .study-group-form__picker-table-wrap {
   overflow-x: auto;
@@ -408,8 +398,5 @@
   .study-group-form__picker-toolbar {
     align-items: stretch;
     flex-direction: column;
-  }
-  .study-group-form__picker-filter {
-    width: 100%;
   }
 }

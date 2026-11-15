@@ -1,8 +1,10 @@
-import { type FormEvent, type ReactNode, useMemo, useState } from 'react'
+import { type FormEvent, useMemo, useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import * as yup from 'yup'
 
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { FormSection } from '@/components/ui/form-section'
 import { Label } from '@/components/ui/label'
 import type {
   StudentListItem,
@@ -20,6 +22,8 @@ import {
   type FormFieldErrors,
 } from '@/lib/yup-validation'
 import { ApiError } from '@/services/api-client'
+import { getStoredAuthUser } from '@/lib/auth-session'
+import { useBillingProfile } from '@/features/invoices/hooks/use-invoices'
 import {
   Dialog,
   DialogBody,
@@ -29,6 +33,7 @@ import {
 } from '@/components/ui/dialog'
 
 type StudentRegistrationForm = {
+  monthlyFee: string
   editing: boolean
   name: string
   phoneNumber: string
@@ -46,8 +51,12 @@ type StudentRegistrationForm = {
   passwordConfirmation: string
 }
 
-function getInitialForm(student?: StudentListItem): StudentRegistrationForm {
+function getInitialForm(
+  student?: StudentListItem,
+  monthlyFee: number | null = null,
+): StudentRegistrationForm {
   return {
+    monthlyFee: monthlyFee === null ? '' : String(monthlyFee),
     editing: Boolean(student),
     name: student?.name ?? '',
     phoneNumber: student ? normalizeEditablePhone(student.phoneNumber) : '',
@@ -62,7 +71,7 @@ function getInitialForm(student?: StudentListItem): StudentRegistrationForm {
       ? normalizeEditablePhone(student.primaryParent?.parentPhoneNumber ?? null)
       : '',
     parentEmail: student?.primaryParent?.parentContactEmail ?? '',
-    status: student?.status ?? 'active',
+    status: student?.administrativeStatus ?? student?.status ?? 'active',
     password: '',
     passwordConfirmation: '',
   }
@@ -70,6 +79,19 @@ function getInitialForm(student?: StudentListItem): StudentRegistrationForm {
 
 const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
   .object({
+    monthlyFee: yup
+      .string()
+      .trim()
+      .defined()
+      .test(
+        'monthly-fee',
+        'Tarif SPP harus berupa rupiah bulat antara Rp1 dan Rp1.000.000.000.',
+        (value) =>
+          !value ||
+          (/^\d+$/.test(value) &&
+            Number(value) >= 1 &&
+            Number(value) <= 1_000_000_000),
+      ),
     editing: yup.boolean().defined(),
     name: yup
       .string()
@@ -175,8 +197,67 @@ export function StudentCreateForm({
   student?: StudentListItem
   onClose: () => void
 }) {
+  const canEditBilling = getStoredAuthUser()?.role === 'owner'
+  const billingQuery = useBillingProfile(
+    student?.id ?? '',
+    Boolean(student) && canEditBilling,
+  )
+  if (student && canEditBilling && !billingQuery.data) {
+    return (
+      <Dialog title="Ubah Data Siswa" onDismiss={onClose}>
+        <DialogBody>
+          {billingQuery.isError ? (
+            <div role="alert" className="space-y-3">
+              <p className="text-sm">
+                Data SPP siswa belum dapat dimuat. Muat ulang agar tarif yang
+                tersimpan tetap terjaga.
+              </p>
+              <DialogButton
+                variant="outline"
+                onClick={() => void billingQuery.refetch()}
+              >
+                Muat ulang SPP
+              </DialogButton>
+            </div>
+          ) : (
+            <p role="status" className="text-sm text-muted-foreground">
+              Memuat data SPP siswa...
+            </p>
+          )}
+        </DialogBody>
+        <DialogFooter>
+          <DialogButton variant="outline" onClick={onClose}>
+            Batal
+          </DialogButton>
+        </DialogFooter>
+      </Dialog>
+    )
+  }
+  return (
+    <StudentRegistrationDialog
+      student={student}
+      onClose={onClose}
+      canEditBilling={canEditBilling}
+      initialMonthlyFee={billingQuery.data?.monthlyFee ?? null}
+    />
+  )
+}
+
+function StudentRegistrationDialog({
+  student,
+  onClose,
+  canEditBilling,
+  initialMonthlyFee,
+}: {
+  student?: StudentListItem
+  onClose: () => void
+  canEditBilling: boolean
+  initialMonthlyFee: number | null
+}) {
   const isEditing = Boolean(student)
-  const [form, setForm] = useState(() => getInitialForm(student))
+  const [form, setForm] = useState(() =>
+    getInitialForm(student, initialMonthlyFee),
+  )
   const [submitted, setSubmitted] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
@@ -239,6 +320,9 @@ export function StudentCreateForm({
       school: value.school,
       address: value.address,
       status: value.status,
+      ...(canEditBilling
+        ? { monthlyFee: value.monthlyFee ? Number(value.monthlyFee) : null }
+        : {}),
     }
     const phoneNumber = value.phoneNumber
       ? normalizePhone(value.phoneNumber)
@@ -400,6 +484,25 @@ export function StudentCreateForm({
               </div>
             </FormSection>
 
+            {canEditBilling ? (
+              <FormSection
+                title="Data SPP Bulanan"
+                description="Atur tarif SPP bulanan siswa untuk pembuatan invoice.  Tarif baru mulai ditagih otomatis bulan berikutnya
+                    dan perubahan tarif tidak mengubah invoice yang sudah terbit."
+              >
+                <FormField
+                  id="student-monthly-fee-input"
+                  label="Tarif SPP bulanan"
+                  leadingText="Rp"
+                  isCurrency
+                  value={form.monthlyFee}
+                  placeholder="100.000"
+                  error={visibleErrors.monthlyFee}
+                  onChange={(value) => updateField('monthlyFee', value)}
+                />
+              </FormSection>
+            ) : null}
+
             <FormSection
               title="Data Orang Tua"
               description="Tambahkan orang tua baru atau gunakan data orang tua yang sudah terdaftar."
@@ -554,9 +657,7 @@ export function StudentCreateForm({
           description={
             issueCount > 0
               ? `${issueCount} validasi perlu diperbaiki sebelum menyimpan.`
-              : isEditing
-                ? 'Perubahan hanya berlaku pada data siswa.'
-                : 'Data siswa dan orang tua akan disimpan bersamaan.'
+              : 'Data siswa, orang tua, dan pengaturan SPP disimpan bersamaan.'
           }
         >
           <DialogButton
@@ -579,33 +680,6 @@ export function StudentCreateForm({
   )
 }
 
-function FormSection({
-  title,
-  description,
-  action,
-  children,
-}: {
-  title: string
-  description: string
-  action?: ReactNode
-  children: ReactNode
-}) {
-  return (
-    <section className="rounded-lg border border-[var(--color-border)] bg-white p-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="text-lg font-bold leading-[1.35]">{title}</h2>
-          <p className="mt-1 text-[13px] leading-[1.35] text-[var(--color-muted)]">
-            {description}
-          </p>
-        </div>
-        {action}
-      </div>
-      <div className="mt-3">{children}</div>
-    </section>
-  )
-}
-
 function FormField({
   id,
   label,
@@ -616,6 +690,8 @@ function FormField({
   placeholder,
   type = 'text',
   isPhone = false,
+  isCurrency = false,
+  leadingText,
   disabled = false,
 }: {
   id: string
@@ -627,6 +703,8 @@ function FormField({
   placeholder?: string
   type?: string
   isPhone?: boolean
+  isCurrency?: boolean
+  leadingText?: string
   disabled?: boolean
 }) {
   return (
@@ -637,12 +715,14 @@ function FormField({
         value={value}
         type={type}
         isPhone={isPhone}
+        isCurrency={isCurrency}
+        leadingText={leadingText}
         disabled={disabled}
         placeholder={placeholder}
         aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] bg-[var(--color-bg-light)] text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
+        className={`h-[42px] text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
         onChange={(event) => onChange(event.target.value)}
       />
       <FieldError id={id} error={error} />
@@ -682,7 +762,7 @@ function PasswordField({
           aria-required="true"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : undefined}
-          className={`h-[42px] bg-[var(--color-bg-light)] pr-10 text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
+          className={`h-[42px] pr-10 text-sm ${error ? 'border-[var(--color-danger)] focus-visible:ring-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
           onChange={(event) => onChange(event.target.value)}
         />
         <button
@@ -727,23 +807,23 @@ function SelectField({
   return (
     <div className="grid gap-[7px]">
       <FieldLabel id={id} label={label} required={required} />
-      <select
+      <Select
         id={id}
         value={value}
         disabled={disabled}
         required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}
-        className={`h-[42px] w-full rounded-md border bg-white px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-[var(--color-gray-50)] disabled:text-[var(--color-muted)] ${error ? 'border-[var(--color-danger)]' : 'border-[var(--color-border)]'}`}
+        placeholder={placeholder}
+        className="h-[42px] py-0 disabled:bg-[var(--color-gray-50)] disabled:text-[var(--color-muted)]"
         onChange={(event) => onChange(event.target.value)}
       >
-        {placeholder ? <option value="">{placeholder}</option> : null}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
-      </select>
+      </Select>
       <FieldError id={id} error={error} />
     </div>
   )

@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   BookOpen,
-  ChevronDown,
   Eye,
   Mail,
   MoreHorizontal,
   Pencil,
-  SlidersHorizontal,
   UserRoundX,
   Users,
   UsersRound,
@@ -14,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
@@ -135,14 +134,16 @@ export function StudentManagement() {
 
   function toggleStatus(student: StudentListItem) {
     const status: EntityStatus =
-      student.status === 'active' ? 'inactive' : 'active'
+      student.administrativeStatus === 'active' ? 'inactive' : 'active'
     setActionError('')
     updateMutation.mutate(
       { id: student.id, input: { status } },
       {
-        onSuccess: () => {
+        onSuccess: (updated) => {
           setNotice(
-            `${student.name} berhasil ${status === 'active' ? 'diaktifkan' : 'dinonaktifkan'}.`,
+            updated.billingBlocked && status === 'active'
+              ? `${student.name} masih nonaktif karena tunggakan SPP.`
+              : `${student.name} berhasil ${status === 'active' ? 'diaktifkan' : 'dinonaktifkan'}.`,
           )
           setMenuId(null)
           menuTriggerRef.current?.focus()
@@ -224,40 +225,32 @@ export function StudentManagement() {
               <Label htmlFor="student-status" className="sr-only">
                 Filter status siswa
               </Label>
-              <select
+              <Select
                 id="student-status"
                 value={filters.status ?? ''}
-                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-10 min-w-28 text-[13px] font-semibold"
                 onChange={(event) => setStatus(event.target.value)}
               >
                 <option value="">Status</option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Nonaktif</option>
-              </select>
-              <SlidersHorizontal
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
+              </Select>
             </div>
             <div className="relative">
               <Label htmlFor="student-stage" className="sr-only">
                 Filter jenjang siswa
               </Label>
-              <select
+              <Select
                 id="student-stage"
                 value={filters.educationStage ?? ''}
-                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-10 min-w-28 text-[13px] font-semibold"
                 onChange={(event) => setEducationStage(event.target.value)}
               >
                 <option value="">Jenjang</option>
                 <option value="SD">SD</option>
                 <option value="SMP">SMP</option>
                 <option value="SMA">SMA</option>
-              </select>
-              <ChevronDown
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
+              </Select>
             </div>
           </div>
         </form>

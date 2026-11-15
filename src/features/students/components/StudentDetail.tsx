@@ -1,10 +1,5 @@
 import { type ReactNode, useState } from 'react'
-import {
-  BookOpen,
-  Pencil,
-  ReceiptText,
-  UserRoundX,
-} from 'lucide-react'
+import { BookOpen, Pencil, UserRoundX } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
@@ -16,6 +11,7 @@ import {
 } from '@/features/students/hooks/use-students'
 import { ApiError } from '@/services/api-client'
 import { StudentCreateForm } from './StudentCreateForm'
+import { StudentInvoiceCard } from '@/features/invoices/components/StudentInvoiceCard'
 
 export function StudentDetail({ id }: { id: string }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -73,7 +69,7 @@ export function StudentDetail({ id }: { id: string }) {
               variant="outline"
               className="border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)]"
               disabled={
-                editableStudent.status === 'inactive' ||
+                editableStudent.administrativeStatus === 'inactive' ||
                 updateMutation.isPending
               }
               onClick={deactivateStudent}
@@ -81,7 +77,7 @@ export function StudentDetail({ id }: { id: string }) {
               <UserRoundX className="h-4 w-4" aria-hidden="true" />
               {updateMutation.isPending
                 ? 'Menonaktifkan...'
-                : editableStudent.status === 'inactive'
+                : editableStudent.administrativeStatus === 'inactive'
                   ? 'Siswa Nonaktif'
                   : 'Nonaktifkan Siswa'}
             </Button>
@@ -130,6 +126,12 @@ export function StudentDetail({ id }: { id: string }) {
                     {student.name}
                   </h2>
                   <StatusBadge status={student.status} />
+                  {student.billingBlocked ? (
+                    <p className="text-xs text-[var(--color-danger)]">
+                      Nonaktif karena tunggakan SPP melewati jatuh tempo dan
+                      tenggang.
+                    </p>
+                  ) : null}
                 </div>
               </section>
 
@@ -139,10 +141,7 @@ export function StudentDetail({ id }: { id: string }) {
               >
                 <dl className="grid gap-x-4 gap-y-5 sm:grid-cols-2">
                   <DetailField label="Sekolah" value={student.school} />
-                  <DetailField
-                    label="Jenjang"
-                    value={student.educationLevel}
-                  />
+                  <DetailField label="Jenjang" value={student.educationLevel} />
                   <DetailField
                     label="Nomor HP siswa"
                     value={student.phoneNumber}
@@ -196,19 +195,7 @@ export function StudentDetail({ id }: { id: string }) {
                 />
               </DetailSection>
 
-              <DetailSection
-                title="Invoice SPP Terakhir"
-                description="Ringkasan tagihan SPP terbaru siswa untuk dicek sebelum membuka detail invoice."
-              >
-                <EmptyPanel
-                  icon={<ReceiptText className="h-5 w-5" aria-hidden="true" />}
-                  message="Data invoice SPP belum tersedia."
-                />
-                <Button variant="outline" className="w-full" disabled>
-                  <ReceiptText className="h-4 w-4" aria-hidden="true" />
-                  Lihat Invoice SPP
-                </Button>
-              </DetailSection>
+              <StudentInvoiceCard student={student} />
             </aside>
           </div>
         </>
@@ -249,7 +236,13 @@ function DetailSection({
   )
 }
 
-function DetailField({ label, value }: { label: string; value: string | null }) {
+function DetailField({
+  label,
+  value,
+}: {
+  label: string
+  value: string | null
+}) {
   return (
     <div className="min-w-0 space-y-1">
       <dt className="text-xs font-bold text-muted-foreground">{label}</dt>

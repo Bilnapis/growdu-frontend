@@ -1,8 +1,9 @@
 import { type FormEvent, type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AlertCircle, Info, Plus, Search, Trash2, X } from 'lucide-react'
+import { AlertCircle, Info, Plus, Search, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import {
   Dialog,
   DialogBody,
@@ -37,6 +38,8 @@ const days = [
   'Sabtu',
   'Minggu',
 ] as const
+
+const scheduleSelectClassName = 'h-[38px] py-0 text-[13px] font-normal'
 
 const newSchedule = (): ScheduleDraft => ({
   tutorId: '',
@@ -170,7 +173,7 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
             <h2 id="group-information">
               {group ? 'Informasi Kelompok' : '1. Informasi Kelompok'}
             </h2>
-            <Field label="Nama Kelompok" required>
+            <Field label="Nama Kelompok" htmlFor="group-name" required>
               <Input
                 id="group-name"
                 value={name}
@@ -209,8 +212,13 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                 Tentukan rentang tanggal aktif untuk kelompok belajar ini.
               </p>
               <div className="study-group-form__row">
-                <Field label="Tanggal Mulai" required>
+                <Field
+                  label="Tanggal Mulai"
+                  htmlFor="group-effective-from"
+                  required
+                >
                   <Input
+                    id="group-effective-from"
                     required
                     type="date"
                     value={effectiveFrom}
@@ -221,8 +229,13 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                     onChange={(event) => setEffectiveFrom(event.target.value)}
                   />
                 </Field>
-                <Field label="Tanggal Selesai" required>
+                <Field
+                  label="Tanggal Selesai"
+                  htmlFor="group-effective-until"
+                  required
+                >
                   <Input
+                    id="group-effective-until"
                     required
                     type="date"
                     min={effectiveFrom}
@@ -330,8 +343,15 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                     ) : null}
                   </div>
                   <div className="study-group-form__row">
-                    <Field label="Tentor" required>
-                      <select
+                    <Field
+                      label="Tentor"
+                      htmlFor={`schedule-${index}-tutor`}
+                      required
+                    >
+                      <Select
+                        id={`schedule-${index}-tutor`}
+                        className={scheduleSelectClassName}
+                        placeholder="Pilih tentor"
                         required
                         value={schedule.tutorId}
                         disabled={tutors.isPending}
@@ -341,7 +361,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                           changeSchedule(index, { tutorId: event.target.value })
                         }
                       >
-                        <option value="">Pilih tentor</option>
                         {schedule.tutorId &&
                         !tutors.data?.data.some(
                           (tutor) => tutor.id === schedule.tutorId,
@@ -357,10 +376,17 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                             {tutor.name}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </Field>
-                    <Field label="Ruangan" required>
-                      <select
+                    <Field
+                      label="Ruangan"
+                      htmlFor={`schedule-${index}-room`}
+                      required
+                    >
+                      <Select
+                        id={`schedule-${index}-room`}
+                        className={scheduleSelectClassName}
+                        placeholder="Pilih ruangan"
                         required
                         value={schedule.roomId}
                         disabled={rooms.isPending}
@@ -370,7 +396,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                           changeSchedule(index, { roomId: event.target.value })
                         }
                       >
-                        <option value="">Pilih ruangan</option>
                         {schedule.roomId &&
                         !rooms.data?.data.some(
                           (room) => room.id === schedule.roomId,
@@ -386,12 +411,18 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                             {room.name} ({room.code}) · {room.capacity} siswa
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </Field>
                   </div>
                   <div className="study-group-form__row">
-                    <Field label="Hari Belajar" required>
-                      <select
+                    <Field
+                      label="Hari Belajar"
+                      htmlFor={`schedule-${index}-day`}
+                      required
+                    >
+                      <Select
+                        id={`schedule-${index}-day`}
+                        className={scheduleSelectClassName}
                         required
                         value={schedule.dayOfWeek}
                         onChange={(event) =>
@@ -405,11 +436,16 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                             {day}
                           </option>
                         ))}
-                      </select>
+                      </Select>
                     </Field>
                     <div className="study-group-form__times">
-                      <Field label="Jam Mulai" required>
+                      <Field
+                        label="Jam Mulai"
+                        htmlFor={`schedule-${index}-start-time`}
+                        required
+                      >
                         <Input
+                          id={`schedule-${index}-start-time`}
                           required
                           type="time"
                           value={schedule.startTime}
@@ -424,8 +460,13 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                           }
                         />
                       </Field>
-                      <Field label="Jam Selesai" required>
+                      <Field
+                        label="Jam Selesai"
+                        htmlFor={`schedule-${index}-end-time`}
+                        required
+                      >
                         <Input
+                          id={`schedule-${index}-end-time`}
                           required
                           type="time"
                           value={schedule.endTime}
@@ -592,7 +633,6 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
           <div>
             <Button asChild variant="outline">
               <Link to={group ? `/study-groups/${group.id}` : '/study-groups'}>
-                <X aria-hidden="true" />
                 Batal
               </Link>
             </Button>
@@ -639,9 +679,9 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                 <label className="sr-only" htmlFor="student-education-stage">
                   Filter jenjang
                 </label>
-                <select
+                <Select
                   id="student-education-stage"
-                  className="study-group-form__picker-filter"
+                  className="h-10 py-0 text-[13px] font-semibold"
                   value={educationStage}
                   onChange={(event) => setEducationStage(event.target.value)}
                 >
@@ -649,7 +689,7 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                   <option value="SD">SD</option>
                   <option value="SMP">SMP</option>
                   <option value="SMA">SMA</option>
-                </select>
+                </Select>
               </div>
               {students.isPending ? (
                 <p role="status" className="study-group-form__picker-message">
@@ -762,16 +802,18 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
 
 function Field({
   label,
+  htmlFor,
   children,
   required = false,
 }: {
   label: string
+  htmlFor: string
   children: ReactNode
   required?: boolean
 }) {
   return (
-    <label className="study-group-form__field">
-      <span>
+    <div className="study-group-form__field">
+      <label htmlFor={htmlFor}>
         {label}
         {required ? (
           <span className="study-group-form__required" aria-hidden="true">
@@ -779,9 +821,9 @@ function Field({
             *
           </span>
         ) : null}
-      </span>
+      </label>
       {children}
-    </label>
+    </div>
   )
 }
 

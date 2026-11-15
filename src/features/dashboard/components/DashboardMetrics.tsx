@@ -46,6 +46,8 @@ const numberFormatter = new Intl.NumberFormat('id-ID')
 export function DashboardMetrics({ today }: { today: string }) {
   const {
     students,
+    invoices,
+    invoiceAccess,
     tutors,
     studyGroups,
     savedAttendance,
@@ -83,10 +85,11 @@ export function DashboardMetrics({ today }: { today: string }) {
     },
     {
       label: 'Invoice Pending',
-      value: '27',
-      helper: formatMetricComparison(undefined, undefined),
+      value: formatCount(invoices.data?.pending),
+      helper: invoiceAccess ? 'Invoice belum lunas, termasuk terlambat' : 'Akses invoice diperlukan',
       icon: Receipt,
       tone: 'warning',
+      queries: invoiceAccess ? [invoices] : [],
     },
     {
       label: 'Tentor Aktif',

@@ -4,6 +4,7 @@ import * as yup from 'yup'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -90,18 +91,18 @@ export function UserSettings({ filters, onFiltersChange }: UserSettingsProps) {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="user-role" className="sr-only">Filter peran</Label>
-              <select id="user-role" name="role" defaultValue={filters.role ?? ''} className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <Select id="user-role" name="role" defaultValue={filters.role ?? ''} className="h-11">
                 <option value="">Semua peran</option>
                 {Object.entries(roleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
+              </Select>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="user-status" className="sr-only">Filter status</Label>
-              <select id="user-status" name="status" defaultValue={filters.status ?? ''} className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+              <Select id="user-status" name="status" defaultValue={filters.status ?? ''} className="h-11">
                 <option value="">Semua status</option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Nonaktif</option>
-              </select>
+              </Select>
             </div>
             <Button type="submit">Terapkan</Button>
           </form>
@@ -247,7 +248,7 @@ function UserEditor({ user, onClose }: { user: ManagedUser; onClose: () => void 
           </div>
           <div className="grid gap-2">
             <Label htmlFor="edit-status">Status akses</Label>
-            <select id="edit-status" name="status" defaultValue={user.status} className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" disabled={isPending}>
+            <select id="edit-status" name="status" defaultValue={user.status} className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" disabled={isPending}>
               <option value="active">Aktif</option>
               <option value="inactive">Nonaktif</option>
             </select>

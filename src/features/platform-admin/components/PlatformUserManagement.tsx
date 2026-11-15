@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import {
   type CreatePlatformUserInput,
@@ -173,11 +174,11 @@ export function PlatformUserManagement({
             className="pl-9"
           />
         </div>
-        <select
+        <Select
           name="role"
           defaultValue={filters.role ?? ""}
           aria-label="Filter peran"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="h-11"
         >
           <option value="">Semua peran</option>
           {Object.entries(roleLabels).map(([value, label]) => (
@@ -185,17 +186,17 @@ export function PlatformUserManagement({
               {label}
             </option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           name="status"
           defaultValue={filters.status ?? ""}
           aria-label="Filter status"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="h-11"
         >
           <option value="">Semua status</option>
           <option value="active">Aktif</option>
           <option value="inactive">Nonaktif</option>
-        </select>
+        </Select>
         <Button type="submit">Terapkan</Button>
       </form>
       <Card>
@@ -394,7 +395,7 @@ function CreatePlatformUserDialog({ onClose }: { onClose: () => void }) {
                   setRole(event.target.value as PlatformUserRole)
                 }
                 disabled={createMutation.isPending}
-                className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 {Object.entries(roleLabels).map(([value, label]) => (
                   <option key={value} value={value}>
@@ -415,7 +416,7 @@ function CreatePlatformUserDialog({ onClose }: { onClose: () => void }) {
                     tenantsQuery.isPending ||
                     tenantsQuery.isError
                   }
-                  className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="">
                     {tenantsQuery.isPending
@@ -680,7 +681,7 @@ function PlatformUserEditor({
                 disabled={
                   isPending || tenantsQuery.isPending || tenantsQuery.isError
                 }
-                className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <option value="">
                   {tenantsQuery.isPending
@@ -798,7 +799,7 @@ function PlatformUserEditor({
               name="status"
               defaultValue={detail.status}
               disabled={isPending}
-              className="h-11 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="h-11 rounded-md border border-input bg-[var(--color-surface)] px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <option value="active">Aktif</option>
               <option value="inactive">Nonaktif</option>

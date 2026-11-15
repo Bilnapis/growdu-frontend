@@ -47,7 +47,7 @@ export function DebouncedSearchInput({
         ref={inputRef}
         type="search"
         className={cn(
-          'h-10 rounded-md border-[var(--color-border)] bg-[var(--color-gray-50)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]',
+          'h-10 rounded-md border-[var(--color-border)] pl-10 text-[13px] font-medium text-[var(--color-text)] placeholder:text-[var(--color-muted)]',
           className,
         )}
         defaultValue={value}

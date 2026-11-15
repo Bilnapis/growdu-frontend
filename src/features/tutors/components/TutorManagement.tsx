@@ -13,7 +13,6 @@ import {
   Mail,
   MoreHorizontal,
   Pencil,
-  SlidersHorizontal,
   UserRoundX,
   UserX,
   UsersRound,
@@ -22,6 +21,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { AddButton } from '@/components/ui/add-button'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TablePagination } from '@/components/ui/table-pagination'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
@@ -202,20 +202,16 @@ export function TutorManagement({
               Filter status tentor
             </Label>
             <div className="relative">
-              <select
+              <Select
                 id="tutor-status"
                 name="status"
                 defaultValue={filters.status ?? ''}
-                className="h-10 appearance-none rounded-md border border-[var(--color-border)] bg-white py-2 pl-3.5 pr-9 text-[13px] font-semibold text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="h-10 min-w-28 text-[13px] font-semibold"
               >
                 <option value="">Status</option>
                 <option value="active">Aktif</option>
                 <option value="inactive">Nonaktif</option>
-              </select>
-              <SlidersHorizontal
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-muted)]"
-                aria-hidden="true"
-              />
+              </Select>
             </div>
             <button
               type="submit"

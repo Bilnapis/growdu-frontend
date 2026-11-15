@@ -49,7 +49,7 @@
   resize: vertical;
   border: var(--border-default);
   border-radius: var(--radius-sm);
-  background: var(--color-bg-light);
+  background: var(--color-surface);
   padding: var(--space-3);
   font-size: 0.875rem;
 }

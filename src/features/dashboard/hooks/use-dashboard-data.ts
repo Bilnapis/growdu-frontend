@@ -3,9 +3,12 @@ import { useStudentsSummary } from '@/features/students/hooks/use-students'
 import { useStudyGroupsSummary } from '@/features/study-groups/hooks/use-study-groups'
 import { useTutorsSummary } from '@/features/tutors/hooks/use-tutors'
 import { previousMonthDate } from '../utils/metric-comparison'
+import { useInvoiceAccess, useInvoiceSummary } from '@/features/invoices/hooks/use-invoices'
 
 export function useDashboardMetrics(today: string) {
   const previousDate = previousMonthDate(today)
+  const invoiceAccess = useInvoiceAccess()
+  const invoices = useInvoiceSummary({}, invoiceAccess)
   const students = useStudentsSummary()
   const tutors = useTutorsSummary()
   const studyGroups = useStudyGroupsSummary()
@@ -33,6 +36,8 @@ export function useDashboardMetrics(today: string) {
 
   return {
     students,
+    invoices,
+    invoiceAccess,
     tutors,
     studyGroups,
     savedAttendance,

@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -13,6 +13,7 @@ import {
   UserX,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
@@ -43,20 +44,6 @@ export function StudyGroupManagement({
   const groups = useStudyGroups(filters)
   const summary = useStudyGroupsSummary()
   const status = useUpdateStudyGroupStatus()
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const value = new FormData(event.currentTarget)
-    const search = formString(value.get('search')).trim()
-    const selected = formString(value.get('status'))
-    onFiltersChange({
-      page: 1,
-      limit: PAGE_SIZE,
-      ...(search ? { search } : {}),
-      ...(selected === 'active' || selected === 'inactive'
-        ? { status: selected }
-        : {}),
-    })
-  }
   return (
     <div className="min-w-0 space-y-5 text-[var(--color-text)]">
       <header className="flex flex-wrap items-center justify-between gap-4">
@@ -105,7 +92,7 @@ export function StudyGroupManagement({
         />
       </SummaryCardGrid>
       <Card className="mt-5 min-h-[560px] p-4 shadow-none sm:p-[18px]">
-        <form className="flex flex-col gap-3 sm:flex-row" onSubmit={submit}>
+        <div className="flex flex-col gap-3 sm:flex-row">
           <div className="min-w-0 flex-1">
             <label htmlFor="study-group-search" className="sr-only">
               Cari nama kelompok atau nama tentor
@@ -124,19 +111,28 @@ export function StudyGroupManagement({
               placeholder="Cari nama kelompok atau nama tentor"
             />
           </div>
-          <select
+          <Select
             name="status"
-            defaultValue={filters.status ?? ''}
-            className="h-10 rounded-md border border-border bg-white px-3 text-sm"
+            aria-label="Filter status kelompok belajar"
+            value={filters.status ?? ''}
+            onChange={(event) => {
+              const status = event.target.value
+              onFiltersChange({
+                ...filters,
+                page: 1,
+                status:
+                  status === 'active' || status === 'inactive'
+                    ? status
+                    : undefined,
+              })
+            }}
+            className="h-10 min-w-[148px] text-[13px] font-semibold"
           >
             <option value="">Semua status</option>
             <option value="active">Aktif</option>
             <option value="inactive">Nonaktif</option>
-          </select>
-          <Button type="submit" variant="outline">
-            Terapkan
-          </Button>
-        </form>
+          </Select>
+        </div>
         {groups.isError ? (
           <p className="p-8 text-center text-sm text-destructive" role="alert">
             Data belum dapat dimuat.
@@ -443,8 +439,4 @@ function StudyGroupRowActions({
         : null}
     </>
   )
-}
-
-function formString(value: FormDataEntryValue | null) {
-  return typeof value === 'string' ? value : ''
 }

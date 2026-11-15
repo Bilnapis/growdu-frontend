@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { SlidersHorizontal, UserRoundX, UsersRound } from 'lucide-react'
+import { UserRoundX, UsersRound } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
@@ -146,14 +147,10 @@ export function StaffManagement() {
             />
           </div>
           <div className="relative sm:w-36">
-            <SlidersHorizontal
-              className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground"
-              aria-hidden="true"
-            />
             <label htmlFor="staff-status" className="sr-only">
               Filter status pegawai
             </label>
-            <select
+            <Select
               id="staff-status"
               value={status}
               onChange={(event) => {
@@ -167,12 +164,12 @@ export function StaffManagement() {
                   setPage(1)
                 }
               }}
-              className="h-10 w-full appearance-none rounded-md border border-input bg-background py-2 pl-10 pr-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="h-10 text-[13px] font-semibold"
             >
               <option value="all">Status</option>
               <option value="active">Aktif</option>
               <option value="inactive">Nonaktif</option>
-            </select>
+            </Select>
           </div>
         </div>
 

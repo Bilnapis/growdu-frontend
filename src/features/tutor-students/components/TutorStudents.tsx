@@ -53,7 +53,7 @@ export function TutorStudents() {
                 value={searchText}
                 onChange={(event) => setSearchText(event.target.value)}
                 placeholder="Cari nama siswa"
-                className="h-9 bg-[var(--color-gray-50)] pl-8 text-[11px] font-normal"
+                className="h-9 pl-8 text-[11px] font-normal"
               />
             </div>
             <button type="submit" className="sr-only">

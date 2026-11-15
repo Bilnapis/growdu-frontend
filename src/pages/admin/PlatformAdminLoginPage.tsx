@@ -115,7 +115,7 @@ export function PlatformAdminLoginPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="platform-admin-password">Kata sandi</Label>
-              <div className="flex rounded-md border border-input bg-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+              <div className="flex rounded-md border border-input bg-[var(--color-surface)] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                 <Input
                   id="platform-admin-password"
                   name="password"

@@ -23,8 +23,11 @@ export function useCreateStudentRegistration() {
   return useMutation({
     mutationFn: createStudentRegistration,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: studentsQueryKey })
-      await queryClient.invalidateQueries({ queryKey: activeParentsQueryKey })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: studentsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: activeParentsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: ['invoices'] }),
+      ])
     },
   })
 }
@@ -83,8 +86,11 @@ export function useUpdateStudentRegistration() {
       input: StudentRegistrationUpdateInput
     }) => updateStudentRegistration(id, input),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: studentsQueryKey })
-      await queryClient.invalidateQueries({ queryKey: activeParentsQueryKey })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: studentsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: activeParentsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: ['invoices'] }),
+      ])
     },
   })
 }
