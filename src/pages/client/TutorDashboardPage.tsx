@@ -4,6 +4,7 @@ import {
   FileText,
   UserRound,
   UsersRound,
+  Wallet,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -23,6 +24,7 @@ const dateFormatter = new Intl.DateTimeFormat('id-ID', {
 const quickActions = [
   { label: 'Jadwal', icon: CalendarDays, to: '/tutor/sessions' },
   { label: 'Siswa', icon: UsersRound, to: '/tutor/students' },
+  { label: 'Slip Gaji', icon: Wallet, to: '/tutor/payroll' },
   { label: 'Laporan', icon: FileText, to: null },
 ] as const
 
@@ -92,7 +94,10 @@ export function TutorDashboardPage() {
                   to={to}
                   className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <Icon className="h-5 w-5 text-primary-text" aria-hidden="true" />
+                  <Icon
+                    className="h-5 w-5 text-primary-text"
+                    aria-hidden="true"
+                  />
                   <span className="text-[11px] font-bold">{label}</span>
                 </Link>
               ) : (
@@ -101,7 +106,10 @@ export function TutorDashboardPage() {
                   className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground"
                   aria-label={`${label} segera tersedia`}
                 >
-                  <Icon className="h-5 w-5 text-primary-text" aria-hidden="true" />
+                  <Icon
+                    className="h-5 w-5 text-primary-text"
+                    aria-hidden="true"
+                  />
                   <span className="text-[11px] font-bold">{label}</span>
                 </div>
               ),

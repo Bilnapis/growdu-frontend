@@ -4,6 +4,8 @@ import { DashboardAnnouncements } from '@/features/announcements/components/Dash
 import { sessionDateLabel, todayInJakarta } from '@/features/class-sessions/api'
 import { DashboardMetrics } from '@/features/dashboard/components/DashboardMetrics'
 import { DashboardTodaySchedule } from '@/features/dashboard/components/DashboardTodaySchedule'
+import { usePayrollAccess, usePayrollSummary } from '@/features/payroll/hooks'
+import { rupiah } from '@/features/payroll/format'
 
 type OperationalAlert = {
   title: string
@@ -11,7 +13,7 @@ type OperationalAlert = {
   tone: 'danger' | 'warning' | 'primary'
 }
 
-const alerts: readonly OperationalAlert[] = [
+const baseAlerts: readonly OperationalAlert[] = [
   {
     title: 'Invoice terlambat',
     description: '8 invoice melewati jatuh tempo',
@@ -22,14 +24,9 @@ const alerts: readonly OperationalAlert[] = [
     description: '14 laporan perkembangan belum dikirim',
     tone: 'warning',
   },
-  {
-    title: 'Payroll siap dicek',
-    description: '3 slip gaji menunggu approval',
-    tone: 'primary',
-  },
 ]
 
-const financeItems = [
+const baseFinanceItems = [
   {
     label: 'Invoice Lunas',
     value: 'Rp 42,8 jt',
@@ -45,11 +42,6 @@ const financeItems = [
     value: 'Rp 3,1 jt',
     tone: 'text-[var(--color-danger)]',
   },
-  {
-    label: 'Payroll Dibayar',
-    value: 'Rp 12,2 jt',
-    tone: 'text-[var(--color-primary-darker)]',
-  },
 ] as const
 
 const alertToneClasses = {
@@ -60,6 +52,38 @@ const alertToneClasses = {
 
 export function DashboardPage() {
   const today = todayInJakarta()
+  const payrollAccess = usePayrollAccess()
+  const payroll = usePayrollSummary({ month: today.slice(0, 7) }, payrollAccess)
+  const pendingPayroll =
+    (payroll.data?.unpaid ?? 0) + (payroll.data?.overdue ?? 0)
+  const alerts: readonly OperationalAlert[] = [
+    ...baseAlerts,
+    ...(pendingPayroll
+      ? [
+          {
+            title: 'Penggajian belum dibayar',
+            description: `${pendingPayroll} penggajian bulan ini menunggu pembayaran`,
+            tone: 'primary' as const,
+          },
+        ]
+      : []),
+  ]
+  const financeItems = [
+    ...baseFinanceItems,
+    ...(payrollAccess
+      ? [
+          {
+            label: 'Gaji Dibayar Bulan Ini',
+            value: payroll.data
+              ? rupiah(payroll.data.paidAmount)
+              : payroll.isError
+                ? 'Gagal memuat'
+                : 'Memuat...',
+            tone: 'text-[var(--color-primary-darker)]',
+          },
+        ]
+      : []),
+  ]
 
   return (
     <div className="min-w-0" aria-labelledby="dashboard-title">

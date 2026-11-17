@@ -15,6 +15,7 @@ import {
   isDashboardAccessError,
 } from '../utils/dashboard-errors'
 import { formatMetricComparison } from '../utils/metric-comparison'
+import { rupiah } from '@/features/payroll/format'
 
 type MetricQuery = {
   isPending: boolean
@@ -48,6 +49,9 @@ export function DashboardMetrics({ today }: { today: string }) {
     students,
     invoices,
     invoiceAccess,
+    payroll,
+    previousPayroll,
+    payrollAccess,
     tutors,
     studyGroups,
     savedAttendance,
@@ -67,10 +71,19 @@ export function DashboardMetrics({ today }: { today: string }) {
     },
     {
       label: 'Gaji Tentor',
-      value: 'Rp 18,6 jt',
-      helper: formatMetricComparison(undefined, undefined),
+      value: payroll.data ? rupiah(payroll.data.totalAmount) : undefined,
+      helper: payrollAccess
+        ? formatMetricComparison(
+            payroll.data ? Number(payroll.data.totalAmount) : undefined,
+            previousPayroll.data
+              ? Number(previousPayroll.data.totalAmount)
+              : undefined,
+          )
+        : 'Akses penggajian diperlukan',
       icon: Wallet,
       tone: 'purple',
+      queries: payrollAccess ? [payroll] : [],
+      comparisonQuery: payrollAccess ? previousPayroll : undefined,
     },
     {
       label: 'Siswa Aktif',
@@ -86,7 +99,9 @@ export function DashboardMetrics({ today }: { today: string }) {
     {
       label: 'Invoice Pending',
       value: formatCount(invoices.data?.pending),
-      helper: invoiceAccess ? 'Invoice belum lunas, termasuk terlambat' : 'Akses invoice diperlukan',
+      helper: invoiceAccess
+        ? 'Invoice belum lunas, termasuk terlambat'
+        : 'Akses invoice diperlukan',
       icon: Receipt,
       tone: 'warning',
       queries: invoiceAccess ? [invoices] : [],

@@ -1,5 +1,14 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 import { InvoicesPage } from '@/pages/client/InvoicesPage'
+import {
+  PayrollPage,
+  PayrollDetailPage,
+  PayrollPaymentPage,
+} from '@/pages/client/PayrollPage'
+import {
+  TutorPayrollPage,
+  TutorPayrollDetailPage,
+} from '@/features/payroll/TutorPayrollPage'
 import { InvoiceDetailPage } from '@/pages/client/InvoiceDetailPage'
 import { InvoicePaymentPage } from '@/pages/client/InvoicePaymentPage'
 import { AnnouncementsPage } from '@/pages/client/AnnouncementsPage'
@@ -106,6 +115,11 @@ export const router = createBrowserRouter([
                     element: <TutorPasswordEditPage />,
                   },
                   { path: 'tutor/sessions', element: <TutorSchedulePage /> },
+                  { path: 'tutor/payroll', element: <TutorPayrollPage /> },
+                  {
+                    path: 'tutor/payroll/:id',
+                    element: <TutorPayrollDetailPage />,
+                  },
                   { path: 'tutor/students', element: <TutorStudentsPage /> },
                   {
                     path: 'tutor/students/:studentId',
@@ -124,6 +138,12 @@ export const router = createBrowserRouter([
                     element: <DashboardLayout />,
                     children: [
                       { path: 'invoices', element: <InvoicesPage /> },
+                      { path: 'payroll', element: <PayrollPage /> },
+                      { path: 'payroll/:id', element: <PayrollDetailPage /> },
+                      {
+                        path: 'payroll/:id/payment',
+                        element: <PayrollPaymentPage />,
+                      },
                       { path: 'invoices/:id', element: <InvoiceDetailPage /> },
                       {
                         path: 'invoices/:id/payment',

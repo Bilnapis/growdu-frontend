@@ -13,7 +13,10 @@ import {
 } from '@/features/tutors/api/tutors-api'
 
 export const tutorsQueryKey = ['tutors'] as const
-export const tutorFormOptionsQueryKey = [...tutorsQueryKey, 'form-options'] as const
+export const tutorFormOptionsQueryKey = [
+  ...tutorsQueryKey,
+  'form-options',
+] as const
 
 export function useTutorsSummary() {
   return useQuery({
@@ -50,7 +53,10 @@ export function useCreateTutor() {
   return useMutation({
     mutationFn: createTutor,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: tutorsQueryKey })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: tutorsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: ['payroll'] }),
+      ])
     },
   })
 }
@@ -62,7 +68,10 @@ export function useUpdateTutor() {
     mutationFn: ({ id, input }: { id: string; input: TutorInput }) =>
       updateTutor(id, input),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: tutorsQueryKey })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: tutorsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: ['payroll'] }),
+      ])
     },
   })
 }

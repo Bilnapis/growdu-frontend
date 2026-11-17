@@ -8,7 +8,7 @@ export const operatorMenus = [
   { id: 'schedule', label: 'Jadwal', description: 'Membuat dan mengubah jadwal belajar' },
   { id: 'rooms', label: 'Ruangan', description: 'Mengatur ketersediaan ruangan' },
   { id: 'invoices', label: 'Invoice SPP', description: 'Membuat tagihan dan memantau pembayaran' },
-  { id: 'payroll', label: 'Penggajian', description: 'Melihat komponen gaji tentor dan staf' },
+  { id: 'payroll', label: 'Penggajian', description: 'Mengelola gaji, pembayaran, dan slip gaji tentor' },
   { id: 'reports', label: 'Laporan', description: 'Membuka laporan performa dan keuangan' },
   { id: 'announcements', label: 'Pengumuman', description: 'Kelola pengumuman untuk admin, tentor, siswa, dan wali' },
   { id: 'settings', label: 'Pengaturan', description: 'Mengubah konfigurasi aplikasi' },

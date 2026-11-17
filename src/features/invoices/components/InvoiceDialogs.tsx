@@ -124,44 +124,58 @@ export function InvoiceSettingsDialog({
               title="Jatuh Tempo & Tenggang"
               description="Atur tanggal jatuh tempo SPP setiap bulan dan tenggang waktu sebelum siswa dinonaktifkan."
             >
-              <fieldset disabled={isPending} className="grid min-w-0 gap-3.5">
+              <fieldset
+                disabled={isPending}
+                className="grid min-w-0 gap-6 text-[13px] leading-normal"
+              >
                 <legend className="sr-only">Jatuh Tempo & Tenggang</legend>
-                <div className="invoice-field">
-                  <label htmlFor="invoice-due-day">Tanggal jatuh tempo</label>
-                  <div className="invoice-actions">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_60px] items-center gap-x-4 gap-y-2 text-[13px]">
+                  <div className="grid min-w-0 gap-1 [overflow-wrap:anywhere] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
+                    <label htmlFor="invoice-due-day">
+                      Tanggal jatuh tempo setiap bulan
+                    </label>
+                    <p id="invoice-due-day-help">
+                      Tanggal jatuh tempo pembayaran SPP setiap bulan.
+                    </p>
+                  </div>
+                  <div className="flex min-w-0 flex-col items-end justify-end gap-1 text-muted-foreground">
                     <Input
                       id="invoice-due-day"
                       name="dueDay"
                       type="number"
+                      inputMode="numeric"
                       min={1}
                       max={31}
                       required
                       defaultValue={settings.dueDay}
-                      className="w-24"
+                      className="w-[60px] max-w-full text-center"
+                      aria-describedby="invoice-due-day-help"
                     />
-                    <span className="text-sm text-muted-foreground">
-                      setiap bulan
-                    </span>
                   </div>
                 </div>
-                <div className="invoice-field">
-                  <label htmlFor="invoice-grace-days">
-                    Tenggang waktu sebelum siswa dinonaktifkan
-                  </label>
-                  <div className="invoice-actions">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_60px] items-center gap-x-4 gap-y-2 text-[13px]">
+                  <div className="grid min-w-0 gap-1 [overflow-wrap:anywhere] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
+                    <label htmlFor="invoice-grace-days">
+                      Tenggang waktu sebelum siswa dinonaktifkan
+                    </label>
+                    <p id="invoice-grace-days-help">
+                      Jumlah hari setelah jatuh tempo sebelum siswa
+                      dinonaktifkan.
+                    </p>
+                  </div>
+                  <div className="flex min-w-0 flex-col items-end justify-end gap-1 text-muted-foreground">
                     <Input
                       id="invoice-grace-days"
                       name="graceDays"
                       type="number"
+                      inputMode="numeric"
                       min={0}
                       max={90}
                       required
                       defaultValue={settings.graceDays}
-                      className="w-24"
+                      className="w-[60px] max-w-full text-center"
+                      aria-describedby="invoice-grace-days-help"
                     />
-                    <span className="text-sm text-muted-foreground">
-                      hari setelah jatuh tempo
-                    </span>
                   </div>
                 </div>
               </fieldset>

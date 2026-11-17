@@ -10,12 +10,14 @@ import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 
 import { Button, type ButtonProps } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 let openDialogCount = 0
 let previousBodyOverflow = ''
 
 type DialogProps = {
   id?: string
+  className?: string
   title: string
   description?: string
   children: ReactNode
@@ -28,6 +30,7 @@ type DialogProps = {
 
 export function Dialog({
   id,
+  className,
   title,
   description,
   children,
@@ -81,7 +84,10 @@ export function Dialog({
       aria-labelledby={titleId}
       aria-describedby={description ? descriptionId : undefined}
       aria-busy={isPending}
-      className={`fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'small' ? 'max-w-[560px]' : size === 'medium' ? 'max-w-[652px]' : 'max-w-[840px]'} overflow-hidden rounded-xl border-0 bg-card p-0 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] open:flex open:flex-col`}
+      className={cn(
+        `fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] ${size === 'small' ? 'max-w-[560px]' : size === 'medium' ? 'max-w-[652px]' : 'max-w-[840px]'} overflow-hidden rounded-xl border-0 bg-card p-0 text-foreground shadow-[var(--shadow-md)] backdrop:bg-[var(--color-modal-overlay)] open:flex open:flex-col`,
+        className,
+      )}
       onCancel={(event) => {
         event.preventDefault()
         if (!isPending) onDismiss()

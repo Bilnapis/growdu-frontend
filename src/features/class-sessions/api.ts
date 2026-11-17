@@ -137,6 +137,7 @@ export function useSaveSession(id: string) {
     onSuccess: () =>
       Promise.all([
         client.invalidateQueries({ queryKey: sessionKeys }),
+        client.invalidateQueries({ queryKey: ['payroll'] }),
         client.invalidateQueries({ queryKey: ['study-groups', 'summary'] }),
       ]),
   })
@@ -152,6 +153,7 @@ export function useOverrideSession(id: string) {
     onSuccess: () =>
       Promise.all([
         client.invalidateQueries({ queryKey: sessionKeys }),
+        client.invalidateQueries({ queryKey: ['payroll'] }),
         client.invalidateQueries({ queryKey: ['study-groups', 'summary'] }),
         client.invalidateQueries({ queryKey: ['rooms'] }),
       ]),

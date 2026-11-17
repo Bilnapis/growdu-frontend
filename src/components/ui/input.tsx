@@ -9,13 +9,17 @@ import { cn } from '@/lib/utils'
 import {
   formatCurrencyValue,
   getCurrencyCaretPosition,
+  getDecimalCurrencyCaretPosition,
+  normalizeCurrencyInputValue,
   normalizeCurrencyValue,
 } from './currency-input'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   isPhone?: boolean
-  /** Shows thousands separators while onChange and FormData receive digits only. */
+  /** Shows thousands separators while onChange and FormData receive an unformatted number string. */
   isCurrency?: boolean
+  /** Preserve up to two decimal places; displayed with a comma. */
+  allowCurrencyDecimals?: boolean
   leadingText?: string
 }
 
@@ -43,6 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       type,
       isPhone = false,
       isCurrency = false,
+      allowCurrencyDecimals = false,
       leadingText,
       onChange,
       value,
@@ -54,10 +59,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     const [currencyValue, setCurrencyValue] = useState(() =>
-      normalizeCurrencyValue(defaultValue),
+      normalizeCurrencyValue(defaultValue, allowCurrencyDecimals),
     )
     const rawCurrencyValue =
-      value === undefined ? currencyValue : normalizeCurrencyValue(value)
+      value === undefined
+        ? currencyValue
+        : normalizeCurrencyValue(value, allowCurrencyDecimals)
     const isPhoneInput = isPhone && !isCurrency
 
     const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,14 +74,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const handleCurrencyChange = (event: ChangeEvent<HTMLInputElement>) => {
       const input = event.currentTarget
-      const rawValue = normalizeCurrencyValue(input.value)
-      const caret = getCurrencyCaretPosition(input.value, input.selectionStart)
+      const rawValue = normalizeCurrencyInputValue(
+        input.value,
+        allowCurrencyDecimals,
+      )
+      const caret = allowCurrencyDecimals
+        ? getDecimalCurrencyCaretPosition(input.value, input.selectionStart)
+        : getCurrencyCaretPosition(input.value, input.selectionStart)
       if (value === undefined) setCurrencyValue(rawValue)
       input.value = rawValue
       try {
         onChange?.(event)
       } finally {
-        input.value = formatCurrencyValue(rawValue)
+        input.value = formatCurrencyValue(rawValue, allowCurrencyDecimals)
         input.setSelectionRange(caret, caret)
       }
     }
@@ -84,13 +96,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       name: isCurrency ? undefined : name,
       type: isCurrency || isPhoneInput ? 'text' : type,
       inputMode: isCurrency
-        ? 'numeric'
+        ? allowCurrencyDecimals
+          ? 'decimal'
+          : 'numeric'
         : (props.inputMode ?? (isPhoneInput ? 'numeric' : undefined)),
       pattern: isCurrency
-        ? '[0-9]{1,3}(\\.[0-9]{3})*'
+        ? allowCurrencyDecimals
+          ? '[0-9]{1,3}(\\.[0-9]{3})*(,[0-9]{1,2})?'
+          : '[0-9]{1,3}(\\.[0-9]{3})*'
         : (props.pattern ?? (isPhoneInput ? '[0-9]*' : undefined)),
       value: isCurrency
-        ? formatCurrencyValue(rawCurrencyValue)
+        ? formatCurrencyValue(rawCurrencyValue, allowCurrencyDecimals)
         : isPhoneInput
           ? normalizePhoneInputValue(value)
           : value,

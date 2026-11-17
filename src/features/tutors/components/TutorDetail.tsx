@@ -1,11 +1,13 @@
 import { type ReactNode, useState } from 'react'
-import { BookOpen, Pencil, UserX, WalletCards } from 'lucide-react'
+import { BookOpen, Pencil, UserX } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import { TutorForm } from '@/features/tutors/components/TutorForm'
 import { useTutor, useUpdateTutor } from '@/features/tutors/hooks/use-tutors'
 import { ApiError } from '@/services/api-client'
+import { TutorLatestPayroll } from '@/features/payroll/TutorLatestPayroll'
+import { rupiah } from '@/features/payroll/format'
 
 export function TutorDetail({ id }: { id: string }) {
   const [isEditing, setIsEditing] = useState(false)
@@ -100,6 +102,7 @@ export function TutorDetail({ id }: { id: string }) {
                   <DetailField label="Bank / E-Wallet" value={tutor.bankName} />
                   <DetailField label="Atas Nama" value={tutor.accountName} />
                   <DetailField label="Nomor Rekening" value={tutor.accountNumber} />
+                  <DetailField label="Tarif per Sesi" value={Number(tutor.sessionRate) > 0 ? rupiah(tutor.sessionRate) : 'Belum diatur'} />
                 </dl>
               </DetailSection>
             </div>
@@ -111,13 +114,7 @@ export function TutorDetail({ id }: { id: string }) {
                 </div>
               </DetailSection>
               <DetailSection title="Penggajian Terakhir" description="Ringkasan penggajian terbaru tentor untuk dicek sebelum membuka detail pembayaran.">
-                <div className="rounded-md border border-border bg-[var(--color-bg)] p-4 text-sm text-muted-foreground">
-                  <WalletCards className="mb-2 h-5 w-5" aria-hidden="true" />
-                  Data penggajian belum tersedia.
-                </div>
-                <Button variant="outline" className="w-full" disabled>
-                  <WalletCards className="h-4 w-4" aria-hidden="true" /> Lihat Penggajian
-                </Button>
+                <TutorLatestPayroll tutorId={tutor.id} />
               </DetailSection>
             </aside>
           </div>

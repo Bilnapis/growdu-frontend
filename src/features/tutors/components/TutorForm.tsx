@@ -35,6 +35,7 @@ type TutorCreateForm = {
   bankName: string
   accountName: string
   accountNumber: string
+  sessionRate: string
   password: string
   passwordConfirmation: string
 }
@@ -49,6 +50,7 @@ const initialForm: TutorCreateForm = {
   bankName: '',
   accountName: '',
   accountNumber: '',
+  sessionRate: '',
   password: '',
   passwordConfirmation: '',
 }
@@ -86,10 +88,27 @@ function createTutorSchema(
       .trim()
       .min(3, 'Nomor rekening minimal 3 karakter.')
       .required('Nomor rekening minimal 3 karakter.'),
+    sessionRate: yup
+      .string()
+      .trim()
+      .required('Tarif per sesi wajib diisi.')
+      .matches(
+        /^\d{1,10}(\.\d{1,2})?$/,
+        'Masukkan nominal tanpa pemisah ribuan, maksimal dua desimal.',
+      )
+      .test(
+        'positive-rate',
+        'Tarif per sesi harus lebih dari nol.',
+        (value) => Number(value) > 0,
+      ),
     password: yup
       .string()
       .defined()
-      .min(5, 'Kata sandi minimal 5 karakter.')
+      .test(
+        'min-length',
+        'Kata sandi minimal 5 karakter.',
+        (value) => value === '' || value.length >= 5,
+      )
       .max(128, 'Kata sandi maksimal 128 karakter.')
       .test(
         'required-for-account',
@@ -133,6 +152,10 @@ export function TutorForm({
           bankName: tutor.bankName ?? '',
           accountName: tutor.accountName ?? '',
           accountNumber: tutor.accountNumber ?? '',
+          sessionRate:
+            Number(tutor.sessionRate) > 0
+              ? String(Number(tutor.sessionRate))
+              : '',
           password: '',
           passwordConfirmation: '',
         }
@@ -141,7 +164,7 @@ export function TutorForm({
   const [submitted, setSubmitted] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const passwordRequired = !tutor || !tutor.userId
+  const passwordRequired = !tutor
   const schema = useMemo(
     () => createTutorSchema(passwordRequired),
     [passwordRequired],
@@ -200,7 +223,7 @@ export function TutorForm({
       ...inputWithoutPassword,
       ...(inputPassword ? { password: inputPassword } : {}),
       phoneNumber: `+62${normalizeTutorPhoneNumber(input.phoneNumber)}`,
-      sessionRate: tutor?.sessionRate ?? '0',
+      sessionRate: input.sessionRate,
       status: tutor?.status ?? 'active',
     }
     const options = {
@@ -333,8 +356,8 @@ export function TutorForm({
 
             <section className="rounded-lg border border-[var(--color-border)] bg-white p-5">
               <SectionHeader
-                title="Data Rekening Tentor"
-                description={'Dipakai untuk invoice atau penggajian'}
+                title="Data Penggajian Tentor"
+                description="Rekening penerima gaji dan tarif mengajar per sesi."
               />
               <div className="mt-4 grid gap-3.5 md:grid-cols-3">
                 <FormField
@@ -366,6 +389,17 @@ export function TutorForm({
                   placeholder="12345678"
                   inputMode="numeric"
                   onChange={(value) => updateField('accountNumber', value)}
+                />
+                <FormField
+                  id="tutor-session-rate"
+                  label="Tarif per Sesi"
+                  leadingText="Rp"
+                  isCurrency
+                  value={form.sessionRate}
+                  required
+                  placeholder="Contoh: 150.000"
+                  error={submitted ? validation.errors.sessionRate : undefined}
+                  onChange={(value) => updateField('sessionRate', value)}
                 />
               </div>
             </section>
@@ -440,6 +474,8 @@ function FormField({
   type = 'text',
   inputMode,
   isPhone = false,
+  isCurrency = false,
+  leadingText,
   autoComplete,
 }: {
   id: string
@@ -450,8 +486,11 @@ function FormField({
   required?: boolean
   placeholder?: string
   type?: string
-  inputMode?: 'email' | 'numeric' | 'search' | 'tel' | 'text' | 'url'
+  inputMode?:
+    'email' | 'numeric' | 'decimal' | 'search' | 'tel' | 'text' | 'url'
   isPhone?: boolean
+  isCurrency?: boolean
+  leadingText?: string
   autoComplete?: string
 }) {
   return (
@@ -476,6 +515,8 @@ function FormField({
         autoComplete={autoComplete}
         inputMode={inputMode}
         isPhone={isPhone}
+        isCurrency={isCurrency}
+        leadingText={leadingText}
         aria-required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? `${id}-error` : undefined}

@@ -236,7 +236,7 @@ export function StaffManagement() {
                 >
                   <th
                     scope="row"
-                    className="min-w-[135px] px-[18px] py-3 font-bold"
+                    className="min-w-[160px] px-[18px] py-3 font-bold"
                   >
                     {staff.name}
                   </th>
