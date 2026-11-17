@@ -3,6 +3,12 @@
 Dashboard operasional GrowDu yang dibangun dengan React 18, Vite, TypeScript,
 React Router, dan TanStack Query.
 
+Untuk deployment Docker production bersama backend dan MySQL, ikuti
+[panduan Docker VPS](../growdu-backend/docs/deploy-docker.md).
+Image frontend memakai Caddy untuk file statis, reverse proxy API, dan HTTPS.
+`VITE_API_BASE_URL` wajib berupa URL HTTPS absolut saat build; Compose production
+mengisinya dari domain aplikasi. Perubahan domain memerlukan rebuild image.
+
 ## Menjalankan project
 
 ```bash

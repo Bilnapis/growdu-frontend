@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+coverage
+.git
+.env
+.env.*
+.npm-cache
+.agents
+.codex
+*.log
+*.tsbuildinfo
+*.pem
+*.key
+*.pen
+docs
