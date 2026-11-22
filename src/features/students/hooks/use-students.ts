@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getActiveStudyGroups } from '@/features/study-groups/api/study-groups-api'
 
 import {
   createStudentRegistration,
@@ -17,6 +18,14 @@ import {
 export const studentsQueryKey = ['students'] as const
 const activeParentsQueryKey = ['parents', 'active'] as const
 
+export function useInitialStudyGroups(enabled: boolean) {
+  return useQuery({
+    queryKey: ['study-groups', 'initial-enrollment'],
+    queryFn: ({ signal }) => getActiveStudyGroups(signal),
+    enabled,
+  })
+}
+
 export function useCreateStudentRegistration() {
   const queryClient = useQueryClient()
 
@@ -26,6 +35,9 @@ export function useCreateStudentRegistration() {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: studentsQueryKey }),
         queryClient.invalidateQueries({ queryKey: activeParentsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: ['study-groups'] }),
+        queryClient.invalidateQueries({ queryKey: ['study-group-options'] }),
+        queryClient.invalidateQueries({ queryKey: ['class-sessions'] }),
         queryClient.invalidateQueries({ queryKey: ['invoices'] }),
       ])
     },

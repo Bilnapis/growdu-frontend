@@ -17,11 +17,16 @@ export type StudyGroupFormOptions = SchedulingOptions & {
 }
 
 export function getStudyGroupFormOptions(signal?: AbortSignal) {
-  return apiRequest<StudyGroupFormOptions>('/study-groups/form-options', { signal })
+  return apiRequest<StudyGroupFormOptions>('/study-groups/form-options', {
+    signal,
+  })
 }
 
 export function getStudyGroupStudents(id: string, signal?: AbortSignal) {
-  return apiRequest<StudyGroupStudentOption[]>(`/study-groups/${encodeURIComponent(id)}/students`, { signal })
+  return apiRequest<StudyGroupStudentOption[]>(
+    `/study-groups/${encodeURIComponent(id)}/students`,
+    { signal },
+  )
 }
 
 export type StudyGroupSchedule = {
@@ -104,6 +109,22 @@ export function getStudyGroups(
 }
 export function getStudyGroupsSummary(signal?: AbortSignal) {
   return apiRequest<StudyGroupsSummary>('/study-groups/summary', { signal })
+}
+
+export async function getActiveStudyGroups(signal?: AbortSignal) {
+  const groups: StudyGroupListItem[] = []
+  let page = 1
+  let totalPages: number
+  do {
+    const result = await getStudyGroups(
+      { page, limit: 100, status: 'active' },
+      signal,
+    )
+    groups.push(...result.data)
+    totalPages = result.meta.totalPages
+    page += 1
+  } while (page <= totalPages)
+  return groups
 }
 export function getStudyGroup(id: string, signal?: AbortSignal) {
   return apiRequest<StudyGroup>(`/study-groups/${encode(id)}`, { signal })

@@ -4,6 +4,7 @@ export type EntityStatus = 'active' | 'inactive'
 export type StudentGender = 'male' | 'female'
 
 export type StudentRegistrationInput = {
+  studyGroupId?: string
   monthlyFee?: number | null
   name: string
   gender: StudentGender

@@ -13,6 +13,7 @@ import type {
 } from '@/features/students/api/students-api'
 import {
   useActiveParents,
+  useInitialStudyGroups,
   useCreateStudentRegistration,
   useUpdateStudentRegistration,
 } from '@/features/students/hooks/use-students'
@@ -33,6 +34,7 @@ import {
 } from '@/components/ui/dialog'
 
 type StudentRegistrationForm = {
+  studyGroupId: string
   monthlyFee: string
   editing: boolean
   name: string
@@ -56,6 +58,7 @@ function getInitialForm(
   monthlyFee: number | null = null,
 ): StudentRegistrationForm {
   return {
+    studyGroupId: '',
     monthlyFee: monthlyFee === null ? '' : String(monthlyFee),
     editing: Boolean(student),
     name: student?.name ?? '',
@@ -79,6 +82,14 @@ function getInitialForm(
 
 const registrationSchema: yup.ObjectSchema<StudentRegistrationForm> = yup
   .object({
+    studyGroupId: yup
+      .string()
+      .defined()
+      .when('status', {
+        is: 'inactive',
+        then: (schema) =>
+          schema.oneOf([''], 'Aktifkan siswa sebelum memilih kelompok awal.'),
+      }),
     monthlyFee: yup
       .string()
       .trim()
@@ -268,6 +279,7 @@ function StudentRegistrationDialog({
   const parentsQuery = useActiveParents(
     !isEditing && form.parentSource === 'existing',
   )
+  const groupsQuery = useInitialStudyGroups(!isEditing)
 
   const validation = useMemo<{
     errors: FormFieldErrors<keyof StudentRegistrationForm>
@@ -351,6 +363,7 @@ function StudentRegistrationDialog({
 
     const registrationBase = {
       ...base,
+      ...(value.studyGroupId ? { studyGroupId: value.studyGroupId } : {}),
       ...(phoneNumber ? { phoneNumber } : {}),
     }
 
@@ -628,20 +641,49 @@ function StudentRegistrationDialog({
               )}
             </FormSection>
 
-            <FormSection
-              title="Kelompok Awal"
-              description="Siswa bisa disimpan tanpa kelompok lalu ditambahkan dari Kelompok Belajar."
-            >
-              <SelectField
-                id="student-group"
-                label="Kelompok aktif"
-                value=""
-                disabled
-                onChange={() => undefined}
-                options={[]}
-                placeholder="Pilih kelompok"
-              />
-            </FormSection>
+            {!isEditing ? (
+              <FormSection
+                title="Kelompok Awal"
+                description="Pilih kelompok yang sudah dibuat. Siswa juga bisa disimpan tanpa kelompok."
+              >
+                <SelectField
+                  id="student-group"
+                  label="Kelompok aktif"
+                  value={form.studyGroupId}
+                  error={visibleErrors.studyGroupId}
+                  disabled={groupsQuery.isPending || groupsQuery.isError}
+                  onChange={(value) => updateField('studyGroupId', value)}
+                  options={(groupsQuery.data ?? []).map((group) => ({
+                    value: group.id,
+                    label: group.name,
+                  }))}
+                  placeholder={
+                    groupsQuery.isPending
+                      ? 'Memuat kelompok...'
+                      : 'Tanpa kelompok'
+                  }
+                />
+                {groupsQuery.isError ? (
+                  <div role="alert" className="mt-2 space-y-2 text-sm">
+                    <p>
+                      Kelompok belum dapat dimuat. Coba lagi atau simpan tanpa
+                      kelompok.
+                    </p>
+                    <DialogButton
+                      variant="outline"
+                      onClick={() => void groupsQuery.refetch()}
+                    >
+                      Muat ulang kelompok
+                    </DialogButton>
+                  </div>
+                ) : groupsQuery.data?.length === 0 ? (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Belum ada kelompok aktif. Buat kelompok dari menu Kelompok
+                    Belajar.
+                  </p>
+                ) : null}
+              </FormSection>
+            ) : null}
           </fieldset>
 
           {formError ? (
@@ -931,7 +973,7 @@ function normalizeEditablePhone(value: string | null) {
 
 function getMutationError(error: unknown, isEditing: boolean) {
   if (!isEditing && error instanceof ApiError && error.status === 409) {
-    return 'Email orang tua sudah digunakan. Gunakan data orang tua yang sudah ada.'
+    return 'Data belum dapat disimpan. Periksa apakah email orang tua sudah digunakan atau konfigurasi kelompok masih berlaku.'
   }
   if (error instanceof ApiError && error.status === 403) {
     return isEditing

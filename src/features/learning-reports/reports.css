@@ -110,12 +110,6 @@
   font-size: 12px;
   margin-top: var(--space-1);
 }
-.lr-filters {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 180px 170px;
-  gap: var(--space-3);
-  align-items: end;
-}
 .lr-field {
   display: grid;
   gap: var(--space-2);
@@ -167,36 +161,6 @@
   font-size: 12px;
   margin-block: var(--space-3);
 }
-.lr-table-wrap {
-  overflow-x: auto;
-}
-.lr-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-.lr-table th {
-  background: var(--color-bg);
-  color: var(--color-muted);
-  font-size: 11px;
-  font-weight: 600;
-  padding: var(--space-3);
-}
-.lr-table td {
-  border-bottom: var(--border-default);
-  padding: var(--space-5) var(--space-3);
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-.lr-table td:nth-child(4) {
-  max-width: 220px;
-}
-.lr-table small {
-  display: block;
-  margin-top: var(--space-1);
-  color: var(--color-muted);
-  font-size: 11px;
-}
 .lr-badge {
   display: inline-flex;
   align-items: center;
@@ -206,6 +170,14 @@
   font-size: 11px;
   line-height: 1.4;
   font-weight: 600;
+}
+.lr-list-table .lr-badge {
+  padding: 5px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+  white-space: nowrap;
 }
 .lr-unfilled {
   background: var(--color-bg-alt);
@@ -222,9 +194,6 @@
 .lr-published {
   background: var(--color-success-bg);
   color: var(--color-success-text);
-}
-.lr-mobile-cards {
-  display: none;
 }
 .lr-empty {
   display: grid;
@@ -480,34 +449,11 @@
   .lr-metric > strong {
     font-size: 20px;
   }
-  .lr-filters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .lr-filters > :first-child {
-    grid-column: 1 / -1;
-  }
   .lr-panel {
     padding: var(--space-4);
   }
   .lr-sidebar {
     grid-template-columns: minmax(0, 1fr);
-  }
-  .lr-table-wrap {
-    display: none;
-  }
-  .lr-mobile-cards {
-    display: grid;
-    gap: var(--space-3);
-  }
-  .lr-group-card {
-    border: var(--border-default);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-    display: grid;
-    gap: var(--space-3);
-  }
-  .lr-group-card > p {
-    color: var(--color-muted);
   }
   .lr-form-actions {
     padding: var(--space-3);
