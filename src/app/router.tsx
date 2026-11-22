@@ -1,4 +1,5 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import { learningReportRoutes } from '@/features/learning-reports/routes'
 import { InvoicesPage } from '@/pages/client/InvoicesPage'
 import {
   PayrollPage,
@@ -116,6 +117,7 @@ export const router = createBrowserRouter([
                   },
                   { path: 'tutor/sessions', element: <TutorSchedulePage /> },
                   { path: 'tutor/payroll', element: <TutorPayrollPage /> },
+                  ...learningReportRoutes('tutor/reports'),
                   {
                     path: 'tutor/payroll/:id',
                     element: <TutorPayrollDetailPage />,
@@ -138,6 +140,7 @@ export const router = createBrowserRouter([
                     element: <DashboardLayout />,
                     children: [
                       { path: 'invoices', element: <InvoicesPage /> },
+                      ...learningReportRoutes('reports'),
                       { path: 'payroll', element: <PayrollPage /> },
                       { path: 'payroll/:id', element: <PayrollDetailPage /> },
                       {

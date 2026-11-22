@@ -25,7 +25,7 @@ const quickActions = [
   { label: 'Jadwal', icon: CalendarDays, to: '/tutor/sessions' },
   { label: 'Siswa', icon: UsersRound, to: '/tutor/students' },
   { label: 'Slip Gaji', icon: Wallet, to: '/tutor/payroll' },
-  { label: 'Laporan', icon: FileText, to: null },
+  { label: 'Laporan', icon: FileText, to: '/tutor/reports' },
 ] as const
 
 function getFirstName(name: string | null) {
@@ -87,33 +87,19 @@ export function TutorDashboardPage() {
             Menu
           </h2>
           <div className="mt-3 grid grid-cols-3 gap-2.5">
-            {quickActions.map(({ label, icon: Icon, to }) =>
-              to ? (
-                <Link
-                  key={label}
-                  to={to}
-                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <Icon
-                    className="h-5 w-5 text-primary-text"
-                    aria-hidden="true"
-                  />
-                  <span className="text-[11px] font-bold">{label}</span>
-                </Link>
-              ) : (
-                <div
-                  key={label}
-                  className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground"
-                  aria-label={`${label} segera tersedia`}
-                >
-                  <Icon
-                    className="h-5 w-5 text-primary-text"
-                    aria-hidden="true"
-                  />
-                  <span className="text-[11px] font-bold">{label}</span>
-                </div>
-              ),
-            )}
+            {quickActions.map(({ label, icon: Icon, to }) => (
+              <Link
+                key={label}
+                to={to}
+                className="flex h-[76px] flex-col items-center justify-center gap-[7px] rounded-[10px] bg-card text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Icon
+                  className="h-5 w-5 text-primary-text"
+                  aria-hidden="true"
+                />
+                <span className="text-[11px] font-bold">{label}</span>
+              </Link>
+            ))}
           </div>
         </section>
 

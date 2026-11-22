@@ -50,6 +50,9 @@ function getActiveItem(pathname: string): SidebarClientItemId {
 export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
+  const isReportForm = /^\/reports\/(?:new|[^/]+\/edit)\/?$/.test(
+    location.pathname,
+  )
   const isStudyGroupDetail =
     /^\/study-groups\/(?:new|[^/]+(?:\/edit)?)\/?$/.test(location.pathname)
   const isScheduleDetail = /^\/schedule\/[^/]+\/?$/.test(location.pathname)
@@ -106,7 +109,7 @@ export function DashboardLayout() {
       />
 
       <div className="min-w-0 flex-1">
-        {!isStudyGroupDetail && !isScheduleDetail ? (
+        {!isStudyGroupDetail && !isScheduleDetail && !isReportForm ? (
           <header className="flex h-[61px] items-center justify-end border-b border-border bg-card px-5 py-3 lg:px-7">
             <DashboardAccountMenu
               accountName={
@@ -126,7 +129,9 @@ export function DashboardLayout() {
             <p role="status" className="text-sm text-muted-foreground">
               Memuat hak akses...
             </p>
-          ) : user?.role === 'operator' && currentUserQuery.isError && !currentUserQuery.data ? (
+          ) : user?.role === 'operator' &&
+            currentUserQuery.isError &&
+            !currentUserQuery.data ? (
             <section
               role="alert"
               className="space-y-3 rounded-lg border bg-card p-6"
