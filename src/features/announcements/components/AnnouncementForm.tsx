@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
+import { FormSection } from '@/components/ui/form-section'
 import { Label } from '@/components/ui/label'
 import type { Announcement, AnnouncementTarget } from '../api/announcements-api'
 import { useAnnouncementMutations } from '../hooks/use-announcements'
@@ -133,7 +134,6 @@ export function AnnouncementForm({
   return (
     <Dialog
       title={announcement ? 'Ubah Pengumuman' : 'Buat Pengumuman Baru'}
-      description="Isi detail pengumuman dan pilih target role dashboard."
       isPending={pending}
       onDismiss={dismiss}
       initialFocusSelector="#announcement-title"
@@ -141,106 +141,127 @@ export function AnnouncementForm({
     >
       <DialogForm ref={formRef} onSubmit={submit} noValidate>
         <DialogBody>
-          <fieldset disabled={pending} className="grid min-w-0 gap-4">
-            <Field
-              id="announcement-title"
-              label="Judul Pengumuman"
-              error={submitted ? errors.title : undefined}
+          <fieldset disabled={pending} className="min-w-0 space-y-3">
+            <FormSection
+              title="Detail Pengumuman"
+              description="Judul dan isi pengumuman yang ditampilkan pada dashboard."
             >
-              <Input
-                id="announcement-title"
-                required
-                maxLength={150}
-                value={values.title}
-                onChange={(event) => setField('title', event.target.value)}
-                placeholder="Contoh: Libur Maulid Nabi"
-                className="h-[42px] rounded-lg bg-card text-[13px]"
-                aria-invalid={submitted && Boolean(errors.title)}
-                aria-describedby={
-                  submitted && errors.title
-                    ? 'announcement-title-error'
-                    : undefined
-                }
-              />
-            </Field>
-            <Field
-              id="announcement-content"
-              label="Isi Pengumuman"
-              error={submitted ? errors.content : undefined}
+              <div className="grid min-w-0 gap-3.5">
+                <Field
+                  id="announcement-title"
+                  label="Judul Pengumuman"
+                  error={submitted ? errors.title : undefined}
+                >
+                  <Input
+                    id="announcement-title"
+                    required
+                    maxLength={150}
+                    value={values.title}
+                    onChange={(event) => setField('title', event.target.value)}
+                    placeholder="Contoh: Libur Maulid Nabi"
+                    className="h-[42px] rounded-lg bg-card text-[13px]"
+                    aria-invalid={submitted && Boolean(errors.title)}
+                    aria-describedby={
+                      submitted && errors.title
+                        ? 'announcement-title-error'
+                        : undefined
+                    }
+                  />
+                </Field>
+                <Field
+                  id="announcement-content"
+                  label="Isi Pengumuman"
+                  error={submitted ? errors.content : undefined}
+                >
+                  <textarea
+                    id="announcement-content"
+                    required
+                    maxLength={10_000}
+                    rows={5}
+                    value={values.content}
+                    onChange={(event) =>
+                      setField('content', event.target.value)
+                    }
+                    placeholder="Tuliskan detail pengumuman, instruksi, dan tanggal penting..."
+                    className="min-h-[132px] w-full resize-y rounded-lg border border-input bg-card p-3 text-[13px] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-invalid={submitted && Boolean(errors.content)}
+                    aria-describedby={
+                      submitted && errors.content
+                        ? 'announcement-content-error'
+                        : undefined
+                    }
+                  />
+                </Field>
+              </div>
+            </FormSection>
+            <FormSection
+              title="Penerima & Jadwal"
+              description="Tentukan penerima dan waktu tampil pengumuman."
             >
-              <textarea
-                id="announcement-content"
-                required
-                maxLength={10_000}
-                rows={5}
-                value={values.content}
-                onChange={(event) => setField('content', event.target.value)}
-                placeholder="Tuliskan detail pengumuman, instruksi, dan tanggal penting..."
-                className="min-h-[132px] w-full resize-y rounded-lg border border-input bg-card p-3 text-[13px] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                aria-invalid={submitted && Boolean(errors.content)}
-                aria-describedby={
-                  submitted && errors.content
-                    ? 'announcement-content-error'
-                    : undefined
-                }
-              />
-            </Field>
-            <Field id="announcement-target" label="Target Role">
-              <select
-                id="announcement-target"
-                value={values.targetRole}
-                onChange={(event) => {
-                  if (isAnnouncementTarget(event.target.value))
-                    setField('targetRole', event.target.value)
-                }}
-                className="h-[42px] w-full rounded-lg border border-input bg-card px-3 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {Object.entries(targetLabels).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-              <Field
-                id="announcement-start"
-                label="Mulai Tampil"
-                error={submitted ? errors.startsAt : undefined}
-              >
-                <Input
-                  id="announcement-start"
-                  type="datetime-local"
-                  value={values.startsAt}
-                  onChange={(event) => setField('startsAt', event.target.value)}
-                  className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
-                  aria-invalid={submitted && Boolean(errors.startsAt)}
-                  aria-describedby={`announcement-schedule-help${submitted && errors.startsAt ? ' announcement-start-error' : ''}`}
-                />
-              </Field>
-              <Field
-                id="announcement-end"
-                label="Berakhir"
-                error={submitted ? errors.endsAt : undefined}
-              >
-                <Input
-                  id="announcement-end"
-                  type="datetime-local"
-                  value={values.endsAt}
-                  onChange={(event) => setField('endsAt', event.target.value)}
-                  className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
-                  aria-invalid={submitted && Boolean(errors.endsAt)}
-                  aria-describedby={`announcement-schedule-help${submitted && errors.endsAt ? ' announcement-end-error' : ''}`}
-                />
-              </Field>
-            </div>
-            <p
-              id="announcement-schedule-help"
-              className="text-xs leading-relaxed text-muted-foreground"
-            >
-              Waktu menggunakan WIB. Kosongkan tanggal untuk menyimpan Draft.
-              Berakhir boleh dikosongkan agar tampil tanpa batas waktu.
-            </p>
+              <div className="grid min-w-0 gap-3.5">
+                <Field id="announcement-target" label="Target Role">
+                  <select
+                    id="announcement-target"
+                    value={values.targetRole}
+                    onChange={(event) => {
+                      if (isAnnouncementTarget(event.target.value))
+                        setField('targetRole', event.target.value)
+                    }}
+                    className="h-[42px] w-full rounded-lg border border-input bg-card px-3 text-[13px] font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {Object.entries(targetLabels).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+                  <Field
+                    id="announcement-start"
+                    label="Mulai Tampil"
+                    error={submitted ? errors.startsAt : undefined}
+                  >
+                    <Input
+                      id="announcement-start"
+                      type="datetime-local"
+                      value={values.startsAt}
+                      onChange={(event) =>
+                        setField('startsAt', event.target.value)
+                      }
+                      className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
+                      aria-invalid={submitted && Boolean(errors.startsAt)}
+                      aria-describedby={`announcement-schedule-help${submitted && errors.startsAt ? ' announcement-start-error' : ''}`}
+                    />
+                  </Field>
+                  <Field
+                    id="announcement-end"
+                    label="Berakhir"
+                    error={submitted ? errors.endsAt : undefined}
+                  >
+                    <Input
+                      id="announcement-end"
+                      type="datetime-local"
+                      value={values.endsAt}
+                      onChange={(event) =>
+                        setField('endsAt', event.target.value)
+                      }
+                      className="h-[42px] min-w-0 rounded-lg bg-card text-[13px]"
+                      aria-invalid={submitted && Boolean(errors.endsAt)}
+                      aria-describedby={`announcement-schedule-help${submitted && errors.endsAt ? ' announcement-end-error' : ''}`}
+                    />
+                  </Field>
+                </div>
+                <p
+                  id="announcement-schedule-help"
+                  className="text-xs leading-relaxed text-muted-foreground"
+                >
+                  Waktu menggunakan WIB. Kosongkan tanggal untuk menyimpan
+                  Draft. Berakhir boleh dikosongkan agar tampil tanpa batas
+                  waktu.
+                </p>
+              </div>
+            </FormSection>
             {formError ? (
               <p
                 role="alert"

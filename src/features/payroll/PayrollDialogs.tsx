@@ -289,140 +289,160 @@ export function GeneratePayrollDialog({
     <Dialog
       className="[container-type:inline-size]"
       title="Buat Penggajian"
-      description="Hitung gaji setelah periode sesi berakhir, tanpa menunggu tanggal gajian."
       size="medium"
       isPending={mutation.isPending}
       onDismiss={onClose}
     >
       <DialogForm onSubmit={submit}>
         <DialogBody>
-          {periods.isPending ? (
-            <p role="status">Memuat periode...</p>
-          ) : periods.isError ? (
-            <PayrollError
-              error={periods.error}
-              retry={() => void periods.refetch()}
-            />
-          ) : (
-            <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold">
-              <label htmlFor="generate-payroll-month">
-                Pilih Periode Penggajian
-              </label>
-              <Input
-                id="generate-payroll-month"
-                type="month"
-                required
-                min="1000-01"
-                max={lastClosedMonth}
-                value={sessionMonth}
-                disabled={mutation.isPending}
-                aria-invalid={!validMonth}
-                aria-describedby="generate-payroll-month-help"
-                onChange={(event) => setSessionMonth(event.target.value)}
-              />
-              {!validMonth ? (
-                <p role="alert" className="text-xs text-[var(--color-danger)]">
-                  Pilih bulan sebelum bulan berjalan.
-                </p>
-              ) : null}
-              {preview ? (
-                <PayrollPeriodPreview
-                  title="Preview periode penggajian"
-                  period={preview}
-                />
-              ) : null}
-            </div>
-          )}
-          <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
-            <label htmlFor="payroll-scope">Penerima penggajian</label>
-            <Select
-              id="payroll-scope"
-              value={scope}
-              disabled={mutation.isPending}
-              onChange={(e) => setScope(e.target.value)}
+          <div className="space-y-3">
+            <FormSection
+              title="Periode Penggajian"
+              description="Pilih bulan sesi mengajar yang akan dihitung."
             >
-              <option value="all">
-                Semua tentor dengan presensi tersimpan
-              </option>
-              <option value="one">Pilih satu tentor</option>
-            </Select>
-          </div>
-          {scope === 'one' ? (
-            <div className="space-y-3">
-              <DebouncedSearchInput
-                aria-label="Cari tentor"
-                placeholder="Cari nama tentor..."
-                value={search}
-                onSearch={(value) => {
-                  setSearch(value)
-                  setPage(1)
-                  setTutorId('')
-                }}
-              />
-              {tutors.isError ? (
+              {periods.isPending ? (
+                <p role="status">Memuat periode...</p>
+              ) : periods.isError ? (
                 <PayrollError
-                  error={tutors.error}
-                  retry={() => void tutors.refetch()}
+                  error={periods.error}
+                  retry={() => void periods.refetch()}
                 />
               ) : (
-                <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
-                  <label htmlFor="generate-payroll-tutor">Tentor</label>
-                  <Select
-                    id="generate-payroll-tutor"
+                <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold">
+                  <label htmlFor="generate-payroll-month">
+                    Pilih Periode Penggajian
+                  </label>
+                  <Input
+                    id="generate-payroll-month"
+                    type="month"
                     required
-                    value={tutorId}
-                    disabled={tutors.isPending || mutation.isPending}
-                    onChange={(e) => setTutorId(e.target.value)}
-                  >
-                    <option value="">
-                      {tutors.isPending ? 'Memuat tentor...' : 'Pilih tentor'}
-                    </option>
-                    {tutors.data?.data.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
-                        {t.status === 'inactive' ? ' (Nonaktif)' : ''} ·{' '}
-                        {Number(t.sessionRate)
-                          ? `${rupiah(t.sessionRate)}/sesi`
-                          : 'Tarif belum diatur'}
-                      </option>
-                    ))}
-                  </Select>
+                    min="1000-01"
+                    max={lastClosedMonth}
+                    value={sessionMonth}
+                    disabled={mutation.isPending}
+                    aria-invalid={!validMonth}
+                    aria-describedby="generate-payroll-month-help"
+                    onChange={(event) => setSessionMonth(event.target.value)}
+                  />
+                  {!validMonth ? (
+                    <p
+                      role="alert"
+                      className="text-xs text-[var(--color-danger)]"
+                    >
+                      Pilih bulan sebelum bulan berjalan.
+                    </p>
+                  ) : null}
+                  {preview ? (
+                    <PayrollPeriodPreview
+                      title="Preview periode penggajian"
+                      period={preview}
+                    />
+                  ) : null}
                 </div>
               )}
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={page <= 1 || mutation.isPending}
-                  onClick={() => {
-                    setPage((p) => p - 1)
-                    setTutorId('')
-                  }}
-                >
-                  Sebelumnya
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={
-                    !tutors.data ||
-                    page >= tutors.data.meta.totalPages ||
-                    mutation.isPending
-                  }
-                  onClick={() => {
-                    setPage((p) => p + 1)
-                    setTutorId('')
-                  }}
-                >
-                  Berikutnya
-                </Button>
+            </FormSection>
+            <FormSection
+              title="Penerima Penggajian"
+              description="Buat penggajian untuk semua tentor atau satu tentor tertentu."
+            >
+              <div className="space-y-3.5">
+                <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
+                  <label htmlFor="payroll-scope">Penerima penggajian</label>
+                  <Select
+                    id="payroll-scope"
+                    value={scope}
+                    disabled={mutation.isPending}
+                    onChange={(e) => setScope(e.target.value)}
+                  >
+                    <option value="all">
+                      Semua tentor dengan presensi tersimpan
+                    </option>
+                    <option value="one">Pilih satu tentor</option>
+                  </Select>
+                </div>
+                {scope === 'one' ? (
+                  <div className="space-y-3">
+                    <DebouncedSearchInput
+                      aria-label="Cari tentor"
+                      placeholder="Cari nama tentor..."
+                      value={search}
+                      onSearch={(value) => {
+                        setSearch(value)
+                        setPage(1)
+                        setTutorId('')
+                      }}
+                    />
+                    {tutors.isError ? (
+                      <PayrollError
+                        error={tutors.error}
+                        retry={() => void tutors.refetch()}
+                      />
+                    ) : (
+                      <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
+                        <label htmlFor="generate-payroll-tutor">Tentor</label>
+                        <Select
+                          id="generate-payroll-tutor"
+                          required
+                          value={tutorId}
+                          disabled={tutors.isPending || mutation.isPending}
+                          onChange={(e) => setTutorId(e.target.value)}
+                        >
+                          <option value="">
+                            {tutors.isPending
+                              ? 'Memuat tentor...'
+                              : 'Pilih tentor'}
+                          </option>
+                          {tutors.data?.data.map((t) => (
+                            <option key={t.id} value={t.id}>
+                              {t.name}
+                              {t.status === 'inactive'
+                                ? ' (Nonaktif)'
+                                : ''} ·{' '}
+                              {Number(t.sessionRate)
+                                ? `${rupiah(t.sessionRate)}/sesi`
+                                : 'Tarif belum diatur'}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                    )}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={page <= 1 || mutation.isPending}
+                        onClick={() => {
+                          setPage((p) => p - 1)
+                          setTutorId('')
+                        }}
+                      >
+                        Sebelumnya
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={
+                          !tutors.data ||
+                          page >= tutors.data.meta.totalPages ||
+                          mutation.isPending
+                        }
+                        onClick={() => {
+                          setPage((p) => p + 1)
+                          setTutorId('')
+                        }}
+                      >
+                        Berikutnya
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
+                <p className="text-xs text-muted-foreground">
+                  Penggajian yang sudah tersedia tidak ditimpa. Gunakan Perbarui
+                  dari Presensi untuk menghitung ulang rinciannya.
+                </p>
               </div>
-            </div>
-          ) : null}
-          <p className="text-xs text-muted-foreground">
-            Penggajian yang sudah tersedia tidak ditimpa. Gunakan Perbarui dari
-            Presensi untuk menghitung ulang rinciannya.
-          </p>
+            </FormSection>
+          </div>
           {mutation.isSuccess && mutation.data.created === 0 ? (
             <div
               role="status"

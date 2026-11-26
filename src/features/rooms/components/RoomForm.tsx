@@ -2,6 +2,7 @@ import { type FormEvent, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { Input } from '@/components/ui/input'
+import { FormSection } from '@/components/ui/form-section'
 import { Label } from '@/components/ui/label'
 import type { Room } from '@/features/rooms/api/rooms-api'
 import { useCreateRoom, useUpdateRoom } from '@/features/rooms/hooks/use-rooms'
@@ -149,44 +150,44 @@ export function RoomForm({
   return (
     <Dialog
       title={room ? 'Ubah Ruangan' : 'Tambah Ruangan'}
-      description={
-        room
-          ? `Perbarui informasi ${room.name} (${room.code}).`
-          : 'Lengkapi informasi ruangan baru.'
-      }
       isPending={pending}
       onDismiss={dismiss}
     >
       <DialogForm onSubmit={submit} noValidate>
         <DialogBody>
-          <fieldset disabled={pending} className="grid gap-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              <FormField
-                id="room-name"
-                label="Nama Ruangan"
-                value={values.name}
-                error={submitted ? validation.errors.name : undefined}
-                placeholder="Ruang Galileo"
-                onChange={(value) => setField('name', value)}
-              />
-              <FormField
-                id="room-code"
-                label="Kode Ruangan"
-                value={values.code}
-                error={submitted ? validation.errors.code : undefined}
-                placeholder="R-01"
-                onChange={(value) => setField('code', value)}
-              />
-            </div>
-            <FormField
-              id="room-capacity"
-              label="Kapasitas Maksimal Siswa"
-              value={values.capacity}
-              error={submitted ? validation.errors.capacity : undefined}
-              placeholder="12"
-              type="number"
-              onChange={(value) => setField('capacity', value)}
-            />
+          <fieldset disabled={pending} className="space-y-3">
+            <FormSection
+              title="Data Ruangan"
+              description="Informasi ruangan dan kapasitas untuk penjadwalan kelompok belajar."
+            >
+              <div className="grid gap-3.5 md:grid-cols-2">
+                <FormField
+                  id="room-name"
+                  label="Nama Ruangan"
+                  value={values.name}
+                  error={submitted ? validation.errors.name : undefined}
+                  placeholder="Ruang Galileo"
+                  onChange={(value) => setField('name', value)}
+                />
+                <FormField
+                  id="room-code"
+                  label="Kode Ruangan"
+                  value={values.code}
+                  error={submitted ? validation.errors.code : undefined}
+                  placeholder="R-01"
+                  onChange={(value) => setField('code', value)}
+                />
+                <FormField
+                  id="room-capacity"
+                  label="Kapasitas Maksimal Siswa"
+                  value={values.capacity}
+                  error={submitted ? validation.errors.capacity : undefined}
+                  placeholder="12"
+                  type="number"
+                  onChange={(value) => setField('capacity', value)}
+                />
+              </div>
+            </FormSection>
             {formError ? (
               <p
                 role="alert"

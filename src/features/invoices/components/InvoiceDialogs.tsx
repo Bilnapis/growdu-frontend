@@ -333,75 +333,88 @@ export function GenerateInvoicesDialog({
   return (
     <Dialog
       title="Generate Invoice Bulanan"
-      description={
-        student
-          ? `Terbitkan invoice ${periodLabel(period)} hanya untuk ${student.name}. Invoice yang sudah ada akan dilewati.`
-          : `Terbitkan invoice ${periodLabel(period)} untuk semua siswa aktif atau satu siswa tertentu. Invoice yang sudah ada akan dilewati.`
-      }
       onDismiss={onClose}
       isPending={mutation.isPending}
       size="small"
     >
       <DialogForm onSubmit={(event) => void submit(event)}>
         <DialogBody>
-          {student ? (
-            <div className="invoice-brief">
-              <p className="text-xs text-muted-foreground">
-                Invoice hanya untuk siswa
-              </p>
-              <p className="mt-1 font-semibold">{student.name}</p>
-            </div>
-          ) : (
-            <fieldset disabled={mutation.isPending} className="space-y-3">
-              <legend className="mb-2 text-sm font-semibold">
-                Buat invoice untuk
-              </legend>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="radio"
-                  name="generation-scope"
-                  value="all"
-                  checked={scope === 'all'}
-                  onChange={() => setScope('all')}
-                />
-                Semua siswa aktif
-              </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="radio"
-                  name="generation-scope"
-                  value="student"
-                  checked={scope === 'student'}
-                  onChange={() => setScope('student')}
-                />
-                Siswa tertentu
-              </label>
-            </fieldset>
-          )}
-          {scope === 'student' && !student ? (
-            <InvoiceStudentSelector
-              selected={selectedStudent}
-              onSelect={setSelectedStudent}
-              disabled={mutation.isPending}
-            />
-          ) : null}
-          <div className="invoice-field">
-            <label htmlFor="generation-due">Jatuh tempo invoice baru</label>
-            <Input
-              id="generation-due"
-              name="dueDate"
-              type="date"
-              min={today}
-              defaultValue={defaultDue}
-              required
-              disabled={mutation.isPending}
-            />
+          <div className="space-y-3">
+            <FormSection
+              title="Penerima Invoice"
+              description="Pilih siswa yang akan menerima tagihan SPP bulan berjalan."
+            >
+              <div className="space-y-3.5">
+                {student ? (
+                  <div className="invoice-brief">
+                    <p className="text-xs text-muted-foreground">
+                      Invoice hanya untuk siswa
+                    </p>
+                    <p className="mt-1 font-semibold">{student.name}</p>
+                  </div>
+                ) : (
+                  <fieldset disabled={mutation.isPending} className="space-y-3">
+                    <legend className="mb-2 text-sm font-semibold">
+                      Buat invoice untuk
+                    </legend>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="radio"
+                        name="generation-scope"
+                        value="all"
+                        checked={scope === 'all'}
+                        onChange={() => setScope('all')}
+                      />
+                      Semua siswa aktif
+                    </label>
+                    <label className="flex items-center gap-2 text-sm">
+                      <input
+                        type="radio"
+                        name="generation-scope"
+                        value="student"
+                        checked={scope === 'student'}
+                        onChange={() => setScope('student')}
+                      />
+                      Siswa tertentu
+                    </label>
+                  </fieldset>
+                )}
+                {scope === 'student' && !student ? (
+                  <InvoiceStudentSelector
+                    selected={selectedStudent}
+                    onSelect={setSelectedStudent}
+                    disabled={mutation.isPending}
+                  />
+                ) : null}
+              </div>
+            </FormSection>
+            <FormSection
+              title="Jatuh Tempo"
+              description="Tentukan batas pembayaran untuk invoice baru."
+            >
+              <div className="space-y-3.5">
+                <div className="invoice-field">
+                  <label htmlFor="generation-due">
+                    Jatuh tempo invoice baru
+                  </label>
+                  <Input
+                    id="generation-due"
+                    name="dueDate"
+                    type="date"
+                    min={today}
+                    defaultValue={defaultDue}
+                    required
+                    disabled={mutation.isPending}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Generate manual dapat menerbitkan tagihan bulan berjalan untuk
+                  siswa yang penagihan otomatisnya baru dimulai bulan depan.
+                  Siswa tanpa tarif dan siswa nonaktif dilewati.
+                </p>
+              </div>
+            </FormSection>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Generate manual dapat menerbitkan tagihan bulan berjalan untuk siswa
-            yang penagihan otomatisnya baru dimulai bulan depan. Siswa tanpa
-            tarif dan siswa nonaktif dilewati.
-          </p>
           {mutation.isError ? <InvoiceError error={mutation.error} /> : null}
         </DialogBody>
         <DialogFooter>
