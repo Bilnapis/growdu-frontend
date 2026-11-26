@@ -5,7 +5,7 @@ export function learningReportRoutes(prefix: string): RouteObject[] {
     {
       path: prefix,
       lazy: async () => ({
-        Component: (await import('./ReportsListPage')).ReportsListPage,
+        Component: (await import('./ReportManagement')).ReportManagement,
       }),
     },
     {

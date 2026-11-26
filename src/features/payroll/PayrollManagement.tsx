@@ -55,14 +55,16 @@ export function PayrollManagement() {
   }
   return (
     <div className="payroll">
-      <header className="payroll-header">
-        <div>
-          <h1>Penggajian Tentor</h1>
-          <p>
+      <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
+            Penggajian Tentor
+          </h1>
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Kelola gaji tentor berdasarkan sesi mengajar dan status pembayaran.
           </p>
         </div>
-        <div className="payroll-actions">
+        <div className="flex flex-wrap gap-2.5">
           <Button
             size="sm"
             variant="outline"

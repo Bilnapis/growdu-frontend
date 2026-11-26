@@ -15,7 +15,7 @@ type SummaryCardProps = {
 type SummaryCardGridProps = {
   label: string
   children: ReactNode
-  columns?: 2 | 4
+  columns?: 2 | 3 | 4
   isLoading?: boolean
 }
 
@@ -62,7 +62,7 @@ export function SummaryCardGrid({
     <section
       aria-label={label}
       aria-busy={isLoading}
-      className={`mt-5 grid min-w-0 gap-3 sm:grid-cols-2 ${columns === 4 ? 'xl:grid-cols-4' : ''}`}
+      className={`mt-5 grid min-w-0 gap-3 sm:grid-cols-2 ${columns === 4 ? 'xl:grid-cols-4' : columns === 3 ? 'xl:grid-cols-3' : ''}`}
     >
       {children}
     </section>

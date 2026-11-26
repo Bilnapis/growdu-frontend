@@ -5,6 +5,7 @@ import { Download, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
+import { cn } from '@/lib/utils'
 import { getReportPdf, type ReportAttendance, type ReportStatus } from './api'
 import { reportBase, reportError, reportLabels } from './format'
 import './reports.css'
@@ -13,25 +14,29 @@ export function ReportShell({
   title,
   children,
   form = false,
+  className,
 }: {
   title: string
   children: ReactNode
   form?: boolean
+  className?: string
 }) {
   const tutor = getStoredAuthUser()?.role === 'tutor'
   return tutor ? (
     <main className="min-h-dvh bg-background">
       <TutorPageHeader title={title} backTo="/tutor/dashboard" />
       <div
-        className={
-          'learning-reports lr-tutor' + (form ? ' lr-form-content' : '')
-        }
+        className={cn(
+          'learning-reports lr-tutor',
+          form && 'lr-form-content',
+          className,
+        )}
       >
         {children}
       </div>
     </main>
   ) : (
-    <div className="learning-reports">{children}</div>
+    <div className={cn('learning-reports', className)}>{children}</div>
   )
 }
 export function ReportPanel({

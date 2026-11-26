@@ -1,19 +1,14 @@
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import {
-  CheckCheck,
-  Eye,
-  FileText,
-  Plus,
-  Settings,
-  UsersRound,
-} from 'lucide-react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { CheckCheck, Eye, FileText, Settings, UsersRound } from 'lucide-react'
+import { AddButton } from '@/components/ui/add-button'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
+import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TablePagination } from '@/components/ui/table-pagination'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { getStoredAuthUser } from '@/lib/auth-session'
@@ -55,7 +50,8 @@ function ReportRowActions({ group }: { group: ReportGroup }) {
     </Button>
   )
 }
-export function ReportsListPage() {
+export function ReportManagement() {
+  const navigate = useNavigate()
   const [params, setParams] = useSearchParams()
   const period = validPeriod(params.get('period'))
   const rawStatus = params.get('status')
@@ -84,71 +80,65 @@ export function ReportsListPage() {
     })
   }
   return (
-    <ReportShell title="Laporan Kelompok">
-      <header className="lr-heading">
-        <div>
-          <h1>Laporan Perkembangan Belajar</h1>
-          <p>
+    <ReportShell title="Laporan Kelompok" className="lr-management">
+      <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-[26px] font-bold leading-tight tracking-normal text-[var(--color-text)]">
+            Laporan Perkembangan Belajar
+          </h1>
+          <p className="text-sm leading-[1.3] text-[var(--color-muted)]">
             Kelola materi, capaian, dan tindak lanjut belajar untuk setiap
             kelompok.
           </p>
         </div>
-        <div className="lr-actions">
+        <div className="flex shrink-0 flex-wrap gap-2.5">
           {admin ? (
-            <Button variant="outline" onClick={() => setShowSettings(true)}>
-              <Settings size={16} aria-hidden="true" />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSettings(true)}
+            >
+              <Settings size={15} aria-hidden="true" />
               Pengaturan
             </Button>
           ) : null}
-          <Button asChild>
-            <Link to={reportBase() + '/new?period=' + period}>
-              <Plus size={16} aria-hidden="true" />
-              Buat laporan
-            </Link>
-          </Button>
+          <AddButton
+            onClick={() => void navigate(reportBase() + '/new?period=' + period)}
+          >
+            Buat laporan
+          </AddButton>
         </div>
       </header>
-      {summary.data ? (
-        <div className="lr-metrics">
-          {[
-            [
-              'Total Kelompok',
-              summary.data.total + ' Kelompok',
-              'Pada periode ' + monthLabel(period),
-            ],
-            [
-              'Laporan Terbit',
-              summary.data.published + ' Laporan',
-              'Seluruh tentor sudah menerbitkan',
-            ],
-            [
-              'Perlu Diselesaikan',
-              summary.data.pending + ' Kelompok',
-              'Belum diisi, draft, atau terbit sebagian',
-            ],
-          ].map(([label, value, description], index) => {
-            const MetricIcon =
-              index === 0 ? UsersRound : index === 1 ? CheckCheck : FileText
-            return (
-              <section className="lr-metric" key={String(label)}>
-                <div>
-                  <MetricIcon size={17} aria-hidden="true" />
-                  <span>{String(label)}</span>
-                </div>
-                <strong>{String(value)}</strong>
-                <p>{String(description)}</p>
-              </section>
-            )
-          })}
-        </div>
-      ) : null}
+      <SummaryCardGrid
+        label={'Ringkasan laporan belajar periode ' + monthLabel(period)}
+        columns={3}
+        isLoading={summary.isPending}
+      >
+        <SummaryCard
+          icon={UsersRound}
+          label="Total Kelompok"
+          value={summary.data?.total}
+        />
+        <SummaryCard
+          icon={CheckCheck}
+          label="Laporan Terbit"
+          value={summary.data?.published}
+          tone="success"
+        />
+        <SummaryCard
+          icon={FileText}
+          label="Perlu Diselesaikan"
+          value={summary.data?.pending}
+          tone="warning"
+        />
+      </SummaryCardGrid>
       {summary.isError ? (
         <ReportError
           error={summary.error}
           retry={() => void summary.refetch()}
         />
       ) : null}
-      <Card className="min-w-0 min-h-[560px] p-4 shadow-none sm:p-[18px]">
+      <Card className="mt-5 min-w-0 min-h-[560px] p-4 shadow-none sm:p-[18px]">
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
           <div className="min-w-0 flex-1">
             <Label htmlFor="reports-search" className="sr-only">
@@ -198,10 +188,6 @@ export function ReportsListPage() {
             </div>
           </div>
         </div>
-        <p className="lr-help">
-          Satu laporan kelompok per periode, dengan evaluasi dari masing-masing
-          tentor.
-        </p>
         {list.isError ? (
           <ReportError error={list.error} retry={() => void list.refetch()} />
         ) : null}
