@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { InfoIcon, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,6 +19,7 @@ import {
   reversePayrollPayment,
   type PayrollDetail,
   type PayrollSettings,
+  type PayrollPeriod,
   type AdjustmentInput,
 } from './api'
 import {
@@ -29,33 +30,61 @@ import {
 import { dateLabel, decimalMinor, rangeLabel, rupiah, todayWib } from './format'
 import { PayrollBadge, PayrollError } from './PayrollShared'
 
+function PayrollPeriodPreview({
+  title,
+  period,
+}: {
+  title: string
+  period: Pick<PayrollPeriod, 'startDate' | 'endDate' | 'payDate'>
+}) {
+  const titleId = useId()
+
+  return (
+    <section
+      className="mt-4 grid gap-4 rounded-[var(--radius-lg)] bg-[var(--color-brand-50)] p-4 text-[13px] leading-normal"
+      aria-labelledby={titleId}
+    >
+      <div className="flex items-center gap-2 text-primary-text [&_h3]:text-sm [&_h3]:font-semibold">
+        <InfoIcon size={18} strokeWidth={2} aria-hidden="true" />
+        <h3 id={titleId}>{title}</h3>
+      </div>
+      <dl className="grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-4 [&_dt]:mb-1 [&_dt]:text-xs [&_dt]:text-[var(--color-neutral-600)] [&_dd]:font-semibold [&_dd]:[overflow-wrap:anywhere] [@container_(max-width:420px)]:grid-cols-1">
+        <div>
+          <dt>Periode penggajian</dt>
+          <dd>{rangeLabel(period)}</dd>
+        </div>
+        <div>
+          <dt>Tanggal penggajian</dt>
+          <dd>{dateLabel(period.payDate)}</dd>
+        </div>
+      </dl>
+    </section>
+  )
+}
+
 function periodPreview(day: number, settings: PayrollSettings) {
   const today = todayWib()
-  const dateInMonth = (month: number) => {
-    const year = Number(today.slice(0, 4))
-    const base = new Date(
-      Date.UTC(year, Number(today.slice(5, 7)) - 1 + month, 1),
-    )
+  const existing = settings.nextPeriod
+  const dateInMonth = (month: string) => {
     const last = new Date(
-      Date.UTC(base.getUTCFullYear(), base.getUTCMonth() + 1, 0),
+      Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5, 7)), 0),
     ).getUTCDate()
-    return `${base.toISOString().slice(0, 7)}-${String(Math.min(day, last)).padStart(2, '0')}`
+    return `${month}-${String(Math.min(day, last)).padStart(2, '0')}`
   }
-  const start = settings.nextPeriod?.startDate
-  const candidate = dateInMonth(0)
-  const payDate =
-    candidate < today || (start && candidate <= start)
-      ? dateInMonth(1)
-      : candidate
-  const end = new Date(`${payDate}T00:00:00Z`)
-  end.setUTCDate(end.getUTCDate() - 1)
-  let startDate = start
-  if (!startDate) {
-    const pay = new Date(`${payDate}T00:00:00Z`)
-    const last = new Date(Date.UTC(pay.getUTCFullYear(), pay.getUTCMonth(), 0))
-    startDate = `${last.toISOString().slice(0, 7)}-${String(Math.min(day, last.getUTCDate())).padStart(2, '0')}`
+  if (existing) {
+    return { ...existing, payDate: dateInMonth(existing.payDate.slice(0, 7)) }
   }
-  return { startDate, endDate: end.toISOString().slice(0, 10), payDate }
+  let payDate = dateInMonth(today.slice(0, 7))
+  if (payDate < today) {
+    const next = new Date(
+      Date.UTC(Number(today.slice(0, 4)), Number(today.slice(5, 7)), 1),
+    )
+    payDate = dateInMonth(next.toISOString().slice(0, 7))
+  }
+  const end = new Date(`${payDate.slice(0, 7)}-01T00:00:00Z`)
+  end.setUTCDate(0)
+  const endDate = end.toISOString().slice(0, 10)
+  return { startDate: `${endDate.slice(0, 7)}-01`, endDate, payDate }
 }
 export function PayrollSettingsDialog({
   settings,
@@ -85,7 +114,7 @@ export function PayrollSettingsDialog({
       id="payroll-settings-dialog"
       className="[container-type:inline-size] [&>header]:items-start [&_button]:h-auto [&_button]:min-h-9 [&_button]:whitespace-normal [&_button]:[overflow-wrap:anywhere] [&_button]:transition-[background-color,opacity] [&_button]:duration-[120ms] [&_button]:ease-out [&>header_button]:min-w-10 motion-safe:[&_footer_button]:transition-[background-color,opacity,scale] motion-safe:[&_footer_button]:duration-[120ms,120ms,150ms] motion-safe:[&_footer_button:not(:disabled):active]:[scale:0.96] [@media_(hover:none)]:[&_button:hover]:bg-[var(--color-bg)] [@media_(hover:none)]:[&_button:hover]:text-foreground [@media_(hover:none)]:[&_button[type=submit]:hover]:bg-primary [@media_(hover:none)]:[&_button[type=submit]:hover]:text-primary-foreground"
       title="Pengaturan Penggajian"
-      description="Atur tanggal generate sekaligus jatuh tempo gaji setiap bulan."
+      description="Atur tanggal generate dan jatuh tempo gaji untuk sesi satu bulan kalender sebelumnya."
       size="medium"
       isPending={mutation.isPending}
       onDismiss={onClose}
@@ -95,7 +124,7 @@ export function PayrollSettingsDialog({
           <div className="space-y-3">
             <FormSection
               title="Jadwal & Otomatisasi"
-              description="Atur tanggal penggajian dan pembuatan penggajian otomatis setiap bulan."
+              description="Perhitungan mencakup tanggal 1 sampai hari terakhir bulan sebelumnya."
             >
               <div className="grid min-w-0 gap-6 text-[13px] leading-normal">
                 <div className="grid min-w-0 grid-cols-2 items-center gap-x-4 gap-y-2 text-[13px]">
@@ -160,27 +189,10 @@ export function PayrollSettingsDialog({
                 </div>
               </div>
               {preview ? (
-                <section
-                  className="mt-4 grid gap-4 rounded-[var(--radius-lg)] bg-[var(--color-brand-50)] p-4 text-[13px] leading-normal [&>p]:text-xs [&>p]:text-[var(--color-neutral-600)]"
-                  aria-labelledby="payroll-preview-title"
-                >
-                  <div className="flex items-center gap-2 text-primary-text [&_h3]:text-sm [&_h3]:font-semibold">
-                    <InfoIcon size={18} strokeWidth={2} aria-hidden="true" />
-                    <h3 id="payroll-preview-title">
-                      Periode penggajian berikutnya
-                    </h3>
-                  </div>
-                  <dl className="grid grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] gap-4 [&_dt]:mb-1 [&_dt]:text-xs [&_dt]:text-[var(--color-neutral-600)] [&_dd]:font-semibold [&_dd]:[overflow-wrap:anywhere] [@container_(max-width:420px)]:grid-cols-1">
-                    <div>
-                      <dt>Periode penggajian</dt>
-                      <dd>{rangeLabel(preview)}</dd>
-                    </div>
-                    <div>
-                      <dt>Tanggal penggajian</dt>
-                      <dd>{dateLabel(preview.payDate)}</dd>
-                    </div>
-                  </dl>
-                </section>
+                <PayrollPeriodPreview
+                  title="Periode penggajian berikutnya"
+                  period={preview}
+                />
               ) : null}
               {mutation.isError ? (
                 <PayrollError error={mutation.error} />
@@ -207,27 +219,61 @@ export function PayrollSettingsDialog({
     </Dialog>
   )
 }
+function manualPeriodPreview(
+  month: string,
+  payday: number,
+  periods: PayrollPeriod[],
+) {
+  const existing = periods.find((p) => p.startDate === `${month}-01`)
+  if (existing) return existing
+  const year = Number(month.slice(0, 4))
+  const monthNumber = Number(month.slice(5, 7))
+  const endDate = new Date(Date.UTC(year, monthNumber, 0))
+    .toISOString()
+    .slice(0, 10)
+  const lastPayDay = new Date(Date.UTC(year, monthNumber + 1, 0)).getUTCDate()
+  const payDate = new Date(
+    Date.UTC(year, monthNumber, Math.min(payday, lastPayDay)),
+  )
+    .toISOString()
+    .slice(0, 10)
+  return { startDate: `${month}-01`, endDate, payDate }
+}
 export function GeneratePayrollDialog({
+  settings,
   onClose,
   onGenerated,
 }: {
   onClose: () => void
   onGenerated: (message: string) => void
+  settings: PayrollSettings
 }) {
   const periods = usePayrollPeriods()
-  const [periodId, setPeriodId] = useState('')
+  const today = todayWib()
+  const lastClosedMonth = new Date(
+    Date.UTC(Number(today.slice(0, 4)), Number(today.slice(5, 7)) - 1, 0),
+  )
+    .toISOString()
+    .slice(0, 7)
+  const [sessionMonth, setSessionMonth] = useState(lastClosedMonth)
   const [scope, setScope] = useState('all')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [tutorId, setTutorId] = useState('')
   const tutors = usePayrollTutors(search, page)
-  const closed = periods.data?.filter((p) => p.payDate <= todayWib()) ?? []
-  const selectedPeriod = periodId || closed[0]?.id || ''
+  const validMonth =
+    /^[1-9]\d{3}-(0[1-9]|1[0-2])$/.test(sessionMonth) &&
+    sessionMonth <= lastClosedMonth
+  const preview =
+    validMonth && periods.data
+      ? manualPeriodPreview(sessionMonth, settings.payday, periods.data)
+      : null
   const mutation = usePayrollMutation(generatePayroll)
   function submit(event: FormEvent) {
     event.preventDefault()
+    if (!validMonth || !preview || mutation.isPending) return
     mutation.mutate(
-      { periodId: selectedPeriod, ...(scope === 'one' ? { tutorId } : {}) },
+      { sessionMonth, ...(scope === 'one' ? { tutorId } : {}) },
       {
         onSuccess: (result) => {
           if (result.created === 0) return
@@ -241,8 +287,9 @@ export function GeneratePayrollDialog({
   }
   return (
     <Dialog
+      className="[container-type:inline-size]"
       title="Buat Penggajian"
-      description="Hitung gaji dari presensi pada siklus yang sudah berakhir."
+      description="Hitung gaji setelah periode sesi berakhir, tanpa menunggu tanggal gajian."
       size="medium"
       isPending={mutation.isPending}
       onDismiss={onClose}
@@ -256,26 +303,34 @@ export function GeneratePayrollDialog({
               error={periods.error}
               retry={() => void periods.refetch()}
             />
-          ) : !closed.length ? (
-            <p className="rounded-[var(--radius-sm)] bg-[var(--color-warning-bg)] p-3 text-[13px] text-[var(--color-warning)]">
-              Siklus penggajian berjalan belum berakhir. Penggajian dapat dibuat
-              setelah siklus selesai.
-            </p>
           ) : (
-            <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
-              <label htmlFor="generate-payroll-period">Periode gaji</label>
-              <Select
-                id="generate-payroll-period"
-                value={selectedPeriod}
+            <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold">
+              <label htmlFor="generate-payroll-month">
+                Pilih Periode Penggajian
+              </label>
+              <Input
+                id="generate-payroll-month"
+                type="month"
+                required
+                min="1000-01"
+                max={lastClosedMonth}
+                value={sessionMonth}
                 disabled={mutation.isPending}
-                onChange={(e) => setPeriodId(e.target.value)}
-              >
-                {closed.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {rangeLabel(p)} · Gaji {dateLabel(p.payDate)}
-                  </option>
-                ))}
-              </Select>
+                aria-invalid={!validMonth}
+                aria-describedby="generate-payroll-month-help"
+                onChange={(event) => setSessionMonth(event.target.value)}
+              />
+              {!validMonth ? (
+                <p role="alert" className="text-xs text-[var(--color-danger)]">
+                  Pilih bulan sebelum bulan berjalan.
+                </p>
+              ) : null}
+              {preview ? (
+                <PayrollPeriodPreview
+                  title="Preview periode penggajian"
+                  period={preview}
+                />
+              ) : null}
             </div>
           )}
           <div className="grid min-w-0 gap-2 text-[13px] [&_label]:font-semibold [&_p]:text-xs [&_p]:text-muted-foreground">
@@ -410,7 +465,9 @@ export function GeneratePayrollDialog({
           <DialogButton
             type="submit"
             disabled={
-              !selectedPeriod ||
+              !validMonth ||
+              !preview ||
+              periods.isError ||
               (scope === 'one' && !tutorId) ||
               mutation.isPending
             }

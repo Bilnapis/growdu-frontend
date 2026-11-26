@@ -335,8 +335,9 @@ export function PayrollManagement() {
           onClose={() => setDialog(null)}
         />
       ) : null}
-      {dialog === 'generate' ? (
+      {dialog === 'generate' && settings.data ? (
         <GeneratePayrollDialog
+          settings={settings.data}
           onClose={() => setDialog(null)}
           onGenerated={setMessage}
         />

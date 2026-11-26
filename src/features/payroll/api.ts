@@ -177,8 +177,14 @@ export const savePayrollSettings = (body: {
   enabled: boolean
 }) =>
   apiRequest<PayrollSettings>('/payroll/settings', { method: 'PATCH', body })
-export const generatePayroll = (body: { periodId: string; tutorId?: string }) =>
-  apiRequest<GenerationResult>('/payroll/generations', { method: 'POST', body })
+export const generatePayroll = (body: {
+  sessionMonth: string
+  tutorId?: string
+}) =>
+  apiRequest<GenerationResult>('/payroll/generations/by-month', {
+    method: 'POST',
+    body,
+  })
 export const savePayrollItems = ({
   id,
   ...body
