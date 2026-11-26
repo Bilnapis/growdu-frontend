@@ -112,7 +112,6 @@ export function InvoiceSettingsDialog({
   return (
     <Dialog
       title="Pengaturan Invoice SPP"
-      description="Atur jatuh tempo SPP, tenggang waktu penonaktifan siswa, dan rekening pembayaran."
       onDismiss={onClose}
       isPending={isPending}
       size="medium"
@@ -332,7 +331,7 @@ export function GenerateInvoicesDialog({
   }
   return (
     <Dialog
-      title="Generate Invoice Bulanan"
+      title="Buat Invoice SPP"
       onDismiss={onClose}
       isPending={mutation.isPending}
       size="small"

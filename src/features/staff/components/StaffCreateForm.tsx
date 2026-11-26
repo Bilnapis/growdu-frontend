@@ -157,7 +157,6 @@ export function StaffCreateForm() {
   return (
     <Dialog
       title="Tambah Pegawai"
-      description="Buat akun pegawai baru dan tentukan hak akses menu."
       isPending={createMutation.isPending}
       onDismiss={closeForm}
       initialFocusSelector="#staff-name"

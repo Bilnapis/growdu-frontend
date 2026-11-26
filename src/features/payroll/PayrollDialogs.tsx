@@ -114,7 +114,6 @@ export function PayrollSettingsDialog({
       id="payroll-settings-dialog"
       className="[container-type:inline-size] [&>header]:items-start [&_button]:h-auto [&_button]:min-h-9 [&_button]:whitespace-normal [&_button]:[overflow-wrap:anywhere] [&_button]:transition-[background-color,opacity] [&_button]:duration-[120ms] [&_button]:ease-out [&>header_button]:min-w-10 motion-safe:[&_footer_button]:transition-[background-color,opacity,scale] motion-safe:[&_footer_button]:duration-[120ms,120ms,150ms] motion-safe:[&_footer_button:not(:disabled):active]:[scale:0.96] [@media_(hover:none)]:[&_button:hover]:bg-[var(--color-bg)] [@media_(hover:none)]:[&_button:hover]:text-foreground [@media_(hover:none)]:[&_button[type=submit]:hover]:bg-primary [@media_(hover:none)]:[&_button[type=submit]:hover]:text-primary-foreground"
       title="Pengaturan Penggajian"
-      description="Atur tanggal generate dan jatuh tempo gaji untuk sesi satu bulan kalender sebelumnya."
       size="medium"
       isPending={mutation.isPending}
       onDismiss={onClose}
