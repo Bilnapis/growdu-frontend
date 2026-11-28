@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 
-import { useDashboardMetrics } from '../hooks/use-dashboard-data'
+import type { DashboardData } from '../hooks/use-dashboard-data'
 import {
   dashboardErrorMessage,
   isDashboardAccessError,
@@ -44,35 +44,52 @@ const metricToneClasses = {
 
 const numberFormatter = new Intl.NumberFormat('id-ID')
 
-export function DashboardMetrics({ today }: { today: string }) {
+export function DashboardMetrics({ data }: { data: DashboardData }) {
   const {
+    access,
     students,
     invoices,
-    invoiceAccess,
+    previousInvoices,
     payroll,
     previousPayroll,
-    payrollAccess,
     tutors,
     studyGroups,
+    reports,
+    previousReports,
     savedAttendance,
     pendingAttendance,
     previousAttendance,
-  } = useDashboardMetrics(today)
+  } = data
   const saved = savedAttendance.data?.meta.total
   const pending = pendingAttendance.data?.meta.total
 
   const metrics: readonly Metric[] = [
     {
       label: 'Pendapatan',
-      value: 'Rp 42,8 jt',
-      helper: formatMetricComparison(undefined, undefined),
+      value:
+        access.invoices && invoices.data
+          ? rupiah(invoices.data.receivedAmount)
+          : undefined,
+      helper: access.invoices
+        ? formatMetricComparison(
+            invoices.data?.receivedAmount,
+            previousInvoices.data?.receivedAmount,
+          )
+        : 'Akses invoice diperlukan',
+      queries: access.invoices ? [invoices] : [],
+      comparisonQuery: access.invoices ? previousInvoices : undefined,
+      comparisonLabel:
+        'Pembayaran diterima pada bulan terpilih (WIB), tidak termasuk pembayaran yang dibatalkan',
       icon: TrendingUp,
       tone: 'success',
     },
     {
       label: 'Gaji Tentor',
-      value: payroll.data ? rupiah(payroll.data.totalAmount) : undefined,
-      helper: payrollAccess
+      value:
+        access.payroll && payroll.data
+          ? rupiah(payroll.data.totalAmount)
+          : undefined,
+      helper: access.payroll
         ? formatMetricComparison(
             payroll.data ? Number(payroll.data.totalAmount) : undefined,
             previousPayroll.data
@@ -82,54 +99,66 @@ export function DashboardMetrics({ today }: { today: string }) {
         : 'Akses penggajian diperlukan',
       icon: Wallet,
       tone: 'purple',
-      queries: payrollAccess ? [payroll] : [],
-      comparisonQuery: payrollAccess ? previousPayroll : undefined,
+      queries: access.payroll ? [payroll] : [],
+      comparisonQuery: access.payroll ? previousPayroll : undefined,
     },
     {
       label: 'Siswa Aktif',
-      value: formatCount(students.data?.active),
-      helper: formatMetricComparison(
-        students.data?.active,
-        students.data?.previousMonthActive,
-      ),
+      value: access.students ? formatCount(students.data?.count) : undefined,
+      helper: !access.students
+        ? 'Akses siswa diperlukan'
+        : students.data?.count === null
+          ? 'Riwayat bulan terpilih belum tersedia'
+          : formatMetricComparison(
+              students.data?.count ?? undefined,
+              students.data?.previousMonthCount,
+            ),
       icon: Users,
       tone: 'success',
-      queries: [students],
+      queries: access.students ? [students] : [],
     },
     {
       label: 'Invoice Pending',
-      value: formatCount(invoices.data?.pending),
-      helper: invoiceAccess
+      value: access.invoices ? formatCount(invoices.data?.pending) : undefined,
+      helper: access.invoices
         ? 'Invoice belum lunas, termasuk terlambat'
         : 'Akses invoice diperlukan',
       icon: Receipt,
       tone: 'warning',
-      queries: invoiceAccess ? [invoices] : [],
+      queries: access.invoices ? [invoices] : [],
     },
     {
       label: 'Tentor Aktif',
-      value: formatCount(tutors.data?.active),
-      helper: formatMetricComparison(
-        tutors.data?.active,
-        tutors.data?.previousMonthActive,
-      ),
+      value: access.tutors ? formatCount(tutors.data?.count) : undefined,
+      helper: !access.tutors
+        ? 'Akses tentor diperlukan'
+        : tutors.data?.count === null
+          ? 'Riwayat bulan terpilih belum tersedia'
+          : formatMetricComparison(
+              tutors.data?.count ?? undefined,
+              tutors.data?.previousMonthCount,
+            ),
       icon: Users,
       tone: 'success',
-      queries: [tutors],
+      queries: access.tutors ? [tutors] : [],
     },
     {
       label: 'Kelompok',
-      value: formatCount(studyGroups.data?.total),
-      helper: formatMetricComparison(
-        studyGroups.data?.total,
-        studyGroups.data?.previousMonthTotal,
-      ),
+      value: access.studyGroups
+        ? formatCount(studyGroups.data?.count)
+        : undefined,
+      helper: access.studyGroups
+        ? formatMetricComparison(
+            studyGroups.data?.count ?? undefined,
+            studyGroups.data?.previousMonthCount,
+          )
+        : 'Akses kelompok belajar diperlukan',
       icon: BookOpen,
       tone: 'info',
-      queries: [studyGroups],
+      queries: access.studyGroups ? [studyGroups] : [],
     },
     {
-      label: 'Presensi Hari Ini',
+      label: 'Presensi Bulanan',
       value:
         saved !== undefined && pending !== undefined
           ? `${numberFormatter.format(saved)}/${numberFormatter.format(saved + pending)}`
@@ -140,15 +169,22 @@ export function DashboardMetrics({ today }: { today: string }) {
       ),
       comparisonQuery: previousAttendance,
       comparisonLabel:
-        'Jumlah sesi dengan presensi pada tanggal yang sama bulan lalu',
+        'Sesi dengan presensi tersimpan dibandingkan dengan seluruh bulan sebelumnya',
       icon: ClipboardCheck,
       tone: 'warning',
       queries: [savedAttendance, pendingAttendance],
     },
     {
-      label: 'Laporan Belum',
-      value: '14',
-      helper: formatMetricComparison(undefined, undefined),
+      label: 'Kelompok Belum Lapor',
+      value: access.reports ? formatCount(reports.data?.pending) : undefined,
+      helper: access.reports
+        ? formatMetricComparison(
+            reports.data?.pending,
+            previousReports.data?.pending,
+          )
+        : 'Akses laporan diperlukan',
+      queries: access.reports ? [reports] : [],
+      comparisonQuery: access.reports ? previousReports : undefined,
       icon: FileText,
       tone: 'danger',
     },
@@ -254,6 +290,6 @@ function MetricCard({ metric }: { metric: Metric }) {
   )
 }
 
-function formatCount(value: number | undefined) {
-  return value === undefined ? undefined : numberFormatter.format(value)
+function formatCount(value: number | null | undefined) {
+  return value == null ? undefined : numberFormatter.format(value)
 }

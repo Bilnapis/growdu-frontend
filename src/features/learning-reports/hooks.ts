@@ -32,10 +32,11 @@ export function useReportGroups(filters: ReportFilters) {
     refetchInterval: 60_000,
   })
 }
-export function useReportSummary(period: string) {
+export function useReportSummary(period: string, enabled = true) {
   return useQuery({
     queryKey: [...reportKey(), 'summary', period],
     queryFn: ({ signal }) => getReportSummary(period, signal),
+    enabled,
     refetchInterval: 60_000,
   })
 }
