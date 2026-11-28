@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import {
   useEffect,
   useRef,
@@ -8,7 +9,6 @@ import {
 import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import {
-  ArrowLeft,
   Ban,
   CalendarClock,
   CheckCheck,
@@ -109,9 +109,10 @@ function SessionDetail({ session }: { session: ClassSession }) {
 
   return (
     <div className="mx-auto w-full min-w-0">
+      <DetailBackLink to="/schedule">Kembali ke daftar jadwal</DetailBackLink>
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <div className="mt-1 flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-2xl font-bold tracking-tight">
               {session.studyGroupName}
             </h1>
@@ -120,12 +121,6 @@ function SessionDetail({ session }: { session: ClassSession }) {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Button asChild type="button" size="sm" variant="outline">
-            <Link to="/schedule">
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Kembali
-            </Link>
-          </Button>
           {canChange ? (
             <>
               <Button

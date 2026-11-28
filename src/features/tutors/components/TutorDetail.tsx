@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { type ReactNode, useState } from 'react'
 import { BookOpen, Pencil, UserX } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -31,33 +32,31 @@ export function TutorDetail({ id }: { id: string }) {
 
   return (
     <div className="min-w-0 space-y-[18px] text-[var(--color-text)]">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <nav aria-label="Breadcrumb" className="mb-1 text-xs font-semibold text-[var(--color-muted)]">
-            <Link to="/tutors" className="rounded-sm hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">Data Tentor</Link>
-            <span aria-hidden="true"> / </span>
-            <span aria-current="page">Detail Tentor</span>
-          </nav>
-          <h1 className="text-2xl font-bold leading-snug">Detail Tentor</h1>
-        </div>
-        {tutor && !tutorQuery.isError ? (
-          <div className="flex flex-wrap gap-2.5">
-            <Button size="sm" onClick={() => setIsEditing(true)}>
-              <Pencil className="h-4 w-4" aria-hidden="true" /> Ubah Data
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)]"
-              disabled={tutor.status === 'inactive' || updateMutation.isPending}
-              onClick={deactivateTutor}
-            >
-              <UserX className="h-4 w-4" aria-hidden="true" />
-              {updateMutation.isPending ? 'Menonaktifkan...' : tutor.status === 'inactive' ? 'Tentor Nonaktif' : 'Nonaktifkan Tentor'}
-            </Button>
+      <div>
+        <DetailBackLink to="/tutors">Kembali ke data tentor</DetailBackLink>
+        <header className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold leading-snug">Detail Tentor</h1>
           </div>
-        ) : null}
-      </header>
+          {tutor && !tutorQuery.isError ? (
+            <div className="flex flex-wrap gap-2.5">
+              <Button size="sm" onClick={() => setIsEditing(true)}>
+                <Pencil className="h-4 w-4" aria-hidden="true" /> Ubah Data
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-[var(--color-danger-border)] bg-[var(--color-danger-bg)] text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)]"
+                disabled={tutor.status === 'inactive' || updateMutation.isPending}
+                onClick={deactivateTutor}
+              >
+                <UserX className="h-4 w-4" aria-hidden="true" />
+                {updateMutation.isPending ? 'Menonaktifkan...' : tutor.status === 'inactive' ? 'Tentor Nonaktif' : 'Nonaktifkan Tentor'}
+              </Button>
+            </div>
+          ) : null}
+        </header>
+      </div>
 
       {tutorQuery.isPending ? (
         <p role="status" className="rounded-lg border border-border bg-card p-10 text-center text-sm text-muted-foreground">Memuat detail tentor...</p>

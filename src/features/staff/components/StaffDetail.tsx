@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { useState } from 'react'
 import {
   Pencil,
@@ -23,15 +24,18 @@ export function StaffDetail({ id }: { id: string }) {
 
   return (
     <section aria-labelledby="staff-detail-title" className="min-w-0 space-y-[18px]">
-      <header className="flex flex-wrap items-center justify-between gap-4">
-        <h1 id="staff-detail-title" className="text-[28px] font-bold leading-[1.2] tracking-tight">Detail Pegawai</h1>
-        {staff && !staffQuery.isError ? (
-          <Button type="button" size="sm" className="h-[42px] rounded-lg px-[18px] text-sm font-bold" onClick={() => setIsEditing(true)}>
-            <Pencil className="h-[17px] w-[17px]" aria-hidden="true" />
-            Edit Pegawai
-          </Button>
-        ) : null}
-      </header>
+      <div>
+        <DetailBackLink to="/staff">Kembali ke daftar pegawai</DetailBackLink>
+        <header className="flex flex-wrap items-center justify-between gap-4">
+          <h1 id="staff-detail-title" className="text-[28px] font-bold leading-[1.2] tracking-tight">Detail Pegawai</h1>
+          {staff && !staffQuery.isError ? (
+            <Button type="button" size="sm" className="h-[42px] rounded-lg px-[18px] text-sm font-bold" onClick={() => setIsEditing(true)}>
+              <Pencil className="h-[17px] w-[17px]" aria-hidden="true" />
+              Edit Pegawai
+            </Button>
+          ) : null}
+        </header>
+      </div>
 
       {staffQuery.isPending ? (
         <p role="status" className="rounded-lg border bg-card p-10 text-center text-sm text-muted-foreground">Memuat detail pegawai...</p>

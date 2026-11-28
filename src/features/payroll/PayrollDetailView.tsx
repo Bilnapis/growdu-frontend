@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
@@ -78,15 +79,9 @@ export function PayrollDetailView({
   const base = tutor ? '/tutor/payroll' : '/payroll'
   return (
     <div className="payroll">
-      <nav
-        aria-label="Breadcrumb"
-        className="mb-2 text-xs text-muted-foreground"
-      >
-        <Link className="hover:underline" to={base}>
-          {tutor ? 'Slip Gaji' : 'Penggajian'}
-        </Link>{' '}
-        / <span aria-current="page">{p.number}</span>
-      </nav>
+      <DetailBackLink to={base}>
+        {tutor ? 'Kembali ke daftar slip gaji' : 'Kembali ke daftar penggajian'}
+      </DetailBackLink>
       <header className="payroll-header">
         <div>
           <h1>{tutor ? 'Slip Gaji' : 'Detail Penggajian'}</h1>

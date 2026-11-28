@@ -182,19 +182,21 @@ export function ReportDetailPage() {
   )
   return (
     <ReportShell title="Detail Laporan Kelompok">
-      <ReportBack period={period} />
-      <header className="lr-heading">
-        <div>
-          <h1>Detail Laporan Kelompok</h1>
-          <p>
-            Laporan perkembangan dari setiap tentor untuk seluruh anggota
-            kelompok.
-          </p>
-        </div>
-        {group.published ? (
-          <ReportPdfButton groupId={groupId} period={period} />
-        ) : null}
-      </header>
+      <div>
+        <ReportBack period={period} />
+        <header className="lr-heading">
+          <div>
+            <h1>Detail Laporan Kelompok</h1>
+            <p>
+              Laporan perkembangan dari setiap tentor untuk seluruh anggota
+              kelompok.
+            </p>
+          </div>
+          {group.published ? (
+            <ReportPdfButton groupId={groupId} period={period} />
+          ) : null}
+        </header>
+      </div>
       <section className="lr-metadata">
         <div>
           <span>Kelompok Belajar</span>

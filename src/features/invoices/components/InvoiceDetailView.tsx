@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -56,6 +57,9 @@ export function InvoiceDetailView({ id }: { id: string }) {
         <InvoiceError error={query.error} retry={() => void query.refetch()} />
       ) : (
         <>
+          <DetailBackLink to="/invoices">
+            Kembali ke daftar invoice SPP
+          </DetailBackLink>
           <header className="invoice-page-header">
             <h1>Detail Invoice</h1>
             <div className="invoice-actions">

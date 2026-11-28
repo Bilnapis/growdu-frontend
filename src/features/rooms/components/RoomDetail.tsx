@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { useState } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -69,48 +70,36 @@ export function RoomDetail({ id }: { id: string }) {
   const room = query.data
   return (
     <div className="min-w-0 space-y-5 text-[var(--color-text)]">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <nav
-            className="text-[13px] leading-[1.35] text-[var(--color-muted)]"
-            aria-label="Breadcrumb"
-          >
-            <Link
-              to="/rooms"
-              className="rounded-sm hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+      <div>
+        <DetailBackLink to="/rooms">Kembali ke data ruangan</DetailBackLink>
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold leading-[1.35]">
+              Detail Ruangan: {room.name}
+            </h1>
+          </div>
+          <div className="flex flex-wrap gap-2.5">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setEditOpen(true)}
             >
-              Data Ruangan
-            </Link>
-            <span aria-hidden="true"> / </span>
-            <span aria-current="page">
-              {room.name} ({room.code})
-            </span>
-          </nav>
-          <h1 className="mt-1 text-2xl font-bold leading-[1.35]">
-            Detail Ruangan: {room.name}
-          </h1>
-        </div>
-        <div className="flex flex-wrap gap-2.5">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setEditOpen(true)}
-          >
-            <Pencil className="h-4 w-4" aria-hidden="true" />
-            Edit
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
-            onClick={() => setDeleteOpen(true)}
-          >
-            <Trash2 className="h-4 w-4" aria-hidden="true" />
-            Hapus
-          </Button>
-        </div>
-      </header>
+              <Pencil className="h-4 w-4" aria-hidden="true" />
+              Edit
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden="true" />
+              Hapus
+            </Button>
+          </div>
+        </header>
+      </div>
 
       <div className="w-full max-w-[840px] space-y-5">
         <section

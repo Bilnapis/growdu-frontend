@@ -1,3 +1,4 @@
+import { DetailBackLink } from '@/components/ui/detail-back-link'
 import { CirclePlay, PauseCircle, Pencil, Search } from 'lucide-react'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -86,6 +87,56 @@ export function StudyGroupDetail({ id }: { id: string }) {
 
   return (
     <div className="study-group-detail min-w-0 space-y-5 text-[var(--color-text)]">
+      <div>
+        <DetailBackLink to="/study-groups">
+          Kembali ke kelompok belajar
+        </DetailBackLink>
+        <header className="study-group-detail__header">
+          <div className="study-group-detail__header-copy">
+            <h1 className="break-words text-2xl font-bold leading-[1.35]">
+              {group.name}
+            </h1>
+          </div>
+
+          <div className="study-group-detail__actions">
+            <Button
+              asChild
+              variant="outline"
+              className="bg-white text-[13px] font-semibold"
+            >
+              <Link to={`/study-groups/${group.id}/edit`}>
+                <Pencil className="h-4 w-4" aria-hidden="true" />
+                Edit
+              </Link>
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="border-[var(--color-danger-border)] bg-white text-[13px] font-semibold text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)] hover:text-[var(--color-danger)]"
+              disabled={status.isPending}
+              onClick={() => {
+                if (window.confirm(`Ubah status ${group.name}?`)) {
+                  status.mutate({
+                    id: group.id,
+                    status: group.status === 'active' ? 'inactive' : 'active',
+                  })
+                }
+              }}
+            >
+              {group.status === 'active' ? (
+                <PauseCircle className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <CirclePlay className="h-4 w-4" aria-hidden="true" />
+              )}
+              {status.isPending
+                ? 'Menyimpan...'
+                : group.status === 'active'
+                  ? 'Nonaktifkan'
+                  : 'Aktifkan'}
+            </Button>
+          </div>
+        </header>
+      </div>
       <section
         className="rounded-lg border bg-card p-5"
         aria-labelledby="configuration-history"
@@ -107,51 +158,6 @@ export function StudyGroupDetail({ id }: { id: string }) {
           ))}
         </ol>
       </section>
-      <header className="study-group-detail__header">
-        <div className="study-group-detail__header-copy">
-          <h1 className="mt-[3px] break-words text-2xl font-bold leading-[1.35]">
-            {group.name}
-          </h1>
-        </div>
-
-        <div className="study-group-detail__actions">
-          <Button
-            asChild
-            variant="outline"
-            className="bg-white text-[13px] font-semibold"
-          >
-            <Link to={`/study-groups/${group.id}/edit`}>
-              <Pencil className="h-4 w-4" aria-hidden="true" />
-              Edit
-            </Link>
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className="border-[var(--color-danger-border)] bg-white text-[13px] font-semibold text-[var(--color-danger)] hover:bg-[var(--color-danger-bg)] hover:text-[var(--color-danger)]"
-            disabled={status.isPending}
-            onClick={() => {
-              if (window.confirm(`Ubah status ${group.name}?`)) {
-                status.mutate({
-                  id: group.id,
-                  status: group.status === 'active' ? 'inactive' : 'active',
-                })
-              }
-            }}
-          >
-            {group.status === 'active' ? (
-              <PauseCircle className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <CirclePlay className="h-4 w-4" aria-hidden="true" />
-            )}
-            {status.isPending
-              ? 'Menyimpan...'
-              : group.status === 'active'
-                ? 'Nonaktifkan'
-                : 'Aktifkan'}
-          </Button>
-        </div>
-      </header>
 
       {status.isError ? (
         <p
