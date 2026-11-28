@@ -2,6 +2,7 @@ import { type FormEvent, type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AlertCircle, Info, Plus, Search, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import {
@@ -582,21 +583,22 @@ export function StudyGroupForm({ group }: { group?: StudyGroup }) {
                         </td>
                         <td>{student?.address ?? '—'}</td>
                         <td>
-                          <Button
-                            className="study-group-form__remove"
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            aria-label={`Hapus ${student?.name ?? 'siswa'} dari peserta`}
-                            onClick={() =>
-                              setStudentIds((current) =>
-                                current.filter((studentId) => studentId !== id),
-                              )
-                            }
-                          >
-                            <Trash2 aria-hidden="true" />
-                            Hapus
-                          </Button>
+                          <TableRowActions
+                            label={student?.name ?? 'siswa terpilih'}
+                            actions={[
+                              {
+                                label: 'Hapus dari peserta',
+                                icon: Trash2,
+                                tone: 'danger',
+                                onSelect: () =>
+                                  setStudentIds((current) =>
+                                    current.filter(
+                                      (studentId) => studentId !== id,
+                                    ),
+                                  ),
+                              },
+                            ]}
+                          />
                         </td>
                       </tr>
                     )

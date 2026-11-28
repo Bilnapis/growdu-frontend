@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { Input } from '@/components/ui/input'
 import { useSchedulingOptions } from './use-scheduling-options'
 import { ApiError } from '@/services/api-client'
@@ -379,12 +380,12 @@ function AttendanceTable({
                   <AttendanceBadge status={student.status} />
                 </td>
                 <td className="px-4 py-2.5">
-                  <Link
-                    to={recordPath}
-                    className="inline-flex items-center gap-1 rounded-md border bg-card px-2 py-1.5 font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    <Edit3 className="h-3 w-3" aria-hidden="true" /> Ubah
-                  </Link>
+                  <TableRowActions
+                    label={`presensi ${student.name}`}
+                    actions={[
+                      { label: 'Ubah presensi', icon: Edit3, to: recordPath },
+                    ]}
+                  />
                 </td>
               </tr>
             ))}

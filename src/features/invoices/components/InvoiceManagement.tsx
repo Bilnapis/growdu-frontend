@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import {
   Banknote,
   CalendarClock,
   Eye,
-  MoreHorizontal,
   Pencil,
   ReceiptText,
   Settings,
@@ -17,6 +15,7 @@ import { Select } from '@/components/ui/select'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TablePagination } from '@/components/ui/table-pagination'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import {
   useInvoiceOptions,
@@ -338,39 +337,6 @@ function InvoiceRow({
   invoice: InvoiceListItem
   onConfirmPayment: () => void
 }) {
-  const [position, setPosition] = useState<{
-    top: number
-    left: number
-  } | null>(null)
-  const trigger = useRef<HTMLButtonElement>(null)
-  const menu = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!position) return
-    menu.current?.querySelector('a')?.focus({ preventScroll: true })
-    const close = (event: PointerEvent) => {
-      if (
-        event.target instanceof Node &&
-        !menu.current?.contains(event.target) &&
-        !trigger.current?.contains(event.target)
-      )
-        setPosition(null)
-    }
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setPosition(null)
-        trigger.current?.focus()
-      }
-    }
-    const scroll = () => setPosition(null)
-    document.addEventListener('pointerdown', close)
-    document.addEventListener('keydown', escape)
-    window.addEventListener('scroll', scroll, true)
-    return () => {
-      document.removeEventListener('pointerdown', close)
-      document.removeEventListener('keydown', escape)
-      window.removeEventListener('scroll', scroll, true)
-    }
-  }, [position])
   return (
     <tr className="relative h-[70px] bg-card text-[13px] leading-[1.3] text-foreground">
       <th scope="row" className="min-w-[160px] px-[18px] py-3 font-bold">
@@ -399,81 +365,24 @@ function InvoiceRow({
       <td className="px-[18px] py-3">
         <InvoiceStatusBadge status={invoice.status} />
       </td>
-      <td className="relative px-3 py-3">
-        <Button
-          ref={trigger}
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-muted-foreground"
-          aria-label={`Aksi ${invoice.number}`}
-          aria-expanded={Boolean(position)}
-          aria-controls={position ? `invoice-actions-${invoice.id}` : undefined}
-          onClick={() => {
-            const bounds = trigger.current?.getBoundingClientRect()
-            if (!bounds || position) {
-              setPosition(null)
-              return
-            }
-            setPosition({
-              top: Math.min(bounds.bottom + 4, window.innerHeight - 110),
-              left: Math.max(
-                8,
-                Math.min(bounds.right - 180, window.innerWidth - 188),
-              ),
-            })
-          }}
-        >
-          <MoreHorizontal size={18} aria-hidden="true" />
-        </Button>
-        {position
-          ? createPortal(
-              <div
-                ref={menu}
-                role="group"
-                id={`invoice-actions-${invoice.id}`}
-                style={position}
-                className="fixed z-50 grid w-[180px] gap-1 rounded-md border border-border bg-card p-2 shadow-[var(--shadow-md)]"
-                aria-label={`Aksi ${invoice.number}`}
-                onBlur={(event) => {
-                  if (
-                    event.relatedTarget instanceof Node &&
-                    !event.currentTarget.contains(event.relatedTarget) &&
-                    event.relatedTarget !== trigger.current
-                  )
-                    setPosition(null)
-                }}
-              >
-                <Button asChild variant="outline" size="sm">
-                  <Link to={`/invoices/${invoice.id}`}>
-                    <Eye size={15} aria-hidden="true" />
-                    Lihat detail
-                  </Link>
-                </Button>
-                {invoice.status === 'paid' ? (
-                  <Button asChild size="sm">
-                    <Link to={`/invoices/${invoice.id}?action=reverse`}>
-                      <Pencil size={15} aria-hidden="true" />
-                      Ubah status
-                    </Link>
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      setPosition(null)
-                      trigger.current?.focus({ preventScroll: true })
-                      onConfirmPayment()
-                    }}
-                  >
-                    <Pencil size={15} aria-hidden="true" />
-                    Ubah status
-                  </Button>
-                )}
-              </div>,
-              document.body,
-            )
-          : null}
+      <td className="px-3 py-3">
+        <TableRowActions
+          label={invoice.number}
+          actions={[
+            { label: 'Lihat detail', icon: Eye, to: `/invoices/${invoice.id}` },
+            invoice.status === 'paid'
+              ? {
+                  label: 'Ubah status',
+                  icon: Pencil,
+                  to: `/invoices/${invoice.id}?action=reverse`,
+                }
+              : {
+                  label: 'Ubah status',
+                  icon: Pencil,
+                  onSelect: onConfirmPayment,
+                },
+          ]}
+        />
       </td>
     </tr>
   )

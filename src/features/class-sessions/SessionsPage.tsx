@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  MoreHorizontal,
+  Eye,
   PauseCircle,
 } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -21,6 +21,7 @@ import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { TablePagination } from '@/components/ui/table-pagination'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { TutorPageHeader } from '@/components/TutorPageHeader'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import {
@@ -347,13 +348,16 @@ function ListView({
                   <AttendanceBadge session={session} />
                 </td>
                 <td className="px-3 py-3">
-                  <Link
-                    to={sessionLink(session.id, tutor)}
-                    className="inline-grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
-                    aria-label={`Buka sesi ${session.studyGroupName}`}
-                  >
-                    <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-                  </Link>
+                  <TableRowActions
+                    label={`sesi ${session.studyGroupName}`}
+                    actions={[
+                      {
+                        label: tutor ? 'Isi presensi' : 'Lihat detail',
+                        icon: Eye,
+                        to: sessionLink(session.id, tutor),
+                      },
+                    ]}
+                  />
                 </td>
               </tr>
             ))}

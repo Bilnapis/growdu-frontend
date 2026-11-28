@@ -1,21 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useEffect, useState } from 'react'
 import {
   CalendarDays,
   DoorOpen,
   Eye,
-  MoreHorizontal,
   Pencil,
   Users,
   Wrench,
 } from 'lucide-react'
 import {
-  Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { Select } from '@/components/ui/select'
 import { AddButton } from '@/components/ui/add-button'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
@@ -310,134 +308,22 @@ function RoomActions({
   room: RoomListItem
   onStatus: () => void
 }) {
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<{
-    top: number
-    left: number
-  } | null>(null)
-
-  useEffect(() => {
-    if (!position) return
-    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus()
-
-    function close() {
-      setPosition(null)
-    }
-    function onPointerDown(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !menuRef.current?.contains(event.target) &&
-        !triggerRef.current?.contains(event.target)
-      )
-        close()
-    }
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        close()
-        triggerRef.current?.focus()
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-    window.addEventListener('resize', close)
-    window.addEventListener('scroll', close, true)
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('resize', close)
-      window.removeEventListener('scroll', close, true)
-    }
-  }, [position])
-
-  function closeMenu() {
-    setPosition(null)
-    triggerRef.current?.focus()
-  }
+  const isActive = room.status === 'active'
 
   return (
-    <>
-      <Button
-        ref={triggerRef}
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 text-muted-foreground"
-        aria-label={`Menu aksi ${room.name}`}
-        aria-expanded={Boolean(position)}
-        aria-controls={position ? `room-actions-${room.id}` : undefined}
-        onClick={() => {
-          const rect = triggerRef.current?.getBoundingClientRect()
-          if (!rect) return
-          setPosition((current) =>
-            current
-              ? null
-              : {
-                  left: Math.max(
-                    8,
-                    Math.min(rect.right - 176, window.innerWidth - 184),
-                  ),
-                  top: Math.max(
-                    8,
-                    rect.bottom + 152 > window.innerHeight
-                      ? rect.top - 144
-                      : rect.bottom + 8,
-                  ),
-                },
-          )
-        }}
-      >
-        <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-      </Button>
-      {position
-        ? createPortal(
-            <div
-              ref={menuRef}
-              id={`room-actions-${room.id}`}
-              role="group"
-              aria-label={`Aksi ${room.name}`}
-              style={position}
-              className="fixed z-30 max-h-[calc(100vh-16px)] w-44 overflow-y-auto rounded-lg border border-border bg-card p-2 text-left shadow-lg"
-              onBlur={(event) => {
-                if (
-                  !event.currentTarget.contains(event.relatedTarget) &&
-                  !triggerRef.current?.contains(event.relatedTarget)
-                )
-                  setPosition(null)
-              }}
-            >
-              <Link
-                to={`/rooms/${room.id}`}
-                onClick={closeMenu}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Eye className="h-4 w-4" />
-                Lihat detail
-              </Link>
-              <Link
-                to={`/rooms/${room.id}/edit`}
-                onClick={closeMenu}
-                className="mt-1 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Pencil className="h-4 w-4" />
-                Ubah data
-              </Link>
-              <button
-                type="button"
-                className={`mt-1 flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${room.status === 'active' ? 'text-destructive' : 'text-foreground'}`}
-                onClick={() => {
-                  closeMenu()
-                  onStatus()
-                }}
-              >
-                <DoorOpen className="h-4 w-4" />
-                {room.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
-              </button>
-            </div>,
-            document.body,
-          )
-        : null}
-    </>
+    <TableRowActions
+      label={room.name}
+      actions={[
+        { label: 'Lihat detail', icon: Eye, to: `/rooms/${room.id}` },
+        { label: 'Ubah data', icon: Pencil, to: `/rooms/${room.id}/edit` },
+        {
+          label: isActive ? 'Nonaktifkan ruangan' : 'Aktifkan ruangan',
+          icon: DoorOpen,
+          tone: isActive ? 'danger' : 'success',
+          onSelect: onStatus,
+        },
+      ]}
+    />
   )
 }
 

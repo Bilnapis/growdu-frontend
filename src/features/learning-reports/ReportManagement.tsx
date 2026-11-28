@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { CheckCheck, Eye, FileText, Settings, UsersRound } from 'lucide-react'
 import { AddButton } from '@/components/ui/add-button'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TablePagination } from '@/components/ui/table-pagination'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { getStoredAuthUser } from '@/lib/auth-session'
 import { generateReports, type ReportGroup } from './api'
@@ -34,22 +35,19 @@ const secondaryClass = 'mt-1 block text-xs font-medium text-muted-foreground'
 
 function ReportRowActions({ group }: { group: ReportGroup }) {
   return (
-    <Button
-      asChild
-      variant="ghost"
-      size="icon"
-      className="h-8 w-8 text-primary-text"
-    >
-      <Link
-        to={reportBase() + '/' + group.id + '?period=' + group.period}
-        aria-label={`Lihat detail laporan ${group.name}`}
-        title={`Lihat detail laporan ${group.name}`}
-      >
-        <Eye className="h-4 w-4" aria-hidden="true" />
-      </Link>
-    </Button>
+    <TableRowActions
+      label={`laporan ${group.name}`}
+      actions={[
+        {
+          label: 'Lihat detail',
+          icon: Eye,
+          to: reportBase() + '/' + group.id + '?period=' + group.period,
+        },
+      ]}
+    />
   )
 }
+
 export function ReportManagement() {
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()

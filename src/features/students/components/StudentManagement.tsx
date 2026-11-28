@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import {
   BookOpen,
   Eye,
   Mail,
-  MoreHorizontal,
   Pencil,
+  UserCheck,
   UserRoundX,
   Users,
   UsersRound,
@@ -19,6 +19,7 @@ import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { Label } from '@/components/ui/label'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
 import { TablePagination } from '@/components/ui/table-pagination'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import type {
   EntityStatus,
@@ -48,37 +49,9 @@ export function StudentManagement() {
   const [searchResetKey, setSearchResetKey] = useState(0)
   const [notice, setNotice] = useState('')
   const [actionError, setActionError] = useState('')
-  const [menuId, setMenuId] = useState<string | null>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const menuTriggerRef = useRef<HTMLButtonElement | null>(null)
   const studentsQuery = useStudents(filters)
   const summaryQuery = useStudentsSummary()
   const updateMutation = useUpdateStudent()
-
-  useEffect(() => {
-    if (!menuId) return
-    menuRef.current?.querySelector('button')?.focus()
-    const dismiss = (event: PointerEvent) => {
-      if (
-        event.target instanceof Node &&
-        !menuRef.current?.contains(event.target) &&
-        !menuTriggerRef.current?.contains(event.target)
-      )
-        setMenuId(null)
-    }
-    const escape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setMenuId(null)
-        menuTriggerRef.current?.focus()
-      }
-    }
-    document.addEventListener('pointerdown', dismiss)
-    document.addEventListener('keydown', escape)
-    return () => {
-      document.removeEventListener('pointerdown', dismiss)
-      document.removeEventListener('keydown', escape)
-    }
-  }, [menuId])
 
   const summary = [
     ['Siswa Aktif', summaryQuery.data?.active, UsersRound, 'success'],
@@ -129,10 +102,11 @@ export function StudentManagement() {
   function resetFilters() {
     setFilters({ page: 1, limit: pageSize })
     setSearchResetKey((current) => current + 1)
-    setMenuId(null)
   }
 
   function toggleStatus(student: StudentListItem) {
+    if (updateMutation.isPending) return
+
     const status: EntityStatus =
       student.administrativeStatus === 'active' ? 'inactive' : 'active'
     setActionError('')
@@ -145,8 +119,6 @@ export function StudentManagement() {
               ? `${student.name} masih nonaktif karena tunggakan SPP.`
               : `${student.name} berhasil ${status === 'active' ? 'diaktifkan' : 'dinonaktifkan'}.`,
           )
-          setMenuId(null)
-          menuTriggerRef.current?.focus()
         },
         onError: (error: unknown) => setActionError(getMutationError(error)),
       },
@@ -352,72 +324,39 @@ export function StudentManagement() {
                       <td className={cellClass}>
                         <StudentStatusBadge student={student} />
                       </td>
-                      <td className="relative px-3 py-3">
-                        <div className="flex items-center">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-primary-text"
-                            aria-label={`Edit ${student.name}`}
-                            onClick={() => setDialog({ type: 'edit', student })}
-                          >
-                            <Pencil className="h-4 w-4" aria-hidden="true" />
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground"
-                            aria-label={`Menu aksi ${student.name}`}
-                            aria-expanded={menuId === student.id}
-                            onClick={(event) => {
-                              menuTriggerRef.current = event.currentTarget
-                              setMenuId(
-                                menuId === student.id ? null : student.id,
-                              )
-                            }}
-                          >
-                            <MoreHorizontal
-                              className="h-4 w-4"
-                              aria-hidden="true"
-                            />
-                          </Button>
-                        </div>
-                        {menuId === student.id ? (
-                          <div
-                            ref={menuRef}
-                            className="absolute right-2 top-14 z-10 w-[190px] space-y-1 rounded-lg border border-border bg-card p-2 shadow-[var(--shadow-md)]"
-                          >
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="h-8 w-full text-xs"
-                              onClick={() => {
-                                setMenuId(null)
-                                void navigate(`/students/${student.id}`)
-                              }}
-                            >
-                              <Eye className="h-4 w-4" aria-hidden="true" />
-                              Lihat detail
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              disabled={updateMutation.isPending}
-                              className="h-8 w-full border-[var(--color-danger-border)] text-xs text-destructive"
-                              onClick={() => toggleStatus(student)}
-                            >
-                              <UserRoundX
-                                className="h-4 w-4"
-                                aria-hidden="true"
-                              />
-                              {student.status === 'active'
-                                ? 'Nonaktifkan siswa'
-                                : 'Aktifkan siswa'}
-                            </Button>
-                          </div>
-                        ) : null}
+                      <td className="px-3 py-3">
+                        <TableRowActions
+                          label={student.name}
+                          actions={[
+                            {
+                              label: 'Lihat detail',
+                              icon: Eye,
+                              to: `/students/${student.id}`,
+                            },
+                            {
+                              label: 'Ubah data',
+                              icon: Pencil,
+                              onSelect: () =>
+                                setDialog({ type: 'edit', student }),
+                            },
+                            {
+                              label:
+                                student.administrativeStatus === 'active'
+                                  ? 'Nonaktifkan siswa'
+                                  : 'Aktifkan siswa',
+                              icon:
+                                student.administrativeStatus === 'active'
+                                  ? UserRoundX
+                                  : UserCheck,
+                              tone:
+                                student.administrativeStatus === 'active'
+                                  ? 'danger'
+                                  : 'success',
+                              disabled: updateMutation.isPending,
+                              onSelect: () => toggleStatus(student),
+                            },
+                          ]}
+                        />
                       </td>
                     </tr>
                   ))}

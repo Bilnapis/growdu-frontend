@@ -1,18 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   CalendarDays,
   CheckCircle2,
   Eye,
-  MoreHorizontal,
   PauseCircle,
   Pencil,
   UserCheck,
   UserX,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { Select } from '@/components/ui/select'
 import { AddButton } from '@/components/ui/add-button'
 import { Card } from '@/components/ui/card'
@@ -285,158 +282,22 @@ function StudyGroupRowActions({
   statusPending: boolean
   onStatusChange: () => void
 }) {
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<{
-    top: number
-    left: number
-  } | null>(null)
-
-  useEffect(() => {
-    if (!position) return
-
-    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus()
-
-    function closeMenu() {
-      setPosition(null)
-    }
-
-    function handlePointerDown(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !menuRef.current?.contains(event.target) &&
-        !triggerRef.current?.contains(event.target)
-      ) {
-        closeMenu()
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        closeMenu()
-        triggerRef.current?.focus()
-      }
-    }
-
-    document.addEventListener('pointerdown', handlePointerDown)
-    document.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('resize', closeMenu)
-    window.addEventListener('scroll', closeMenu, true)
-
-    return () => {
-      document.removeEventListener('pointerdown', handlePointerDown)
-      document.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('resize', closeMenu)
-      window.removeEventListener('scroll', closeMenu, true)
-    }
-  }, [position])
-
-  function toggleMenu() {
-    const trigger = triggerRef.current?.getBoundingClientRect()
-    if (!trigger) return
-
-    setPosition((current) => {
-      if (current) return null
-
-      const menuWidth = 213
-      const menuHeight = 123
-      return {
-        left: Math.max(
-          8,
-          Math.min(
-            trigger.right - menuWidth,
-            window.innerWidth - menuWidth - 8,
-          ),
-        ),
-        top:
-          trigger.bottom + menuHeight + 8 > window.innerHeight
-            ? Math.max(8, trigger.top - menuHeight - 8)
-            : trigger.bottom + 8,
-      }
-    })
-  }
-
-  function closeMenu() {
-    setPosition(null)
-  }
+  const isActive = group.status === 'active'
 
   return (
-    <>
-      <Button
-        ref={triggerRef}
-        type="button"
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 text-muted-foreground"
-        aria-label={`Menu aksi ${group.name}`}
-        aria-haspopup="menu"
-        aria-expanded={Boolean(position)}
-        aria-controls={position ? `study-group-actions-${group.id}` : undefined}
-        onClick={toggleMenu}
-      >
-        <MoreHorizontal className="h-[18px] w-[18px]" aria-hidden="true" />
-      </Button>
-
-      {position
-        ? createPortal(
-            <div
-              ref={menuRef}
-              id={`study-group-actions-${group.id}`}
-              role="menu"
-              aria-label={`Aksi ${group.name}`}
-              style={position}
-              className="fixed z-30 w-[213px] space-y-1 rounded-lg border border-border bg-card p-2 shadow-[var(--shadow-md)]"
-              onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) {
-                  closeMenu()
-                }
-              }}
-            >
-              <Button
-                asChild
-                variant="outline"
-                className="h-[33px] w-full text-[13px]"
-                onClick={closeMenu}
-              >
-                <Link to={`/study-groups/${group.id}`} role="menuitem">
-                  <Eye className="h-4 w-4" aria-hidden="true" />
-                  Lihat detail
-                </Link>
-              </Button>
-              <Button
-                asChild
-                className="h-[33px] w-full text-[13px]"
-                onClick={closeMenu}
-              >
-                <Link to={`/study-groups/${group.id}/edit`} role="menuitem">
-                  <Pencil className="h-4 w-4" aria-hidden="true" />
-                  Ubah data
-                </Link>
-              </Button>
-              <Button
-                type="button"
-                role="menuitem"
-                variant="outline"
-                disabled={statusPending}
-                className="h-[33px] w-full border-[var(--color-danger-border)] text-[13px] text-destructive hover:text-destructive"
-                onClick={() => {
-                  closeMenu()
-                  onStatusChange()
-                }}
-              >
-                {group.status === 'active' ? (
-                  <UserX className="h-4 w-4" aria-hidden="true" />
-                ) : (
-                  <UserCheck className="h-4 w-4" aria-hidden="true" />
-                )}
-                {group.status === 'active'
-                  ? 'Nonaktifkan kelompok'
-                  : 'Aktifkan kelompok'}
-              </Button>
-            </div>,
-            document.body,
-          )
-        : null}
-    </>
+    <TableRowActions
+      label={group.name}
+      actions={[
+        { label: 'Lihat detail', icon: Eye, to: `/study-groups/${group.id}` },
+        { label: 'Ubah data', icon: Pencil, to: `/study-groups/${group.id}/edit` },
+        {
+          label: isActive ? 'Nonaktifkan kelompok' : 'Aktifkan kelompok',
+          icon: isActive ? UserX : UserCheck,
+          tone: isActive ? 'danger' : 'success',
+          disabled: statusPending,
+          onSelect: onStatusChange,
+        },
+      ]}
+    />
   )
 }

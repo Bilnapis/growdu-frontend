@@ -1,29 +1,23 @@
-import {
-  type CSSProperties,
-  type FormEvent,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { type FormEvent, useMemo } from 'react'
 import {
   BookOpen,
   ChevronDown,
   Eye,
   GraduationCap,
   Mail,
-  MoreHorizontal,
   Pencil,
+  UserCheck,
   UserRoundX,
   UserX,
   UsersRound,
 } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { AddButton } from '@/components/ui/add-button'
-import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TablePagination } from '@/components/ui/table-pagination'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { Label } from '@/components/ui/label'
 import { SummaryCard, SummaryCardGrid } from '@/components/ui/summary-card'
@@ -39,13 +33,6 @@ type TutorManagementProps = {
   onFiltersChange: (filters: TutorManagementProps['filters']) => void
 }
 
-type ActionMenuState = {
-  tutorId: string
-  top: number
-  left: number
-} | null
-
-const actionMenuWidth = 180
 const pageSize = 5
 
 export function TutorManagement({
@@ -53,8 +40,6 @@ export function TutorManagement({
   onFiltersChange,
 }: TutorManagementProps) {
   const navigate = useNavigate()
-  const actionMenuBoundaryRef = useRef<HTMLElement | null>(null)
-  const [actionMenu, setActionMenu] = useState<ActionMenuState>(null)
   const tutorsQuery = useTutors({ ...filters, limit: pageSize })
   const updateMutation = useUpdateTutor()
   const summary = useMemo(() => {
@@ -69,9 +54,6 @@ export function TutorManagement({
       total: tutorsQuery.data?.meta.total ?? 0,
     }
   }, [tutorsQuery.data])
-  const openActionTutor =
-    tutorsQuery.data?.data.find((tutor) => tutor.id === actionMenu?.tutorId) ??
-    null
 
   function handleFilterSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -86,35 +68,16 @@ export function TutorManagement({
     })
   }
 
-  function handleActionMenuToggle(tutor: Tutor, button: HTMLButtonElement) {
-    setActionMenu((current) => {
-      if (current?.tutorId === tutor.id) return null
+  function handleToggleTutorStatus(tutor: Tutor) {
+    if (updateMutation.isPending) return
 
-      const boundary = actionMenuBoundaryRef.current
-      if (!boundary) return current
-
-      const buttonRect = button.getBoundingClientRect()
-      const boundaryRect = boundary.getBoundingClientRect()
-      const maxLeft = Math.max(8, boundaryRect.width - actionMenuWidth - 8)
-      const preferredLeft =
-        buttonRect.right - boundaryRect.left - actionMenuWidth
-
-      return {
-        tutorId: tutor.id,
-        top: buttonRect.bottom - boundaryRect.top + 8,
-        left: Math.max(8, Math.min(preferredLeft, maxLeft)),
-      }
-    })
-  }
-
-  function handleDeactivateTutor(tutor: Tutor) {
     updateMutation.mutate({
       id: tutor.id,
       input: {
         name: tutor.name,
         phoneNumber: tutor.phoneNumber,
         sessionRate: tutor.sessionRate,
-        status: 'inactive',
+        status: tutor.status === 'active' ? 'inactive' : 'active',
       },
     })
   }
@@ -172,7 +135,6 @@ export function TutorManagement({
       </SummaryCardGrid>
 
       <section
-        ref={actionMenuBoundaryRef}
         className="relative mt-5 min-h-[560px] rounded-lg border bg-card p-4 text-card-foreground shadow-none sm:p-[18px]"
       >
         <form
@@ -225,6 +187,24 @@ export function TutorManagement({
             </button>
           </div>
         </form>
+
+        {updateMutation.isPending ? (
+          <p role="status" className="mt-4 text-sm text-muted-foreground">
+            Memperbarui status tentor...
+          </p>
+        ) : null}
+        {updateMutation.isError ? (
+          <p role="alert" className="mt-4 text-sm text-[var(--color-danger)]">
+            Status tentor belum dapat diperbarui. Silakan coba lagi.
+          </p>
+        ) : null}
+        {updateMutation.isSuccess ? (
+          <p role="status" className="mt-4 text-sm text-[var(--color-success)]">
+            {updateMutation.variables.input.status === 'active'
+              ? 'Tentor berhasil diaktifkan.'
+              : 'Tentor berhasil dinonaktifkan.'}
+          </p>
+        ) : null}
 
         {tutorsQuery.isError ? <ErrorState /> : null}
         {tutorsQuery.isPending || tutorsQuery.data ? (
@@ -306,37 +286,32 @@ export function TutorManagement({
                         <TutorStatusBadge status={tutor.status} />
                       </td>
                       <td className="px-3 py-3">
-                        <div className="flex items-center">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-primary-text"
-                            onClick={() => {
-                              setActionMenu(null)
-                              void navigate(`/tutors/${tutor.id}/edit`)
-                            }}
-                            aria-label={`Edit ${tutor.name}`}
-                          >
-                            <Pencil className="h-4 w-4" aria-hidden="true" />
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground"
-                            onClick={(event) =>
-                              handleActionMenuToggle(tutor, event.currentTarget)
-                            }
-                            aria-label={`Menu aksi ${tutor.name}`}
-                            aria-expanded={actionMenu?.tutorId === tutor.id}
-                          >
-                            <MoreHorizontal
-                              className="h-4 w-4"
-                              aria-hidden="true"
-                            />
-                          </Button>
-                        </div>
+                        <TableRowActions
+                          label={tutor.name}
+                          actions={[
+                            {
+                              label: 'Lihat detail',
+                              icon: Eye,
+                              to: `/tutors/${tutor.id}`,
+                            },
+                            {
+                              label: 'Ubah data',
+                              icon: Pencil,
+                              to: `/tutors/${tutor.id}/edit`,
+                            },
+                            {
+                              label:
+                                tutor.status === 'active'
+                                  ? 'Nonaktifkan tentor'
+                                  : 'Aktifkan tentor',
+                              icon: tutor.status === 'active' ? UserX : UserCheck,
+                              tone:
+                                tutor.status === 'active' ? 'danger' : 'success',
+                              disabled: updateMutation.isPending,
+                              onSelect: () => handleToggleTutorStatus(tutor),
+                            },
+                          ]}
+                        />
                       </td>
                     </tr>
                   ))}
@@ -352,70 +327,9 @@ export function TutorManagement({
                 onPageChange={(page) => onFiltersChange({ ...filters, page })}
               />
             ) : null}
-            {openActionTutor && actionMenu ? (
-              <TutorActionMenu
-                tutor={openActionTutor}
-                style={{
-                  left: actionMenu.left,
-                  top: actionMenu.top,
-                }}
-                onEdit={() => {
-                  setActionMenu(null)
-                  void navigate(`/tutors/${openActionTutor.id}/edit`)
-                }}
-                onDeactivate={() => {
-                  setActionMenu(null)
-                  handleDeactivateTutor(openActionTutor)
-                }}
-              />
-            ) : null}
           </>
         ) : null}
       </section>
-    </div>
-  )
-}
-
-function TutorActionMenu({
-  tutor,
-  style,
-  onEdit,
-  onDeactivate,
-}: {
-  tutor: Tutor
-  style: CSSProperties
-  onEdit: () => void
-  onDeactivate: () => void
-}) {
-  return (
-    <div
-      className="absolute z-20 w-[180px] rounded-lg border border-[var(--color-border)] bg-white p-2 shadow-[0_8px_24px_rgb(15_23_42_/_10%)]"
-      style={style}
-    >
-      <Link
-        to={`/tutors/${tutor.id}`}
-        className="flex w-full items-center justify-center gap-2 rounded-md border border-[var(--color-border)] bg-white px-4 py-2 text-[13px] font-semibold text-[var(--color-text)]"
-        aria-label={`Lihat detail ${tutor.name}`}
-      >
-        <Eye className="h-4 w-4" aria-hidden="true" />
-        Lihat detail
-      </Link>
-      <button
-        type="button"
-        className="mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-[var(--color-primary)] px-4 py-2 text-[13px] font-semibold text-white"
-        onClick={onEdit}
-      >
-        <Pencil className="h-4 w-4" aria-hidden="true" />
-        Ubah data
-      </button>
-      <button
-        type="button"
-        className="mt-1 flex w-full items-center justify-center gap-2 rounded-md border border-[var(--color-danger-border)] bg-white px-4 py-2 text-[13px] font-semibold text-[var(--color-danger)]"
-        onClick={onDeactivate}
-      >
-        <UserX className="h-4 w-4" aria-hidden="true" />
-        Nonaktifkan tentor
-      </button>
     </div>
   )
 }

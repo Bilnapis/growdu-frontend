@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { Megaphone, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Megaphone, Pencil, Trash2 } from 'lucide-react'
 import {
-  Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { DebouncedSearchInput } from '@/components/ui/debounced-search-input'
 import { TableSkeletonRows } from '@/components/ui/table-skeleton-rows'
 import { TablePagination } from '@/components/ui/table-pagination'
@@ -338,128 +337,18 @@ function Actions({
   search: string
   onDelete: () => void
 }) {
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState<{
-    top: number
-    left: number
-  } | null>(null)
-
-  useEffect(() => {
-    if (!position) return
-    menuRef.current?.querySelector<HTMLElement>('a, button')?.focus()
-
-    function close() {
-      setPosition(null)
-    }
-    function onPointerDown(event: PointerEvent) {
-      if (
-        event.target instanceof Node &&
-        !menuRef.current?.contains(event.target) &&
-        !triggerRef.current?.contains(event.target)
-      )
-        close()
-    }
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        close()
-        triggerRef.current?.focus()
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-    window.addEventListener('resize', close)
-    window.addEventListener('scroll', close, true)
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('resize', close)
-      window.removeEventListener('scroll', close, true)
-    }
-  }, [position])
-
-  function closeMenu() {
-    setPosition(null)
-    triggerRef.current?.focus()
-  }
-
   return (
-    <>
-      <Button
-        ref={triggerRef}
-        type="button"
-        variant="ghost"
-        size="icon"
-        aria-label={`Aksi ${announcement.title}`}
-        aria-expanded={Boolean(position)}
-        aria-controls={
-          position ? `announcement-actions-${announcement.id}` : undefined
-        }
-        className="h-8 w-8 text-muted-foreground"
-        onClick={() => {
-          const rect = triggerRef.current?.getBoundingClientRect()
-          if (!rect) return
-          setPosition((current) =>
-            current
-              ? null
-              : {
-                  left: Math.max(
-                    8,
-                    Math.min(rect.right - 160, window.innerWidth - 168),
-                  ),
-                  top: Math.max(
-                    8,
-                    rect.bottom + 96 > window.innerHeight
-                      ? rect.top - 88
-                      : rect.bottom + 8,
-                  ),
-                },
-          )
-        }}
-      >
-        <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
-      </Button>
-      {position
-        ? createPortal(
-            <div
-              ref={menuRef}
-              id={`announcement-actions-${announcement.id}`}
-              role="group"
-              aria-label={`Menu aksi ${announcement.title}`}
-              style={position}
-              className="fixed z-30 grid max-h-[calc(100vh-16px)] w-40 overflow-y-auto rounded-lg border bg-card p-1 shadow-md"
-              onBlur={(event) => {
-                if (
-                  !event.currentTarget.contains(event.relatedTarget) &&
-                  !triggerRef.current?.contains(event.relatedTarget)
-                )
-                  setPosition(null)
-              }}
-            >
-              <Link
-                to={`/announcements/${announcement.id}/edit${search}`}
-                onClick={closeMenu}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Pencil className="h-4 w-4" aria-hidden="true" />
-                Ubah
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  closeMenu()
-                  onDelete()
-                }}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <Trash2 className="h-4 w-4" aria-hidden="true" />
-                Hapus
-              </button>
-            </div>,
-            document.body,
-          )
-        : null}
-    </>
+    <TableRowActions
+      label={announcement.title}
+      actions={[
+        {
+          label: 'Ubah data',
+          icon: Pencil,
+          to: `/announcements/${announcement.id}/edit${search}`,
+        },
+        { label: 'Hapus', icon: Trash2, tone: 'danger', onSelect: onDelete },
+      ]}
+    />
   )
 }
 

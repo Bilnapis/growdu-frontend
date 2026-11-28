@@ -4,6 +4,7 @@ import * as yup from 'yup'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { TableRowActions } from '@/components/ui/table-row-actions'
 import { Select } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -124,7 +125,7 @@ export function UserSettings({ filters, onFiltersChange }: UserSettingsProps) {
                       <th scope="col" className="px-6 py-3">Peran</th>
                       <th scope="col" className="px-6 py-3">Status</th>
                       <th scope="col" className="px-6 py-3">Login terakhir</th>
-                      <th scope="col" className="px-6 py-3"><span className="sr-only">Aksi</span></th>
+                      <th scope="col" className="px-3 py-3">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -134,10 +135,17 @@ export function UserSettings({ filters, onFiltersChange }: UserSettingsProps) {
                         <td className="px-6 py-4 text-muted-foreground">{roleLabels[user.role]}</td>
                         <td className="px-6 py-4"><StatusBadge status={user.status} /></td>
                         <td className="px-6 py-4 text-muted-foreground">{formatDate(user.lastLoginAt)}</td>
-                        <td className="px-6 py-4 text-right">
-                          <Button type="button" variant="ghost" size="sm" onClick={() => setSelectedUser(user)}>
-                            <Pencil className="h-4 w-4" aria-hidden="true" /> Edit
-                          </Button>
+                        <td className="px-3 py-4">
+                          <TableRowActions
+                            label={user.email}
+                            actions={[
+                              {
+                                label: 'Ubah data',
+                                icon: Pencil,
+                                onSelect: () => setSelectedUser(user),
+                              },
+                            ]}
+                          />
                         </td>
                       </tr>
                     ))}
